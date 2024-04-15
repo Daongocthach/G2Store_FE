@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Box, Button, Stack, TextField, Container, Snackbar, Alert, CircularProgress } from '@mui/material'
+import { Box, Button, Stack, TextField, Container } from '@mui/material'
+import { useDispatch } from 'react-redux'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import { validateEmail } from '../../../utils/email'
 import { setCookie } from '../../../utils/cookie'
 import authenApi from '../../../apis/authenApi'
+import ShowAlert from '../../../components/ShowAlert/ShowAlert'
+import Loading from '../../../components/Loading/Loading'
+import { login } from '../../../redux/actions/auth'
 
 function Register() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
@@ -16,27 +21,30 @@ function Register() {
   const [repeatPassword, setRepeatPassword] = useState('')
 
 
-  const onFinish = () => {
-    if (!validateEmail(email) || password !== repeatPassword) {
-      setShowAlertFail(true)
-    }
-    else {
-      setLoading(true)
-      authenApi.register(email, password)
-        .then((response) => {
-          setCookie('token', response.data.token, 1)
+  const onFinish = async () => {
+    setLoading(true)
+    try {
+      if (!validateEmail(email) || password !== repeatPassword) {
+        setShowAlertFail(true)
+      }
+      else {
+        const response = await authenApi.register({ email, password })
+        if (response) {
           setShowAlert(true)
+          setCookie('atk', response?.access_token, 1)
+          setCookie('rtk', response?.refresh_token, 1)
+          dispatch(login(response?.access_token))
           setTimeout(() => {
             navigate('/')
           }, 1000)
-        })
-        .catch((error) => {
-          console.log(error)
-          setShowAlertFail(true)
-        })
-        .finally(() => {
           setLoading(false)
-        })
+        }
+      }
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      setShowAlertFail(true)
+      console.log(error)
     }
   }
   return (
@@ -106,26 +114,9 @@ function Register() {
           </Stack>
         </Box>
       </Box>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-          Đăng ký thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertFail} onClose={() => setShowAlertFail(false)}>
-        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-          Vui lòng kiểm tra lại email hoặc mật khẩu!
-        </Alert>
-      </Snackbar>
-      {loading && (
-          <Box sx={{
-            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999
-          }}>
-            <CircularProgress color="primary" />
-          </Box>
-        )}
+      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng ký thành công'} />
+      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đăng ký thất bại'} isFail={true} />
+      {loading && <Loading />}
     </Container>
   )
 }

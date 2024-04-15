@@ -16,17 +16,17 @@ const publicRoutes = [
     { path:'/register', component: Register, layout: AuthLayout },
     { path:'/reset-password', component: ResetPassword, layout: AuthLayout },
     { path:'/', component: DashBoard },
-    { path:'/profile', component: Account },
     { path:'/cart', component: Cart },
-    { path:'/checkout', component: Checkout },
     { path:'/promotion', component: Promotion },
-    { path:'/thanks', component: Thanks },
     { path:'/genre-detail', component: GenreDetail },
     { path:'/product-detail', component: ProductDetail },
     { path:'*', component: NotFound }
 ]
 
 const privateRoutes = [
+    { path:'/profile', component: Account },
+    { path:'/checkout', component: Checkout },
+    { path:'/thanks', component: Thanks },
 ]
 
 export { publicRoutes, privateRoutes }

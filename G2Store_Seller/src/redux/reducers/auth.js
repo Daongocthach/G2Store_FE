@@ -11,7 +11,12 @@ const authReducer = (state = initialState, action) => {
                 atk: action?.payload
             }
         }
-
+        case 'UPDATE_AVATAR': {
+            return {
+                ...state,
+                avatar: action?.payload
+            }
+        }
         case 'LOGOUT': {
             return {
                 ...state,
@@ -19,7 +24,6 @@ const authReducer = (state = initialState, action) => {
                 avatar: ''
             }
         }
-
         default: {
             return state
         }

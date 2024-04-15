@@ -27,7 +27,7 @@ function App() {
               />)
           }
           )}
-          <Route path="/seller" element={<ProtectedRoute isAllowed={atk} />}>
+          <Route path="/" element={<ProtectedRoute isAllowed={atk} />}>
             {privateRoutes.map((route, index) => {
               const Page = route.component
               const Layout = route.layout || DefaultLayout

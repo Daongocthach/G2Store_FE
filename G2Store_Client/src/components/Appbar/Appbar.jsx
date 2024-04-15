@@ -6,41 +6,41 @@ import { useSelector, useDispatch } from 'react-redux'
 import Account from './Account/Account'
 import Search from './Search/Search'
 import G2Logo from '../../assets/img/G2Logo.png'
-import { setSubCategory } from '../../redux/actions/subCategory'
 
 function AppBar() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const cart = useSelector(state => state.cart)
   const [quantity, setQuantity] = useState(0)
-  const dispatch = useDispatch()
 
-  const onClickGenreDetail = () => {
-    dispatch(setSubCategory(subCategory))
-    navigate('/genre-detail')
-  }
   useEffect(() => {
     setQuantity(cart?.cartItems.length)
   }, [cart])
   return (
     <Box sx={{
       position: 'static', width: '100%', height: (theme) => theme.webCustom.appBarHeight, display: 'flex',
-      alignItems: 'center', justifyContent: 'space-between', border: 'none', overflow: 'auto',
-      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#1C1C1C' : '#FFFAFA')
+      alignItems: 'center', justifyContent: 'space-between', border: 'none', overflow: 'auto', bgcolor: '#2f3640'
     }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, paddingX: 2 }}>
-        <img src={G2Logo} style={{ height: '50px', width: '50px' }} />
-        <Link to={'/'} style={{ textDecoration: 'none' }}>
-          <Typography variant="h5" sx={{ display: { xs: 'none', sm: 'flex' } }}
-            fontWeight="bold" color={(theme) => (theme.palette.mode === 'dark' ? 'white' : '#333333')}> G2Store</Typography>
-        </Link>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button sx={useStyles.button} onClick={onClickGenreDetail}>Sản phẩm</Button>
-          <Link to={'/promotion'}><Button sx={useStyles.button}>Khuyến mãi</Button></Link>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, paddingX: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <img src={G2Logo} style={{ height: '65px', width: '65px' }} />
+          <Link to={'/'} style={{ textDecoration: 'none' }}>
+            <Typography variant="h5" sx={{ display: { xs: 'none', sm: 'flex' } }}
+              fontWeight="bold" color={'white'}> G2Store</Typography>
+          </Link>
         </Box>
+        <Link to={'/genre-detail'}><Button sx={{ ...useStyles.button, minWidth: 150 }} >Sản phẩm</Button></Link>
+        <Search />
       </Box>
-      <Search />
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Tooltip title="Cart">
+
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+
+        <Tooltip title="Thông báo">
+          <Badge color="warning" badgeContent={quantity} sx={{ cursor: 'pointer' }}>
+            <Notifications sx={useStyles.button} onClick={() => navigate('/cart')} />
+          </Badge>
+        </Tooltip>
+        <Tooltip title="Giỏ hàng">
           <Badge color="warning" badgeContent={quantity} sx={{ cursor: 'pointer' }}>
             <ShoppingCart sx={useStyles.button} onClick={() => navigate('/cart')} />
           </Badge>
@@ -55,11 +55,7 @@ export default AppBar
 
 const useStyles = {
   button: {
-    color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black'),
-    border: 'none', fontWeight: 'bold', '&:hover': { color: 'red' }
+    color: 'white', fontSize: 25,
+    border: 'none', fontWeight: 'bold', '&:hover': { color: 'orange', bgcolor: 'inherit' }
   }
-}
-const subCategory = {
-  id: '0',
-  name: ''
 }

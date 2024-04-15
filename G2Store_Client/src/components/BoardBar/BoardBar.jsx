@@ -1,8 +1,9 @@
-import { Box, Button, Menu } from '@mui/material'
-import { KeyboardArrowDown, Dehaze } from '@mui/icons-material'
+import { Box, Button, Menu, Chip, Stack } from '@mui/material'
+import { KeyboardArrowDown, Dehaze, AddHomeWork, Filter9Plus, MoneyOff } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import MenuCategory from '../MenuCategory/MenuCategory'
-import categoryApi from '../../apis/categoryApi'
+import { mockData } from '../../apis/mockdata'
 
 function BoardBar() {
     const [categories, setCategories] = useState([])
@@ -29,10 +30,11 @@ function BoardBar() {
             bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#E6E6FA')
         }} paddingX={{ xs: 0, md: 5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-                <Button startIcon={<Dehaze />} endIcon={<KeyboardArrowDown />} sx={{ bgcolor: 'inherit', fontSize: '18px', fontWeight: 'bold', color: '#696969' }}
-                    aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick}>
-                    Danh Mục
-                </Button>
+                <Chip icon={<Dehaze />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
+                    onDelete={handleClick} deleteIcon={<KeyboardArrowDown />}/>
+                <Link to={'/manage/providers'}><Chip icon={<AddHomeWork />} label={'Gian hàng tốt'} clickable sx={useStyles.chip} ></Chip></Link>
+                <Link to={'/manage/products'}><Chip icon={<Filter9Plus />} label={'Sản phẩm top'} clickable sx={useStyles.chip} ></Chip></Link>
+                <Link to={'/manage/promotions'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
                 <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
@@ -42,7 +44,7 @@ function BoardBar() {
                         'aria-labelledby': 'basic-button'
                     }}
                 >
-                    { Array.isArray(categories) && categories?.map((category, index) => (
+                    {Array.isArray(mockData.categories) && mockData.categories?.map((category, index) => (
                         <MenuCategory key={index} category={category} />
                     ))}
                 </Menu>
@@ -52,3 +54,19 @@ function BoardBar() {
 }
 
 export default BoardBar
+
+const useStyles = {
+    chip: {
+        color: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#444444'),
+        bgcolor: 'transparent',
+        border: '1 ',
+        paddingX: '5px',
+        borderRadius: '4px',
+        '& .MuiSvgIcon-root': {
+            color: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#444444')
+        },
+        '&:hover': {
+            bgcolor: 'primary.50'
+        }
+    }
+}

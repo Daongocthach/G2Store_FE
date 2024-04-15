@@ -8,7 +8,6 @@ import reviewApi from '../../apis/reviewApi'
 import { formatCurrency } from '../../utils/price'
 import cartItemApi from '../../apis/cartItemApi'
 import { addToCart, updateQuantity } from '../../redux/actions/cart'
-import { randomColor } from '../../utils/color'
 
 function ProductDetail() {
   const dispatch = useDispatch()
@@ -156,7 +155,7 @@ function ProductDetail() {
             <Typography variant='h5' fontWeight={'bold'}>Đánh giá sản phẩm</Typography>
             {reviews?.slice(0, showMore).map((review, index) =>
               <Box key={index} sx={{ display: 'flex', borderRadius: 3, width: '100%', gap: 2, alignItems: 'center', mt: 3 }}>
-                <Avatar sx={{ bgcolor: randomColor }}>{review?.customerId}</Avatar>
+                <Avatar sx={{ }}>{review?.customerId}</Avatar>
                 <Box >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Typography variant='subtitle1' fontWeight={'bold'}>User Id: {review?.customerId}</Typography>

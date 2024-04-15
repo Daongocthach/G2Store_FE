@@ -1,12 +1,15 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Menu, Box, Divider, MenuItem, Alert, Snackbar, IconButton, Tooltip } from '@mui/material'
 import { Settings, ManageAccounts, AccountCircle } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteCookie } from '../../../utils/cookie'
 import { persistor } from '../../../redux/store'
+import authenApi from '../../../apis/authenApi'
+import { logout } from '../../../redux/actions/auth'
 
 function Account() {
+    const dispatch = useDispatch()
     const user = useSelector(state => state.auth)
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState(null)
@@ -20,12 +23,12 @@ function Account() {
         setAnchorEl(null)
     }
     const handleLogout = () => {
+        authenApi.logout()
         deleteCookie()
+        dispatch(logout())
         persistor.purge()
         setShowAlert(true)
-        setTimeout(() => {
-            navigate('/')
-        }, 500)
+        navigate('/')
     }
     return (
         <Box>
@@ -44,7 +47,7 @@ function Account() {
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
                 >
-                    <ManageAccounts sx={{ width: 40, height: 40, color:'white' }} />
+                    <ManageAccounts sx={{ width: 40, height: 40, color: 'white' }} />
                 </IconButton>
             </Tooltip>
             <Menu
@@ -57,7 +60,7 @@ function Account() {
                 }}
             >
                 {user && <MenuItem onClick={handleClose}>
-                    <Link to={'/account'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Link to={'/seller/profile'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <AccountCircle fontSize="small" />
                         Tài khoản
                     </Link>

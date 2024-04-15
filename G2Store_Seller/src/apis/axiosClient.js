@@ -12,7 +12,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
   const atk = getCookie('atk')
-  if (atk && atk !== '' && atk != undefined) {
+  if (atk && atk !== '' && atk !== undefined) {
     config.headers.Authorization = `Bearer ${atk}`
   }
   return config

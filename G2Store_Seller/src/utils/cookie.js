@@ -13,6 +13,6 @@ export function getCookie(name) {
 }
 
 export function deleteCookie() {
-  document.cookie = 'token' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-  document.cookie = 'avatar' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+  document.cookie = 'atk' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+  document.cookie = 'rtk' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
 }

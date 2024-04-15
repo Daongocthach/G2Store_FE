@@ -51,10 +51,10 @@ function Order() {
     setTab(newTab)
 
   }
-  useEffect(() => {
-    orderApi.getOrderByCustomerIdPending(customerId)
-      .then((response) => { setOrders(sortByMaxId(response.data)) })
-  }, [customerId])
+  // useEffect(() => {
+  //   orderApi.getOrderByCustomerIdPending(customerId)
+  //     .then((response) => { setOrders(sortByMaxId(response.data)) })
+  // }, [customerId])
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

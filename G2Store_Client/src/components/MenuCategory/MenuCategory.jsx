@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import { ExpandLess, ExpandMore } from '@mui/icons-material'
+import { NavigateNext } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import { Box, Typography, ListItemButton, List, Collapse } from '@mui/material'
-import subCategoryApi from '../../apis/subCategory'
-import SubCategory from './SubCategory/SubCategory'
-import { setSubCategory } from '../../redux/actions/subCategory'
+
 
 export default function MenuCategory({ category }) {
   const dispatch = useDispatch()
@@ -15,24 +13,18 @@ export default function MenuCategory({ category }) {
     setOpen(!open)
   }
   const handleClickItem = (subCategory) => {
-    dispatch(setSubCategory(subCategory))
+
   }
   useEffect(() => {
-    subCategoryApi.getSubCategoriesByCateId(category?.id)
-      .then(response => {
-        setSubCategories(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
+
   }, [])
   return (
     <Box>
       <ListItemButton onClick={handleClick} sx={{ p: 1, justifyContent: 'space-between' }} >
-        <Typography variant='body1' sx={{ fontWeight: '600' }}>{category?.name}</Typography>
-        {open ? <ExpandLess sx={{ color:'gray' }}/> : <ExpandMore sx={{ color:'gray' }}/>}
+        <Typography variant='body1' sx={{ color: '#444444' }}>{category?.name}</Typography>
+        <NavigateNext sx={{ color:'#444444', fontSize: 16 }}/>
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      {/* <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {subCategories?.map((subCategory, index) => (
             <SubCategory key={index} subCategory={subCategory}/>
@@ -41,7 +33,7 @@ export default function MenuCategory({ category }) {
             // </ListItemButton>
           ))}
         </List>
-      </Collapse>
+      </Collapse> */}
     </Box>
   )
 }

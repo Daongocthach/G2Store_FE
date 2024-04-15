@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { Container, TextField, Stack, Button, Box, Alert, Snackbar, CircularProgress } from '@mui/material'
+import { Container, TextField, Stack, Button, Box } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { setCookie } from '../../../utils/cookie'
-import authenApi from '../../../apis/authenApi'
 import loginImage from '../../../assets/img/loginImage.jpg'
-import { login } from '../../../redux/actions/auth'
-import { setCart } from '../../../redux/actions/cart'
-import cartItemApi from '../../../apis/cartItemApi'
-
+import authenApi from '../../../apis/authenApi'
+import ShowAlert from '../../../components/ShowAlert/ShowAlert'
+import Loading from '../../../components/Loading/Loading'
+import { login, updateAvatar } from '../../../redux/actions/auth'
 function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -18,28 +17,31 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const onFinish = () => {
-    if (email !== '' && password !== '') {
-      setLoading(true)
-      authenApi.login(email, password)
-        .then(response => {
+  const onFinish = async () => {
+    setLoading(true)
+    try {
+      if (email !== '' && password !== '') {
+        const response = await authenApi.login({ email, password })
+        if (response) {
           setShowAlert(true)
-          setCookie('token', response.data.token, 1)
-          // cartItemApi.getCartItemsByCustomerId(response.data.id)
-          //   .then(response => { dispatch(setCart(response.data)) })
-          setTimeout(() => {
-            navigate('/')
-          }, 1000)
-        })
-        .catch(error => {
-          console.log(error)
-          setShowAlertFail(true)
-        }).finally(() => {
+          setCookie('atk', response?.access_token, 1)
+          setCookie('rtk', response?.refresh_token, 1)
+          dispatch(login(response?.access_token))
+          authenApi.me()
+            .then((response) => dispatch(updateAvatar(response?.data?.avatar)))
+          navigate('/')
           setLoading(false)
-        })
-    }
-    else {
+        }
+        else {
+          console.log(response)
+          setShowAlertFail(true)
+        }
+      }
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
       setShowAlertFail(true)
+      console.log(error)
     }
   }
   return (
@@ -68,31 +70,14 @@ function Login() {
             >Đăng nhập</Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Link to={'/reset-password'} style={{ color: 'white' }}>Quên mật khẩu?</Link>
-              <Link to={'/register'} style={{ color: 'white' }}>Đăng ký ?</Link>
+              <Link to={'/register'} style={{ color: 'white' }}>Đăng ký?</Link>
             </Box>
           </Stack>
         </Box>
       </Box>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-          Đăng nhập thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
-        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-          Sai tên đăng nhập hoặc mật khẩu!
-        </Alert>
-      </Snackbar>
-      {loading && (
-        <Box sx={{
-          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999
-        }}>
-          <CircularProgress color="primary" />
-        </Box>
-      )}
+      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng nhập thành công'} />
+      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đăng nhập thất bại'} isFail={true} />
+      {loading && <Loading />}
     </Container>
   )
 }
