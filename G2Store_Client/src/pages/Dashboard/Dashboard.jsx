@@ -1,11 +1,13 @@
-import BoardContent from './BoardContent/BoardContent'
-import { Box } from '@mui/material'
+import { Container } from '@mui/material'
+import Advertisement from './Advertisement/Advertisement'
+import BestProducts from './BestProducts/BestProducts'
 
 function Dashboard() {
   return (
-    <Box >
-      <BoardContent />
-    </Box>
+    <Container sx={{ mb: 2, borderRadius: 5, bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#E6E6FA') }}>
+      <Advertisement/>
+      <BestProducts/>
+    </Container>
   )
 }
 

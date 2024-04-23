@@ -11,50 +11,44 @@ import DeleteOrder from './DeleteOrder/DeleteOrder'
 import { sortByMaxId } from '../../../utils/price'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
 
-const useStyles = {
-  flexBox: {
-    display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between'
-  }
-}
 function Order() {
+  const [rerender, setRerender] = useState(false)
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
-  const user = useSelector(state => state.auth)
-  const customerId = user.id
   const [tab, setTab] = useState(1)
 
   const handleAllOrders = () => {
-    orderApi.getOrderByCustomerId(customerId)
-      .then((response) => { setOrders(sortByMaxId(response.data)) })
+    orderApi.getOrders()
+      .then((response) => { setOrders(sortByMaxId(response)) })
   }
   const handlePending = () => {
-    orderApi.getOrderByCustomerIdPending(customerId)
-      .then((response) => { setOrders(sortByMaxId(response.data)) })
+    orderApi.getOrders()
+      .then((response) => { setOrders(sortByMaxId(response)) })
   }
   const handleConfirmed = () => {
-    orderApi.getOrderByCustomerIdConfirmed(customerId)
-      .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
   const handleOnDelivery = () => {
-    orderApi.getOrderByCustomerIdOnDelivery(customerId)
-      .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
   const handleCancel = () => {
-    orderApi.getOrderByCustomerIdCancel(customerId)
-      .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
   const handleSuccess = () => {
-    orderApi.getOrderByCustomerIdSuccess(customerId)
-      .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
   const handleChange = (event, newTab) => {
     setTab(newTab)
 
   }
-  // useEffect(() => {
-  //   orderApi.getOrderByCustomerIdPending(customerId)
-  //     .then((response) => { setOrders(sortByMaxId(response.data)) })
-  // }, [customerId])
+  useEffect(() => {
+    orderApi.getOrders()
+      .then((response) => { setOrders(response) })
+  }, [])
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -77,7 +71,7 @@ function Order() {
               <Box sx={useStyles.flexBox}>
                 <Box sx={useStyles.flexBox}>
                   <Typography variant='h7' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng</Typography>
-                  <Typography variant='h8'>{order?.id}</Typography>
+                  <Typography variant='h8'>#{order?.order_id}</Typography>
                 </Box>
                 <Box sx={useStyles.flexBox}>
                   <Box sx={{ display: 'flex', gap: 1 }}>
@@ -85,20 +79,20 @@ function Order() {
                     <Typography variant='h7' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', gap: 1 }}
-                    color={order?.orderStatus == 'SUCCESS' ? 'green' :
-                      order?.orderStatus == 'ON_DELIVERY' ? 'orange' :
-                        order?.orderStatus == 'CONFIRMED' ? 'gold' : order?.orderStatus == 'PENDING' ? 'blue' : 'red'}>
+                    color={order?.order_status == 'SUCCESS' ? 'green' :
+                      order?.order_status == 'ON_DELIVERY' ? 'orange' :
+                        order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : 'red'}>
                     <FiberManualRecord />
-                    <Typography variant='body1'>{order?.orderStatus}</Typography>
+                    <Typography variant='body1'>{order?.order_status}</Typography>
                   </Box>
                 </Box>
               </Box>
-              {order?.orderItems.map((orderItem, index) =>
-                <OrderItem key={index} customerId={customerId} orderItem={orderItem} orderStatus={order?.orderStatus}/>)}
+              {order?.items.map((orderItem, index) =>
+                <OrderItem key={index} orderItem={orderItem} order_status={order?.order_status} />)}
               <Box sx={useStyles.flexBox}>
-                {order?.orderStatus == 'CONFIRMED' || order?.orderStatus == 'PENDING' ?
+                {order?.order_status == 'ORDERED' || order?.order_status == 'CONFIRMED' ?
                   <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id} /> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
-                {order?.orderStatus == 'ON_DELIVERY' && <GoodsReceived orderId={order?.id} />}
+                {order?.order_status == 'ON_DELIVERY' && <GoodsReceived orderId={order?.id} />}
                 <Typography variant='h6'>Thành tiền: {formatCurrency(order.total)}</Typography>
               </Box>
             </Box>)}
@@ -119,3 +113,9 @@ function Order() {
 }
 
 export default Order
+
+const useStyles = {
+  flexBox: {
+    display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between'
+  }
+}

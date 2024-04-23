@@ -31,8 +31,8 @@ function Register() {
         const response = await authenApi.register({ email, password })
         if (response) {
           setShowAlert(true)
-          setCookie('atk', response?.access_token, 1)
-          setCookie('rtk', response?.refresh_token, 1)
+          localStorage.setItem('atk', response?.access_token)
+          localStorage.setItem('rtk', response?.refresh_token)
           dispatch(login(response?.access_token))
           setTimeout(() => {
             navigate('/seller/dashboard')

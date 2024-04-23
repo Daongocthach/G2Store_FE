@@ -2,8 +2,12 @@ export function setCookie(cname, cvalue, exdays) {
   const d = new Date()
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
   let expires = 'expires=' + d.toUTCString()
+  if (cname == 'atk') {
+    localStorage.setItem('expireTime', expires)
+  }
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/'
 }
+
 export function getCookie(name) {
   const value = '; ' + document.cookie
   const parts = value.split('; ' + name + '=')

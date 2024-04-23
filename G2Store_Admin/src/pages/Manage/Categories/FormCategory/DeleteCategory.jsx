@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle, Alert, Snackbar } from '@mui/material'
-import { useDispatch } from 'react-redux'
+import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import categoryApi from '../../../../apis/categoryApi'
-import { updateCategory } from '../../../../redux/actions/categories'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 
-function DeleteCategory({ category_id }) {
-    const dispatch = useDispatch()
+function DeleteCategory({ category_id, reRender, setReRender }) {
     const [open, setOpen] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
@@ -17,16 +14,13 @@ function DeleteCategory({ category_id }) {
     const handleClose = () => {
         setOpen(false)
     }
-    const handleClickDelete = () => {
+    const handleClickDelete = async (category_id) => {
         categoryApi.deleteCategory(category_id)
-            .then((response) => {
+            .then(() => {
                 setShowAlert(true)
-                dispatch(updateCategory(response.data))
+                setReRender(!reRender)
             })
-            .catch(error => {
-                console.log(error)
-                setShowAlertFail(true)
-            })
+            .catch((error) => console.log(error))
         handleClose()
     }
     return (
@@ -36,11 +30,11 @@ function DeleteCategory({ category_id }) {
                 <DialogTitle >Bạn có muốn xóa danh mục này ?</DialogTitle>
                 <DialogActions>
                     <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 500, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-                    <Button onClick={handleClickDelete} size='small' sx={{ fontWeight: 500, bgcolor: '#1E90FF', color: 'white' }} >Xóa</Button>
+                    <Button onClick={() => handleClickDelete(category_id)} size='small' sx={{ fontWeight: 500, bgcolor: '#1E90FF', color: 'white' }} >Xóa</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Xóa danh mục thành công!'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Xóa danh mục thất bại!'} />
+            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Xóa danh mục thất bại!'} isFail={true} />
         </div>
     )
 }

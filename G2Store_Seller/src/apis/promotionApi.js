@@ -6,7 +6,7 @@ const promotionApi = {
         return axiosClient.get(url)
     },
     addPromotion: (promotionData) => {
-        const url = 'promotion/voucher/create'
+        const url = 'vouchers'
         return axiosClient.post(url, promotionData)
     }
 }

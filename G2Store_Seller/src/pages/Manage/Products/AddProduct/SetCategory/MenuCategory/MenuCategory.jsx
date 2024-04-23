@@ -2,13 +2,20 @@ import { useState } from 'react'
 import { ArrowForwardIos } from '@mui/icons-material'
 import { Box, Typography, Button } from '@mui/material'
 
-function MenuCategory({ categories, setCategoryId }) {
+function MenuCategory({ categories, setCategoryId, setSelectedCategories }) {
     const [selectCategory, setSelectCategory] = useState()
-    const [list, setList] = useState([])
     const handleClick = (category) => {
+        if (category?.child_categories && category.child_categories.length === 0) {
+            setCategoryId(category?.category_id)
+            //setSelectedCategories(prev => [...prev, category?.name])
+            setSelectedCategories(category?.name)
+        }
+        // else {
+        //     const categoryName = category?.child_categories.find(item => item?.name === category?.name)?.name
+        //     if (categoryName)
+        //         setSelectedCategories(prev => [...prev, categoryName])
+        // }
         setSelectCategory(category)
-        if (setCategoryId)
-            setCategoryId(category?.name)
     }
     return (
         <Box sx={{ display: 'flex', height: 200 }}>
@@ -17,12 +24,13 @@ function MenuCategory({ categories, setCategoryId }) {
                     <Button sx={{ display: 'flex', gap: 2, color: '#555555', ':hover': { bgcolor: 'inherit' } }}
                         key={index} onClick={() => handleClick(category)}>
                         <Typography variant='body1' sx={{ width: 200, textAlign: 'left' }} >{category?.name}</Typography>
-                        <ArrowForwardIos sx={{ color: '#666666', fontSize: 10 }} />
+                        {Array.isArray(category?.child_categories) && category.child_categories.length > 0 &&
+                        <ArrowForwardIos sx={{ color: '#666666', fontSize: 10 }} />}
                     </Button>
                 ))}
             </Box>
-            {Array.isArray(selectCategory?.childCategories) && <Box>
-                <MenuCategory categories={selectCategory?.childCategories} setCategoryId={setCategoryId} />
+            {Array.isArray(selectCategory?.child_categories) && selectCategory.child_categories.length > 0 && <Box>
+                <MenuCategory categories={selectCategory?.child_categories} setCategoryId={setCategoryId} setSelectedCategories={setSelectedCategories} />
             </Box>}
         </Box>
     )

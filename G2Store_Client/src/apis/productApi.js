@@ -1,33 +1,23 @@
-import axios from 'axios'
+import axiosClient from './axiosClient'
 const productApi = {
-    getAllEnabledProducts(page, size) {
-        if (!page)
-            page = 0
-        if (!size)
-            size = 8
-        const url = `${import.meta.env.VITE_PUBLIC_API_URL}products-enabled?page=${page}`
-        return axios.get(url)
+    getProducts(page, size) {
+        let seed = localStorage.getItem('seed')
+        if (!seed)
+            seed = 123
+        const url = `products?page=${page}&size=${size}&seed=${seed}`
+        return axiosClient.get(url)
     },
-    getProductById(id) {
-        const url = `${import.meta.env.VITE_PUBLIC_API_URL}product/${id}`
-        return axios.get(url)
+    getShopProducts(shop_id, page, size) {
+        let seed = localStorage.getItem('seed')
+        if (!seed)
+            seed = 123
+        const url = `products/shop/${shop_id}?page=${page}&size=${size}&seed=${seed}`
+        return axiosClient.get(url)
     },
-    getProductsByProviderId(id) {
-        const url = `${import.meta.env.VITE_PUBLIC_API_URL}products-provider/${id}`
-        return axios.get(url)
+    getProduct(productId) {
+        const url = `products/${productId}`
+        return axiosClient.get(url)
     },
-    getProductsBySubCategoryId(id) {
-        const url = `${import.meta.env.VITE_PUBLIC_API_URL}products-subcategory/${id}`
-        return axios.get(url)
-    },
-    getProductsByCategoryId(id) {
-        const url = `${import.meta.env.VITE_PUBLIC_API_URL}products-category/${id}`
-        return axios.get(url)
-    },
-    searchProductsByName(keyword) {
-        const url = `${import.meta.env.VITE_PUBLIC_API_URL}products-search?keyword=${keyword}`
-        return axios.get(url)
-    }
 }
 
 export default productApi

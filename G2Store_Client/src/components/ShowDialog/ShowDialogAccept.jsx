@@ -6,7 +6,7 @@ function ShowDialogAccept({ buttonName, title, content, handle }) {
 
   return (
     <Box>
-      <Button onClick={() => setOpen(true)} sx={{ fontWeight: 600, color: '#444444', ':hover': { bgcolor: 'inherit', color: '#1C86EE'}, gap: 1 }}>
+      <Button onClick={() => setOpen(true)} sx={{ fontWeight: 600, color: '#444444', ':hover': { bgcolor: 'inherit', color: '#1C86EE' }, gap: 1 }}>
         {buttonName}
       </Button>
       <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
@@ -16,7 +16,7 @@ function ShowDialogAccept({ buttonName, title, content, handle }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-          <Button onClick={handle} size='small' sx={{ fontWeight: 600, bgcolor: '#1E90FF', color: 'white' }} >Ok</Button>
+          <Button onClick={handle} size='small' sx={{ fontWeight: 600, bgcolor: '#1E90FF', color: 'white' }} >Chấp nhận</Button>
         </DialogActions>
       </Dialog>
     </Box>

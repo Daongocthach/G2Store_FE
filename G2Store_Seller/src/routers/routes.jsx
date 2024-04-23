@@ -15,6 +15,8 @@ import Products from '../pages/Manage/Products/Products'
 import AddProduct from '../pages/Manage/Products/AddProduct/AddProduct'
 import ManageReviews from '../pages/Manage/Orders/MangeReivews/ManageReviews'
 import AddSeller from '../pages/Manage/Sellers/AddSeller/AddSeller'
+import Categories from '../pages/Manage/Categories/Categories'
+import DesignShop from '../pages/Manage/DesignShop/DesignShop'
 
 const publicRoutes = [
     { path:'/', component: Login, layout: AuthLayout },
@@ -35,7 +37,10 @@ const privateRoutes = [
     { path:'manage/promotions', component: Promotions },
     { path:'manage/add-promotion', component: AddPromotion },
     { path:'manage/orders', component: Orders },
-    { path:'manage/reviews', component: ManageReviews }
+    { path:'manage/reviews', component: ManageReviews },
+    { path:'manage/categories', component: Categories },
+    { path:'manage/design-shop', component: DesignShop }
+
 ]
 
 

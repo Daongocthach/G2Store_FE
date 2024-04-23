@@ -32,27 +32,27 @@ function Promotions() {
     setSelect(event.target.value)
   }
   useEffect(() => {
-    promotionApi.getShopPromotions(1)
-      .then(response => {
-        dispatch(listPromotions(response.data))
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    // promotionApi.getShopPromotions(1)
+    //   .then(response => {
+    //     dispatch(listPromotions(response.data))
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
   }, [])
   return (
     <Box sx={{ m: 5, height: '100vh' }}>
       <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/dashboard">
+        <Link underline="hover" color="inherit" href="/seller/dashboard">
           Trang chủ
         </Link>
-        <Link underline="hover" color="inherit" href="/manage/promotions">
+        <Link underline="hover" color="inherit" href="/seller/manage/promotions">
           Quản lý khuyến mãi
         </Link>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} startIcon={<AddCircle />} variant="outlined"
-          onClick={() => { navigate('/manage/add-promotion') }}>
+          onClick={() => { navigate('/seller/manage/add-promotion') }}>
           Thêm khuyến mãi
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
@@ -80,7 +80,7 @@ function Promotions() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Array.isArray(promotions) && promotions.map((promotion, index) => {
+              {/* {Array.isArray(promotions) && promotions.map((promotion, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell >
@@ -104,12 +104,13 @@ function Promotions() {
                     <TableCell ><DeletePromotion /></TableCell>
                   </TableRow>
                 )
-              })}
+              })} */}
             </TableBody>
             <TableFooter>
               <TableRow >
                 <TablePagination
                   colSpan={12}
+                  labelRowsPerPage={'Số lượng mỗi trang'}
                   rowsPerPageOptions={[5, 10, { value: promotions?.length, label: 'All' }]}
                   count={Array.isArray(promotions) ? promotions?.length : 0}
                   rowsPerPage={rowsPerPage}

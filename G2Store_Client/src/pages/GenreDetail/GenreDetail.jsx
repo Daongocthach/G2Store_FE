@@ -1,6 +1,5 @@
 import { Container, Grid, Typography, Breadcrumbs, Link } from '@mui/material'
 import Products from './Products/Products'
-import Providers from './Providers/Providers'
 
 function GenreDetail() {
 
@@ -18,8 +17,6 @@ function GenreDetail() {
           </Breadcrumbs>
           <Typography variant='subtitle1' fontWeight={'bold'} mt={2}>Loại sản phẩm</Typography>
           <Typography variant='body1' color={'orange'} >Dầu ăn</Typography>
-          <Providers/>
-          
         </Grid>
         <Grid mt={1} item xs={12} sm={12} md={10} lg={10} >
           <Products/>

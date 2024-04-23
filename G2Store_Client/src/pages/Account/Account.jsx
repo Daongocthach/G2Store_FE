@@ -3,7 +3,7 @@ import { Container, Grid, Typography, Button, Box } from '@mui/material'
 import { Inventory, EditLocationAlt, NavigateNext, AccountBox } from '@mui/icons-material'
 import Profile from './Profile/Profile'
 import Order from './Order/Order'
-import Address from './Address/Address'
+import EditAddress from './EditAddress/EditAddress'
 import authenApi from '../../apis/authenApi'
 
 function Account() {
@@ -44,7 +44,7 @@ function Account() {
           <Grid item xs={12} sm={12} md={10} lg={10}>
             {select == 0 && <Profile user={user} setUser={setUser}/>}
             {select == 1 && <Order />}
-            {select == 2 && <Address user={user} />}
+            {select == 2 && <EditAddress user={user} />}
           </Grid>
         </Grid>
       </Grid>

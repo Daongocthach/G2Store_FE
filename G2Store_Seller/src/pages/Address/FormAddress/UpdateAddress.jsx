@@ -14,7 +14,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
     const [fullName, setFullName] = useState(address?.receiver_name)
     const [province, setProvince] = useState('')
     const [district, setDistrict] = useState('')
-    const [district_id, setDistrictId] = useState()
+    const [district_id, setDistrictId] = useState(address?.district_id)
     const [ward, setWard] = useState('')
     const [street, setStreet] = useState(address?.order_receive_address)
     const [checked, setChecked] = useState(false)
@@ -70,7 +70,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
             .catch(err => { console.log(err) })
         setOpen(true)
     }
-    const handleClickUpdate = () => {
+    const handleClickUpdate = async () => {
         if (ward == '') {
             toast.error('Vui lòng chọn địa chỉ !', { position: 'top-center', autoClose: 2000 })
         }
@@ -86,6 +86,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
                 receiver_phone_no: phoneNo,
                 is_default: checked
             }
+
             addressApi.updateAddress(address?.address_id, data)
                 .then(() => {
                     toast.success('Cập nhật địa chỉ thành công', { position: 'top-center', autoClose: 2000 })

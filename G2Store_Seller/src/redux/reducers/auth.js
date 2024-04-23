@@ -1,6 +1,6 @@
 const initialState = {
-    atk: '',
-    avatar: ''
+    avatar: '',
+    shop_id: ''
 }
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -11,17 +11,20 @@ const authReducer = (state = initialState, action) => {
                 atk: action?.payload
             }
         }
-        case 'UPDATE_AVATAR': {
+        case 'UPDATE_PROFILE': {
             return {
                 ...state,
-                avatar: action?.payload
+                avatar: action?.payload?.avatar,
+                shop_id: action?.payload?.shop_id
             }
         }
         case 'LOGOUT': {
+            localStorage.removeItem('atk')
+            localStorage.removeItem('rtk')
+            localStorage.removeItem('expireTime')
             return {
-                ...state,
-                atk: '',
-                avatar: ''
+                avatar: '',
+                shop_id: ''
             }
         }
         default: {

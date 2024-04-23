@@ -7,6 +7,7 @@ import { Create } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
 import productApi from '../../../../apis/productApi'
 import { updateProduct } from '../../../../redux/actions/products'
+import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 
 function UpdatePrice({ product }) {
   const dispatch = useDispatch()
@@ -50,25 +51,13 @@ function UpdatePrice({ product }) {
   }
   return (
     <div>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-          Cập nhật sản phẩm thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
-        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-          Cập nhật sản phẩm thất bại!
-        </Alert>
-      </Snackbar>
-      <Button onClick={handleClickOpen}><Create /></Button>
+      <Button onClick={handleClickOpen} sx={{ ':hover': { bgcolor: 'inherit' } }} ><Create /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Update Product</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>Name: </Typography>
+              <Typography minWidth={'100px'}>Tên: </Typography>
               <TextField fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -90,6 +79,8 @@ function UpdatePrice({ product }) {
           <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
+      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật giá thành công'} />
+      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Cập nhật giá thất bại'} isFail={true} />
     </div>
   )
 }

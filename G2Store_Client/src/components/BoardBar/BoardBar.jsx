@@ -1,9 +1,9 @@
-import { Box, Button, Menu, Chip, Stack } from '@mui/material'
-import { KeyboardArrowDown, Dehaze, AddHomeWork, Filter9Plus, MoneyOff } from '@mui/icons-material'
+import { Box, Menu, Chip } from '@mui/material'
+import { KeyboardArrowDown, Dehaze, MoneyOff } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import MenuCategory from '../MenuCategory/MenuCategory'
-import { mockData } from '../../apis/mockdata'
+import categoryApi from '../../apis/categoryApi'
 
 function BoardBar() {
     const [categories, setCategories] = useState([])
@@ -12,17 +12,18 @@ function BoardBar() {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
+    const handle = () => {}
     const handleClose = () => {
         setAnchorEl(null)
     }
     useEffect(() => {
-        // categoryApi.getCategories()
-        //     .then(response => {
-        //         setCategories(response.data)
-        //     })
-        //     .catch(error => {
-        //         console.error(error)
-        //     })
+        categoryApi.getCategories()
+            .then(response => {
+                setCategories(response)
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }, [])
     return (
         <Box sx={{
@@ -31,24 +32,22 @@ function BoardBar() {
         }} paddingX={{ xs: 0, md: 5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                 <Chip icon={<Dehaze />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
-                    onDelete={handleClick} deleteIcon={<KeyboardArrowDown />}/>
-                <Link to={'/manage/providers'}><Chip icon={<AddHomeWork />} label={'Gian hàng tốt'} clickable sx={useStyles.chip} ></Chip></Link>
-                <Link to={'/manage/products'}><Chip icon={<Filter9Plus />} label={'Sản phẩm top'} clickable sx={useStyles.chip} ></Chip></Link>
+                    onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
                 <Link to={'/manage/promotions'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button'
-                    }}
-                >
-                    {Array.isArray(mockData.categories) && mockData.categories?.map((category, index) => (
-                        <MenuCategory key={index} category={category} />
-                    ))}
-                </Menu>
             </Box>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button'
+                }}
+            >
+                {Array.isArray(categories) && categories?.map((category, index) => (
+                    <MenuCategory key={index} category={category} />
+                ))}
+            </Menu>
         </Box>
     )
 }

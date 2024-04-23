@@ -62,7 +62,7 @@ function UpdateQuantity({ product }) {
           Cập nhật sản phẩm thất bại!
         </Alert>
       </Snackbar>
-      <Button onClick={handleClickOpen}><Create /></Button>
+      <Button onClick={handleClickOpen} sx={{ ':hover': { bgcolor: 'inherit' } }}><Create /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Update Product</DialogTitle>
         <DialogContent>

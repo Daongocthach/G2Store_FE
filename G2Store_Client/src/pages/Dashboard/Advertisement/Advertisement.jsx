@@ -14,15 +14,15 @@ const useStyles = {
 
 function Advertisement() {
   const [index, setIndex] = useState(0)
-  const promotions = mockData.promotions
+  const notifications = mockData.notifications
   return (
     <Box sx={{ width: '100%', height: (theme) => theme.webCustom.promotionBannerHeight, position: 'relative' }} >
       <Box sx={{ width: '100%', height: '100%', bgcolor: color, borderRadius: 5 }}>
-        <img src={promotions[index]?.image} alt='product' style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(60%)' }} />
+        <img src={notifications[index]?.image} alt='product' style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(60%)' }} />
         <Typography variant={'h2'} sx={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', fontWeight: 'bold',
           fontFamily: 'Rubik Vinyl, cursive', width: '400px', textAlign: 'center'
-        }}>{promotions[index]?.name}</Typography>
+        }}>{notifications[index]?.name}</Typography>
       </Box>
       <Box sx={{ display: 'flex', gap: 1, position: 'absolute', top: '80%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', height: '40px', opacity: 0.8 }}>
         <Button variant="contained" startIcon={<Visibility sx={{ color: 'black' }} />}
@@ -33,7 +33,7 @@ function Advertisement() {
       </Box>
       {index > 0 && <Button startIcon={<ArrowBackIos />}
         sx={{ ...useStyles.btnNextPrev, left: '5%' }} onClick={() => { setIndex(index - 1) }}></Button>}
-      {index < promotions.length - 1 && <Button startIcon={<ArrowForwardIos />}
+      {index < notifications.length - 1 && <Button startIcon={<ArrowForwardIos />}
         sx={{ ...useStyles.btnNextPrev, left: '95%' }} onClick={() => { setIndex(index + 1) }}></Button>}
     </Box>
 

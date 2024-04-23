@@ -11,6 +11,8 @@ import ProductDetail from '../pages/ProductDetail/ProductDetail'
 import AuthLayout from '../layouts/AuthLayout'
 import Thanks from '../pages/Thanks/Thanks'
 import Account from '../pages/Account/Account'
+import ShopPage from '../pages/ShopPage/ShopPage'
+
 const publicRoutes = [
     { path:'/login', component: Login, layout: AuthLayout },
     { path:'/register', component: Register, layout: AuthLayout },
@@ -20,6 +22,7 @@ const publicRoutes = [
     { path:'/promotion', component: Promotion },
     { path:'/genre-detail', component: GenreDetail },
     { path:'/product-detail', component: ProductDetail },
+    { path:'/shop-page', component: ShopPage },
     { path:'*', component: NotFound }
 ]
 

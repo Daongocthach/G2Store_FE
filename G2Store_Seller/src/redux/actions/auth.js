@@ -6,9 +6,9 @@ export const login = (data) => {
 }
 
 
-export const updateAvatar = (data) => {
+export const updateProfile = (data) => {
     return {
-        type: 'UPDATE_AVATAR',
+        type: 'UPDATE_PROFILE',
         payload: data
     }
 }

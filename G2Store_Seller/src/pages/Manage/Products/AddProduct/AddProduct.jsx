@@ -1,31 +1,61 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, TextField, Box, Typography, Paper, Divider } from '@mui/material'
-import AddCircle from '@mui/icons-material/AddCircle'
+import { useDispatch } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Button, TextField, Box, Typography, Paper } from '@mui/material'
+import { AddCircle, NavigateNext } from '@mui/icons-material'
 import productApi from '../../../../apis/productApi'
-import { addProduct } from '../../../../redux/actions/products'
+import { addProduct, updateProduct } from '../../../../redux/actions/products'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import MenuCategory from './SetCategory/MenuCategory/MenuCategory'
-import { mockData } from '../../../../apis/mockdata'
+import categoryApi from '../../../../apis/categoryApi'
 
 function AddProduct() {
+    const location = useLocation()
+    const product = location.state
+    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [selectedCategories, setSelectedCategories] = useState([])
+    const [categories, setCategories] = useState([])
+    const [selectedCategories, setSelectedCategories] = useState()
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [description, setDescription] = useState('')
-    const [discount, setDiscount] = useState(0)
+    const [special_price, setSpecialPrice] = useState(undefined)
     const [quantity, setQuantity] = useState(0)
     const [weight, setWeight] = useState(0)
     const [height, setHeight] = useState(0)
     const [width, setWidth] = useState(0)
     const [length, setLength] = useState(0)
-    const [categoryId, setCategoryId] = useState()
+    const [categoryId, setCategoryId] = useState('')
     const [images, setImages] = useState([])
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertWarning, setShowAlertWarning] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
 
+    const fetchData = async () => {
+        if (product) {
+            setName(product?.name)
+            setPrice(product?.price)
+            setDescription(product?.description)
+            setSpecialPrice(product?.special_price)
+            setQuantity(product?.stock_quantity)
+            setWeight(product?.weight)
+            setHeight(product?.height)
+            setWidth(product?.width)
+            setLength(product?.length)
+            const deepestCategory = getDeepestCategory(product?.category)
+            setCategoryId(deepestCategory?.category_id)
+            setSelectedCategories(deepestCategory?.name)
+        }
+    }
+    useEffect(() => {
+        if (product) {
+            fetchData()
+        }
+        categoryApi.getCategories()
+            .then((response) => { setCategories(response) })
+            .catch(err => console.log(err))
+
+    }, [])
     const handleImageChange = (e) => {
         const file = e.target.files[0]
         if (file) {
@@ -42,25 +72,44 @@ function AddProduct() {
             reader.readAsDataURL(file)
         }
     }
-    const handleClickAdd = () => {
-        // const productData = { name, description, image, available,= price: 10000,
-        //     stockQuantity: 100,
-        //     categoryId: 2,
-        //     shopId: 2
-        // }
-        // productApi.addProduct(name, price, description, discount, subCategory, provider, image)
-        //     .then((response) => {
-        //         setShowAlert(true)
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //         setShowAlertFail(true)
-        //     })
-        console.log(images)
+    const handleClickAdd = async () => {
+        const productData = {
+            name,
+            description,
+            images: 'https://www.bigw.com.au/medias/sys_master/images/images/h27/hda/29143439376414.jpg',
+            price: price,
+            height: height,
+            width: width,
+            length: length,
+            weight: weight,
+            special_price: special_price,
+            stock_quantity: quantity,
+            category_id: categoryId
+        }
+        if (product) {
+            productApi.updateProduct(product?.product_id, productData)
+                .then(() => {
+                    setShowAlert(true)
+                    setTimeout(() => { navigate('/seller/manage/products') }, 1000)
+                })
+                .catch(error => {
+                    console.log(error)
+                    setShowAlertFail(true)
+                })
+        }
+        else {
+            productApi.addProduct(productData)
+                .then(() => {
+                    setShowAlert(true)
+                    setTimeout(() => { navigate('/seller/manage/products') }, 1000)
+                })
+                .catch(error => {
+                    console.log(error)
+                    setShowAlertFail(true)
+                })
+        }
     }
-    useEffect(() => {
 
-    }, [])
     return (
         <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', p: 1, bgcolor: '#E8E8E8' }}>
             <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', bgcolor: 'white', p: 1, borderRadius: 3 }}>
@@ -80,12 +129,20 @@ function AddProduct() {
                     <Box sx={{ mt: 2 }}>
                         <Paper sx={{ width: '100%', p: 2 }} elevation={4}>
                             <Paper sx={{ borderWidth: 0.5, borderColor: '#CCCCCC' }} variant='outlined'>
-                                <MenuCategory categories={mockData.categories} setCategoryId={setCategoryId}/>
+                                <MenuCategory categories={categories} setCategoryId={setCategoryId} setSelectedCategories={setSelectedCategories} />
                             </Paper>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
                                 <Typography variant='subtitle1'>Đang chọn: </Typography>
-                                {/* {Array.isArray(chooseCategories) && chooseCategories.map((name, index) => (
-                                    <Typography key={index} variant='subtitle2' color={'blue'}>{name}</Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <Typography variant='subtitle2' color={'#555555'}>{selectedCategories}</Typography>
+                                    <NavigateNext sx={{ color: '#444444', fontSize: 14 }} />
+                                </Box>
+                                {/* {Array.isArray(selectedCategories) && selectedCategories.map((name, index) => (
+                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Typography variant='subtitle2' color={'#555555'}>{name}</Typography>
+                                        <NavigateNext sx={{ color: '#444444', fontSize: 14 }} />
+                                    </Box>
+
                                 ))} */}
                             </Box>
                         </Paper>
@@ -101,7 +158,7 @@ function AddProduct() {
                     </Box>
                     <Box sx={{ alignItems: 'center', gap: 1 }}>
                         <Typography variant='subtitle2'>Giá đặc biệt: </Typography>
-                        <TextField fullWidth size='small' type='number' inputProps={{ min: 0 }} value={discount} onChange={(e) => setDiscount(e.target.value)} />
+                        <TextField fullWidth size='small' type='number' inputProps={{ min: 0 }} value={special_price} onChange={(e) => setSpecialPrice(e.target.value)} />
                     </Box>
                     <Box sx={{ alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -171,10 +228,19 @@ function AddProduct() {
             <Box sx={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'end', pr: 5 }}>
                 <Button onClick={() => { handleClickAdd() }} sx={{ bgcolor: '#1a71ff', color: 'white', fontWeight: '500', ':hover': { bgcolor: '#00B2EE' } }}>Gửi đi</Button>
             </Box>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm thành công'} />
+            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={product ?'Cập nhật sản phẩm thành công': 'Thêm sản phẩm thành công'} />
             <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Vui lòng không chọn cùng ảnh!'} isWarning={true} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm thất bại'} isFail={true} />
+            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={product ?'Cập nhật sản phẩm thất bại': 'Thêm sản phẩm thất bại'} isFail={true} />
         </Box>
     )
 }
 export default AddProduct
+
+function getDeepestCategory(category) {
+    let deepestCategory = category
+    while (!(deepestCategory?.child_categories && deepestCategory.child_categories.length === 0)) {
+        deepestCategory = deepestCategory.child_categories[0]
+    }
+
+    return deepestCategory
+}

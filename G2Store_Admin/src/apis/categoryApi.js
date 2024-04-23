@@ -15,7 +15,7 @@ const categoryApi = {
     },
     deleteCategory(category_id) {
         const url = `categories/${category_id}`
-        return axiosClient.put(url)
+        return axiosClient.delete(url)
     },
     getCategoryById(category_id) {
         const url = `categories/${category_id}`

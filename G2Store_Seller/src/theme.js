@@ -61,7 +61,7 @@ const theme = extendTheme({
           '*::-webkit-scrollbar-thumb:hover ': {
             backgroundColor: 'white'
           },
-          overflowX: 'hidden'
+          // overflowX: 'hidden'
         }
       }
     },

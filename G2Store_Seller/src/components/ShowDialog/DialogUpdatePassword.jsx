@@ -1,45 +1,53 @@
 import { useState } from 'react'
-import { Typography, Input, Box, Dialog, DialogTitle, Button, DialogContent, DialogActions, InputAdornment, IconButton } from '@mui/material'
-import { AddCircle, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Box, Dialog, DialogTitle, Button, DialogContent, DialogActions, TextField } from '@mui/material'
+import { toast } from 'react-toastify'
+import authenApi from '../../apis/authenApi'
 
-
-function DialogUpdatePassword({ handle }) {
+function DialogUpdatePassword() {
     const [open, setOpen] = useState(false)
-    const [oldPassword, setOldPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
+    const [touched, setTouched] = useState(false)
+    const [old_password, setOld_password] = useState('')
+    const [new_password, setNew_password] = useState('')
+    const handle = async () => {
+        if (new_password && old_password && old_password !== new_password) {
+            authenApi.updatePassword({ old_password, new_password })
+                .then(() => {
+                    toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
+                })
+                .catch((err) => {
+                    console.log(err)
+                    toast.error('Cập nhật thất bại', { position: 'top-center', autoClose: 2000 })
+                })
+                .finally(() => setOpen(false))
+        }
+        else {
+            toast.error('Vui lòng kiểm tra lại thông tin', { position: 'top-center', autoClose: 2000 })
+        }
 
-    const [showPassword, setShowPassword] = useState(false)
-
-    const handleClickShowPassword = () => setShowPassword((show) => !show)
+    }
     return (
         <Box>
-            <Button sx={{ color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2, width: '150px' }}
-                variant="contained" color="success" onClick={() => setOpen(true)}>Đổi mật khẩu</Button>
-            <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
-                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550 }}>Cập nhật thông tin</DialogTitle>
+            <Button sx={{ color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2 }}
+                variant="contained" color="info" onClick={() => setOpen(true)}>Đổi mật khẩu</Button>
+            <Dialog open={open} keepMounted onClose={() => { setOpen(false), setTouched(false) }} >
+                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550 }}>Cập nhật mật khẩu</DialogTitle>
                 <DialogContent>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1 }}>
-                        <Typography variant='body1' sx={{ fontWeight: 550, minWidth: '90px' }}>Mật khẩu cũ</Typography>
-                        <Input placeholder='*****' type={'password'} sx={{ fontSize: 15 }}
-                            value={oldPassword} onChange={e => setOldPassword(e.target.value)}
-                           />
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1 }}>
-                        <Typography variant='body1' sx={{ fontWeight: 550, minWidth: '90px' }}>Mật khẩu mới</Typography>
-                        <Input placeholder='*****' type={'password'} sx={{ fontSize: 15 }}
-                            value={newPassword} onChange={e => setNewPassword(e.target.value)}
-                            // endAdornment={
-                            //     <InputAdornment position="end">
-                            //         <IconButton onClick={handleClickShowPassword} edge="end" sx={{ mr: 1 }}>
-                            //             {showPassword ? <VisibilityOff /> : <Visibility />}
-                            //         </IconButton>
-                            //     </InputAdornment>
-                            // } 
-                            />
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+                        <TextField fullWidth label='Mật khẩu cũ' size='small' type='password' value={old_password}
+                            error={touched && !old_password}
+                            helperText={touched && !old_password ? 'Không được để trống' : ''}
+                            onChange={(e) => setOld_password(e.target.value)}
+                            onBlur={() => setTouched(true)} />
+                        <TextField fullWidth label='Mật khẩu mới' size='small'
+                            type='password' value={new_password}
+                            error={touched && old_password == new_password}
+                            helperText={touched && old_password == new_password ? 'Trùng mật khẩu cũ' : ''}
+                            onChange={e => setNew_password(e.target.value)}
+                            onBlur={() => setTouched(true)} />
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
+                    <Button onClick={() => { setOpen(false), setTouched(false) }} size='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
                     <Button onClick={handle} size='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#1E90FF', color: 'white' }} >Ok</Button>
                 </DialogActions>
             </Dialog>

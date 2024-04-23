@@ -16,7 +16,7 @@ const roles = ['SELLER_PROMOTION_ACCESS',
 function AddSeller() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const [role, setRole] = useState('')
+    const [role, setRole] = useState(4)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
@@ -27,17 +27,15 @@ function AddSeller() {
         setRole(event.target.value)
     }
     const handleClickAdd = () => {
-        if (!validateEmail(email) || password !== rePassword || role == '') {
+        if (!validateEmail(email) || password !== rePassword || !role) {
             setShowAlertFail(true)
         }
         else {
             setLoading(true)
-            sellerApi.addSeller(email, password, role, 2)
+            sellerApi.addShopSeller(email, password, role)
                 .then(() => {
                     setShowAlert(true)
-                    setTimeout(() => {
-                        navigate('/manage/sellers')
-                    }, 1000)
+                    navigate('/seller/manage/sellers')
                 })
                 .catch(error => {
                     console.log(error)
@@ -48,7 +46,7 @@ function AddSeller() {
         }
     }
     return (
-        <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', p: 1, bgcolor: '#E8E8E8' }}>
+        <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', p: 1, bgcolor: '#E8E8E8', minHeight:'100vh' }}>
             <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', bgcolor: 'white', p: 1, borderRadius: 3 }}>
                 <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Thêm người dùng</Typography>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>

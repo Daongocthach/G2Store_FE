@@ -1,33 +1,25 @@
-import axios from 'axios'
+import axiosClient from './axiosClient'
 
 const cartItemApi = {
-  getAllCartItems() {
-    const url = `${import.meta.env.VITE_PUBLIC_API_URL}cartitems`
-    return axios.get(url)
+  getCartItems() {
+    const url = 'cart-items/me'
+    return axiosClient.get(url)
   },
-  getCartItemById(customerId, productId) {
-    const url = `${import.meta.env.VITE_PUBLIC_API_URL}cartitem?customerId=${customerId}&productId=${productId}`
-    return axios.get(url)
+  getCartItemsIntended() {
+    const url = 'intended-cart/me'
+    return axiosClient.get(url)
   },
-  addCartItem(cartItem) {
-    const url = `${import.meta.env.VITE_PUBLIC_API_URL}add-cartitems`
-    return axios.post(url, cartItem)
+  addToCart(data) {
+    const url = 'cart-items/me'
+    return axiosClient.post(url, data)
   },
-  updateCartItem(cartItem) {
-    const url = `${import.meta.env.VITE_PUBLIC_API_URL}update-cartitems`
-    return axios.put(url, cartItem)
+  updateQuantity(data) {
+    const url = 'cart-items/me'
+    return axiosClient.put(url, data)
   },
-  deleteCartItem(customerId, productId) {
-    const url = `${import.meta.env.VITE_PUBLIC_API_URL}delete-cartitem?customerId=${customerId}&productId=${productId}`
-    return axios.delete(url)
-  },
-  deleteAllCartItemByCustomerId(customerId) {
-    const url = `${import.meta.env.VITE_PUBLIC_API_URL}delete-cartitems-customer?customerId=${customerId}`
-    return axios.delete(url)
-  },
-  getCartItemsByCustomerId(customerId) {
-    const url = `${import.meta.env.VITE_PUBLIC_API_URL}cartitems-customer?customerId=${customerId}`
-    return axios.get(url)
+  deleteCartItem(productId) {
+    const url = `cart-items/me/${productId}`
+    return axiosClient.delete(url)
   }
 }
 

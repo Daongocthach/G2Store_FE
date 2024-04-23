@@ -142,25 +142,47 @@ export const mockData = {
     ],
     promotions: [
         {
-            _id: 'promotion-id-01',
-            name: 'Omachi Sốt Spaghetty',
-            image: 'https://cdn-www.vinid.net/2020/10/c82b07dc-c%C3%A1ch-n%E1%BA%A5u-m%C3%AC-omachi-ngon.jpg'
+            'id': 1,
+            'name': 'Mã điên',
+            'quantity': 1,
+            'start_date': '2024-04-21',
+            'end_date': '2024-04-21',
+            'discount_type': 'PERCENTAGE',
+            'voucher_type': 'SHOP_VOUCHER',
+            'min_spend': 2000,
+            'reduce_price': 200,
+            'reduce_percent': 0,
+            'max_use_per_cus': 1,
+            'shop_id': 1
         },
         {
-            _id: 'promotion-id-02',
-            name: 'Hảo hảo Chua Cay',
-            image: 'https://poongsankorea.vn/medias/e51/images/2022/07/1-goi-mi-hao-hao-bao-nhieu-calo-1-1.jpg'
+            'id': 2,
+            'name': 'Tốt thí',
+            'quantity': 1,
+            'start_date': '2024-04-21',
+            'end_date': '2024-04-21',
+            'discount_type': 'PERCENTAGE',
+            'voucher_type': 'SHOP_VOUCHER',
+            'min_spend': 2000,
+            'reduce_price': 200,
+            'reduce_percent': 0,
+            'max_use_per_cus': 1,
+            'shop_id': 1
         },
         {
-            _id: 'promotion-id-03',
-            name: 'Miến phú hương',
-            image: 'https://cdn.fast.vn/tmp/20200919065808-mien-phu-huong-thit-heo-nau-mang-1.jpg'
+            'id': 3,
+            'name': 'Phế hậu',
+            'quantity': 1,
+            'start_date': '2024-04-21',
+            'end_date': '2024-04-21',
+            'discount_type': 'PERCENTAGE',
+            'voucher_type': 'SHOP_VOUCHER',
+            'min_spend': 2000,
+            'reduce_price': 200,
+            'reduce_percent': 0,
+            'max_use_per_cus': 1,
+            'shop_id': 1
         },
-        {
-            _id: 'promotion-id-04',
-            name: 'Mì hải sản siêu cay',
-            image: 'https://bizweb.dktcdn.net/100/345/470/products/4261222092-1974521184.jpg?v=1584683941813'
-        }
 
     ],
     users: [
@@ -233,6 +255,29 @@ export const mockData = {
         {
             id: 'provider-id-04',
             brand: 'Iphone',
+            image: 'https://bizweb.dktcdn.net/100/345/470/products/4261222092-1974521184.jpg?v=1584683941813'
+        }
+
+    ],
+    notifications: [
+        {
+            _id: 'promotion-id-01',
+            name: 'Omachi Sốt Spaghetty',
+            image: 'https://cdn-www.vinid.net/2020/10/c82b07dc-c%C3%A1ch-n%E1%BA%A5u-m%C3%AC-omachi-ngon.jpg'
+        },
+        {
+            _id: 'promotion-id-02',
+            name: 'Hảo hảo Chua Cay',
+            image: 'https://poongsankorea.vn/medias/e51/images/2022/07/1-goi-mi-hao-hao-bao-nhieu-calo-1-1.jpg'
+        },
+        {
+            _id: 'promotion-id-03',
+            name: 'Miến phú hương',
+            image: 'https://cdn.fast.vn/tmp/20200919065808-mien-phu-huong-thit-heo-nau-mang-1.jpg'
+        },
+        {
+            _id: 'promotion-id-04',
+            name: 'Mì hải sản siêu cay',
             image: 'https://bizweb.dktcdn.net/100/345/470/products/4261222092-1974521184.jpg?v=1584683941813'
         }
 

@@ -11,7 +11,12 @@ export const updateProduct = (data) => {
         payload: data
     }
 }
-
+export const deleteProduct = (productId) => {
+    return {
+        type: 'DELETE_PRODUCT',
+        payload: productId
+    }
+}
 export const listProducts = (data) => {
     return {
         type: 'LIST_PRODUCTS',

@@ -1,12 +1,12 @@
 import axiosClient from './axiosClient'
 const sellerApi = {
-    getSellers(shopId) {
-        const url = `setting/sellers/list?shopId=${shopId}`
+    getShopSellers() {
+        const url = 'sellers/my-shop'
         return axiosClient.get(url)
     },
-    addSeller(email, password, roleId, shopId) {
-        const url = 'setting/seller/create'
-        return axiosClient.post(url, { email, password, roleId, shopId })
+    addShopSeller(email, password, role_id) {
+        const url = 'sellers/my-shop'
+        return axiosClient.post(url, { email, password, role_id })
     },
     // updateStatus(id, enabled) {
     //     const url = 'http://localhost:8080/api/v1/admin/update-status'

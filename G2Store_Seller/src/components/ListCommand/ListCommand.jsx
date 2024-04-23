@@ -33,9 +33,9 @@ const listButton = [
     {
         name: 'Tài khoản',
         commands: [
+            { path: '/seller/manage/add-seller', name: 'Thêm người bán' },
             { path: '/seller/manage/sellers', name: 'Quản lý người bán' },
-            { path: '/seller/manage/profile', name: 'Cài đặt tài khoản' },
-            { path: '/seller/manage/profile', name: 'Thiết lập chat' }
+            { path: '/seller/profile', name: 'Cài đặt tài khoản' }
         ]
     },
     {
@@ -57,23 +57,24 @@ const listButton = [
         name: 'Thống kê',
         icon: 'Equalizer',
         commands: [
-            { path: '/', name: 'Thống kê dữ liệu' },
-            { path: '/', name: 'Tình trạng vận hành' }
+            { path: '/seller/dashboard', name: 'Thống kê dữ liệu' },
+            { path: '/seller/dashboard', name: 'Tình trạng vận hành' }
         ]
     },
     {
         name: 'Gian hàng',
         icon: 'AddHomeWork',
         commands: [
-            { path: '/', name: 'Thiết kế gian hàng' }
+            { path: '/seller/manage/design-shop', name: 'Thiết kế gian hàng' },
+            { path: '/seller/manage/categories', name: 'Thiết lập ngành hàng' }
         ]
     },
     {
         name: 'Tài chính',
         icon: 'Money',
         commands: [
-            { path: '/', name: 'Thu nhập' },
-            { path: '/', name: 'Số dư tài khoản' }
+            { path: '/seller/dashboard', name: 'Thu nhập' },
+            { path: '/seller/dashboard', name: 'Số dư tài khoản' }
         ]
     }
 ]

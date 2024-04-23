@@ -12,6 +12,9 @@ const authReducer = (state = initialState, action) => {
         }
 
         case 'LOGOUT': {
+            localStorage.removeItem('atk')
+            localStorage.removeItem('rtk')
+            localStorage.removeItem('expireTime')
             return {
                 atk:''
             }

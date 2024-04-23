@@ -1,177 +1,207 @@
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { Rating, Box, Typography, Button, Avatar, Alert, Snackbar } from '@mui/material'
-import { CheckCircleOutline, ShoppingCart, PointOfSale } from '@mui/icons-material'
-import { useSelector, useDispatch } from 'react-redux'
-import momo from '../../assets/img/momo.png'
-import productApi from '../../apis/productApi'
-import reviewApi from '../../apis/reviewApi'
+import { Rating, Box, Typography, Button, Avatar, Container, Breadcrumbs, Link, Divider, Grid, Popover, ToggleButton } from '@mui/material'
+import { Storefront, NavigateNext, AddShoppingCart, CheckCircleOutline, Remove, Add } from '@mui/icons-material'
+import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { formatCurrency } from '../../utils/price'
 import cartItemApi from '../../apis/cartItemApi'
-import { addToCart, updateQuantity } from '../../redux/actions/cart'
+import ShowAlert from '../../components/ShowAlert/ShowAlert'
+import { addToCart } from '../../redux/actions/cart'
+import reviewApi from '../../apis/reviewApi'
+import { mockData } from '../../apis/mockdata'
 
 function ProductDetail() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const product = location.state
   const user = useSelector(state => state.auth)
-  const cartItems = useSelector(state => state.cart.cartItems)
-  var productId = window.location.search.substring(1)
-  const [product, setProduct] = useState()
+  const [quantity, setQuantity] = useState(1)
   const [reviews, setReviews] = useState([])
-  const [review, setReview] = useState()
-  var avarageReviews = 0
-  reviews.map((review) => { avarageReviews += review?.rating })
-  avarageReviews = avarageReviews / reviews.length
+  const [imageZoom, setImageZoom] = useState()
+  const [anchorEl, setAnchorEl] = useState(null)
   const [showMore, setShowMore] = useState(3)
-  const [showAlertUpdate, setShowAlertUpdate] = useState(false)
-  const [showAlertAdd, setShowAlertAdd] = useState(false)
+  const [showAlertFail, setShowAlertFail] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
+  const open = Boolean(anchorEl)
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleIncrease = () => {
+    setQuantity(quantity + 1)
+  }
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1)
+    }
+  }
+  const handleSetImageZoom = (index) => {
+    if (imageZoom == index)
+      setImageZoom()
+    else {
+      setImageZoom(index)
+    }
+  }
 
   function handleShowMoreClick() {
     setShowMore(showMore + 3)
   }
   function handleClickAddToCart() {
-    if (user && product && cartItems) {
-      var update = false
-      var quantity = 1
-      cartItems.forEach(cartItem => {
-        if (cartItem.product.id == product.id) {
-          update = true
-          quantity = cartItem.quantity + 1
-        }
-      })
-      const cartItem = {
-        'id': {
-          'customerId': user.id,
-          'productId': product.id
-        },
-        'customer': {
-          'id': user.id
-        },
-        'product': {
-          'id': product.id
-        },
-        'quantity': quantity
-      }
-      if (update) {
-        cartItemApi.updateCartItem(cartItem)
-          .then(response => {
-            setShowAlertUpdate(true)
-            dispatch(updateQuantity(response.data))
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      }
-      else {
-        cartItemApi.addCartItem(cartItem)
-          .then(response => {
-            setShowAlertAdd(true)
-            dispatch(addToCart(response.data))
-          })
-          .catch(error => {
-            console.error('Lỗi khi thêm vào giỏ hàng:', error)
-          })
-      }
-    } else {
-      console.error('User hoặc Product không tồn tại.')
+    if (!user?.atk) {
+      toast.error('Bạn cần đăng nhập để thực hiện chức năng này!', { autoClose: 2000 })
+      navigate('/login')
+    }
+    else {
+      cartItemApi.addToCart({ quantity: quantity, product_id: product?.product_id })
+        .then((response) => {
+          if (response?.quantity == quantity)
+            dispatch(addToCart(response))
+          setShowAlert(true)
+        })
+        .catch((error) => {
+          console.log(error)
+          setShowAlertFail(true)
+        })
     }
   }
-
   useEffect(() => {
-    productApi.getProductById(productId)
-      .then(response => {
-        setProduct(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-    reviewApi.getReviewByProduct(productId)
-      .then(response => {
-        setReviews(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-    if (user)
-      reviewApi.getReviewByCustomer(user?.id)
-        .then(response => {
-          setReview(response.data)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-  }, [productId])
+    reviewApi.getReviewByProductId(product?.product_id)
+      .then((response) => { setReviews(response) })
+  }, [product])
   return (
-    <div>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertUpdate} autoHideDuration={2000} onClose={() => setShowAlertUpdate(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlertUpdate(false)}>
-          Cập nhật số lượng sản phẩm thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertAdd} autoHideDuration={2000} onClose={() => setShowAlertAdd(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlertAdd(false)}>
-          Thêm sản phẩm vào giỏ thành công!
-        </Alert>
-      </Snackbar>
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-        <Box sx={{
-          width: '80vw', height: '100%', overflow: 'hidden', pt: 5, pl: 5,
-          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#FFFFF0')
-        }}>
-          <Typography variant='h4' fontWeight={'bold'} sx={{ mb: 1 }}>{product?.name}</Typography>
-          <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-start', gap: 5 }}>
+    <Box sx={{ minHeight: '100%' }}>
+      <Container fixed>
+        <Breadcrumbs sx={{ mt: 2 }}>
+          <Link underline="hover" color="inherit" href="/" variant='subtitle1'>
+            Trang chủ
+          </Link>
+          <Link underline="hover" color="inherit" variant='subtitle1' >
+            Chi tiết sản phẩm
+          </Link>
+        </Breadcrumbs>
+        <Typography variant='h5' fontWeight={'bold'} color={'#444444'} sx={{ mb: 1 }}>{product?.name}</Typography>
+        <Divider />
+        <Grid container spacing={1} mt={3}>
+          {/* Product Infomation left */}
+          <Grid item xs={12} sm={12} md={8} lg={8} >
             <Box >
-              <img src={product?.image} style={{ objectFit: 'contain', borderRadius: '15px', width: '590px', height: '350px' }} />
-              <Typography variant='h5' fontWeight={'bold'}>Thông tin sản phẩm</Typography>
-              <Typography variant='body1'> {product?.description}</Typography>
+              <img src={product?.images} style={{ objectFit: 'contain', borderRadius: '15px', width: '100%', height: '350px' }} />
+              <Typography variant='h5' fontWeight={'bold'} color={'#444444'}>Thông tin sản phẩm</Typography>
+              <Typography variant='subtitle1' color={'#444444'} > {product?.description}</Typography>
             </Box>
-            <Box>
-              <Typography variant='h5' fontWeight={'bold'} sx={{ color: 'red' }} >{formatCurrency(product?.price)}</Typography>
-              <Typography variant='h7' >Giảm giá: {product?.discount}%</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
-                <Typography variant='body1' color={'blue'}>{reviews.length + ' Đánh giá'}</Typography>
-                <Rating name="size-medium" size='large' value={avarageReviews} precision={0.1} readOnly />
-                {review?.rating && <Typography variant='subtitle2'>Your Rating: {review?.rating}</Typography>}
+          </Grid>
+          {/* Product Infomation right*/}
+          <Grid item xs={12} sm={12} md={4} lg={4} >
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'end', gap: 2 }}>
+                {product?.special_price && <Typography variant='h5' fontWeight={'bold'} sx={{ color: '#cb1c22' }} >{formatCurrency(product?.special_price)}</Typography>}
+                <Typography variant={product?.special_price ? 'h6' : 'h5'} fontWeight={product?.special_price ? 500 : 600}
+                  sx={{ color: product?.special_price ? ' #444444' : '#cb1c22', textDecoration: product?.special_price ? 'line-through' : 'none' }}>
+                  {product?.special_price ? formatCurrency(product?.price) : formatCurrency(product?.price)}
+                </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <b>Loại sản phẩm:</b> <Typography variant='body1'>{product?.subCategory?.name}</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <b>Nhà cung cấp</b> <Typography variant='body1'>{product?.provider?.name}</Typography>
-              </Box>
-              <img src={momo} alt='momo' style={{ objectFit: 'cover', borderRadius: '15px', width: '100%', height: '50px' }} />
-              <Typography variant='h7' fontWeight={'bold'} >Nhận ngay khuyến mãi đặc biệt</Typography>
-              <ul style={{ padding: 0 }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: 1 }}> <CheckCircleOutline /> 'Nhận mã giảm giá giao hàng'</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: 1 }}> <CheckCircleOutline /> 'Tích xu đổi thưởng khi đơn hàng thành công'</li>
-              </ul>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button sx={{ color: 'white', ':hover': { bgcolor: 'gray' }, bgcolor: '#EE3B3B' }} startIcon={<PointOfSale />} onClick={handleClickAddToCart}>Mua Ngay</Button>
-                <Button sx={{ bgcolor: '#1E90FF', color: 'white', ':hover': { bgcolor: 'gray' } }} startIcon={<ShoppingCart />} onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
+                <Typography variant='subtitle2' color={'#016afa'}>{(reviews?.length || 0) + ' Đánh giá'}</Typography>
+                <Rating name="size-medium" size='large' value={5} precision={0.1} readOnly />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'} >Danh mục:</Typography>
+                <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
+                  onClick={() => { navigate('/shop-page', { state: product?.shop?.shop_id }) }}>
+                  <Typography variant='subtitle1' color={'#444444'}>{product?.category?.name}</Typography>
+                  <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
+                </Button>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'}>Gian hàng:</Typography>
+                <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
+                  onClick={() => { navigate('/shop-page', { state: product?.shop?.shop_id }) }}>
+                  <Storefront sx={{ fontSize: 25, color: '#444444' }} />
+                  <Typography variant='subtitle1' sx={{ color: '#444444' }}>{product?.shop?.name}</Typography>
+                  <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
+                </Button>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'}>Số lượng:</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', pl: 2 }}>
+                  <ToggleButton value="left" key="left" sx={{ width: 50, height: 40 }} onClick={handleDecrease}>
+                    <Remove sx={{ fontSize: 15 }} />
+                  </ToggleButton>
+                  <input value={quantity} type='number' min={0} max={1000} onFocus={(e) => e.target.select()} onChange={(e) => setQuantity(parseInt(e.target.value), 10)}
+                    style={{ border: '0.5px solid', borderColor: '#D3D3D3', borderRadius: 2, width: 60, height: 40, textAlign: 'center' }} />
+                  <ToggleButton value="right" key="right" sx={{ width: 50, height: 40 }} onClick={handleIncrease}>
+                    <Add sx={{ fontSize: 15 }} />
+                  </ToggleButton>
+                </Box>
+              </Box>
+              {/* Promotions*/}
+              <Button variant="contained" startIcon={<CheckCircleOutline />} endIcon={<NavigateNext />} onClick={handleClick} color='success'
+                sx={{ ':hover': { bgcolor: 'green' } }}> Xem các khuyến mãi đặc biệt</Button>
+              <Popover open={open} anchorEl={anchorEl} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} >
+                {mockData.promotions.map((promotion, index) => (
+                  <Box key={index} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minWidth: 300, p: 1 }}>
+                    <Box>
+                      <Typography color={'#cb1c22'} variant='subtitle1' fontWeight={'bold'} >{formatCurrency(promotion?.discount_type == 'PERCENTAGE' ? promotion?.reduce_percent : promotion?.reduce_price)}</Typography>
+                      <Typography color={'#cb1c22'} variant='subtitle2' sx={{}}>Đơn tối thiểu: {formatCurrency(promotion?.min_spend)}</Typography>
+                      <Typography sx={{}}>{promotion?.start_date} - {promotion?.end_date}</Typography>
+                    </Box>
+                    <Typography variant='subtitle1' fontWeight={'bold'} color={'orange'} >{promotion?.name}</Typography>
+                  </Box>
+                ))}
+              </Popover>
+              {/* Quantity */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+
+                <Button variant='contained' fullWidth color='error' onClick={handleClickAddToCart}>Mua Ngay</Button>
+                <Button variant='contained' fullWidth startIcon={<AddShoppingCart />} color='info' onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
+
               </Box>
             </Box>
-          </Box>
+          </Grid>
+        </Grid>
+        {/* Reviews */}
+        {Array.isArray(reviews) && reviews.length > 0 &&
           <Box sx={{ mb: 2, mt: 5 }}>
-            <Typography variant='h5' fontWeight={'bold'}>Đánh giá sản phẩm</Typography>
+            <Typography variant='h5' fontWeight={'bold'} color={'#444444'}>Đánh giá sản phẩm</Typography>
             {reviews?.slice(0, showMore).map((review, index) =>
-              <Box key={index} sx={{ display: 'flex', borderRadius: 3, width: '100%', gap: 2, alignItems: 'center', mt: 3 }}>
-                <Avatar sx={{ }}>{review?.customerId}</Avatar>
-                <Box >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                    <Typography variant='subtitle1' fontWeight={'bold'}>User Id: {review?.customerId}</Typography>
-                    <Rating name="size-medium" size='large' value={review?.rating} precision={1} readOnly />
+              <Box key={index}>
+                <Box sx={{ display: 'flex', borderRadius: 3, width: '100%', gap: 2, alignItems: 'center', mt: 3 }}>
+                  <Avatar sx={{ height: 50, width: 50 }}>{review?.review_id}</Avatar>
+                  <Box >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'}>Khách hàng {review?.customer_name || 'ẩn danh'}</Typography>
+                      <Rating size='small' value={4} readOnly />
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <Typography variant='subtitle1' color={'#444444'}>{review?.content}</Typography>
+                      <img src={review?.images} alt={'Đánh giá'} onClick={() => handleSetImageZoom(index)}
+                        style={{ objectFit: 'cover', borderRadius: '10px', width: '50px', height: '50px' }} />
+                    </Box>
                   </Box>
-                  <Typography variant='body1'>{review?.comment}</Typography>
                 </Box>
+                {imageZoom == index && <img src={review?.images} alt={'Đánh giá'}
+                  style={{ objectFit: 'cover', borderRadius: '5px', marginTop: 2, cursor: 'pointer', width: '300px', height: '200px' }} />}
               </Box>
             )}
             {reviews.length > showMore && (
-              <Button onClick={handleShowMoreClick} sx={{ color: 'gray', '&:hover': { bgcolor: 'darkgray' } }}>Show More</Button>
+              <Button onClick={handleShowMoreClick}>Hiện thêm</Button>
             )}
-          </Box>
-        </Box>
-      </Box>
-    </div>
+          </Box>}
+
+      </Container>
+      <ShowAlert setShowAlert={setShowAlert} showAlert={showAlert} content={'Thêm sản phẩm vào giỏ thành công'} />
+      <ShowAlert setShowAlert={setShowAlertFail} showAlert={showAlertFail} content={'Thêm sản phẩm vào giỏ thất bại'} isFail={true} />
+    </Box>
   )
 }
 

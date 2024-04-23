@@ -2,19 +2,18 @@ import { ShoppingCart, Notifications } from '@mui/icons-material'
 import { Box, Button, Badge, Tooltip, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Account from './Account/Account'
 import Search from './Search/Search'
 import G2Logo from '../../assets/img/G2Logo.png'
 
 function AppBar() {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const cart = useSelector(state => state.cart)
   const [quantity, setQuantity] = useState(0)
-
   useEffect(() => {
-    setQuantity(cart?.cartItems.length)
+    if (Array.isArray(cart?.cartItems))
+      setQuantity(cart?.cartItems.length)
   }, [cart])
   return (
     <Box sx={{
@@ -33,10 +32,9 @@ function AppBar() {
         <Search />
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         <Tooltip title="Thông báo">
-          <Badge color="warning" badgeContent={quantity} sx={{ cursor: 'pointer' }}>
+          <Badge color="warning" badgeContent={1} sx={{ cursor: 'pointer' }}>
             <Notifications sx={useStyles.button} onClick={() => navigate('/cart')} />
           </Badge>
         </Tooltip>

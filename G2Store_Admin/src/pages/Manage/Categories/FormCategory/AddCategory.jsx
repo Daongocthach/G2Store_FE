@@ -1,14 +1,11 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box } from '@mui/material'
 import Add from '@mui/icons-material/Add'
 import categoryApi from '../../../../apis/categoryApi'
-import { listCategories } from '../../../../redux/actions/categories'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 
-function AddCategory({ parent_id, isParent }) {
-    const dispatch = useDispatch()
+function AddCategory({ parent_id, isParent, reRender, setReRender }) {
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
@@ -19,23 +16,16 @@ function AddCategory({ parent_id, isParent }) {
     }
     const handleClickAdd = async () => {
         setLoading(true)
-        try {
-            const response = await categoryApi.addCategory({ name, parent_id })
-            if (response) {
-                setShowAlert(true)
-                categoryApi.getCategories()
-                    .then((response) => {
-                        dispatch(listCategories(response))
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-            }
-        } catch (error) {
+        categoryApi.addCategory({ name, parent_id })
+          .then(() => {
+            setShowAlert(true)
+            setReRender(!reRender)
+          })
+          .catch((error) => {
             console.log(error)
             setShowAlertFail(true)
-        }
-        setLoading(false)
+          })
+          .finally(() => setLoading(false))
         handleClose()
     }
     return (

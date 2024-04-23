@@ -1,18 +1,12 @@
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Container, Grid, Typography, Button } from '@mui/material'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import thanksImage from '../../assets/img/thanks.gif'
-import cartItemApi from '../../apis/cartItemApi'
-import { deleteAllCart } from '../../redux/actions/cart'
-import { getCookie } from '../../utils/cookie'
 
 function Thanks() {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
-    var quantity = window.location.search.substring(1)
-    const userId = getCookie('userId')
-    cartItemApi.deleteAllCartItemByCustomerId(userId)
-        .then(response => { dispatch(deleteAllCart()) })
+    const location = useLocation()
+    const quantity = location.state
+
     return (
         <Container maxWidth='lg' >
             <Grid container spacing={3} mt={2} minHeight={'63vh'}>

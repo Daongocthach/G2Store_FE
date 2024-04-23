@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Typography, Box, Input, Button } from '@mui/material'
 import { AddCircle } from '@mui/icons-material'
+import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
-import { useFormik } from 'formik'
 import { updateAvatar } from '../../../redux/actions/auth'
 import avatarNull from '../../../assets/img/avatar.png'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
@@ -14,12 +14,11 @@ import DialogUpdatePhoneNo from '../../../components/ShowDialog/DialogUpdatePhon
 import DialogUpdateEmail from '../../../components/ShowDialog/DialogUpdateEmail'
 
 function Profile() {
-  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertFail, setShowAlertFail] = useState(false)
   const [user, setUser] = useState({})
-  const [avatar, setAvatar] = useState(user?.avatar || '')
+  const [avatar, setAvatar] = useState(user?.avatar)
 
   useEffect(() => {
     authenApi.me()
@@ -29,7 +28,6 @@ function Profile() {
           phoneNo: response?.phone_no,
           full_name: response?.full_name,
           dob: response?.dob,
-          avatar: response?.avatar,
           point: response?.point
         })
       })

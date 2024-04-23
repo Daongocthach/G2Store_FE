@@ -11,7 +11,6 @@ import { listSellers } from '../../../redux/actions/sellers'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import UpdateSeller from './FormSeller/UpdateSeller'
 import DeleteSeller from './FormSeller/DeleteSeller'
-import AddSeller from './AddSeller/AddSeller'
 
 function Sellers() {
   const dispatch = useDispatch()
@@ -36,9 +35,9 @@ function Sellers() {
     setSelect(event.target.value)
   }
   useEffect(() => {
-    sellerApi.getSellers(2)
+    sellerApi.getShopSellers()
       .then(response => {
-        dispatch(listSellers(response.data))
+        dispatch(listSellers(response))
       })
       .catch(error => {
         console.log(error)
@@ -48,18 +47,18 @@ function Sellers() {
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
       <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/dashboard">
+        <Link underline="hover" color="inherit" href="/seller/dashboard">
           Trang chủ
         </Link>
-        <Link underline="hover" color="inherit" href="/manage/Sellers">
-          Quản lý tài khoản khách hàng
+        <Link underline="hover" color="inherit" href="/seller/manage/sellers">
+          Quản lý tài khoản người bán
         </Link>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="outlined"
-            onClick={() => { navigate('/manage/add-seller') }}>
-            Thêm người dùng
+          <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }} startIcon={<AddCircle />} variant="outlined"
+            onClick={() => { navigate('/seller/manage/add-seller') }}>
+            Thêm người bán
           </Button>
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
@@ -89,12 +88,12 @@ function Sellers() {
               {Array.isArray(sellers) && sellers?.map((seller, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell >{seller?.fullName}</TableCell>
-                    <TableCell >{seller?.email}</TableCell>
-                    <TableCell >{seller?.phoneNo}</TableCell>
-                    <TableCell sx={{ color: 'blue' }}>{seller?.role?.appRole}</TableCell>
-                    <TableCell ><Switch /></TableCell>
-                    <TableCell >{index==0 && <Alert severity='success' />}</TableCell>
+                    <TableCell >{seller?.fullName || null}</TableCell>
+                    <TableCell >{seller?.email || null}</TableCell>
+                    <TableCell >{seller?.phone_no || null}</TableCell>
+                    <TableCell sx={{ color: 'blue' }}>{seller?.role || null}</TableCell>
+                    <TableCell ><Switch checked={seller?.is_enabled} /></TableCell>
+                    <TableCell >{index == 0 && <Alert severity='success' />}</TableCell>
                     <TableCell ><UpdateSeller /></TableCell>
                     <TableCell ><DeleteSeller /></TableCell>
                   </TableRow>

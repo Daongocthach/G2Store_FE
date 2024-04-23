@@ -2,27 +2,25 @@ import {
   Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
   TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Checkbox, Switch
 } from '@mui/material'
+import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { AddCircle } from '@mui/icons-material'
-import UpdateProduct from './FormProduct/UpdateProduct'
+import { AddCircle, Create } from '@mui/icons-material'
 import DeleteProduct from './FormProduct/DeleteProduct'
-import UpdatePrice from './FormProduct/UpdatePrice'
-import UpdateQuantity from './FormProduct/UpdateQuantity'
 import productApi from '../../../apis/productApi'
-import { listProducts } from '../../../redux/actions/products'
 import { formatCurrency } from '../../../utils/price'
 
 function Products() {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const products = useSelector(state => state.products.products)
+  const shop_id = useSelector(state => state.auth.shop_id)
+  const [reRender, setReRender] = useState(false)
+  const [products, setProducts] = useState([])
   const [page, setPage] = useState(0)
+  const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [select, setSelect] = useState(1)
-
-  const handleChangePage = (e, newPage) => {
+  const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
   const handleChangeRowsPerPage = (event) => {
@@ -32,15 +30,21 @@ function Products() {
   const handleChange = (event) => {
     setSelect(event.target.value)
   }
+  const handleClickUpdate = (product) => {
+    navigate('/seller/manage/add-product', { state: product })
+  }
   useEffect(() => {
-    productApi.getShopProducts(2)
-      .then(response => {
-        dispatch(listProducts(response.data))
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [])
+    if (shop_id) {
+      productApi.getShopProducts(shop_id, page, rowsPerPage)
+        .then(response => {
+          setProducts(response?.content)
+          setTotalElements(response?.totalElements)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
+  }, [page, reRender, rowsPerPage, shop_id])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
       <Breadcrumbs>
@@ -53,7 +57,7 @@ function Products() {
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="outlined"
-          onClick={() => { navigate('/manage/add-product') }}>
+          onClick={() => { navigate('/seller/manage/add-product') }}>
           Thêm sản phẩm mới
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
@@ -87,30 +91,30 @@ function Products() {
                     <TableCell ><Checkbox /></TableCell>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {<img src={ product?.image || 'https://forums.fanedit.org/data/avatars/l/27/27296.jpg?1671171104'} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                        {<img src={product?.images} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
                         <Box>
                           <Typography variant='subtitle1' fontWeight={'bold'}>{product?.name}</Typography>
-                          <Typography variant='body2'>{'Seller SKU: ' + product?.id}</Typography>
+                          <Typography variant='body2'>{'Product ID: ' + product?.product_id}</Typography>
                         </Box>
                       </Box>
                     </TableCell>
                     <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography>{formatCurrency(product?.price)}</Typography>
-                        <UpdatePrice />
+                        {/* <UpdatePrice /> */}
                       </Box>
                     </TableCell>
                     <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography>{product?.stockQuantity}</Typography>
-                        <UpdateQuantity />
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography>{product?.stock_quantity}</Typography>
+                        {/* <UpdateQuantity /> */}
                       </Box>
                     </TableCell>
                     <TableCell >
                       <Switch defaultChecked />
                     </TableCell>
-                    <TableCell ><UpdateProduct /></TableCell>
-                    <TableCell ><DeleteProduct /></TableCell>
+                    <TableCell ><Button sx={{ bgcolor: 'orange', color: '#363636' }} onClick={() => handleClickUpdate(product)}><Create /></Button></TableCell>
+                    <TableCell ><DeleteProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} /></TableCell>
                   </TableRow>
                 )
               })}
@@ -119,11 +123,12 @@ function Products() {
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[5, 10, { value: products?.length, label: 'All' }]}
-                  count={products?.length}
-                  rowsPerPage={rowsPerPage}
+                  labelRowsPerPage={'Số lượng mỗi trang'}
+                  rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
+                  count={totalElements}
                   page={page}
                   onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </TableRow>

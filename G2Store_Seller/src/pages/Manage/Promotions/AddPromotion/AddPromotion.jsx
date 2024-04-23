@@ -13,43 +13,42 @@ function AddPromotion() {
     const [name, setName] = useState('')
     const [startDate, setStartDate] = useState(formatDate(new Date()))
     const [endDate, setEndDate] = useState(formatDate(new Date()))
-    const [promotionType, setPromotionType] = useState('SHOP_DISCOUNT')
+    const [voucherType, setVoucherType] = useState('SHOP_VOUCHER')
     const [minSpend, setMinSpend] = useState(8000)
-    const [percentDiscount, setPercentDiscount] = useState(10)
-    const [priceDiscount, setPriceDiscount] = useState(2000)
+    const [percentReduce, setPercentReduce] = useState(0)
+    const [priceReduce, setPriceReduce] = useState(0)
     const [quantity, setQuantity] = useState(10)
     const [maxUsePerCus, setMaxUsePerCus] = useState(1)
-    const [select, setSelect] = useState(1)
+    const [discoutType, setDiscoutType] = useState('PRICE')
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertWarning, setShowAlertWarning] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
     const checkOverMinSpend = () => {
-        if (select == 1) {
-            return (priceDiscount / minSpend) > 0.3
+        if (discoutType == 'PRICE') {
+            return (priceReduce / minSpend) > 0.3
         }
-        return (percentDiscount / 100) > 0.3
+        return (percentReduce / 100) > 0.3
     }
-    const handleClickAdd = () => {
-        if (name && startDate && endDate && minSpend && quantity && maxUsePerCus) {
+    const handleClickAdd = async () => {
+        if (name && startDate && endDate && minSpend && quantity && maxUsePerCus ) {
             const promotionData = {
-                name,
-                startDate,
-                endDate,
-                promotionType,
-                minSpend,
-                percentDiscount,
-                priceDiscount,
-                quantity,
-                maxUsePerCus,
-                suspended: false,
-                shopId: 1
+                name: name,
+                quantity: quantity,
+                start_date: startDate,
+                end_date: endDate,
+                discount_type: discoutType,
+                voucher_type: voucherType,
+                min_spend: minSpend,
+                reduce_price: discoutType == 'PRICE' ? priceReduce : null,
+                reduce_percent: discoutType == 'PERCENTAGE' ? percentReduce : null,
+                max_use_per_cus: maxUsePerCus
             }
             promotionApi.addPromotion(promotionData)
                 .then((response) => {
                     setShowAlert(true)
                     dispatch(addPromotion(response.data))
                     setTimeout(() => {
-                        navigate('/manage/promotions')
+                        navigate('/seller/manage/promotions')
                       }, 1000)
                 })
                 .catch(error => {
@@ -93,9 +92,9 @@ function AddPromotion() {
                         <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
                         <Typography variant='body1'>Mã giảm được áp dụng cho: </Typography>
                     </Box>
-                    <RadioGroup row onChange={(e) => setPromotionType(e.target.value)} value={promotionType}>
-                        <FormControlLabel value={'SHOP_DISCOUNT'} control={<Radio />} label='Toàn gian hàng' />
-                        <FormControlLabel value={'FREE_SHIP'} control={<Radio />} label='Phí vận chuyển' />
+                    <RadioGroup row onChange={(e) => setVoucherType(e.target.value)} value={voucherType}>
+                        <FormControlLabel value={'SHOP_VOUCHER'} control={<Radio />} label='Toàn gian hàng' />
+                        <FormControlLabel value={'FREE_SHIP_VOUCHER'} control={<Radio />} label='Phí vận chuyển' />
                     </RadioGroup>
                 </Box>
             </Box>
@@ -106,9 +105,9 @@ function AddPromotion() {
                         <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
                         <Typography variant='body1'>Loại mã giảm giá: </Typography>
                     </Box>
-                    <RadioGroup row onChange={(e) => setSelect(e.target.value)} value={select}>
-                        <FormControlLabel value={1} control={<Radio />} label='Giảm giá theo tiền' />
-                        <FormControlLabel value={2} control={<Radio />} label='Giảm giá theo phần trăm' />
+                    <RadioGroup row onChange={(e) => setDiscoutType(e.target.value)} value={discoutType}>
+                        <FormControlLabel value={'PRICE'} control={<Radio />} label='Giảm giá theo tiền' />
+                        <FormControlLabel value={'PERCENTAGE'} control={<Radio />} label='Giảm giá theo phần trăm' />
                     </RadioGroup>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
@@ -129,16 +128,16 @@ function AddPromotion() {
                             <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
                             <Typography variant='body1'>Giảm giá: </Typography>
                         </Box>
-                        {select == 1 ?
+                        {discoutType == 'PRICE' ?
                             <Box>
                                 <OutlinedInput size='small' sx={{ width: 200 }} type='number' endAdornment={<InputAdornment position='end'>đ</InputAdornment>} onFocus={(e) => e.target.select()}
-                                    inputProps={{ min: 0, inputMode: 'numeric' }} error={checkOverMinSpend()} value={priceDiscount} onChange={(e) => setPriceDiscount(e.target.value)} />
+                                    inputProps={{ min: 0, inputMode: 'numeric' }} error={checkOverMinSpend()} value={priceReduce} onChange={(e) => setPriceReduce(e.target.value)} />
                                 <FormHelperText sx={{ color: 'orange', visibility: checkOverMinSpend() ? 'visible' : 'hidden' }}> Giảm giá vượt quá 30%</FormHelperText>
                             </Box>
                             :
                             <Box>
                                 <OutlinedInput size='small' sx={{ width: 200 }} type='number' endAdornment={<InputAdornment position='end'>%</InputAdornment>} onFocus={(e) => e.target.select()}
-                                    inputProps={{ min: 0, max: 100 }} error={checkOverMinSpend()} value={percentDiscount} onChange={(e) => setPercentDiscount(e.target.value)} />
+                                    inputProps={{ min: 0, max: 100 }} error={checkOverMinSpend()} value={percentReduce} onChange={(e) => setPercentReduce(e.target.value)} />
                                 <FormHelperText sx={{ color: 'orange', visibility: checkOverMinSpend() ? 'visible' : 'hidden' }}> Giảm giá vượt quá 30%</FormHelperText>
                             </Box>
                         }

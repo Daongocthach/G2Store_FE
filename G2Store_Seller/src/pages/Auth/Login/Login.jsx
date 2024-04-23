@@ -7,7 +7,7 @@ import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../components/Loading/Loading'
-import { login, updateAvatar } from '../../../redux/actions/auth'
+import { updateProfile } from '../../../redux/actions/auth'
 function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -24,11 +24,16 @@ function Login() {
         const response = await authenApi.login({ email, password })
         if (response) {
           setShowAlert(true)
-          setCookie('atk', response?.access_token, 1)
-          setCookie('rtk', response?.refresh_token, 1)
-          dispatch(login(response?.access_token))
+          localStorage.setItem('atk', response?.access_token)
+          localStorage.setItem('rtk', response?.refresh_token)
           authenApi.me()
-            .then((response) => dispatch(updateAvatar(response?.data?.avatar)))
+            .then((response) => {
+              const data = {
+                avatar : response?.avatar,
+                shop_id: response?.shop?.shopId
+              }
+              dispatch(updateProfile(data))
+             })
           setTimeout(() => {
             navigate('/seller/dashboard')
           }, 1000)

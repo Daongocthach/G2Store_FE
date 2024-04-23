@@ -9,7 +9,7 @@ const initialState = {
                 products: [...state.products, action.payload]
             }
         case 'UPDATE_PRODUCT': {
-            const updateIndex = state.products.findIndex(product => product.id === action.payload.id)
+            const updateIndex = state.products.findIndex(product => product.product_id === action.payload.product_id)
             return {
                 ...state,
                 products: [
@@ -19,6 +19,13 @@ const initialState = {
                 ]
             }
         }
+        case 'DELETE_PRODUCT': {
+            const newProducts = state.products.filter(product => product.product_id !== action.payload)
+            return {
+              ...state,
+              products: newProducts
+            }
+          }
         case 'LIST_PRODUCTS':
             return {
               ...state,
