@@ -33,7 +33,7 @@ function Product({ product, reRender, setReRender }) {
                 <ToggleButton value="left" key="left" sx={{ width: 30, height: 30 }} size='small' onClick={handleDecrease}>
                     <Remove sx={{ fontSize: 15 }}/>
                 </ToggleButton>
-                <input value={changeQuantity} onFocus={(e) => e.target.select()} onChange={(e) => setChangeQuantity(parseInt(e.target.value), 10)}
+                <input value={changeQuantity} type='number' onFocus={(e) => e.target.select()} onChange={(e) => setChangeQuantity(parseInt(e.target.value), 10)}
                     style={{ border: '0.5px solid', borderColor: '#D3D3D3', borderRadius: 2, width: 50, height: 30, textAlign: 'center' }} />
                 <ToggleButton value="right" key="right" sx={{ width: 30, height: 30 }} size='small' onClick={handleIncrease}>
                     <Add sx={{ fontSize: 15 }}/>

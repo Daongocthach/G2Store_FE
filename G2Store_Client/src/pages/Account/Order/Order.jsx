@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { Typography, Box, Button, Grid, Tab, Tabs } from '@mui/material'
-import { LocalShipping, FiberManualRecord } from '@mui/icons-material'
+import { Typography, Box, Button, Tab, Tabs, Divider } from '@mui/material'
+import { LocalShipping, FiberManualRecord, Storefront, NavigateNext } from '@mui/icons-material'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
@@ -70,38 +69,47 @@ function Order() {
             <Box key={index}>
               <Box sx={useStyles.flexBox}>
                 <Box sx={useStyles.flexBox}>
-                  <Typography variant='h7' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng</Typography>
-                  <Typography variant='h8'>#{order?.order_id}</Typography>
+                  <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng</Typography>
+                  <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
                 </Box>
                 <Box sx={useStyles.flexBox}>
                   <Box sx={{ display: 'flex', gap: 1 }}>
                     <LocalShipping />
-                    <Typography variant='h7' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
+                    <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: 1 }}
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
                     color={order?.order_status == 'SUCCESS' ? 'green' :
                       order?.order_status == 'ON_DELIVERY' ? 'orange' :
-                        order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : 'red'}>
-                    <FiberManualRecord />
-                    <Typography variant='body1'>{order?.order_status}</Typography>
+                        order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'}>
+                    <FiberManualRecord sx={{ fontSize: 15 }} />
+                    <Typography variant='body2'>{order?.order_status}</Typography>
                   </Box>
                 </Box>
               </Box>
+              <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
+                onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
+                <Storefront sx={{ fontSize: 25, color: '#444444' }} />
+                <Typography variant='subtitle1' sx={{ color: '#444444' }}>{order?.shop_name}</Typography>
+                <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
+              </Button>
               {order?.items.map((orderItem, index) =>
                 <OrderItem key={index} orderItem={orderItem} order_status={order?.order_status} />)}
               <Box sx={useStyles.flexBox}>
                 {order?.order_status == 'ORDERED' || order?.order_status == 'CONFIRMED' ?
                   <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id} /> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
                 {order?.order_status == 'ON_DELIVERY' && <GoodsReceived orderId={order?.id} />}
-                <Typography variant='h6'>Thành tiền: {formatCurrency(order.total)}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
+                  <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
+                  <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order.total)}</Typography>
+                </Box>
               </Box>
+              <Divider sx={{ mb: 2 }} />
             </Box>)}
           {orders.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
             <img src={emptyOrder} />
-            <Typography variant='h7' >Bạn chưa có đơn hàng nào</Typography>
-            <Typography variant='h6' >Cùng khám phá hàng ngàn sản phẩm tại G2Store nhé!</Typography>
-            <Button
-              sx={{ bgcolor: '#CD3333', borderRadius: 10, color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }}
+            <Typography color={'#444444'} variant='subtitle2' >Bạn chưa có đơn hàng nào</Typography>
+            <Typography color={'#444444'} variant='h6' >Cùng khám phá hàng ngàn sản phẩm tại G2Store nhé!</Typography>
+            <Button variant='contained' color='warning'
               onClick={() => navigate('/genre-detail')}>
               Khám phá ngay
             </Button>

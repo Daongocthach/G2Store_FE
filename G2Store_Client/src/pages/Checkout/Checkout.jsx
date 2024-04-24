@@ -40,7 +40,8 @@ function Checkout() {
 
   function handleClickPromotion() {
   }
-  const convertDataToOrderFormat = (data, feeShip) => {
+  const convertDataToOrderFormat = (data) => {
+    const address_id = address?.address_id
     const orders = data.map(order => {
       return {
         items: order.items.map(item => {
@@ -55,66 +56,59 @@ function Checkout() {
             sub_total: item.sub_total
           }
         }),
-        shop_id: order.shop.shop_id,
-        fee_ship: feeShipData[order.shop.shop_id]
+        shop_id: order?.shop?.shop_id,
+        fee_ship: feeShipData[order?.shop?.shop_id]
       }
     })
-    return { orders }
+    return { orders, address_id }
   }
   function handleClickOrder() {
-    // setLoading(true)
-    const orderData = convertDataToOrderFormat(data?.cartItems, 5000)
-    // orderApi.addOrder(order)
-    //   .then(() => {
-    //     setShowAlert(true)
-    //     setTimeout(() => {
-    //       dispatch(deleteAllCart())
-    //       navigate('/thanks', { state: data?.cartItems.length })
-    //     }, 1000)
-    //   })
-    //   .catch(() => {
-    //     setShowAlertFail(true)
-    //   })
-    //   .finally(() => setLoading(false))
-  }
-  const calculateFeeShip = async (shopDistrictId, userDistrictId, height, length, weight, width) => {
-    ghnApi.getMethodShip(shopDistrictId, userDistrictId)
-      .then((response) => {
-        const service_id = response?.data?.data[0]?.service_id
-        const data = ghnApi.calculateFeeShip(service_id, shopDistrictId, userDistrictId, height, length, weight, width)
-        return data.data.data.total
-      })
-      .catch((error) => {
-        console.error('Error calculating fee ship:', error)
-        return null
-      })
-  }
-
-  const fetchData = async () => {
     setLoading(true)
-    addressApi.getAddresses()
-      .then((response) => {
-        setAddresses(response)
-        const defaultAddress = response.find(address => address?.is_default)
+    const order = convertDataToOrderFormat(data?.cartItems)
+    console.log(order)
+    orderApi.addOrder(order)
+      .then(() => {
+        setShowAlert(true)
+        setTimeout(() => {
+          dispatch(deleteAllCart())
+          navigate('/thanks')
+        }, 1000)
+      })
+      .catch(() => {
+        setShowAlertFail(true)
+      })
+      .finally(() => setLoading(false))
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const addressesResponse = await addressApi.getAddresses()
+        setAddresses(addressesResponse)
+        const defaultAddress = addressesResponse.find(address => address?.is_default)
         if (defaultAddress) {
           setAddress(defaultAddress)
           const feeShipData = {}
-          data?.cartItems.map((cartItem) => {
+          let totalFeeShip = 0
+          await Promise.all(data?.cartItems.map(async (cartItem) => {
             const height = 5
             const length = 5
             const weight = 100
             const width = 5
-            const feeShip = calculateFeeShip(cartItem?.shop?.district_id, defaultAddress?.address_id, height, length, weight, width)
-            feeShipData[cartItem?.shop?.shop_id] = feeShip
-          })
+            const response = await ghnApi.getMethodShip(cartItem?.shop?.district_id, defaultAddress?.district_id)
+            const data = await ghnApi.calculateFeeShip(response?.data?.data[0]?.service_id, cartItem?.shop?.district_id, defaultAddress?.district_id, height, length, weight, width)
+            feeShipData[cartItem?.shop?.shop_id] = data?.data?.data?.total
+            totalFeeShip += data?.data?.data?.total
+          }))
           setFeeShipData(feeShipData)
+          setFeeShip(totalFeeShip)
         }
-
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false))
-  }
-  useEffect(() => {
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
     fetchData()
   }, [])
   return (
@@ -146,7 +140,7 @@ function Checkout() {
                 <Product key={index} product={product} />
               ))}
               <Chip color='success' icon={<CheckCircleOutline sx={{ color: 'green' }} />} sx={{ mt: 2 }} variant="outlined"
-                label={'Giao hàng tiêu chuẩn: ' + (10000)} />
+                label={'Phí vận chuyển: ' + formatCurrency(feeShipData[cartItem?.shop?.shop_id] ? feeShipData[cartItem?.shop?.shop_id] : 0)} />
             </Box>))}
         </Grid>
 
@@ -156,38 +150,39 @@ function Checkout() {
             <TextField fullWidth value={code} size='small' label='Mã khuyến mãi' onChange={(e) => { setCode(e.target.value) }} />
             <Button sx={useStyles.buttonVoucher} onClick={handleClickPromotion}>Nhập</Button>
           </Box>
-          <TextField sx={{ mt: 2 }} value={note} label='Ghi chú' size='small' fullWidth onChange={(e) => { setNote(e.target.value) }} />
-          <Box sx={{ ...useStyles.flexBoxPrice, borderTop: '1px solid gray' }}>
-            <Typography variant='h6' >Tổng tiền: </Typography>
-            <Typography variant='h6' sx={{ color: 'red', fontWeight: 'bold' }}>{formatCurrency(total)}</Typography>
+          <Divider sx={{ mt: 2 }} />
+          <Box sx={{ ...useStyles.flexBoxPrice }}>
+            <Typography variant='h6' sx={{ color: '#4F4F4F' }}>Tổng tiền: </Typography>
+            <Typography variant='h6' sx={{ color: '#cb1c22', fontWeight: 'bold' }}>{formatCurrency(total)}</Typography>
           </Box>
           <Box sx={useStyles.flexBoxPrice}>
-            <Typography variant='subtitle1' >Tiền hàng: </Typography>
-            <Typography variant='subtitle1' >{formatCurrency(totalProducts)}</Typography>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Tiền hàng: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#cb1c22' }}>{formatCurrency(totalProducts)}</Typography>
           </Box>
           <Box sx={useStyles.flexBoxPrice}>
-            <Typography variant='subtitle1' >Phí vận chuyển: </Typography>
-            <Typography variant='subtitle1' >{formatCurrency(feeShip)}</Typography>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Phí vận chuyển: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#6ca46f' }}>{formatCurrency(feeShip)}</Typography>
           </Box>
           <Box sx={useStyles.flexBoxPrice}>
-            <Typography variant='subtitle1' >Giảm giá khuyến mãi: </Typography>
-            <Typography variant='subtitle1' >{formatCurrency(0)}</Typography>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Giảm giá khuyến mãi: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>{formatCurrency(0)}</Typography>
           </Box>
           {voucher && <Box sx={{ ...useStyles.flexBoxPrice, borderBottom: '1px solid gray' }}>
-            <Typography variant='subtitle1' >Giảm giá voucher: </Typography>
-            <Typography variant='subtitle1' >{formatCurrency(voucher?.value)}</Typography>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Giảm giá voucher: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>{formatCurrency(voucher?.value)}</Typography>
           </Box>}
-          <Typography variant='h5' sx={{ mt: 3 }}>Phương thức thanh toán</Typography>
+          <Typography variant='h6' sx={{ mt: 3, color: '#4F4F4F' }}>Phương thức thanh toán</Typography>
           <Box sx={useStyles.flexBox}>
             <Radio sx={useStyles.radio} checked={checked == 0} onChange={() => setChecked(0)} />
-            <Typography variant='subtitle1'>Thanh toán khi nhận hàng</Typography>
+            <Typography sx={{ color: '#4F4F4F' }} variant='subtitle1'>Thanh toán khi nhận hàng</Typography>
           </Box>
           <Box sx={useStyles.flexBox}>
             <Radio sx={useStyles.radio} checked={checked == 1} onChange={() => setChecked(1)} />
-            <Typography variant='subtitle1' >Thanh toán bằng momo</Typography>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Thanh toán bằng momo</Typography>
             <img src={imgMomo} alt='thanh toan momo' style={{ height: '30px', width: '30px' }} />
           </Box>
-          <Button sx={{ ...useStyles.button, mt: 2 }} onClick={handleClickOrder}> Hoàn tất đặt hàng </Button>
+          <Divider sx={{ mb: 2 }} />
+          <Button size='large' color='error' variant='contained' onClick={handleClickOrder}> Hoàn tất đặt hàng </Button>
         </Grid>
       </Grid>
 

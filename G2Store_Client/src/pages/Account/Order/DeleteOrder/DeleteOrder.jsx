@@ -24,10 +24,10 @@ function DeleteOrder({ handleAllOrders, orderId }) {
     }
     return (
         <div>
-            <Button size={'small'} sx={{ bgcolor: '#CD3333', color: 'white', borderRadius: 10, fontWeight: 'bold', ':hover': { bgcolor: 'red' } }}
+            <Button size={'small'} variant='contained' color='error' sx={{ borderRadius: 2, fontWeight: 'bold' }}
                 onClick={handleClickOpen} >Hủy đơn hàng</Button>
             <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
+                <DialogTitle >Vui lòng chọn lý do hủy đơn hàng?</DialogTitle>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleClickDelete}>Delete</Button>

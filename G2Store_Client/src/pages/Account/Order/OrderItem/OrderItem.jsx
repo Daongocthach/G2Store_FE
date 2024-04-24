@@ -16,15 +16,21 @@ function OrderItem({ orderItem, orderStatus }) {
     //         .then((response) => { setReview(response.data) })
     // }, [])
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1, justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
                 <img src={orderItem?.image} style={{ width: '70px', height: '70px', cursor: 'pointer' }}
                     onClick={() => { navigate('/product-detail', { state: orderItem }) }} />
-                <Typography variant='subtitle1' sx={{ fontWeight: 'bold', minWidth: '100px' }}>{orderItem?.name}</Typography>
+                <Box>
+                    <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'} sx={{}}>{orderItem?.name}</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
+                        <Typography variant='subtitle2' color={'#444444'}>{formatCurrency(orderItem?.price)}</Typography>
+                        <Typography variant='subtitle2'  color={'#444444'}>x{orderItem?.quantity}</Typography>
+                    </Box>
+                    <Typography variant='h6' fontWeight={'bold'} color={'#cd3333'}>{formatCurrency(orderItem?.sub_total)}</Typography>
+                </Box>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
-                <Typography variant='subtitle1' color={'red'}>{formatCurrency(orderItem?.price)}</Typography>
-                <Typography variant='subtitle1'>x{orderItem?.quantity}</Typography>
+
             </Box>
         </Box>
     )

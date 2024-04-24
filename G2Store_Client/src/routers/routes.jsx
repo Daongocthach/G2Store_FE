@@ -22,6 +22,7 @@ const publicRoutes = [
     { path:'/promotion', component: Promotion },
     { path:'/genre-detail', component: GenreDetail },
     { path:'/product-detail', component: ProductDetail },
+    { path:'/thanks', component: Thanks },
     { path:'/shop-page', component: ShopPage },
     { path:'*', component: NotFound }
 ]
@@ -29,7 +30,6 @@ const publicRoutes = [
 const privateRoutes = [
     { path:'/profile', component: Account },
     { path:'/checkout', component: Checkout },
-    { path:'/thanks', component: Thanks },
 ]
 
 export { publicRoutes, privateRoutes }
