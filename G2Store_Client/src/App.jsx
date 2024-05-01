@@ -3,14 +3,10 @@ import { ToastContainer } from 'react-toastify'
 import DefaultLayout from './layouts/DefaultLayout'
 import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
-import { useEffect, useState } from 'react'
 
 function App() {
-  const [atk, setAtk] = useState()
-  useEffect(() => {
-    const atk = localStorage.getItem('atk')
-    setAtk(atk)
-  }, [])
+  var atk = localStorage.getItem('atk')
+  sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
   return (
     <div>
       <ToastContainer />

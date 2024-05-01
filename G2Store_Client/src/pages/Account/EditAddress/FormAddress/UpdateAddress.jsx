@@ -11,14 +11,14 @@ function UpdateAddress({ address, rerender, setRerender }) {
     const [provinces, setProvinces] = useState([])
     const [districts, setDistricts] = useState([])
     const [wards, setWards] = useState([])
-    const [fullName, setFullName] = useState(address?.receiver_name)
+    const [fullName, setFullName] = useState('')
     const [province, setProvince] = useState('')
     const [district, setDistrict] = useState('')
-    const [district_id, setDistrictId] = useState(address?.district_id)
+    const [district_id, setDistrictId] = useState()
     const [ward, setWard] = useState('')
-    const [street, setStreet] = useState(address?.order_receive_address)
+    const [street, setStreet] = useState('')
     const [checked, setChecked] = useState(false)
-    const [phoneNo, setPhoneNo] = useState(address?.receiver_phone_no)
+    const [phoneNo, setPhoneNo] = useState('')
 
     const handleClose = () => {
         setDistricts([])
@@ -46,6 +46,11 @@ function UpdateAddress({ address, rerender, setRerender }) {
         setWard(event)
     }
     const handleClickOpen = async () => {
+        setFullName(address?.receiver_name)
+        setPhoneNo(address?.receiver_phone_no)
+        setStreet(address?.order_receive_address)
+        setDistrictId(address?.district_id)
+        setChecked(address?.is_default)
         setProvince(address?.province)
         setDistrict(address?.district)
         setWard(address?.ward)
@@ -86,7 +91,6 @@ function UpdateAddress({ address, rerender, setRerender }) {
                 receiver_phone_no: phoneNo,
                 is_default: checked
             }
-
             addressApi.updateAddress(address?.address_id, data)
                 .then(() => {
                     toast.success('Cập nhật địa chỉ thành công', { position: 'top-center', autoClose: 2000 })
@@ -102,7 +106,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
         handleClose()
     }
     return (
-        <div>
+        <Box>
             <Button color='error' sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }} onClick={handleClickOpen}>Sửa</Button>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Chỉnh sửa thông tin nhận hàng</DialogTitle>
@@ -150,7 +154,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
                 </DialogActions>
             </Dialog>
             {loading && <Loading />}
-        </div>
+        </Box>
     )
 }
 export default UpdateAddress

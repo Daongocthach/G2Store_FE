@@ -31,10 +31,10 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
     return (
         <Box >
             <Button className="action-buttons" sx={{
-                color: '#666666', fontSize: '20px', visibility: isParent ? 'visible' : 'hidden',
-                ':hover': { color: '#1E90FF' }, bgcolor: isParent ? '	#DDDDDD' : 'inherit'
+                fontSize: '20px', visibility: isParent ? 'visible' : 'hidden',
+                ':hover': { color: '#1E90FF' }, bgcolor: isParent ? '#1C86EE' : 'inherit'
             }}
-                onClick={() => setOpen(true)}><Add /></Button>
+                onClick={() => setOpen(true)}><Add sx={{ color: isParent ? 'white' :'#333333' }}/></Button>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle sx={{ textAlign: 'center' }}>Thêm danh mục</DialogTitle>
                 <DialogContent >

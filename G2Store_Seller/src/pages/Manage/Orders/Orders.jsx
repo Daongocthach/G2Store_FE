@@ -1,117 +1,58 @@
-import {
-  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, Checkbox, Tab, Tabs,
-  TableFooter, TablePagination, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Divider
-} from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { format } from 'date-fns'
-import UpdateOrder from './FormOrder/UpdateOrder'
-import ViewOrder from './FormOrder/ViewOrder'
+import { useNavigate } from 'react-router-dom'
+import { Typography, Box, Button, Tab, Tabs, Divider, Breadcrumbs, Link } from '@mui/material'
+import { LocalShipping, FiberManualRecord, Storefront, NavigateNext } from '@mui/icons-material'
 import { formatCurrency } from '../../../utils/price'
+import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
+import OrderItem from './OrderItem/OrderItem'
+import DeleteOrder from './DeleteOrder/DeleteOrder'
+import { sortByMaxId } from '../../../utils/price'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 
 function Orders() {
-  const [update, setUpdate] = useState(0)
-  var ordersRedux = useSelector(state => state.orders.orders)
-  const [orders, setOrders] = useState(ordersRedux)
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [select, setSelect] = useState(1)
+  const [rerender, setRerender] = useState(false)
+  const navigate = useNavigate()
+  const [orders, setOrders] = useState([])
+  const [tab, setTab] = useState(1)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertFail, setShowAlertFail] = useState(false)
-  const [isExport, setIsExport] = useState(false)
-  const [checked, setChecked] = useState([])
-  const [path, setPath] = useState('C:/Downloads')
-  const [tab, setTab] = useState(1)
+
   const handleAllOrders = () => {
-    // orderApi.getOrderByCustomerId(customerId)
-    //   .then((response) => { setOrders(sortByMaxId(response.data)) })
+    orderApi.getOrders()
+      .then((response) => { setOrders(sortByMaxId(response)) })
   }
   const handlePending = () => {
-    // orderApi.getOrderByCustomerIdPending(customerId)
-    //   .then((response) => { setOrders(sortByMaxId(response.data)) })
+    orderApi.getOrders()
+      .then((response) => { setOrders(sortByMaxId(response)) })
   }
   const handleConfirmed = () => {
-    // orderApi.getOrderByCustomerIdConfirmed(customerId)
-    //   .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
   const handleOnDelivery = () => {
-    // orderApi.getOrderByCustomerIdOnDelivery(customerId)
-    //   .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
   const handleCancel = () => {
-    // orderApi.getOrderByCustomerIdCancel(customerId)
-    //   .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
   const handleSuccess = () => {
-    // orderApi.getOrderByCustomerIdSuccess(customerId)
-    //   .then((response) => { setOrders(sortByMaxId(response.data)) })
+    setOrders([])
+
   }
-  const handleChangeTab = (event, newTab) => {
+  const handleChange = (event, newTab) => {
     setTab(newTab)
 
   }
-  const handleChangePage = (e, newPage) => {
-    setPage(newPage)
-  }
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
-  const handleChange = (event) => {
-    setSelect(event.target.value)
-  }
-  const handleSelectAll = () => {
-    if (checked.length > 0)
-      setChecked([])
-    else {
-      const allIds = orders?.map((order) => order.id)
-      setChecked(allIds)
-    }
-  }
-  const handleExportOrder = () => {
-    const orders = checked.map(check => ({
-      id: check
-    }))
-    orderApi.exportOrders(orders, path)
-      .then(() => {
-        setShowAlert(true)
-      })
-      .catch(() => {
-        setShowAlertFail(true)
-      })
-
-  }
   useEffect(() => {
-    setOrders(ordersRedux)
-  }, [update])
-  useEffect(() => {
-    switch (select) {
-      case 1:
-        setOrders(orders)
-        break
-      case 2:
-        setOrders(orders)
-        break
-      default:
-        break
-    }
-  }, [select])
-  const handleCheck = (id) => {
-    setChecked(prev => {
-      const isChecked = checked.includes(id)
-      if (isChecked) {
-        return checked.filter(item => item != id)
-      }
-      else {
-        return [...prev, id]
-      }
-    })
-  }
+    // orderApi.getOrders()
+    //   .then((response) => { setOrders(response) })
+  }, [])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <Breadcrumbs>
+      <Breadcrumbs sx={{ m: 2 }}>
         <Link underline="hover" color="inherit" href="/dashboard">
           Trang chủ
         </Link>
@@ -121,85 +62,62 @@ function Orders() {
       </Breadcrumbs>
       <Typography variant='h5' sx={{ fontWeight: 'bold', minWidth: '100px', m: 2 }}>Quản lý đơn hàng</Typography>
       <Divider />
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={tab} onChange={handleChangeTab} >
-          <Tab label='Đã đặt hàng' value={1} onClick={handlePending} sx={{ fontWeight: 'bold' }} />
-          <Tab label='Đã xác nhận' value={2} onClick={handleConfirmed} sx={{ fontWeight: 'bold' }} />
-          <Tab label='Đang giao' value={3} onClick={handleOnDelivery} sx={{ fontWeight: 'bold' }} />
-          <Tab label='Hoàn tất' value={4} onClick={handleSuccess} sx={{ fontWeight: 'bold' }} />
-          <Tab label='Đã hủy' value={5} onClick={handleCancel} sx={{ fontWeight: 'bold' }} />
-          <Tab label='Tất cả' value={6} onClick={handleAllOrders} sx={{ fontWeight: 'bold' }} />
-        </Tabs>
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
-          <Button startIcon={<Reorder />} sx={{ fontWeight: 'bold' }} variant="outlined" onClick={() => { setIsExport(!isExport) }}>Export Orders</Button>
-          {isExport && <Button variant="contained" startIcon={<Checklist />} onClick={handleSelectAll}>Select All</Button>}
-          {checked.length > 0 && isExport && <Button variant="contained" startIcon={<FileDownload />} onClick={handleExportOrder}>Export</Button>}
-          {checked.length > 0 && isExport && <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
-            <Typography variant='h7' fontWeight={'bold'}>Location</Typography>
-            <TextField defaultValue={'C:/Downloads'} value={path} size='small' onChange={(e) => { setPath(e.target.value) }}></TextField>
-          </Box>}
-        </Box> */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
-          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange} defaultValue={10} >
-              <MenuItem value={1}>Mới nhất</MenuItem>
-              <MenuItem value={2}>Cũ nhất</MenuItem>
-            </Select>
-          </FormControl>
+      <Box sx={{ mb: 2 }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={tab} onChange={handleChange} >
+            <Tab label='Đã đặt hàng' value={1} onClick={handlePending} />
+            <Tab label='Đã xác nhận' value={2} onClick={handleConfirmed} />
+            <Tab label='Đang giao' value={3} onClick={handleOnDelivery} />
+            <Tab label='Hoàn tất' value={4} onClick={handleSuccess} />
+            <Tab label='Đã hủy' value={5} onClick={handleCancel} />
+            <Tab label='Tất cả' value={6} onClick={handleAllOrders} />
+          </Tabs>
         </Box>
-      </Box>
-      <Box sx={{ height: 'fit-content', width: '100%', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
-        <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
-            <TableHead>
-              <TableRow>
-                {isExport && <TableCell sx={{ fontWeight: 'bold' }} align="center"></TableCell>}
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Id</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">CreateDate</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Total</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Notes</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">CustomerId</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Status</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">View</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} align="center">Update Status</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {orders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => {
-                return (
-                  <TableRow key={index}>
-                    {isExport && <TableCell align="center"><Checkbox checked={checked.includes(order.id)} onChange={() => handleCheck(order.id)} /></TableCell>}
-                    <TableCell align="center">{order?.id}</TableCell>
-                    <TableCell align="center">{format(new Date(order?.createdDate), 'yyyy-MM-dd')}</TableCell>
-                    <TableCell align="center">{formatCurrency(order?.total)}</TableCell>
-                    <TableCell align="center">{order?.note}</TableCell>
-                    <TableCell align="center">{order?.customer.id}</TableCell>
-                    <TableCell align="center">{order?.orderStatus}</TableCell>
-                    <TableCell align="center"><ViewOrder order={order} /></TableCell>
-                    {order?.orderStatus != 'CANCEL' && order?.orderStatus != 'SUCCESS' &&
-                      <TableCell align="center"><UpdateOrder setUpdate={setUpdate} order={order} /></TableCell>}
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  colSpan={12}
-                  rowsPerPageOptions={[5, 10, { value: orders?.length, label: 'All' }]}
-                  count={orders?.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+        <Box>
+          {Array.isArray(orders) && orders.map((order, index) =>
+            <Box key={index}>
+              <Box sx={useStyles.flexBox}>
+                <Box sx={useStyles.flexBox}>
+                  <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng</Typography>
+                  <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
+                </Box>
+                <Box sx={useStyles.flexBox}>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <LocalShipping />
+                    <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
+                    color={order?.order_status == 'SUCCESS' ? 'green' :
+                      order?.order_status == 'ON_DELIVERY' ? 'orange' :
+                        order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'}>
+                    <FiberManualRecord sx={{ fontSize: 15 }} />
+                    <Typography variant='body2'>{order?.order_status}</Typography>
+                  </Box>
+                </Box>
+              </Box>
+              <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
+                onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
+                <Storefront sx={{ fontSize: 25, color: '#1E90FF' }} />
+                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#1E90FF' }}>{order?.shop_name}</Typography>
+                <NavigateNext sx={{ fontSize: 25, color: '#1E90FF' }} />
+              </Button>
+              {order?.items.map((orderItem, index) =>
+                <OrderItem key={index} orderItem={orderItem} order_status={order?.order_status} />)}
+              <Box sx={useStyles.flexBox}>
+                {order?.order_status == 'ORDERED' || order?.order_status == 'CONFIRMED' ?
+                  <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id} /> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
+                <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
+                  <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
+                  <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order.total)}</Typography>
+                </Box>
+              </Box>
+              <Divider sx={{ mb: 2 }} />
+            </Box>)}
+          {orders.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+            <img src={emptyOrder} />
+            <Typography color={'#444444'} variant='subtitle2' >Bạn chưa có đơn hàng nào</Typography>
+          </Box>}
+        </Box>
       </Box>
       <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Xuất file thành công'} />
       <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Xuất file thất bại'} isFail={true} />
@@ -208,3 +126,9 @@ function Orders() {
 }
 
 export default Orders
+
+const useStyles = {
+  flexBox: {
+    display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between'
+  }
+}

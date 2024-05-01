@@ -18,6 +18,12 @@ const authReducer = (state = initialState, action) => {
                 shop_id: action?.payload?.shop_id
             }
         }
+        case 'UPDATE_AVATAR': {
+            return {
+                ...state,
+                avatar: action?.payload
+            }
+        }
         case 'LOGOUT': {
             localStorage.removeItem('atk')
             localStorage.removeItem('rtk')

@@ -75,13 +75,13 @@ function Products() {
           <Table>
             <TableHead>
               <TableRow >
-                <TableCell sx={{ fontWeight: 'bold' }} ><Checkbox /></TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Thông tin sản phẩm</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Giá</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Số lượng</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Đang hoạt động</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Cập nhật</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Xóa</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'#444444' }} ><Checkbox /></TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'#444444' }} >Thông tin sản phẩm</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'#444444' }} >Giá</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'#444444' }} >Số lượng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'#444444' }} >Đang hoạt động</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'#444444' }} >Cập nhật</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'#444444' }} >Xóa</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -91,10 +91,9 @@ function Products() {
                     <TableCell ><Checkbox /></TableCell>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {<img src={product?.images} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                        {<img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
                         <Box>
-                          <Typography variant='subtitle1' fontWeight={'bold'}>{product?.name}</Typography>
-                          <Typography variant='body2'>{'Product ID: ' + product?.product_id}</Typography>
+                          <Typography variant='subtitle2' color={'#444444'}>{product?.name}</Typography>
                         </Box>
                       </Box>
                     </TableCell>

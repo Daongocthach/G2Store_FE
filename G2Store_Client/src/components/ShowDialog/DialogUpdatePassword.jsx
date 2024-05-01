@@ -3,7 +3,7 @@ import { Box, Dialog, DialogTitle, Button, DialogContent, DialogActions, TextFie
 import { toast } from 'react-toastify'
 import authenApi from '../../apis/authenApi'
 
-function DialogUpdatePassword() {
+function DialogUpdatePassword({ reRender, setReRender }) {
     const [open, setOpen] = useState(false)
     const [touched, setTouched] = useState(false)
     const [old_password, setOld_password] = useState('')
@@ -13,6 +13,7 @@ function DialogUpdatePassword() {
             authenApi.updatePassword({ old_password, new_password })
                 .then(() => {
                     toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
+                    setReRender(!reRender)
                 })
                 .catch((err) => {
                     console.log(err)

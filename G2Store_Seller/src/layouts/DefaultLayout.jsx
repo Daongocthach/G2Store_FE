@@ -90,7 +90,7 @@ export default function DefaultLayout({ children }) {
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: '' }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <TopAppBar position="fixed" open={open} sx={{
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#1C1C1C' : '#2f3640'),

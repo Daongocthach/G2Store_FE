@@ -10,7 +10,7 @@ import { formatCurrency } from '../../utils/price'
 import { addToCart } from '../../redux/actions/cart'
 import ShowAlert from '../ShowAlert/ShowAlert'
 
-function Product({ product }) {
+function CardProduct({ product }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth)
@@ -36,22 +36,26 @@ function Product({ product }) {
     }
   }
   return (
-    <Card sx={{ maxWidth: 400, cursor: 'pointer' }} >
+    <Card sx={{ maxWidth: 300, cursor: 'pointer' }} >
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <CardMedia
           onClick={() => { navigate('/product-detail', { state: product }) }}
-          sx={{ height: 210, width: 210, objectFit: 'contain' }}
-          image={product?.images}
+          sx={{ height: 250, width: 250, objectFit: 'contain', borderRadius: 1, m: 0.5 }}
+          image={product?.images[0]?.file_url || null}
           title={product?.name}
         />
       </Box>
       <CardContent>
-        <Typography variant='subtitle1' gutterBottom fontWeight={'bold'} sx={{ height: '50px' }} overflow={'hidden'}>
+        <Typography variant='subtitle1' color={'#444444'} gutterBottom fontWeight={'bold'} sx={{ height: '50px' }} overflow={'hidden'}>
           {product?.name}
         </Typography>
-        <Typography variant='subtitle1' mt={1} fontWeight={'bold'} color={'red'}>
-          {formatCurrency(product?.price)}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'end', gap: 2 }}>
+          {product?.special_price && <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#cb1c22' }} >{formatCurrency(product?.special_price)}</Typography>}
+          <Typography variant={product?.special_price ? 'subtitle2' : 'subtitle1'} fontWeight={product?.special_price ? 500 : 600}
+            sx={{ color: product?.special_price ? ' #444444' : '#cb1c22', textDecoration: product?.special_price ? 'line-through' : 'none' }}>
+            {product?.special_price ? formatCurrency(product?.price) : formatCurrency(product?.price)}
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Rating size='small' value={5} precision={0.1} readOnly />
           <Typography variant='subtitle2' fontSize={'13px'} sx={{ textAlign: 'center' }} color={'#00B2EE'}>{5 + ' Đánh giá'}</Typography>
@@ -68,4 +72,4 @@ function Product({ product }) {
   )
 }
 
-export default Product
+export default CardProduct

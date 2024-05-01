@@ -4,7 +4,7 @@ import { Storefront, NavigateNext, CheckCircleOutline, LocalShipping } from '@mu
 import { useDispatch } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { formatCurrency } from '../../utils/price'
-import Product from './Product/Product'
+import ProductComponent from '../../components/Product/ProductComponent'
 import orderApi from '../../apis/orderApi'
 import useStyles from './useStyles'
 import ghnApi from '../../apis/ghnApi'
@@ -14,16 +14,16 @@ import Loading from '../../components/Loading/Loading'
 import Address from '../../components/Address/Address'
 import { deleteAllCart } from '../../redux/actions/cart'
 import imgMomo from '../../assets/img/momo.png'
-import productApi from '../../apis/productApi'
 import ChangeAddress from './ChangeAddress/ChangeAddress'
+import UpdateAddress from '../Account/EditAddress/FormAddress/UpdateAddress'
 
 function Checkout() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const data = location.state
+  const [reRender, setReRender] = useState(false)
   const [checked, setChecked] = useState(0)
-  const [note, setNote] = useState('')
   const [code, setCode] = useState('')
   const [voucher, setVoucher] = useState()
   const [feeShip, setFeeShip] = useState(0)
@@ -32,6 +32,7 @@ function Checkout() {
   const [address, setAddress] = useState()
   const [loading, setLoading] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
+  const [showAlertWarning, setShowAlertWaring] = useState(false)
   const [showAlertFail, setShowAlertFail] = useState(false)
   const [showAlertVoucher, setShowAlertVoucher] = useState(false)
   const [showAlertVoucherFail, setShowAlertVoucherFail] = useState(false)
@@ -62,22 +63,41 @@ function Checkout() {
     })
     return { orders, address_id }
   }
-  function handleClickOrder() {
-    setLoading(true)
-    const order = convertDataToOrderFormat(data?.cartItems)
-    console.log(order)
-    orderApi.addOrder(order)
-      .then(() => {
-        setShowAlert(true)
-        setTimeout(() => {
-          dispatch(deleteAllCart())
-          navigate('/thanks')
-        }, 1000)
-      })
-      .catch(() => {
-        setShowAlertFail(true)
-      })
-      .finally(() => setLoading(false))
+  async function handleClickOrder() {
+    if (address) {
+      setLoading(true)
+      const order = convertDataToOrderFormat(data?.cartItems)
+      orderApi.addOrder(order)
+        .then(() => {
+          setShowAlert(true)
+          setTimeout(() => {
+            dispatch(deleteAllCart())
+            navigate('/thanks')
+          }, 1000)
+        })
+        .catch(() => {
+          setShowAlertFail(true)
+        })
+        .finally(() => setLoading(false))
+    } else {
+      setShowAlertWaring(true)
+    }
+  }
+  const getFeeShip = async (address) => {
+    const feeShipData = {}
+    let totalFeeShip = 0
+    await Promise.all(data?.cartItems.map(async (cartItem) => {
+      const height = 5
+      const length = 5
+      const weight = 100
+      const width = 5
+      const response = await ghnApi.getMethodShip(cartItem?.shop?.district_id, address?.district_id)
+      const data = await ghnApi.calculateFeeShip(response?.data?.data[0]?.service_id, cartItem?.shop?.district_id, address?.district_id, height, length, weight, width)
+      feeShipData[cartItem?.shop?.shop_id] = data?.data?.data?.total
+      totalFeeShip += data?.data?.data?.total
+    }))
+    setFeeShipData(feeShipData)
+    setFeeShip(totalFeeShip)
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -85,23 +105,23 @@ function Checkout() {
       try {
         const addressesResponse = await addressApi.getAddresses()
         setAddresses(addressesResponse)
-        const defaultAddress = addressesResponse.find(address => address?.is_default)
-        if (defaultAddress) {
-          setAddress(defaultAddress)
-          const feeShipData = {}
-          let totalFeeShip = 0
-          await Promise.all(data?.cartItems.map(async (cartItem) => {
-            const height = 5
-            const length = 5
-            const weight = 100
-            const width = 5
-            const response = await ghnApi.getMethodShip(cartItem?.shop?.district_id, defaultAddress?.district_id)
-            const data = await ghnApi.calculateFeeShip(response?.data?.data[0]?.service_id, cartItem?.shop?.district_id, defaultAddress?.district_id, height, length, weight, width)
-            feeShipData[cartItem?.shop?.shop_id] = data?.data?.data?.total
-            totalFeeShip += data?.data?.data?.total
-          }))
-          setFeeShipData(feeShipData)
-          setFeeShip(totalFeeShip)
+        if (!address) {
+          const defaultAddress = addressesResponse.find(address => address?.is_default)
+          if (defaultAddress) {
+            setAddress(defaultAddress)
+            getFeeShip(defaultAddress)
+          }
+          else {
+            setAddress(addressesResponse[0])
+            getFeeShip(addressesResponse[0])
+          }
+        }
+        else {
+          {/**Update address && change Address */}
+          getFeeShip(address)
+          const addressUpdated = addressesResponse.find(addressResponse => addressResponse?.address_id == address?.address_id)
+          if (addressUpdated)
+            setAddress(addressUpdated)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -110,7 +130,7 @@ function Checkout() {
       }
     }
     fetchData()
-  }, [])
+  }, [reRender])
   return (
     <Container maxWidth="lg" sx={{ mb: 2 }}>
       <Grid container spacing={3} mt={2}>
@@ -123,27 +143,29 @@ function Checkout() {
           <Box sx={{ ...useStyles.flexBoxPrice, alignItems: 'center', justifyContent: 'flex-start', gap: 2 }}>
             <Chip color='error' icon={<LocalShipping sx={{ color: '#1E90FF' }} />} sx={{ mt: 2 }} variant="outlined"
               label={'Giao đến địa chỉ'} />
-            <ChangeAddress addresses={addresses} setAddress={setAddress} />
+            <ChangeAddress addresses={addresses} setAddress={setAddress} reRender={reRender} setReRender={setReRender} />
           </Box>
-          <Address address={address} />
+          <Box sx={{ ...useStyles.flexBoxPrice, alignItems: 'center', justifyContent: 'flex-start', gap: 2 }}>
+            <Address address={address} />
+            <UpdateAddress address={address} rerender={reRender} setRerender={setReRender} isCheckout={true} />
+          </Box>
           <Typography variant="h6" color={'#444444'} mt={2}>Thông tin đơn hàng</Typography>
           {Array.isArray(data?.cartItems) && data?.cartItems.map((cartItem, index) => (
             <Box key={index} mt={2} >
               <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
                 onClick={() => { navigate('/shop-page', { state: cartItem?.shop?.shop_id }) }}>
-                <Storefront sx={{ fontSize: 25, color: '#4F4F4F' }} />
-                <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }} fontWeight={500}>{cartItem?.shop?.name}</Typography>
-                <NavigateNext sx={{ fontSize: 25, color: '#4F4F4F' }} />
+                <Storefront sx={{ fontSize: 25, color: '#444444' }} />
+                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{cartItem?.shop?.name}</Typography>
+                <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
               </Button>
               <Divider />
               {Array.isArray(cartItem?.items) && cartItem?.items.map((product, index) => (
-                <Product key={index} product={product} />
+                <ProductComponent key={index} product={product} isCheckout={true}/>
               ))}
               <Chip color='success' icon={<CheckCircleOutline sx={{ color: 'green' }} />} sx={{ mt: 2 }} variant="outlined"
                 label={'Phí vận chuyển: ' + formatCurrency(feeShipData[cartItem?.shop?.shop_id] ? feeShipData[cartItem?.shop?.shop_id] : 0)} />
             </Box>))}
         </Grid>
-
         {/* Phần tổng cộng và thanh toán */}
         <Grid item xs={12} sm={6} md={6} lg={6}>
           <Box sx={{ ...useStyles.flexBoxPrice, alignItems: 'center', gap: 2 }}>
@@ -182,7 +204,7 @@ function Checkout() {
             <img src={imgMomo} alt='thanh toan momo' style={{ height: '30px', width: '30px' }} />
           </Box>
           <Divider sx={{ mb: 2 }} />
-          <Button size='large' color='error' variant='contained' onClick={handleClickOrder}> Hoàn tất đặt hàng </Button>
+          <Button size='large' fullWidth color='error' variant='contained' sx={{ fontWeight: 'bold' }} onClick={handleClickOrder}> Đặt hàng </Button>
         </Grid>
       </Grid>
 
@@ -191,6 +213,7 @@ function Checkout() {
       <ShowAlert setShowAlert={setShowAlertFail} showAlert={showAlertFail} content={'Đặt hàng thất bại!'} isFail={true} />
       <ShowAlert setShowAlert={setShowAlertVoucher} showAlert={showAlertVoucher} content={'Áp mã giảm giá thành công!'} />
       <ShowAlert setShowAlert={setShowAlertVoucherFail} showAlert={showAlertVoucherFail} content={'Voucher không đúng!'} isWarning={true} />
+      <ShowAlert setShowAlert={setShowAlertWaring} showAlert={showAlertWarning} content={'Vui lòng nhập địa chỉ!'} isWarning={true} />
 
     </Container>
   )

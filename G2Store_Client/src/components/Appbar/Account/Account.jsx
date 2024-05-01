@@ -13,6 +13,7 @@ function Account() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = useSelector(state => state.auth)
+    const atk = localStorage.getItem('atk')
     const [anchorEl, setAnchorEl] = useState(null)
     const [showAlert, setShowAlert] = useState(false)
     const open = Boolean(anchorEl)
@@ -41,30 +42,30 @@ function Account() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
             >
-                {!user?.atk && <Box sx={{ display: 'flex', gap: 2 }}>
+                {!atk && <Box sx={{ display: 'flex', gap: 2 }}>
                     <Link to={'/login'} ><Chip icon={<Person />} label='Đăng nhập' sx={{ bgcolor: '#DDDDDD' }} /></Link>
                     <Link to={'/register'} ><Chip icon={<PersonAdd />} label='Đăng Ký' sx={{ bgcolor: '#DDDDDD' }} /></Link>
                 </Box>}
-                {user?.atk && <Avatar sx={{ width: 40, height: 40 }}>
+                {atk && <Avatar sx={{ width: 40, height: 40 }}>
                     <img src={user?.avatar || avatarNull} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
                 </Avatar>}
             </IconButton>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
-                {user?.atk && <MenuItem onClick={handleClose}>
+                {atk && <MenuItem onClick={handleClose}>
                     <Link to={'/profile'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <AccountCircle fontSize="small" />
+                        <AccountCircle fontSize="small" sx={{ mr: 1 }}/>
                         Tài khoản
                     </Link>
                 </MenuItem>}
                 <Divider />
-                {!user?.atk && <MenuItem onClick={handleClose}>
+                {!atk && <MenuItem onClick={handleClose}>
                     <Link to={'/login'} style={{ textDecoration: 'none', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Login fontSize="small" />
                         <Typography >Đăng nhập</Typography>
                     </Link>
                 </MenuItem>}
-                {user?.atk && <MenuItem onClick={handleLogout}>
-                    <Settings fontSize="small" />
+                {atk && <MenuItem onClick={handleLogout}>
+                    <Settings fontSize="small" sx={{ mr: 1 }}/>
                     Đăng xuất
                 </MenuItem>}
             </Menu>

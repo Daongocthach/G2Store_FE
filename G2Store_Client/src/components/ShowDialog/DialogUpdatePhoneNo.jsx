@@ -3,7 +3,7 @@ import { TextField, Box, Dialog, DialogTitle, Button, DialogContent, DialogActio
 import { toast } from 'react-toastify'
 import authenApi from '../../apis/authenApi'
 
-function DialogUpdatePhoneNo() {
+function DialogUpdatePhoneNo({ reRender, setReRender }) {
     const [open, setOpen] = useState(false)
     const [new_phone_no, setPhoneNo] = useState('')
     const [touched, setTouched] = useState(false)
@@ -13,6 +13,7 @@ function DialogUpdatePhoneNo() {
             authenApi.updatePhone({ new_phone_no })
                 .then(() => {
                     toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
+                    setReRender(!reRender)
                 })
                 .catch((err) => {
                     console.log(err)

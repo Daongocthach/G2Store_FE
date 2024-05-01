@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { Typography, IconButton, Tabs, Tab, Grid, Box, Breadcrumbs, Link, Menu, Chip } from '@mui/material'
 import { ChatBubbleOutline, AddBusiness, Store, Dehaze, KeyboardArrowDown } from '@mui/icons-material'
 import authenApi from '../../../apis/authenApi'
@@ -25,13 +26,11 @@ function DesignShop() {
         authenApi.me()
             .then((response) => {
                 setSeller(response)
-                console.log(response?.shop?.shopId)
-                categoryApi.getShopCategories(response?.shop?.shopId)
+                categoryApi.getShopCategories(response?.shop?.shop_id)
                     .then((response) => setCategories(response))
                     .catch((error) => console.log(error))
             })
             .catch((error) => console.log(error))
-
     }, [])
     return (
         <Box sx={{ minHeight: '100vh', p: 2 }} >
@@ -81,40 +80,18 @@ function DesignShop() {
                     onDelete={handleClick} deleteIcon={<KeyboardArrowDown />} />
                 <Tabs value={value} onChange={handleChange}>
                     <Tab label="Trang chủ" {...a11yProps(0)} />
-                    <Tab label="Tất cả sản phẩm" {...a11yProps(1)} />
-                    <Tab label="Hồ sơ" {...a11yProps(2)} />
+                    <Tab label="Hồ sơ" {...a11yProps(1)} />
                 </Tabs>
             </Box>
 
             <TabPanel value={value} index={0}>
-                <Grid container maxWidth='lg' spacing={1}>
-                    <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Sản phẩm nổi bật</Typography>
-                </Grid>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <Grid container spacing={1}>
-                    <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Tất cả sản phẩm</Typography>
-                </Grid>
+                <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Tất cả sản phẩm</Typography>
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <Grid container spacing={1}>
-                    <Grid item xs={3}>
-                        <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Hồ sơ</Typography>
-                    </Grid>
-                </Grid>
+                <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Hồ sơ</Typography>
             </TabPanel>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button'
-                }}
-            >
-                {Array.isArray(categories) && categories?.map((category, index) => (
-                    <MenuCategory key={index} category={category} />
-                ))}
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
+                <MenuCategory categories={categories} />
             </Menu>
         </Box>
 
@@ -132,7 +109,7 @@ function TabPanel(props) {
     const { children, value, index, ...other } = props
 
     return (
-        <div
+        <Box
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
@@ -144,7 +121,7 @@ function TabPanel(props) {
                     <Typography>{children}</Typography>
                 </Box>
             )}
-        </div>
+        </Box>
     )
 }
 

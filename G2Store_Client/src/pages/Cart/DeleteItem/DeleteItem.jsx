@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -35,10 +35,15 @@ function DeleteItem({ productId, reRender, setReRender }) {
             <Button onClick={handleClickOpen}><DeleteIcon sx={{ color: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#444444') }} />
             </Button>
             <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >Bạn muốn xóa sản phẩm này khỏi giỏ hàng ?</DialogTitle>
+                <DialogTitle >Xóa sản phẩm khỏi giỏ?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Bạn muốn xóa sản phẩm này khỏi giỏ hàng, bấm 'Chấp nhận' để tiếp tục, 'Hủy' để thoát
+                    </DialogContentText>
+                </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-                    <Button onClick={handleClickDelete} size='small' sx={{ fontWeight: 600, bgcolor: '#1E90FF', color: 'white' }} >Chấp nhận</Button>
+                    <Button onClick={() => { setOpen(false) }} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight:'bold' }}>Hủy</Button>
+                    <Button onClick={handleClickDelete} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight:'bold' }} >Chấp nhận</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert setShowAlert={setShowAlert} showAlert={showAlert} content={'Xóa sản phẩm khỏi giỏ thành công'} />

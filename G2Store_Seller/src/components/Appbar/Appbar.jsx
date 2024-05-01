@@ -3,7 +3,7 @@ import Account from './Account/Account'
 
 function AppBar() {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 2, paddingX: 3, width: '100%' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%' }}>
       <Account />
     </Box>
   )

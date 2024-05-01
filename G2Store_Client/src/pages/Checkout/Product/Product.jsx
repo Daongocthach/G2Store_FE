@@ -5,10 +5,8 @@ import { formatCurrency } from '../../../utils/price'
 function Product({ product }) {
     const navigate = useNavigate()
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }}>
-            <img src={product?.images} alt='omachi'
-                style={{ objectFit: 'cover', borderRadius: '5px', height: '90px', with: '90px' }}
-                onClick={() => { navigate('/product-detail', { state: product }) }} />
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }} onClick={() => { navigate('/product-detail', { state: product })}}>
+        <img src={product?.images} alt='omachi' style={{ objectFit: 'cover', height: '100px', width: '100px', borderRadius: 5 }} />
             <Box ml={2}>
                 <Typography variant='h6' fontWeight={500} color={'#444444'}>{product?.name}</Typography>
                 <Box sx={{ display: 'flex', alignItems:'center', gap: 3 }}>

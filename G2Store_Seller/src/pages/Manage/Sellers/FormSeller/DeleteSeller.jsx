@@ -45,10 +45,10 @@ function DeleteSeller({ setUpdate, productId }) {
             </Snackbar>
             <Button sx={{ bgcolor: '#EE6363', color: 'black' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon /></Button>
             <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
+                <DialogTitle >Bạn muốn xóa người bán này?</DialogTitle>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClickDelete}>Delete</Button>
+                    <Button variant='contained' color='inherit' onClick={handleClose}>Hủy</Button>
+                    <Button variant='contained' color='success' onClick={handleClickDelete}>Xóa</Button>
                 </DialogActions>
             </Dialog>
         </div>

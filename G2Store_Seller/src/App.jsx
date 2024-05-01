@@ -7,11 +7,8 @@ import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
 
 function App() {
-  const [atk, setAtk] = useState()
-  useEffect(() => {
-    const atk = localStorage.getItem('atk')
-    setAtk(atk)
-  }, [])
+  var atk = localStorage.getItem('atk')
+
   return (
     <div>
       <ToastContainer />

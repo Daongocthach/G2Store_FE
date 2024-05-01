@@ -71,18 +71,18 @@ function UpdateSeller
       <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
         <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-          Cập nhật sản phẩm thành công!
+          Cập nhật người bán thành công!
         </Alert>
       </Snackbar>
       <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
         <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-          Cập nhật sản phẩm thất bại!
+          Cập nhật người bán thất bại!
         </Alert>
       </Snackbar>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>Update Product</DialogTitle>
+        <DialogTitle>Cập nhật</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

@@ -14,12 +14,13 @@ import DialogUpdatePhoneNo from '../../../components/ShowDialog/DialogUpdatePhon
 import DialogUpdateEmail from '../../../components/ShowDialog/DialogUpdateEmail'
 
 function Profile() {
+  const dispatch = useDispatch()
+  const [reRender, setReRender] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertFail, setShowAlertFail] = useState(false)
   const [user, setUser] = useState({})
   const [avatar, setAvatar] = useState(user?.avatar)
-
   useEffect(() => {
     authenApi.me()
       .then((response) => {
@@ -32,7 +33,7 @@ function Profile() {
         })
       })
       .catch((error) => console.log(error))
-  }, [])
+  }, [reRender])
 
   const formik = useFormik({
     initialValues: {
@@ -42,20 +43,38 @@ function Profile() {
     enableReinitialize: true
   })
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        setAvatar(reader.result)
-      }
-      reader.readAsDataURL(file)
+      handleUpdateAvatar(file)
+
+    }
+  }
+  const handleUpdateAvatar = async (file) => {
+    setLoading(true)
+    if (file) {
+      const formData = new FormData()
+      formData.append('file', file)
+      authenApi.updateAvatar(formData)
+        .then((response) => {
+          dispatch(updateAvatar(response?.avatar))
+          const reader = new FileReader()
+          reader.onload = () => {
+            setAvatar(reader.result)
+          }
+          reader.readAsDataURL(file)
+          setShowAlert(true)
+        })
+        .catch((error) => {
+          console.log(error)
+          setShowAlertFail(true)
+        })
+        .finally(() => setLoading(false))
     }
   }
   const handleUpdate = async () => {
     const { full_name, dob } = formik.values
     if (!dob || !full_name) {
-      console.log(dob, full_name)
       setShowAlertFail(true)
     }
     else {
@@ -102,11 +121,11 @@ function Profile() {
           <img src={avatar || avatarNull} width={'50px'} height={'50px'} style={{ borderRadius: 10 }} />
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap:'wrap' }}>
         <DialogUpdate handle={handleUpdate} />
         <DialogUpdatePassword />
-        <DialogUpdatePhoneNo />
-        <DialogUpdateEmail />
+        <DialogUpdatePhoneNo reRender={reRender} setReRender={setReRender} />
+        <DialogUpdateEmail reRender={reRender} setReRender={setReRender} />
       </Box>
       <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật thành công'} />
       <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Vui lòng kiểm tra lại thông tin!'} isFail={true} />

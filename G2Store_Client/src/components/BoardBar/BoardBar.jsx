@@ -12,7 +12,7 @@ function BoardBar() {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
-    const handle = () => {}
+    const handle = () => { }
     const handleClose = () => {
         setAnchorEl(null)
     }
@@ -29,24 +29,14 @@ function BoardBar() {
         <Box sx={{
             height: (theme) => theme.webCustom.boardBarHeight, display: 'flex', alignItems: 'center', borderTop: '1px solid #D3D3D3',
             bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#E6E6FA')
-        }} paddingX={{ xs: 0, md: 5 }}>
+        }} paddingX={{ xs: 0, md: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                 <Chip icon={<Dehaze />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
                     onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
                 <Link to={'/manage/promotions'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
             </Box>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button'
-                }}
-            >
-                {Array.isArray(categories) && categories?.map((category, index) => (
-                    <MenuCategory key={index} category={category} />
-                ))}
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
+                <MenuCategory categories={categories} />
             </Menu>
         </Box>
     )

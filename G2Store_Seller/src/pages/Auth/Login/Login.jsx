@@ -30,7 +30,7 @@ function Login() {
             .then((response) => {
               const data = {
                 avatar : response?.avatar,
-                shop_id: response?.shop?.shopId
+                shop_id: response?.shop?.shop_id
               }
               dispatch(updateProfile(data))
              })

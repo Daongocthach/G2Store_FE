@@ -51,11 +51,11 @@ function Order() {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant='h6' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng của tôi</Typography>
+        <Typography variant='h6' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng của tôi</Typography>
       </Box>
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={tab} onChange={handleChange} >
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', flexGrow: 1, display: 'flex', maxWidth: { xs: 350, sm: 500, md: 600, lg: 800 } }}>
+          <Tabs value={tab} onChange={handleChange} variant="scrollable">
             <Tab label='Đã đặt hàng' value={1} onClick={handlePending} />
             <Tab label='Đã xác nhận' value={2} onClick={handleConfirmed} />
             <Tab label='Đang giao' value={3} onClick={handleOnDelivery} />
@@ -74,7 +74,7 @@ function Order() {
                 </Box>
                 <Box sx={useStyles.flexBox}>
                   <Box sx={{ display: 'flex', gap: 1 }}>
-                    <LocalShipping />
+                    <LocalShipping sx={{ color: '#444444' }} />
                     <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
@@ -88,9 +88,9 @@ function Order() {
               </Box>
               <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
                 onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
-                <Storefront sx={{ fontSize: 25, color: '#444444' }} />
-                <Typography variant='subtitle1' sx={{ color: '#444444' }}>{order?.shop_name}</Typography>
-                <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
+                <Storefront sx={{ fontSize: 25, color: '#1E90FF' }} />
+                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#1E90FF' }}>{order?.shop_name}</Typography>
+                <NavigateNext sx={{ fontSize: 25, color: '#1E90FF' }} />
               </Button>
               {order?.items.map((orderItem, index) =>
                 <OrderItem key={index} orderItem={orderItem} order_status={order?.order_status} />)}
@@ -124,6 +124,6 @@ export default Order
 
 const useStyles = {
   flexBox: {
-    display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between'
+    display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between', flexWrap: 'wrap'
   }
 }

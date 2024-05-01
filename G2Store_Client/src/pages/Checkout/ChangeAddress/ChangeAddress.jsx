@@ -2,7 +2,7 @@ import { Box, Menu, Chip } from '@mui/material'
 import { useState } from 'react'
 import Address from '../../../components/Address/Address'
 
-function ChangeAddress({ addresses, setAddress }) {
+function ChangeAddress({ addresses, setAddress, reRender, setReRender }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
@@ -14,6 +14,8 @@ function ChangeAddress({ addresses, setAddress }) {
 
     const handleChangeAddress = (address) => {
         setAddress(address)
+        setReRender(!reRender)
+        handleClose()
     }
     return (
         <Box>

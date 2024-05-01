@@ -20,6 +20,13 @@ const authenApi = {
         const url = 'sellers/me'
         return axiosClient.put(url, data)
     },
+    updateAvatar: (formData) => {
+        const url = 'sellers/upload-avatar'
+        const headers = {
+            'Content-Type': 'multipart/form-data'
+        }
+        return axiosClient.put(url, formData, headers)
+    }
 }
 
 export default authenApi

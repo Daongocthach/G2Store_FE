@@ -29,7 +29,6 @@ const theme = extendTheme({
           borderWidth: '0.5px',
           fontFamily: 'sans-serif',
           ':hover': { backgroundColor: '#666666' },
-          color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black'),
           '&.MuiButtonBase-root': {
             fontSize: '17px',
             backgroundColor: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
@@ -42,7 +41,8 @@ const theme = extendTheme({
         root: {
           fontFamily: '"Roboto", sans-serif',
           '&.MuiTypography-body1': {
-            fontSize: '0.800rem'
+            fontSize: '0.800rem',
+            color: '#444444'
           }
         }
       }

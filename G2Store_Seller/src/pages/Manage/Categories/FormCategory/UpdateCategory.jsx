@@ -20,7 +20,7 @@ function UpdateCategory({ category, reRender, setReRender }) {
   }
   const handleUpdate = async () => {
     setLoading(true)
-    categoryApi.updateShopCategory(category?.category_id, name)
+    categoryApi.updateShopCategory(category?.shop_cate_id, name)
       .then(() => {
         setShowAlert(true)
         setReRender(!reRender)

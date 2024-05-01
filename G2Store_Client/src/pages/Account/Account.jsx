@@ -4,16 +4,10 @@ import { Inventory, EditLocationAlt, NavigateNext, AccountBox } from '@mui/icons
 import Profile from './Profile/Profile'
 import Order from './Order/Order'
 import EditAddress from './EditAddress/EditAddress'
-import authenApi from '../../apis/authenApi'
 
 function Account() {
   const [select, setSelect] = useState(0)
-  const [user, setUser] = useState()
-  useEffect(() => {
-    authenApi.me()
-      .then((response) => setUser(response))
-      .catch((error) => console.log(error))
-  }, [])
+
   return (
     <Container sx={{ mb: 2 }}>
       <Grid container mt={2} spacing={3} >
@@ -42,9 +36,9 @@ function Account() {
         {/* Phần sản phẩm */}
         <Grid mt={1} item container xs={12} sm={12} md={9} lg={9} >
           <Grid item xs={12} sm={12} md={10} lg={10}>
-            {select == 0 && <Profile user={user} setUser={setUser}/>}
+            {select == 0 && <Profile/>}
             {select == 1 && <Order />}
-            {select == 2 && <EditAddress user={user} />}
+            {select == 2 && <EditAddress/>}
           </Grid>
         </Grid>
       </Grid>

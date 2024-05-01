@@ -1,4 +1,4 @@
-import { Box, Typography, FormControl, Select, MenuItem, Breadcrumbs, Link } from '@mui/material'
+import { Box, Typography, Breadcrumbs, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import categoryApi from '../../../apis/categoryApi'
@@ -12,10 +12,6 @@ function Categories() {
   const [reRender, setReRender] = useState(false)
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(false)
-  const [select, setSelect] = useState(1)
-  const handleChange = (event) => {
-    setSelect(event.target.value)
-  }
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
@@ -28,11 +24,7 @@ function Categories() {
     }
     if (shop_id)
       fetchData()
-    else {
-      console.log(shop_id
-      )
-    }
-  }, [])
+  }, [reRender])
 
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
@@ -44,20 +36,9 @@ function Categories() {
           Quản lý ngành hàng
         </Link>
       </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
-          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange} >
-              <MenuItem value={1}>Mới nhất</MenuItem>
-              <MenuItem value={2}>Cũ nhất</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-      <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', pt: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mr: 1 }}>
-          <Typography variant='h6' sx={{ ml: 3, fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
+      <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
+        <Box sx={{ display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant='h6' color={'#444444'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
           <AddCategory isParent={true} reRender={reRender} setReRender={setReRender}/>
         </Box>
         {Array.isArray(categories) && categories.map((category, index) => (
@@ -65,7 +46,7 @@ function Categories() {
         ))}
         {Array.isArray(categories) && categories.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
           <img src={emptyImage} />
-          <Typography variant='h7' >Bạn chưa có danh mục nào</Typography>
+          <Typography variant='h6' >Bạn chưa có danh mục nào</Typography>
         </Box>}
       </Box>
       {loading && <Loading />}

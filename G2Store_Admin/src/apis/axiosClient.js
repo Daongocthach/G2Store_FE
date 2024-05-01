@@ -4,16 +4,10 @@ import { jwtDecode } from 'jwt-decode'
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_PUBLIC_API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
   withCredentials: true
 })
 const jwtAxios = axios.create({
   baseURL: import.meta.env.VITE_PUBLIC_API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
   withCredentials: true
 })
 
@@ -25,15 +19,18 @@ axiosClient.interceptors.request.use(async (config) => {
     const decodedToken = jwtDecode(atk)
     if (decodedToken.exp < date.getTime() / 1000) {
       try {
-        const res = await jwtAxios.post('admins/refresh-token', rtk)
-        const newatk = res.data.token
+        const res = await jwtAxios.post('customers/refresh-token', { refresh_token: rtk })
+        const newatk = res.data.access_token
+        const newrtk = res.data.refresh_token
         if (newatk) {
           localStorage.setItem('atk', newatk)
+          localStorage.setItem('rtk', newrtk)
           config.headers.Authorization = `Bearer ${newatk}`
         }
       } catch (error) {
-        if (error.response.status === 403 || error.response.status === 401) {
+        if (error.response.status === 401) {
           localStorage.removeItem('atk')
+          localStorage.removeItem('rtk')
         }
       }
     } else {

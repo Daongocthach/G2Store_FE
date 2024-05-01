@@ -6,17 +6,11 @@ import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import { validateEmail } from '../../../../utils/email'
 
-const roles = ['SELLER_PROMOTION_ACCESS',
-    'SELLER_PRODUCT_ACCESS',
-    'JUNIOR_CHAT_AGENT',
-    'SELLER_ORDER_MANAGEMENT',
-    'SELLER_FULL_ACCESS',
-    'SELLER_READ_ONLY']
 
 function AddSeller() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const [role, setRole] = useState(4)
+    const [role, setRole] = useState(3)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
@@ -46,7 +40,7 @@ function AddSeller() {
         }
     }
     return (
-        <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', p: 1, bgcolor: '#E8E8E8', minHeight:'100vh' }}>
+        <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', p: 1, bgcolor: '#E8E8E8', minHeight: '100vh' }}>
             <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', bgcolor: 'white', p: 1, borderRadius: 3 }}>
                 <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Thêm người dùng</Typography>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
@@ -55,12 +49,14 @@ function AddSeller() {
                         <Typography variant='body1'>Vai trò: </Typography>
                     </Box>
                     <FormControl fullWidth>
-                        <Select size='small' value={role} onChange={handleChangeRole}>
-                            {roles?.map((role, index) => {
-                                return (
-                                    <MenuItem key={index} value={index}>{role}</MenuItem>
-                                )
-                            })}
+                        <Select size='small' color='primary' value={role}
+                            onChange={(event) => handleChangeRole(event)}>
+                            <MenuItem value={3}>Quản lý khuyến mãi</MenuItem>
+                            <MenuItem value={4}>Toàn quyền</MenuItem>
+                            <MenuItem value={5}>Quản lý sản phẩm shop</MenuItem>
+                            <MenuItem value={6}>Quản lý đơn hàng</MenuItem>
+                            <MenuItem value={7}>Chỉ xem</MenuItem>
+                            <MenuItem value={8}>Tương tác khách hàng</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>
