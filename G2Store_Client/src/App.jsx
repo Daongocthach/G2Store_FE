@@ -1,12 +1,14 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import { useSelector } from 'react-redux'
 import DefaultLayout from './layouts/DefaultLayout'
 import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
 
+
 function App() {
-  var atk = localStorage.getItem('atk')
-  sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
+  const keep_login = useSelector(state => state.auth.keep_login)
+
   return (
     <div>
       <ToastContainer />
@@ -27,7 +29,7 @@ function App() {
               />)
           }
           )}
-          <Route path="/" element={<ProtectedRoute isAllowed={atk} />}>
+          <Route path="/" element={<ProtectedRoute isAllowed={keep_login} />}>
             {privateRoutes.map((route, index) => {
               const Page = route.component
               const Layout = route.layout || DefaultLayout

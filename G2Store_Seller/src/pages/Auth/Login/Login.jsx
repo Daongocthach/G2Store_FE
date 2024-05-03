@@ -7,7 +7,7 @@ import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../components/Loading/Loading'
-import { updateProfile } from '../../../redux/actions/auth'
+import { login, updateProfile } from '../../../redux/actions/auth'
 function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -26,6 +26,7 @@ function Login() {
           setShowAlert(true)
           localStorage.setItem('atk', response?.access_token)
           localStorage.setItem('rtk', response?.refresh_token)
+          dispatch(login())
           authenApi.me()
             .then((response) => {
               const data = {

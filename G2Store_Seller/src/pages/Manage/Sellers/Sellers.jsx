@@ -127,9 +127,3 @@ function Sellers() {
 }
 
 export default Sellers
-const roles = ['Quản lý khuyến mãi',
-  'Quản lý sản phẩm shop',
-  'Tương tác khách hàng',
-  'Quản lý đơn hàng',
-  'Toàn quyền',
-  'Chỉ xem']

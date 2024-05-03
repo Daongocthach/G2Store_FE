@@ -12,7 +12,7 @@ function DialogUpdate({ handle }) {
             <Button sx={{ color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2 }}
                 variant="contained" color="success" onClick={() => setOpen(true)}>Cập nhật</Button>
             <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
-                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550 }}>Cập nhật thông tin</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550, color:'#444444' }}>Cập nhật thông tin</DialogTitle>
                 <DialogContent>
                     Bấm 'Ok' để chấp nhận, 'Hủy' để thoát!
                 </DialogContent>

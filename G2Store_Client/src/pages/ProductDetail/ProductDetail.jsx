@@ -61,7 +61,7 @@ function ProductDetail() {
     setShowMore(showMore + 3)
   }
   function handleClickAddToCart() {
-    if (!user?.atk) {
+    if (!user?.keep_login) {
       toast.error('Bạn cần đăng nhập để thực hiện chức năng này!', { autoClose: 2000 })
       navigate('/login')
     }

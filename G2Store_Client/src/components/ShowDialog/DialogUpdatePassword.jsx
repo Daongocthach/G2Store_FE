@@ -31,7 +31,7 @@ function DialogUpdatePassword({ reRender, setReRender }) {
             <Button sx={{ color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2 }}
                 variant="contained" color="info" onClick={() => setOpen(true)}>Đổi mật khẩu</Button>
             <Dialog open={open} keepMounted onClose={() => { setOpen(false), setTouched(false) }} >
-                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550 }}>Cập nhật mật khẩu</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550, color:'#444444' }}>Cập nhật mật khẩu</DialogTitle>
                 <DialogContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
                         <TextField fullWidth label='Mật khẩu cũ' size='small' type='password' value={old_password}

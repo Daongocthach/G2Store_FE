@@ -10,7 +10,7 @@ function ShowDialogAccept({ buttonName, title, content, handle }) {
         {buttonName}
       </Button>
       <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
-        <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
+        <DialogTitle sx={{ textAlign: 'center', color:'#444444' }}>{title}</DialogTitle>
         <DialogContent>
           {content}
         </DialogContent>

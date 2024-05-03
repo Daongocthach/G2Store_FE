@@ -28,7 +28,8 @@ axiosClient.interceptors.request.use(async (config) => {
           config.headers.Authorization = `Bearer ${newatk}`
         }
       } catch (error) {
-        if (error.response.status === 401) {
+        console.log(error)
+        if (error.response.status == 401) {
           localStorage.removeItem('atk')
           localStorage.removeItem('rtk')
         }
@@ -42,7 +43,12 @@ axiosClient.interceptors.request.use(async (config) => {
 axiosClient.interceptors.response.use(
   (res) => res.data,
   (error) => {
-    toast.error(error?.response?.data?.message, { autoClose: 2000 })
+    console.log(error?.response?.data?.message)
+    if (error?.response?.data?.message === 'Token is no longer valid, please replace new access token') {
+      localStorage.removeItem('atk')
+      localStorage.removeItem('rtk')
+    }
+    // toast.error(error?.response?.data?.message, { autoClose: 2000 })
     return Promise.reject(error)
   })
 export default axiosClient

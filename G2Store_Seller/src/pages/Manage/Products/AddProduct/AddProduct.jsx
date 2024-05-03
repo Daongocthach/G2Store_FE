@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, TextField, Box, Typography, Paper } from '@mui/material'
 import { AddCircle, NavigateNext, Clear } from '@mui/icons-material'
+import { NumericFormat } from 'react-number-format'
 import productApi from '../../../../apis/productApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import MenuCategory from './SetCategory/MenuCategory/MenuCategory'
@@ -162,13 +163,29 @@ function AddProduct() {
                     <Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>
-                            <Typography variant='subtitle2'>Giá: </Typography>
+                            <Typography variant='subtitle2'>Giá (vnđ): </Typography>
                         </Box>
-                        <TextField size='small' type='number' inputProps={{ min: 0 }} value={price} onChange={(e) => setPrice(e.target.value)} />
+                        <NumericFormat
+                            customInput={TextField}
+                            size='small'
+                            type='text'
+                            thousandSeparator={true}
+                            value={price}
+                            onValueChange={(values) => setPrice(values.value)}
+                            inputProps={{ min: 0 }}
+                        />
                     </Box>
                     <Box sx={{ alignItems: 'center', gap: 1 }}>
-                        <Typography variant='subtitle2'>Giá đặc biệt: </Typography>
-                        <TextField fullWidth size='small' type='number' inputProps={{ min: 0 }} value={special_price} onChange={(e) => setSpecialPrice(e.target.value)} />
+                        <Typography variant='subtitle2'>Giá đặc biệt (vnđ): </Typography>
+                        <NumericFormat
+                            customInput={TextField}
+                            size='small'
+                            type='text'
+                            thousandSeparator={true}
+                            value={special_price}
+                            onValueChange={(values) => setSpecialPrice(values.value)}
+                            inputProps={{ min: 0 }}
+                        />
                     </Box>
                     <Box sx={{ alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -213,7 +230,7 @@ function AddProduct() {
                     <Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>
-                            <Typography variant='subtitle2'>Khối lượng sản phẩm: </Typography>
+                            <Typography variant='subtitle2'>Khối lượng sản phẩm (g): </Typography>
                         </Box>
                         <TextField size='small' value={weight} onChange={(e) => setWeight(e.target.value)} />
                     </Box>

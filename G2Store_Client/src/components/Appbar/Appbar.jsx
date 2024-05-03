@@ -9,12 +9,8 @@ import G2Logo from '../../assets/img/G2Logo.png'
 
 function AppBar() {
   const navigate = useNavigate()
-  const cart = useSelector(state => state.cart)
-  const [quantity, setQuantity] = useState(0)
-  useEffect(() => {
-    if (Array.isArray(cart?.cartItems))
-      setQuantity(cart?.cartItems.length)
-  }, [cart])
+  const cartItems = useSelector(state => state.cart.cartItems)
+
   return (
     <Box sx={{
       position: 'static', width: '100%', height: (theme) => theme.webCustom.appBarHeight, display: 'flex',
@@ -39,7 +35,7 @@ function AppBar() {
           </Badge>
         </Tooltip>
         <Tooltip title="Giỏ hàng">
-          <Badge color="warning" badgeContent={quantity} sx={{ cursor: 'pointer' }}>
+          <Badge color="warning" badgeContent={cartItems.length} sx={{ cursor: 'pointer' }}>
             <ShoppingCart sx={useStyles.button} onClick={() => navigate('/cart')} />
           </Badge>
         </Tooltip>

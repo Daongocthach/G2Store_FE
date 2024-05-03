@@ -36,7 +36,8 @@ const cartReducer = (state = initialState, action) => {
             }
         }
         case 'SET_CART': {
-            const cartItems = action.payload
+            const cartItems = action.payload.flatMap(item => item.items)
+            console.log(cartItems)
             return {
                 ...state,
                 cartItems: cartItems

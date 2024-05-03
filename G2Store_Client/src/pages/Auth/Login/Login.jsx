@@ -27,7 +27,7 @@ function Login() {
           setShowAlert(true)
           localStorage.setItem('atk', response?.access_token)
           localStorage.setItem('rtk', response?.refresh_token)
-          dispatch(login(response?.access_token))
+          dispatch(login())
           authenApi.me()
             .then((response) => dispatch(updateAvatar(response?.avatar)))
           cartItemApi.getCartItemsIntended()

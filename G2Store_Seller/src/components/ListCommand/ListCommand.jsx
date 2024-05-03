@@ -17,8 +17,7 @@ const listButton = [
         name: 'Sản phẩm',
         commands: [
             { path: '/seller/manage/add-product', name: 'Thêm sản phẩm' },
-            { path: '/seller/manage/products', name: 'Quản lý sản phẩm' },
-            { path: '/seller/manage/products', name: 'Banner trang sản phẩm' }
+            { path: '/seller/manage/products', name: 'Quản lý sản phẩm' }
         ]
     },
     {

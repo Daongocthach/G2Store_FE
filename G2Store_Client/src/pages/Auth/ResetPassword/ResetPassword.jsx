@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Container, TextField, Stack, Button, Box } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import { validateEmail } from '../../../utils/email'
@@ -66,10 +66,14 @@ function ResetPassword() {
             />}
             {!showOTP ? <Button sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} onClick={() => handleShowOTP()}>Nhận OTP qua email</Button>
               : <Button sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} onClick={() => onFinish()}>Xác nhận</Button>}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Link to={'/reset-password'} style={{ color: 'white' }}>Đăng ký?</Link>
+              <Link to={'/login'} style={{ color: 'white' }}>Đăng nhập?</Link>
+            </Box>
           </Stack>
         </Box>
       </Box>
-      {loading && <Loading/>}
+      {loading && <Loading />}
       <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đã gửi OTP'} />
       <ShowAlert showAlert={showAlertSuccess} setShowAlert={setShowAlertSuccess} content={'Đổi mật khẩu thành công'} />
       <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Email không đúng định dạng!'} isWarning={true} />

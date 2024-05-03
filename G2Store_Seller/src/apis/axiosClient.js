@@ -17,11 +17,11 @@ axiosClient.interceptors.request.use(async (config) => {
   if (atk) {
     const date = new Date()
     const decodedToken = jwtDecode(atk)
-    if (decodedToken.exp < date.getTime() / 1000) {
+    if (decodedToken.exp <= date.getTime() / 1000) {
       try {
         const res = await jwtAxios.post('customers/refresh-token', { refresh_token: rtk })
-        const newatk = res.data.access_token
-        const newrtk = res.data.refresh_token
+        const newatk = res?.data?.access_token
+        const newrtk = res?.data?.refresh_token
         if (newatk) {
           localStorage.setItem('atk', newatk)
           localStorage.setItem('rtk', newrtk)
@@ -42,6 +42,7 @@ axiosClient.interceptors.request.use(async (config) => {
 axiosClient.interceptors.response.use(
   (res) => res.data,
   (error) => {
+    console.log(error?.response?.data?.message)
     toast.error(error?.response?.data?.message, { autoClose: 2000 })
     return Promise.reject(error)
   })

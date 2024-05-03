@@ -17,7 +17,7 @@ function CardProduct({ product }) {
   const [showAlertFail, setShowAlertFail] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const handleClickAddToCart = () => {
-    if (!user?.atk) {
+    if (!user?.keep_login) {
       toast.error('Bạn cần đăng nhập để thực hiện chức năng này!', { autoClose: 2000 })
       navigate('/login')
     }

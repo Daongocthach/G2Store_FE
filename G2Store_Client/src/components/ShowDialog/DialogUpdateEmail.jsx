@@ -42,7 +42,7 @@ function DialogUpdateEmail() {
             <Button sx={{ color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2 }}
                 variant="contained" color="info" onClick={() => setOpen(true)}>Đổi email</Button>
             <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
-                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550 }}>Cập nhật email</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550, color:'#444444' }}>Cập nhật email</DialogTitle>
                 <DialogContent>
                     <TextField sx={{ mt: 2 }} fullWidth label='Email' size='small' type='text' value={new_email}
                         error={touched && !new_email}

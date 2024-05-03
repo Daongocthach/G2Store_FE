@@ -29,7 +29,6 @@ function Register() {
       setShowAlertWarning(true)
       setLoading(false)
     } else {
-      console.log(captcha)
       authenApi.register(captcha, email, password)
         .then(() => {
           setShowAlertOTP(true)
@@ -45,7 +44,6 @@ function Register() {
   }
   const onFinish = async () => {
     setLoading(true)
-    console.log(otp)
     authenApi.activeAccount(otp)
       .then(() => {
         setShowAlert(true)

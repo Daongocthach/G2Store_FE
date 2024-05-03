@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import DefaultLayout from './layouts/DefaultLayout'
@@ -7,7 +6,7 @@ import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
 
 function App() {
-  var atk = localStorage.getItem('atk')
+  const keep_login = useSelector(state => state.auth.keep_login)
 
   return (
     <div>
@@ -29,7 +28,7 @@ function App() {
               />)
           }
           )}
-          <Route path="/seller" element={<ProtectedRoute isAllowed={atk} />}>
+          <Route path="/seller" element={<ProtectedRoute isAllowed={keep_login}/>}>
             {privateRoutes.map((route, index) => {
               const Page = route.component
               const Layout = route.layout || DefaultLayout

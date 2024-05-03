@@ -1,5 +1,5 @@
 const initialState = {
-    atk: '',
+    keep_login: false,
     avatar: ''
 }
 const authReducer = (state = initialState, action) => {
@@ -8,7 +8,7 @@ const authReducer = (state = initialState, action) => {
         case 'LOGIN': {
             return {
                 ...state,
-                atk: action?.payload
+                keep_login: true
             }
         }
         case 'UPDATE_AVATAR': {
@@ -20,9 +20,8 @@ const authReducer = (state = initialState, action) => {
         case 'LOGOUT': {
             localStorage.removeItem('atk')
             localStorage.removeItem('rtk')
-            localStorage.removeItem('expireTime')
             return {
-                atk: '',
+                keep_login: false,
                 avatar: ''
             }
         }

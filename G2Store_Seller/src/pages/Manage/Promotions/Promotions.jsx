@@ -12,6 +12,7 @@ import DeletePromotion from './FormPromotion/DeletePromotion'
 import promotionApi from '../../../apis/promotionApi'
 import { listPromotions } from '../../../redux/actions/promotions'
 import { formatCurrency } from '../../../utils/price'
+import emptyImage from '../../../assets/img/empty-order.png'
 
 function Promotions() {
   const dispatch = useDispatch()
@@ -106,22 +107,26 @@ function Promotions() {
                 )
               })} */}
             </TableBody>
-            <TableFooter>
-              <TableRow >
+            {Array.isArray(promotions) && promotions.length > 0 && <TableFooter>
+              <TableRow>
                 <TablePagination
                   colSpan={12}
                   labelRowsPerPage={'Số lượng mỗi trang'}
-                  rowsPerPageOptions={[5, 10, { value: promotions?.length, label: 'All' }]}
-                  count={Array.isArray(promotions) ? promotions?.length : 0}
-                  rowsPerPage={rowsPerPage}
+                  rowsPerPageOptions={[5, { value: 5, label: 'Tất cả' }]}
+                  count={5}
                   page={page}
                   onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </TableRow>
-            </TableFooter>
+            </TableFooter>}
           </Table>
         </TableContainer>
+        {Array.isArray(promotions) && promotions.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+          <img src={emptyImage} />
+          <Typography variant='h6' >Bạn chưa có mã khuyến mãi nào</Typography>
+        </Box>}
       </Box>
     </Box>
   )

@@ -4,9 +4,13 @@ const authenApi = {
         const url = 'sellers/login'
         return axiosClient.post(url, data)
     },
-    register(data) {
-        const url = 'sellers/register'
-        return axiosClient.post(url, data)
+    register(captcha, email, password) {
+        const url = `sellers/register?g-recaptcha-response=${captcha}`
+        return axiosClient.post(url, { email, password })
+    },
+    activeAccount(otp) {
+        const url = `sellers/activate-account?verification-code=${otp}`
+        return axiosClient.get(url)
     },
     logout() {
         const url = 'logout'

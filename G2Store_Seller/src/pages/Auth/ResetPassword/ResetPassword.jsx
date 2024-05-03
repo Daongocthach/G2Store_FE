@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Container, TextField, Stack, Button, Box } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import { validateEmail } from '../../../utils/email'
@@ -57,9 +57,13 @@ function ResetPassword() {
               onChange={e => setEmail(e.target.value)}
             />
             <Button
-              sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover':{ bgcolor:'red' } }}
+              sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }}
               onClick={() => onFinish()}
             >Nhận password mới qua email</Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Link to={'/reset-password'} style={{ color: 'white' }}>Đăng ký?</Link>
+              <Link to={'/'} style={{ color: 'white' }}>Đăng nhập?</Link>
+            </Box>
           </Stack>
         </Box>
       </Box>

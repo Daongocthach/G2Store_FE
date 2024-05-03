@@ -31,16 +31,16 @@ function DialogUpdatePhoneNo({ reRender, setReRender }) {
             <Button sx={{ color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2 }}
                 variant="contained" color="info" onClick={() => setOpen(true)}>Đổi số điện thoại</Button>
             <Dialog open={open} keepMounted onClose={() => { setOpen(false), setTouched(false) }} >
-                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550 }}>Cập nhật số điện thoại</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550, color:'#444444' }}>Cập nhật số điện thoại</DialogTitle>
                 <DialogContent>
-                    <TextField sx={{ mt: 2 }} fullWidth label='Số điện thoại' size='small' type='text' value={new_phone_no}
+                    <TextField sx={{ mt: 1 }} fullWidth label='Số điện thoại' size='small' type='text' value={new_phone_no}
                         error={touched && !new_phone_no}
                         helperText={touched && !new_phone_no ? 'Không được để trống' : ''}
                         onChange={(e) => setPhoneNo(e.target.value)}
                         onBlur={() => setTouched(true)} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpen(false), setTouched(false) }} size='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
+                    <Button onClick={() => { setOpen(false), setTouched(false) }} ssize='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
                     <Button onClick={handleUpdatePhoneNo} size='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#1E90FF', color: 'white' }} >Ok</Button>
                 </DialogActions>
             </Dialog>
