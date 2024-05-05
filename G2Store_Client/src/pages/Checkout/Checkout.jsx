@@ -44,6 +44,7 @@ function Checkout() {
   const convertDataToOrderFormat = (data) => {
     const address_id = address?.address_id
     const payment_type = paymentType
+    const is_point_spent = false
     const orders = data.map(order => {
       return {
         items: order.items.map(item => {
@@ -62,7 +63,7 @@ function Checkout() {
         fee_ship: feeShipData[order?.shop?.shop_id]
       }
     })
-    return { orders, address_id, payment_type }
+    return { orders, address_id, payment_type, is_point_spent }
   }
   async function handleClickOrder() {
     if (address) {
