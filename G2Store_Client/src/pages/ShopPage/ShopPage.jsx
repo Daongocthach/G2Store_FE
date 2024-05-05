@@ -50,10 +50,10 @@ function ShopPage() {
             }
             else {
                 productApi.getShopProducts(shop_id, page - 1, 16)
-                .then((response) => {
-                    setProducts(response)
-                })
-                .catch((error) => console.log(error))
+                    .then((response) => {
+                        setProducts(response)
+                    })
+                    .catch((error) => console.log(error))
             }
             shopApi.getShopCategories(shop_id)
                 .then((response) => setCategories(response))
@@ -78,10 +78,10 @@ function ShopPage() {
                         <Typography variant="h6" noWrap color={'#555555'}>
                             {shop?.name}
                         </Typography>
-                        <Typography variant="subtitle2" noWrap  color={'#555555'}>
+                        <Typography variant="subtitle2" noWrap color={'#555555'}>
                             Theo dõi: 10
                         </Typography>
-                        <Typography variant="subtitle2" noWrap  color={'#555555'}>
+                        <Typography variant="subtitle2" noWrap color={'#555555'}>
                             Đánh giá tích cực: 90%
                         </Typography>
                     </Box>
@@ -115,7 +115,7 @@ function ShopPage() {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     Tất cả sản phẩm
                     <Tooltip title="Đặt lại">
-                        <RestartAlt sx={{ fontSize: 30, color: '#193744', cursor:'pointer' }} onClick={() => setCategory(null)} />
+                        <RestartAlt sx={{ fontSize: 30, color: '#193744', cursor: 'pointer' }} onClick={() => setCategory(null)} />
                     </Tooltip>
                 </Box>
                 <Box sx={{ bgcolor: '#E6E6FA', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -133,7 +133,7 @@ function ShopPage() {
                 </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Thông tin shop</Typography>
+                Thông tin shop
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1, mt: 1, mb: 1 }}>
                     <Typography variant='subtitle1' sx={useStyles.inputTitle}>Tên shop:</Typography>
                     <Input placeholder='Tên shop' sx={useStyles.input} readOnly value={shop?.name} />

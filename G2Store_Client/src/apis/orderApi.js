@@ -2,11 +2,11 @@ import axiosClient from './axiosClient'
 
 const orderApi = {
   addOrder(data) {
-    const url = 'orders/me'
+    const url = 'orders/create-orders'
     return axiosClient.post(url, data)
   },
-  getOrders() {
-    const url = 'orders/me'
+  getOrders(orderStatus, page, size) {
+    const url = `orders/me?orderStatus=${orderStatus}&page=${page}&size=${size}`
     return axiosClient.get(url)
   }
 }

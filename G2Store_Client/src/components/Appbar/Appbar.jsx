@@ -1,7 +1,6 @@
 import { ShoppingCart, Notifications } from '@mui/icons-material'
 import { Box, Button, Badge, Tooltip, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Account from './Account/Account'
 import Search from './Search/Search'

@@ -1,17 +1,19 @@
 import { Container, Grid, Typography, Button, Box, Breadcrumbs, Link } from '@mui/material'
 import { Storefront, NavigateNext } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import Product from './Product/Product'
 import ProductComponent from '../../components/Product/ProductComponent'
 import { formatCurrency } from '../../utils/price'
 import emptyOrder from '../../assets/img/empty-order.png'
 import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import cartItemApi from '../../apis/cartItemApi'
+import { setCart } from '../../redux/actions/cart'
 
 function Cart() {
-  const atk = localStorage.getItem('atk')
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const keep_login = useSelector(state => state.auth.keep_login)
   const [reRender, setReRender] = useState(false)
   const [cartItems, setCartItems] = useState([])
   const [isSoldOut, setIsSoldOut] = useState(false)
@@ -25,9 +27,7 @@ function Cart() {
     if (cartItems.length < 1)
       setShowAlert(true)
     else if (isSoldOut) {
-      console.log('ab')
       setShowAlertWaring(true)
-
     }
     else {
       const data = {
@@ -37,13 +37,14 @@ function Cart() {
     }
   }
   useEffect(() => {
-    if (atk) {
+    if (keep_login) {
       cartItemApi.getCartItemsIntended()
         .then(response => {
           setCartItems(response)
+          dispatch(setCart(response))
         })
     }
-  }, [reRender, atk])
+  }, [reRender])
   return (
     <Container maxWidth='lg' sx={{ mb: 2 }}>
       <Grid container spacing={3} mt={2} >

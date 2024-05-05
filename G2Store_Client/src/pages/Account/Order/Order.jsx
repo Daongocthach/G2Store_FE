@@ -7,46 +7,24 @@ import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import OrderItem from './OrderItem/OrderItem'
 import DeleteOrder from './DeleteOrder/DeleteOrder'
-import { sortByMaxId } from '../../../utils/price'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
 
 function Order() {
   const [rerender, setRerender] = useState(false)
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
-  const [tab, setTab] = useState(1)
+  const [tab, setTab] = useState('UN_PAID')
 
-  const handleAllOrders = () => {
-    orderApi.getOrders()
-      .then((response) => { setOrders(sortByMaxId(response)) })
-  }
-  const handlePending = () => {
-    orderApi.getOrders()
-      .then((response) => { setOrders(sortByMaxId(response)) })
-  }
-  const handleConfirmed = () => {
-    setOrders([])
-
-  }
-  const handleOnDelivery = () => {
-    setOrders([])
-
-  }
-  const handleCancel = () => {
-    setOrders([])
-
-  }
-  const handleSuccess = () => {
-    setOrders([])
-
-  }
   const handleChange = (event, newTab) => {
     setTab(newTab)
-
+    orderApi.getOrders(newTab, 0, 16)
+      .then((response) => {
+        setOrders(response?.content)
+      })
   }
   useEffect(() => {
-    orderApi.getOrders()
-      .then((response) => { setOrders(response) })
+    orderApi.getOrders(tab, 0, 16)
+      .then((response) => { setOrders(response?.content) })
   }, [])
   return (
     <Box>
@@ -54,14 +32,18 @@ function Order() {
         <Typography variant='h6' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng của tôi</Typography>
       </Box>
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', flexGrow: 1, display: 'flex', maxWidth: { xs: 350, sm: 500, md: 600, lg: 800 } }}>
-          <Tabs value={tab} onChange={handleChange} variant="scrollable">
-            <Tab label='Đã đặt hàng' value={1} onClick={handlePending} />
-            <Tab label='Đã xác nhận' value={2} onClick={handleConfirmed} />
-            <Tab label='Đang giao' value={3} onClick={handleOnDelivery} />
-            <Tab label='Hoàn tất' value={4} onClick={handleSuccess} />
-            <Tab label='Đã hủy' value={5} onClick={handleCancel} />
-            <Tab label='Tất cả' value={6} onClick={handleAllOrders} />
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', flexGrow: 1, display: 'flex' }}>
+          <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
+            <Tab label='Chưa thanh toán' value={'UN_PAID'} />
+            <Tab label='Đã đặt hàng' value={'ORDERED'} />
+            <Tab label='Đã xác nhận' value={'CONFIRMED'} />
+            <Tab label='Đã đóng gói' value={'PACKED'} />
+            <Tab label='Đang giao' value={'DELIVERING'} />
+            <Tab label='Đã giao' value={'DELIVERED'} />
+            <Tab label='Đã nhận' value={'RECEIVED'} />
+            <Tab label='Đã hủy' value={'CANCELED'} />
+            <Tab label='Chờ hoàn tiền' value={'REFUNDING'} />
+            <Tab label='Đã hoàn tiền' value={'REFUNDED'} />
           </Tabs>
         </Box>
         <Box>
@@ -69,6 +51,11 @@ function Order() {
             <Box key={index}>
               <Box sx={useStyles.flexBox}>
                 <Box sx={useStyles.flexBox}>
+                  <FiberManualRecord sx={{
+                    fontSize: 15, color: order?.order_status == 'SUCCESS' ? 'green' :
+                      order?.order_status == 'ON_DELIVERY' ? 'orange' :
+                        order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'
+                  }} />
                   <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng</Typography>
                   <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
                 </Box>
@@ -77,26 +64,19 @@ function Order() {
                     <LocalShipping sx={{ color: '#444444' }} />
                     <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
-                    color={order?.order_status == 'SUCCESS' ? 'green' :
-                      order?.order_status == 'ON_DELIVERY' ? 'orange' :
-                        order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'}>
-                    <FiberManualRecord sx={{ fontSize: 15 }} />
-                    <Typography variant='body2'>{order?.order_status}</Typography>
-                  </Box>
                 </Box>
               </Box>
               <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
                 onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
-                <Storefront sx={{ fontSize: 25, color: '#1E90FF' }} />
-                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#1E90FF' }}>{order?.shop_name}</Typography>
-                <NavigateNext sx={{ fontSize: 25, color: '#1E90FF' }} />
+                <Storefront sx={{ fontSize: 25, color: '#444444' }} />
+                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{order?.shop_name}</Typography>
+                <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
               </Button>
               {order?.items.map((orderItem, index) =>
                 <OrderItem key={index} orderItem={orderItem} order_status={order?.order_status} />)}
               <Box sx={useStyles.flexBox}>
                 {order?.order_status == 'ORDERED' || order?.order_status == 'CONFIRMED' ?
-                  <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id} /> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
+                  <DeleteOrder orderId={order?.id} /> : <Typography variant='subtitle1' color={'#444444'}></Typography>}
                 {order?.order_status == 'ON_DELIVERY' && <GoodsReceived orderId={order?.id} />}
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>

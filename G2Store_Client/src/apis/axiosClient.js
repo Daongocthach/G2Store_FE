@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode'
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_PUBLIC_API_URL,
+
   withCredentials: true
 })
 const jwtAxios = axios.create({

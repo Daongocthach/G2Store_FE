@@ -12,7 +12,6 @@ import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import { addToCart } from '../../redux/actions/cart'
 import reviewApi from '../../apis/reviewApi'
 import { mockData } from '../../apis/mockdata'
-import productApi from '../../apis/productApi'
 
 function ProductDetail() {
   const dispatch = useDispatch()
@@ -59,6 +58,25 @@ function ProductDetail() {
 
   function handleShowMoreClick() {
     setShowMore(showMore + 3)
+  }
+  function handleClickBuy() {
+    cartItemApi.addToCart({ quantity: 1, product_id: product?.product_id })
+      .then(() => {
+        cartItemApi.getCartItemsIntended()
+          .then(response => {
+            const total = product?.special_price || product?.price
+            const cartItems = response
+            const data = {
+              total, cartItems
+            }
+            navigate('/checkout', { state: data })
+          })
+        setShowAlert(true)
+      })
+      .catch((error) => {
+        console.log(error)
+        setShowAlertFail(true)
+      })
   }
   function handleClickAddToCart() {
     if (!user?.keep_login) {
@@ -197,7 +215,7 @@ function ProductDetail() {
               </Popover>
               {/* Quantity */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={handleClickAddToCart}>Mua Ngay</Button>
+                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => {handleClickAddToCart()}}>Mua Ngay</Button>
                 <Button variant='contained' color='info' fullWidth disabled={product?.stock_quantity < 1} startIcon={<AddShoppingCart />} onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
               </Box>
             </Box>

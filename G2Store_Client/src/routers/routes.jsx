@@ -12,17 +12,16 @@ import AuthLayout from '../layouts/AuthLayout'
 import Thanks from '../pages/Thanks/Thanks'
 import Account from '../pages/Account/Account'
 import ShopPage from '../pages/ShopPage/ShopPage'
+import OrderFail from '../pages/OrderFail/OrderFail'
 
 const publicRoutes = [
     { path:'/login', component: Login, layout: AuthLayout },
     { path:'/register', component: Register, layout: AuthLayout },
     { path:'/reset-password', component: ResetPassword, layout: AuthLayout },
     { path:'/', component: DashBoard },
-    { path:'/cart', component: Cart },
     { path:'/promotion', component: Promotion },
     { path:'/genre-detail', component: GenreDetail },
     { path:'/product-detail', component: ProductDetail },
-    { path:'/thanks', component: Thanks },
     { path:'/shop-page', component: ShopPage },
     { path:'*', component: NotFound }
 ]
@@ -30,6 +29,9 @@ const publicRoutes = [
 const privateRoutes = [
     { path:'/profile', component: Account },
     { path:'/checkout', component: Checkout },
+    { path:'/order-fail', component: OrderFail },
+    { path:'/thanks', component: Thanks },
+    { path:'/cart', component: Cart }
 ]
 
 export { publicRoutes, privateRoutes }

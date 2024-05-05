@@ -1,5 +1,5 @@
 import { Button, Typography, Box, Rating, Tooltip, CardActions, CardMedia, CardContent, Card } from '@mui/material'
-import { Help, PointOfSale, ShoppingCart } from '@mui/icons-material'
+import { Help, Visibility, ShoppingCart } from '@mui/icons-material'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -16,6 +16,7 @@ function CardProduct({ product }) {
   const user = useSelector(state => state.auth)
   const [showAlertFail, setShowAlertFail] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
+
   const handleClickAddToCart = () => {
     if (!user?.keep_login) {
       toast.error('Bạn cần đăng nhập để thực hiện chức năng này!', { autoClose: 2000 })
@@ -62,7 +63,7 @@ function CardProduct({ product }) {
         </Box>
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Tooltip title="Mua ngay"><Button size="small" sx={{ color: '#EE3B3B', ':hover': { bgcolor: 'inherit' } }} onClick={() => { }}><PointOfSale /></Button></Tooltip>
+        <Tooltip title="Xem chi tiết"><Button size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }} onClick={() => {navigate('/product-detail', { state: product })}}><Visibility /></Button></Tooltip>
         <Tooltip title="Thêm vào giỏ"><Button size="small" sx={{ color: 'black', ':hover': { bgcolor: 'inherit' } }} onClick={handleClickAddToCart}><ShoppingCart /></Button></Tooltip>
         <Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: 'black', ':hover': { bgcolor: 'inherit' } }}><Help /></Button></Tooltip>
       </CardActions>

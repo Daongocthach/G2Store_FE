@@ -1,54 +1,46 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Typography, Box, Button, Tab, Tabs, Divider, Breadcrumbs, Link } from '@mui/material'
-import { LocalShipping, FiberManualRecord, Storefront, NavigateNext } from '@mui/icons-material'
+import {
+  Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
+  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link, Checkbox, Switch
+} from '@mui/material'
+import { LocalShipping, FiberManualRecord, Storefront, NavigateNext, AddCircle, Create } from '@mui/icons-material'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
-import OrderItem from './OrderItem/OrderItem'
-import DeleteOrder from './DeleteOrder/DeleteOrder'
-import { sortByMaxId } from '../../../utils/price'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 
 function Orders() {
   const [rerender, setRerender] = useState(false)
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
-  const [tab, setTab] = useState(1)
+  const [tab, setTab] = useState('UN_PAID')
+  const [page, setPage] = useState(0)
+  const [totalElements, setTotalElements] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertFail, setShowAlertFail] = useState(false)
-
-  const handleAllOrders = () => {
-    orderApi.getOrders()
-      .then((response) => { setOrders(sortByMaxId(response)) })
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
   }
-  const handlePending = () => {
-    orderApi.getOrders()
-      .then((response) => { setOrders(sortByMaxId(response)) })
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
   }
-  const handleConfirmed = () => {
-    setOrders([])
 
-  }
-  const handleOnDelivery = () => {
-    setOrders([])
-
-  }
-  const handleCancel = () => {
-    setOrders([])
-
-  }
-  const handleSuccess = () => {
-    setOrders([])
-
+  const handleClickUpdate = (product) => {
+    navigate('/seller/manage/add-product', { state: product })
   }
   const handleChange = (event, newTab) => {
     setTab(newTab)
-
+    orderApi.getOrders(newTab, 0, 16)
+      .then((response) => {
+        setOrders(response?.content)
+      })
   }
   useEffect(() => {
-    // orderApi.getOrders()
-    //   .then((response) => { setOrders(response) })
+    orderApi.getOrders(tab, 0, 16)
+      .then((response) => { setOrders(response?.content) })
   }, [])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
@@ -64,58 +56,70 @@ function Orders() {
       <Divider />
       <Box sx={{ mb: 2 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={tab} onChange={handleChange} >
-            <Tab label='Đã đặt hàng' value={1} onClick={handlePending} />
-            <Tab label='Đã xác nhận' value={2} onClick={handleConfirmed} />
-            <Tab label='Đang giao' value={3} onClick={handleOnDelivery} />
-            <Tab label='Hoàn tất' value={4} onClick={handleSuccess} />
-            <Tab label='Đã hủy' value={5} onClick={handleCancel} />
-            <Tab label='Tất cả' value={6} onClick={handleAllOrders} />
+          <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
+            <Tab label='Chưa thanh toán' value={'UN_PAID'} />
+            <Tab label='Đã đặt hàng' value={'ORDERED'} />
+            <Tab label='Đã xác nhận' value={'CONFIRMED'} />
+            <Tab label='Đã đóng gói' value={'PACKED'} />
+            <Tab label='Đang giao' value={'DELIVERING'} />
+            <Tab label='Đã giao' value={'DELIVERED'} />
+            <Tab label='Đã nhận' value={'RECEIVED'} />
+            <Tab label='Đã hủy' value={'CANCELED'} />
+            <Tab label='Chờ hoàn tiền' value={'REFUNDING'} />
+            <Tab label='Đã hoàn tiền' value={'REFUNDED'} />
           </Tabs>
         </Box>
-        <Box>
-          {Array.isArray(orders) && orders.map((order, index) =>
-            <Box key={index}>
-              <Box sx={useStyles.flexBox}>
-                <Box sx={useStyles.flexBox}>
-                  <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng</Typography>
-                  <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
-                </Box>
-                <Box sx={useStyles.flexBox}>
-                  <Box sx={{ display: 'flex', gap: 1 }}>
-                    <LocalShipping />
-                    <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
-                    color={order?.order_status == 'SUCCESS' ? 'green' :
-                      order?.order_status == 'ON_DELIVERY' ? 'orange' :
-                        order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'}>
-                    <FiberManualRecord sx={{ fontSize: 15 }} />
-                    <Typography variant='body2'>{order?.order_status}</Typography>
-                  </Box>
-                </Box>
-              </Box>
-              <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
-                <Storefront sx={{ fontSize: 25, color: '#1E90FF' }} />
-                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#1E90FF' }}>{order?.shop_name}</Typography>
-                <NavigateNext sx={{ fontSize: 25, color: '#1E90FF' }} />
-              </Button>
-              {order?.items.map((orderItem, index) =>
-                <OrderItem key={index} orderItem={orderItem} order_status={order?.order_status} />)}
-              <Box sx={useStyles.flexBox}>
-                {order?.order_status == 'ORDERED' || order?.order_status == 'CONFIRMED' ?
-                  <DeleteOrder handleAllOrders={handleAllOrders} orderId={order?.id} /> : <Typography variant='h6' color={'gray'}>Hủy đơn hàng</Typography>}
-                <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
-                  <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
-                  <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order.total)}</Typography>
-                </Box>
-              </Box>
-              <Divider sx={{ mb: 2 }} />
-            </Box>)}
-          {orders.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px  ' }}>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow >
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Ngày đặt</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Tổng tiền</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Giao tới</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Trạng thái</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Hủy đơn</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(orders) && orders?.map((order, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell >
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          {<img src={order?.images[0]?.file_url} alt={order?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                          <Typography variant='subtitle2' color={'#444444'}>{order?.name}</Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell ><Typography>{formatCurrency(order?.special_price || order?.price)}</Typography></TableCell>
+                      <TableCell > <Typography>{order?.stock_quantity}</Typography> </TableCell>
+                      <TableCell >
+                        <Switch defaultChecked />
+                      </TableCell>
+                      <TableCell ><Button sx={{ bgcolor: 'orange', color: '#363636' }} onClick={() => handleClickUpdate(order)}><Create /></Button></TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+              {Array.isArray(orders) && orders.length > 0 && <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    colSpan={12}
+                    labelRowsPerPage={'Số lượng mỗi trang'}
+                    rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
+                    count={totalElements}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>}
+            </Table>
+          </TableContainer>
+          {Array.isArray(orders) && orders.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
             <img src={emptyOrder} />
-            <Typography color={'#444444'} variant='subtitle2' >Bạn chưa có đơn hàng nào</Typography>
+            <Typography variant='h6' >Bạn chưa có đơn hàng nào</Typography>
           </Box>}
         </Box>
       </Box>

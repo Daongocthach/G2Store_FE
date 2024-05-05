@@ -13,7 +13,7 @@ import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import Loading from '../../components/Loading/Loading'
 import Address from '../../components/Address/Address'
 import { deleteAllCart } from '../../redux/actions/cart'
-import imgMomo from '../../assets/img/momo.png'
+import imgVNPAY from '../../assets/img/vnpay.png'
 import ChangeAddress from './ChangeAddress/ChangeAddress'
 import UpdateAddress from '../Account/EditAddress/FormAddress/UpdateAddress'
 
@@ -23,7 +23,7 @@ function Checkout() {
   const location = useLocation()
   const data = location.state
   const [reRender, setReRender] = useState(false)
-  const [checked, setChecked] = useState(0)
+  const [paymentType, setPaymentType] = useState('COD')
   const [code, setCode] = useState('')
   const [voucher, setVoucher] = useState()
   const [feeShip, setFeeShip] = useState(0)
@@ -43,6 +43,7 @@ function Checkout() {
   }
   const convertDataToOrderFormat = (data) => {
     const address_id = address?.address_id
+    const payment_type = paymentType
     const orders = data.map(order => {
       return {
         items: order.items.map(item => {
@@ -61,7 +62,7 @@ function Checkout() {
         fee_ship: feeShipData[order?.shop?.shop_id]
       }
     })
-    return { orders, address_id }
+    return { orders, address_id, payment_type }
   }
   async function handleClickOrder() {
     if (address) {
@@ -70,13 +71,12 @@ function Checkout() {
       orderApi.addOrder(order)
         .then(() => {
           setShowAlert(true)
-          setTimeout(() => {
-            dispatch(deleteAllCart())
-            navigate('/thanks')
-          }, 1000)
+          dispatch(deleteAllCart())
+          navigate('/thanks')
         })
         .catch(() => {
           setShowAlertFail(true)
+          navigate('/order-fail')
         })
         .finally(() => setLoading(false))
     } else {
@@ -117,7 +117,7 @@ function Checkout() {
           }
         }
         else {
-          {/**Update address && change Address */}
+          {/**Update address && change Address */ }
           getFeeShip(address)
           const addressUpdated = addressesResponse.find(addressResponse => addressResponse?.address_id == address?.address_id)
           if (addressUpdated)
@@ -160,7 +160,7 @@ function Checkout() {
               </Button>
               <Divider />
               {Array.isArray(cartItem?.items) && cartItem?.items.map((product, index) => (
-                <ProductComponent key={index} product={product} isCheckout={true}/>
+                <ProductComponent key={index} product={product} isCheckout={true} reRender={reRender} setReRender={setReRender}/>
               ))}
               <Chip color='success' icon={<CheckCircleOutline sx={{ color: 'green' }} />} sx={{ mt: 2 }} variant="outlined"
                 label={'Phí vận chuyển: ' + formatCurrency(feeShipData[cartItem?.shop?.shop_id] ? feeShipData[cartItem?.shop?.shop_id] : 0)} />
@@ -195,13 +195,13 @@ function Checkout() {
           </Box>}
           <Typography variant='h6' sx={{ mt: 3, color: '#4F4F4F' }}>Phương thức thanh toán</Typography>
           <Box sx={useStyles.flexBox}>
-            <Radio sx={useStyles.radio} checked={checked == 0} onChange={() => setChecked(0)} />
+            <Radio sx={useStyles.radio} checked={paymentType == 'COD'} onChange={() => setPaymentType('COD')} />
             <Typography sx={{ color: '#4F4F4F' }} variant='subtitle1'>Thanh toán khi nhận hàng</Typography>
           </Box>
           <Box sx={useStyles.flexBox}>
-            <Radio sx={useStyles.radio} checked={checked == 1} onChange={() => setChecked(1)} />
-            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Thanh toán bằng momo</Typography>
-            <img src={imgMomo} alt='thanh toan momo' style={{ height: '30px', width: '30px' }} />
+            <Radio sx={useStyles.radio} checked={paymentType == 'VNPAY'} onChange={() => setPaymentType('VNPAY')} />
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Thanh toán qua VNPAY</Typography>
+            <img src={imgVNPAY} alt='thanh toan Vnpay' style={{ height: 50, width: 70 }} />
           </Box>
           <Divider sx={{ mb: 2 }} />
           <Button size='large' fullWidth color='error' variant='contained' sx={{ fontWeight: 'bold' }} onClick={handleClickOrder}> Đặt hàng </Button>
