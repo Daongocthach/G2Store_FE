@@ -16,8 +16,8 @@ import { mockData } from '../../apis/mockdata'
 function ProductDetail() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const location = useLocation()
-  const product = location.state
+  const location1 = useLocation()
+  const product = location1.state
   const user = useSelector(state => state.auth)
   const [quantity, setQuantity] = useState(1)
   const [reviews, setReviews] = useState([])
@@ -60,23 +60,7 @@ function ProductDetail() {
     setShowMore(showMore + 3)
   }
   function handleClickBuy() {
-    cartItemApi.addToCart({ quantity: 1, product_id: product?.product_id })
-      .then(() => {
-        cartItemApi.getCartItemsIntended()
-          .then(response => {
-            const total = product?.special_price || product?.price
-            const cartItems = response
-            const data = {
-              total, cartItems
-            }
-            navigate('/checkout', { state: data })
-          })
-        setShowAlert(true)
-      })
-      .catch((error) => {
-        console.log(error)
-        setShowAlertFail(true)
-      })
+    location.assign('https://translate.google.com/?hl=vi')
   }
   function handleClickAddToCart() {
     if (!user?.keep_login) {
@@ -215,7 +199,7 @@ function ProductDetail() {
               </Popover>
               {/* Quantity */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => {handleClickAddToCart()}}>Mua Ngay</Button>
+                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => {handleClickBuy()}}>Mua Ngay</Button>
                 <Button variant='contained' color='info' fullWidth disabled={product?.stock_quantity < 1} startIcon={<AddShoppingCart />} onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
               </Box>
             </Box>

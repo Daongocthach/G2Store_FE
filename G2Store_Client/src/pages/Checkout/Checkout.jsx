@@ -20,8 +20,8 @@ import UpdateAddress from '../Account/EditAddress/FormAddress/UpdateAddress'
 function Checkout() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const location = useLocation()
-  const data = location.state
+  const location1 = useLocation()
+  const data = location1.state
   const [reRender, setReRender] = useState(false)
   const [paymentType, setPaymentType] = useState('COD')
   const [code, setCode] = useState('')
@@ -70,10 +70,17 @@ function Checkout() {
       setLoading(true)
       const order = convertDataToOrderFormat(data?.cartItems)
       orderApi.addOrder(order)
-        .then(() => {
+        .then((response) => {
           setShowAlert(true)
           dispatch(deleteAllCart())
-          navigate('/thanks')
+          if (paymentType === 'COD')
+            navigate('/thanks')
+          else if (response?.payment_url) {
+            location.assign(response?.payment_url)
+          }
+          else {
+            navigate('/order-fail')
+          }
         })
         .catch(() => {
           setShowAlertFail(true)
@@ -83,6 +90,7 @@ function Checkout() {
     } else {
       setShowAlertWaring(true)
     }
+
   }
   const getFeeShip = async (address) => {
     const feeShipData = {}
@@ -161,7 +169,7 @@ function Checkout() {
               </Button>
               <Divider />
               {Array.isArray(cartItem?.items) && cartItem?.items.map((product, index) => (
-                <ProductComponent key={index} product={product} isCheckout={true} reRender={reRender} setReRender={setReRender}/>
+                <ProductComponent key={index} product={product} isCheckout={true} reRender={reRender} setReRender={setReRender} />
               ))}
               <Chip color='success' icon={<CheckCircleOutline sx={{ color: 'green' }} />} sx={{ mt: 2 }} variant="outlined"
                 label={'Phí vận chuyển: ' + formatCurrency(feeShipData[cartItem?.shop?.shop_id] ? feeShipData[cartItem?.shop?.shop_id] : 0)} />
