@@ -24,7 +24,7 @@ function OrderItem({ orderItem }) {
                         <Typography variant='subtitle2' color={'#444444'}>{formatCurrency(orderItem?.price)}</Typography>
                         <Typography variant='subtitle2' color={'#444444'}>x{orderItem?.quantity}</Typography>
                     </Box>
-                    <Typography variant='h6' fontWeight={'bold'} color={'#cd3333'}>{formatCurrency(orderItem?.sub_total)}</Typography>
+                    <Typography variant='subtitle1' fontWeight={'bold'} color={'#cd3333'}>Tiền hàng: {formatCurrency(orderItem?.sub_total)}</Typography>
                 </Box>
             </Box>
         </Box>

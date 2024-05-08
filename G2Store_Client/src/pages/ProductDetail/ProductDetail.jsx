@@ -1,11 +1,10 @@
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { Rating, Box, Typography, Button, Avatar, Container, Breadcrumbs, Link, Divider, Grid, Popover, ToggleButton, BottomNavigation, BottomNavigationAction, IconButton } from '@mui/material'
 import { Storefront, NavigateNext, AddShoppingCart, CheckCircleOutline, Remove, Add, ArrowBackIos, ArrowForwardIos, YouTube, Image, Receipt } from '@mui/icons-material'
 import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
 import { formatCurrency } from '../../utils/price'
 import cartItemApi from '../../apis/cartItemApi'
 import ShowAlert from '../../components/ShowAlert/ShowAlert'
@@ -59,9 +58,9 @@ function ProductDetail() {
   function handleShowMoreClick() {
     setShowMore(showMore + 3)
   }
-  function handleClickBuy() {
-    location.assign('https://translate.google.com/?hl=vi')
-  }
+  // function handleClickBuy() {
+
+  // }
   function handleClickAddToCart() {
     if (!user?.keep_login) {
       toast.error('Bạn cần đăng nhập để thực hiện chức năng này!', { autoClose: 2000 })
@@ -199,7 +198,7 @@ function ProductDetail() {
               </Popover>
               {/* Quantity */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => {handleClickBuy()}}>Mua Ngay</Button>
+                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => {handleClickAddToCart()}}>Mua Ngay</Button>
                 <Button variant='contained' color='info' fullWidth disabled={product?.stock_quantity < 1} startIcon={<AddShoppingCart />} onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
               </Box>
             </Box>

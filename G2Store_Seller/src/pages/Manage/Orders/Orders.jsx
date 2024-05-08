@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link, Checkbox, Switch
+  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
+  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link,
 } from '@mui/material'
-import { LocalShipping, FiberManualRecord, Storefront, NavigateNext, AddCircle, Create } from '@mui/icons-material'
+import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
+import ViewOrder from './FormOrder/ViewOrder'
+import UpdateOrder from './FormOrder/UpdateOrder'
+
 
 function Orders() {
-  const [rerender, setRerender] = useState(false)
+  const [reRender, setRerender] = useState(false)
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
@@ -28,20 +31,17 @@ function Orders() {
     setPage(0)
   }
 
-  const handleClickUpdate = (product) => {
-    navigate('/seller/manage/add-product', { state: product })
-  }
   const handleChange = (event, newTab) => {
     setTab(newTab)
-    orderApi.getOrders(newTab, 0, 16)
+    orderApi.getShopOrders(newTab, 0, 16)
       .then((response) => {
         setOrders(response?.content)
       })
   }
   useEffect(() => {
-    orderApi.getOrders(tab, 0, 16)
+    orderApi.getShopOrders(tab, 0, 16)
       .then((response) => { setOrders(response?.content) })
-  }, [])
+  }, [reRender])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
       <Breadcrumbs sx={{ m: 2 }}>
@@ -55,7 +55,7 @@ function Orders() {
       <Typography variant='h5' sx={{ fontWeight: 'bold', minWidth: '100px', m: 2 }}>Quản lý đơn hàng</Typography>
       <Divider />
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
           <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
             <Tab label='Chưa thanh toán' value={'UN_PAID'} />
             <Tab label='Đã đặt hàng' value={'ORDERED'} />
@@ -74,29 +74,28 @@ function Orders() {
             <Table>
               <TableHead>
                 <TableRow >
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Đơn hàng</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Ngày đặt</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Tổng tiền</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Giao tới</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Trạng thái</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Hủy đơn</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Người nhận</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Số điện thoại</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Thanh toán</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Xem Đơn</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Cập nhật</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {Array.isArray(orders) && orders?.map((order, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell >
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          {<img src={order?.images[0]?.file_url} alt={order?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
-                          <Typography variant='subtitle2' color={'#444444'}>{order?.name}</Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell ><Typography>{formatCurrency(order?.special_price || order?.price)}</Typography></TableCell>
-                      <TableCell > <Typography>{order?.stock_quantity}</Typography> </TableCell>
-                      <TableCell >
-                        <Switch defaultChecked />
-                      </TableCell>
-                      <TableCell ><Button sx={{ bgcolor: 'orange', color: '#363636' }} onClick={() => handleClickUpdate(order)}><Create /></Button></TableCell>
+                      <TableCell >#{order?.order_id}</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>{format(new Date(order?.created_date), 'yyyy-MM-dd')}</TableCell>
+                      <TableCell sx={{ color: '#cd3333', fontWeight: 'bold' }}>{formatCurrency(order?.total)}</TableCell>
+                      <TableCell >{order?.address?.receiver_name}</TableCell>
+                      <TableCell >{order?.address?.receiver_phone_no}</TableCell>
+                      <TableCell >{order?.payment_type}</TableCell>
+                      <TableCell ><ViewOrder order={order} /></TableCell>
+                      <TableCell ><UpdateOrder order={order} reRender={reRender} setReRender={setRerender} /></TableCell>
                     </TableRow>
                   )
                 })}
@@ -130,9 +129,3 @@ function Orders() {
 }
 
 export default Orders
-
-const useStyles = {
-  flexBox: {
-    display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between'
-  }
-}

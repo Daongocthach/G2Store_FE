@@ -1,136 +1,105 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Alert, Snackbar } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box } from '@mui/material'
 import { Create } from '@mui/icons-material'
-import { useDispatch } from 'react-redux'
 import orderApi from '../../../../apis/orderApi'
-import { updateOrder } from '../../../../redux/actions/orders'
+import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
+import Loading from '../../../../components/Loading/Loading'
 
-const steps = [
-  'PENDING',
-  'CONFIRMED',
-  'ON_DELIVERY',
-  'SUCCESS'
-]
-
-function UpdateOrder({ setUpdate, order }) {
-  var status
-  if (order?.orderStatus == 'PENDING') {
-    status = 0
-  }
-  if (order?.orderStatus == 'CONFIRMED') {
-    status = 1
-  }
-  if (order?.orderStatus == 'ON_DELIVERY') {
-    status = 2
-  }
-  const dispatch = useDispatch()
-  const [activeStep, setActiveStep] = useState(status || 0)
+function UpdateOrder({ order, setReRender, reRender }) {
+  const [activeStep, setActiveStep] = useState(0)
+  const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
-  const [openCancel, setOpenCancel] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertFail, setShowAlertFail] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
-  }
-  const handleClickOpenCancel = () => {
-    setOpenCancel(true)
+    const orderStatusIndex = steps.findIndex(step => step?.value === order?.order_status)
+    setActiveStep(orderStatusIndex)
   }
   const handleClose = () => {
     setOpen(false)
   }
-  const handleCloseCancel = () => {
-    setOpenCancel(false)
-  }
-  const handleCancel = () => {
-    orderApi.updateOrderStatus(order?.id, 4)
-      .then((response) => {
+  const handleUpdate = async () => {
+    setLoading(true)
+    orderApi.updateOrder(order?.order_id, steps[activeStep]?.value)
+      .then(() => {
         setShowAlert(true)
-        dispatch(updateOrder(response.data))
-        setUpdate(activeStep)
+        setReRender(!reRender)
       })
       .catch(error => {
         console.log(error)
         setShowAlertFail(true)
       })
-    setOpenCancel(false)
-    setOpen(false)
-  }
-  const handleUpdate = () => {
-    orderApi.updateOrderStatus(order?.id, activeStep)
-      .then((response) => {
-        setShowAlert(true)
-        setUpdate(activeStep)
-        dispatch(updateOrder(response.data))
-      })
-      .catch(error => {
-        console.log(error)
-        setShowAlertFail(true)
-      })
+      .finally(setLoading(false))
     handleClose()
   }
   const handleNext = () => {
-    if (activeStep == 4) {
+    if (activeStep === steps.length - 1)
       return
+    let nextStepIndex = activeStep + 1
+    while (nextStepIndex < steps.length && !canTransition(nextStepIndex)) {
+      nextStepIndex++
     }
-    setActiveStep(activeStep + 1)
+    setActiveStep(nextStepIndex)
   }
 
   const handleBack = () => {
-    if (activeStep == 0)
+    if (activeStep === 0 || activeStep === 2)
       return
-    setActiveStep(activeStep - 1)
+    let previousStepIndex = activeStep - 1
+    while (previousStepIndex >= 0 && !canTransition(previousStepIndex)) {
+      previousStepIndex--
+    }
+    setActiveStep(previousStepIndex)
+  }
+  const canTransition = (nextStepIndex) => {
+    const nextStepValue = steps[nextStepIndex]?.value
+    const allowedStates = ['CONFIRMED', 'PACKED', 'DELIVERING', 'DELIVERED', 'REFUNDING']
+    return allowedStates.includes(nextStepValue)
   }
   return (
-    <div>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-          Cập nhật đơn hàng thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
-        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-          Cập nhật đơn hàng thất bại!
-        </Alert>
-      </Snackbar>
-      <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
+    <Box>
+      <Button variant="contained" color='warning' onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth >
-        <DialogTitle>Update Order</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 'bold', color: '#444444' }}>Cập nhật trạng thái đơn hàng</DialogTitle>
         <DialogContent>
           <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((step) => (
-              <Step key={step}>
-                <StepLabel>{step}</StepLabel>
+              <Step key={step?.index} >
+                <StepLabel sx={{ color: '#444444' }}>{step?.label}</StepLabel>
               </Step>
             ))}
           </Stepper>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-            <Button onClick={handleClickOpenCancel}
-              sx={{ bgcolor: '#EE6363', color: 'white', borderRadius: 5, '&:hover': { bgcolor: '#BEBEBE' } }}>Cancel Order
+            <Button onClick={handleBack} variant='contained' color='info' sx={{ '&:hover': { bgcolor: 'inherit' }, borderRadius: 10 }}>Trước
             </Button>
-            <Button onClick={handleBack}
-              sx={{ bgcolor: '#1874CD', color: 'white', borderRadius: 10, '&:hover': { bgcolor: '#BEBEBE' } }}>Back
+            <Button onClick={handleNext} variant='contained' color='info' sx={{ '&:hover': { bgcolor: 'inherit' }, borderRadius: 10 }}>Tiếp
             </Button>
-            <Button onClick={handleNext}
-              sx={{ bgcolor: '#1874CD', color: 'white', borderRadius: 10, '&:hover': { bgcolor: '#BEBEBE' } }}>Next
-            </Button>
-
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleUpdate}>Update</Button>
+          <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Hủy</Button>
+          <Button onClick={handleUpdate} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Lưu</Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={openCancel} onClose={handleCloseCancel} >
-        <DialogTitle >Are you sure to cancel this order?</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleCloseCancel}>Close</Button>
-          <Button onClick={handleCancel}>Update</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật đơn hàng thành công!'} />
+      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Cập nhật đơn hàng thất bại'} isFail={true} />
+      {loading && <Loading />}
+    </Box>
   )
 }
 export default UpdateOrder
+
+const steps = [
+  { index: 0, value: 'UN_PAID', label: 'Chưa thanh toán' },
+  { index: 1, value: 'ORDERED', label: 'Đã đặt' },
+  { index: 2, value: 'CONFIRMED', label: 'Đã xác nhận' },
+  { index: 3, value: 'PACKED', label: 'Đóng gói' },
+  { index: 4, value: 'DELIVERING', label: 'Đang giao hàng' },
+  { index: 5, value: 'DELIVERED', label: 'Đã giao hàng' },
+  { index: 6, value: 'RECEIVED', label: 'Đã nhận hàng' },
+  { index: 7, value: 'CANCELED', label: 'Đã hủy' },
+  { index: 8, value: 'REFUNDING', label: 'Đang hoàn tiền' },
+  { index: 9, value: 'REFUNDED', label: 'Đã hoàn tiền' }
+]
+

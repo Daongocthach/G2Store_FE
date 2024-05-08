@@ -7,3 +7,9 @@ export const formatDate = (date) => {
     const minute = String(d.getMinutes()).padStart(2, '0'); // Lấy phút (00 đến 59)
     return `${year}-${month}-${day}T${hour}:${minute}`;
 }
+
+export function covertStringToDate(date_string) {
+    var formatted_date = new Date(date_string).toLocaleString('en-GB', { timeZone: 'UTC' })
+        .replace(/(\d{4}-\d{2}-\d{2}),\s(\d{2}:\d{2}:\d{2})/, '$1 $2')
+    return formatted_date
+}

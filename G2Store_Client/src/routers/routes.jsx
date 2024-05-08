@@ -13,6 +13,7 @@ import Thanks from '../pages/Thanks/Thanks'
 import Account from '../pages/Account/Account'
 import ShopPage from '../pages/ShopPage/ShopPage'
 import OrderFail from '../pages/OrderFail/OrderFail'
+import OrderDetail from '../pages/OrderDetail/OrderDetail'
 
 const publicRoutes = [
     { path:'/login', component: Login, layout: AuthLayout },
@@ -30,6 +31,7 @@ const privateRoutes = [
     { path:'/profile', component: Account },
     { path:'/checkout', component: Checkout },
     { path:'/order-fail', component: OrderFail },
+    { path:'/profile/order-detail', component: OrderDetail },
     { path:'/thanks', component: Thanks },
     { path:'/cart', component: Cart }
 ]

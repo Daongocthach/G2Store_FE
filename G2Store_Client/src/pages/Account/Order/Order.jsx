@@ -8,6 +8,7 @@ import orderApi from '../../../apis/orderApi'
 import OrderItem from './OrderItem/OrderItem'
 import DeleteOrder from './DeleteOrder/DeleteOrder'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
+import { covertStringToDate } from '../../../utils/date'
 
 function Order() {
   const [rerender, setRerender] = useState(false)
@@ -56,15 +57,11 @@ function Order() {
                       order?.order_status == 'ON_DELIVERY' ? 'orange' :
                         order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'
                   }} />
-                  <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng</Typography>
+                  <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold' }}>Đơn hàng</Typography>
+                  <Typography variant='subtitle2' color={'#444444'}>{covertStringToDate(order?.created_date, 'dd/MM/yyyy', '/')}</Typography>
                   <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
                 </Box>
-                <Box sx={useStyles.flexBox}>
-                  <Box sx={{ display: 'flex', gap: 1 }}>
-                    <LocalShipping sx={{ color: '#444444' }} />
-                    <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold', minWidth: '100px' }}>Giao hàng tận nơi</Typography>
-                  </Box>
-                </Box>
+                <LocalShipping sx={{ color: '#444444' }} />
               </Box>
               <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
                 onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
@@ -72,12 +69,19 @@ function Order() {
                 <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{order?.shop_name}</Typography>
                 <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
               </Button>
-              {order?.items.map((orderItem, index) =>
-                <OrderItem key={index} orderItem={orderItem} order_status={order?.order_status} />)}
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                <Box>
+                  {order?.items.map((orderItem, index) =>
+                    <OrderItem key={index} orderItem={orderItem} />)}
+                </Box>
+                <Box>
+                  <Typography variant='subtitle2' color={'#2e7d32'} >Phí vận chuyển: {formatCurrency(order?.fee_ship)}</Typography>
+                  <Typography variant='subtitle2' color={'#444444'}>Thanh toán: {order?.payment_type}</Typography>
+                </Box>
+              </Box>
               <Box sx={useStyles.flexBox}>
-                {order?.order_status == 'ORDERED' || order?.order_status == 'CONFIRMED' ?
-                  <DeleteOrder orderId={order?.id} /> : <Typography variant='subtitle1' color={'#444444'}></Typography>}
-                {order?.order_status == 'ON_DELIVERY' && <GoodsReceived orderId={order?.id} />}
+                <Button variant='contained' color='error' size='small' sx={{ borderRadius: 10 }}
+                  onClick={() => navigate('order-detail', { state: order })} >Xem chi tiết</Button>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
                   <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order.total)}</Typography>

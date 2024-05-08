@@ -1,16 +1,20 @@
 import axiosClient from './axiosClient'
 const productApi = {
     getProducts(page, size) {
-        const seed = sessionStorage.getItem('seed')
-        if (!seed)
+        var seed = sessionStorage.getItem('seed')
+        if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
+            seed = sessionStorage.getItem('seed')
+        }
         const url = `products?page=${page}&size=${size}&seed=${seed}`
         return axiosClient.get(url)
     },
     getProductsByCategoryId(categoryId, page, size, sort, startPrice, endPrice, districtId) {
-        const seed = sessionStorage.getItem('seed')
-        if (!seed)
+        var seed = sessionStorage.getItem('seed')
+        if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
+            seed = sessionStorage.getItem('seed')
+        }
         const params = {}
         if (districtId) {
             params.districtId = districtId
@@ -28,9 +32,11 @@ const productApi = {
         return axiosClient.get(url, { params: params })
     },
     searchProducts(name, page, size, sort, startPrice, endPrice, districtId) {
-        const seed = sessionStorage.getItem('seed')
-        if (!seed)
+        var seed = sessionStorage.getItem('seed')
+        if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
+            seed = sessionStorage.getItem('seed')
+        }
         const params = {}
         if (districtId) {
             params.districtId = districtId
@@ -48,9 +54,11 @@ const productApi = {
         return axiosClient.get(url, { params: params })
     },
     getShopProducts(shop_id, page, size) {
-        const seed = sessionStorage.getItem('seed')
-        if (!seed)
+        var seed = sessionStorage.getItem('seed')
+        if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
+            seed = sessionStorage.getItem('seed')
+        }
         const url = `products/shop/${shop_id}?page=${page}&size=${size}&seed=${seed}`
         return axiosClient.get(url)
     },

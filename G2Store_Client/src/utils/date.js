@@ -1,3 +1,9 @@
+export function covertStringToDate(date_string) {
+    var formatted_date = new Date(date_string).toLocaleString('en-GB', { timeZone: 'UTC' })
+        .replace(/(\d{4}-\d{2}-\d{2}),\s(\d{2}:\d{2}:\d{2})/, '$1 $2')
+    return formatted_date
+}
+
 export function getCurrentTime() {
     const currentTime = new Date()
     const offsetMinutes = currentTime.getTimezoneOffset()

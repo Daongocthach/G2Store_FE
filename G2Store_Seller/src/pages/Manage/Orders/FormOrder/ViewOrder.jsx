@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, TextField, Box } from '@mui/material'
-import { Visibility } from '@mui/icons-material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Box, Input } from '@mui/material'
+import { Visibility, LocalShipping, FiberManualRecord } from '@mui/icons-material'
 import { format } from 'date-fns'
-import Product from '../../../../components/Product/Product'
+import OrderItem from '../OrderItem/OrderItem'
 import { formatCurrency } from '../../../../utils/price'
 
 function ViewOrder({ order }) {
-  const orderItems = order?.orderItems
   const [open, setOpen] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
@@ -15,66 +14,96 @@ function ViewOrder({ order }) {
     setOpen(false)
   }
   return (
-    <div>
-      <Button sx={{ bgcolor: '#EE6363', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Visibility /></Button>
+    <Box>
+      <Button variant="contained" color='error' onClick={handleClickOpen}><Visibility /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle><Typography variant="h5" fontWeight={'bold'}>View Order</Typography></DialogTitle>
+        <DialogTitle sx={{ fontWeight: 'bold', color:'#444444' }}>Thông tin đơn hàng</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>UserName: </Typography>
-              <TextField fullWidth size='small' value={order?.customer?.fullName} />
+            <Box sx={useStyles.flexBox}>
+              <Box sx={useStyles.flexBox}>
+                <FiberManualRecord sx={{
+                  fontSize: 15, color: order?.order_status == 'SUCCESS' ? 'green' :
+                    order?.order_status == 'ON_DELIVERY' ? 'orange' :
+                      order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'
+                }} />
+                <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold' }}>Đơn hàng</Typography>
+                <Typography variant='subtitle2' color={'#444444'}>{format(new Date(order?.created_date), 'yyyy-MM-dd')}</Typography>
+                <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
+              </Box>
+              <LocalShipping sx={{ color: '#444444' }} />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>Email: </Typography>
-              <TextField fullWidth size='small' value={order?.customer?.email} />
+            <Typography variant='h6' sx={{ color: '#444444' }}>Thông tin khách hàng</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}>
+              <Typography variant='subtitle1' sx={useStyles.inputTitle}>Họ và tên</Typography>
+              <Input readOnly sx={useStyles.input} value={order?.address?.receiver_name} />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>PhoneNo: </Typography>
-              <TextField fullWidth size='small' value={order?.customer?.phoneNo} />
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}>
+              <Typography variant='subtitle1' sx={useStyles.inputTitle}>Số điện thoại</Typography>
+              <Input readOnly sx={useStyles.input} value={order?.address?.receiver_phone_no} />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>Address: </Typography>
-              <TextField fullWidth size='small'
-                value={order?.customer?.address + ',' + order?.customer?.ward + ',' +
-                  order?.customer?.district + ',' + order?.customer?.province} />
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}>
+              <Typography variant='subtitle1' sx={useStyles.inputTitle}>Địa chỉ giao hàng</Typography>
+              <Input readOnly sx={useStyles.input} value={order?.address?.province ? (order?.address?.order_receive_address + ', ' + order?.address?.ward + ', ' + order?.address?.district + ', ' + order?.address?.province) : ''} />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>CreatedDate: </Typography>
-              <TextField fullWidth size='small' value={format(new Date(order?.createdDate), 'yyyy-MM-dd')} />
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}>
+              <Typography variant='subtitle1' sx={useStyles.inputTitle}>Thanh toán</Typography>
+              <Input readOnly sx={useStyles.input} value={order?.payment_type} />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>OrderStatus: </Typography>
-              <TextField fullWidth size='small' value={order?.orderStatus} />
+            <Box>
+              <Typography variant='h6' sx={{ color: '#444444' }}>Thông tin đơn hàng</Typography>
+              <Box>
+                {order?.items.map((orderItem, index) =>
+                  <OrderItem key={index} orderItem={orderItem} />)}
+              </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'}>PayMethod: </Typography>
-              <TextField fullWidth size='small' value={order?.paymentMethod} />
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'} >FeeShip: </Typography>
-              <Typography minWidth={'100px'} variant='h6' fontWeight={'bold'} color={'red'}>{formatCurrency(order?.shippingFee)}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'} >Discount: </Typography>
-              <Typography minWidth={'100px'} variant='h6' fontWeight={'bold'} color={'red'}>{formatCurrency(order?.voucherDiscount)}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography minWidth={'100px'} >Tổng tiền: </Typography>
-              <Typography minWidth={'100px'} variant='h6' fontWeight={'bold'} color={'red'}>{formatCurrency(order?.total)}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Typography variant="h5" fontWeight={'bold'}>Thông tin đơn hàng</Typography>
-              {Array.isArray(orderItems) && orderItems.map((orderItem, index) =>
-                <Product key={index} product={orderItem.product} quantity={orderItem.quantity} />)}
+            <Box>
+              <Typography variant='h6' sx={{ color: '#444444' }}>Giá trị đơn hàng</Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap: 'wrap' }}>
+                <Typography variant='subtitle1' sx={useStyles.inputTitle}>Tổng tiền:</Typography>
+                <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order?.total)}</Typography>
+              </Box>
+              <Divider />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap: 'wrap' }}>
+                <Typography variant='subtitle1' sx={useStyles.inputTitle}>Phí vận chuyển:</Typography>
+                <Typography variant='subtitle1' color={'#2e7d32'} >{formatCurrency(order?.fee_ship)}</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap: 'wrap' }}>
+                <Typography variant='subtitle1' sx={useStyles.inputTitle}>Giảm giá shop:</Typography>
+                <Typography variant='subtitle1' >{formatCurrency(order?.shop_voucher_price_reduce)}</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap: 'wrap' }}>
+                <Typography variant='subtitle1' sx={useStyles.inputTitle}>Giảm giá toàn sàn:</Typography>
+                <Typography variant='subtitle1' >{formatCurrency(order?.g2_voucher_price_reduce)}</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap: 'wrap' }}>
+                <Typography variant='subtitle1' sx={useStyles.inputTitle}>Giảm giá bằng điểm:</Typography>
+                <Typography variant='subtitle1' >{formatCurrency(order?.point_spent)}</Typography>
+              </Box>
             </Box>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' } }}>Tắt</Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   )
 }
 export default ViewOrder
+
+const useStyles = {
+  inputTitle: {
+    minWidth: 100, color: '#444444'
+  },
+  input: {
+    minWidth: { xs: 200, md: 500 },
+    fontSize: 15
+  },
+  button: {
+    color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2
+  },
+  flexBox: {
+    display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between', flexWrap: 'wrap'
+  }
+}
