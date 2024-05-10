@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { Rating, Box, Typography, Button, Avatar, Container, Breadcrumbs, Link, Divider, Grid, Popover, ToggleButton, BottomNavigation, BottomNavigationAction, IconButton } from '@mui/material'
+import { Rating, Box, Typography, Button, Container, Breadcrumbs, Link, Divider, Grid, Popover, ToggleButton, BottomNavigation, BottomNavigationAction, IconButton } from '@mui/material'
 import { Storefront, NavigateNext, AddShoppingCart, CheckCircleOutline, Remove, Add, ArrowBackIos, ArrowForwardIos, YouTube, Image, Receipt } from '@mui/icons-material'
 import { useSelector } from 'react-redux'
 import { formatCurrency } from '../../utils/price'
@@ -11,6 +11,7 @@ import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import { addToCart } from '../../redux/actions/cart'
 import reviewApi from '../../apis/reviewApi'
 import { mockData } from '../../apis/mockdata'
+import CommentSection from './CommentSection/CommentSection'
 
 function ProductDetail() {
   const dispatch = useDispatch()
@@ -20,10 +21,11 @@ function ProductDetail() {
   const user = useSelector(state => state.auth)
   const [quantity, setQuantity] = useState(1)
   const [reviews, setReviews] = useState([])
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(3)
   const [index, setIndex] = useState(0)
   const [images, setImages] = useState(product?.images)
   const [videos, setVideos] = useState(product?.videos)
-  const [imageZoom, setImageZoom] = useState()
   const [bottomTab, setBottomTab] = useState(0)
   const [anchorEl, setAnchorEl] = useState(null)
   const [showMore, setShowMore] = useState(3)
@@ -33,34 +35,20 @@ function ProductDetail() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
-
   const handleClose = () => {
     setAnchorEl(null)
   }
-
   const handleIncrease = () => {
     setQuantity(quantity + 1)
   }
-
   const handleDecrease = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1)
     }
   }
-  const handleSetImageZoom = (index) => {
-    if (imageZoom == index)
-      setImageZoom()
-    else {
-      setImageZoom(index)
-    }
-  }
-
   function handleShowMoreClick() {
     setShowMore(showMore + 3)
   }
-  // function handleClickBuy() {
-
-  // }
   function handleClickAddToCart() {
     if (!user?.keep_login) {
       toast.error('Bạn cần đăng nhập để thực hiện chức năng này!', { autoClose: 2000 })
@@ -80,7 +68,7 @@ function ProductDetail() {
     }
   }
   useEffect(() => {
-    reviewApi.getReviewByProductId(product?.product_id)
+    reviewApi.getReviewByProductId(product?.product_id, page, size)
       .then((response) => { setReviews(response) })
   }, [product])
   return (
@@ -166,6 +154,10 @@ function ProductDetail() {
                 <Typography variant='subtitle1' color={'#444444'}>{product?.stock_quantity} sản phẩm</Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant='subtitle1' minWidth={90} fontWeight={'bold'} color={'#444444'}>Đã bán: </Typography>
+                <Typography variant='subtitle1' color={'#444444'}>{product?.sold_quantity} sản phẩm</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'}>Số lượng:</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', pl: 2 }}>
                   <ToggleButton value="left" key="left" sx={{ width: 50, height: 40 }} onClick={handleDecrease}>
@@ -198,41 +190,23 @@ function ProductDetail() {
               </Popover>
               {/* Quantity */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => {handleClickAddToCart()}}>Mua Ngay</Button>
+                <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => { handleClickAddToCart() }}>Mua Ngay</Button>
                 <Button variant='contained' color='info' fullWidth disabled={product?.stock_quantity < 1} startIcon={<AddShoppingCart />} onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
               </Box>
             </Box>
           </Grid>
         </Grid>
         {/* Reviews */}
-        {Array.isArray(reviews) && reviews.length > 0 &&
+        {reviews?.total_rate_count > 0 &&
           <Box sx={{ mb: 2, mt: 5 }}>
             <Typography variant='h5' fontWeight={'bold'} color={'#444444'}>Đánh giá sản phẩm</Typography>
-            {reviews?.slice(0, showMore).map((review, index) =>
-              <Box key={index}>
-                <Box sx={{ display: 'flex', borderRadius: 3, width: '100%', gap: 2, alignItems: 'center', mt: 3 }}>
-                  <Avatar sx={{ height: 50, width: 50 }}>{review?.review_id}</Avatar>
-                  <Box >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                      <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'}>Khách hàng {review?.customer_name || 'ẩn danh'}</Typography>
-                      <Rating size='small' value={4} readOnly />
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                      <Typography variant='subtitle1' color={'#444444'}>{review?.content}</Typography>
-                      <img src={review?.images} alt={'Đánh giá'} onClick={() => handleSetImageZoom(index)}
-                        style={{ objectFit: 'cover', borderRadius: '10px', width: '50px', height: '50px' }} />
-                    </Box>
-                  </Box>
-                </Box>
-                {imageZoom == index && <img src={review?.images} alt={'Đánh giá'}
-                  style={{ objectFit: 'cover', borderRadius: '5px', marginTop: 2, cursor: 'pointer', width: '300px', height: '200px' }} />}
-              </Box>
+            {reviews?.reviews?.content?.slice(0, showMore).map((review, index) =>
+              <CommentSection key={index} review={review} />
             )}
             {reviews.length > showMore && (
-              <Button onClick={handleShowMoreClick}>Hiện thêm</Button>
+              <Button variant='contained' color='warning' onClick={handleShowMoreClick}>Hiện thêm</Button>
             )}
           </Box>}
-
       </Container>
       <ShowAlert setShowAlert={setShowAlert} showAlert={showAlert} content={'Thêm sản phẩm vào giỏ thành công'} />
       <ShowAlert setShowAlert={setShowAlertFail} showAlert={showAlertFail} content={'Thêm sản phẩm vào giỏ thất bại'} isFail={true} />

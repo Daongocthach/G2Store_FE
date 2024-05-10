@@ -9,9 +9,10 @@ import OrderItem from './OrderItem/OrderItem'
 import DeleteOrder from './DeleteOrder/DeleteOrder'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
 import { covertStringToDate } from '../../../utils/date'
+import ReviewProduct from './ReviewProduct/ReviewProduct'
 
 function Order() {
-  const [rerender, setRerender] = useState(false)
+  const [reRender, setRerender] = useState(false)
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
@@ -61,7 +62,7 @@ function Order() {
                   <Typography variant='subtitle2' color={'#444444'}>{covertStringToDate(order?.created_date, 'dd/MM/yyyy', '/')}</Typography>
                   <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
                 </Box>
-                <LocalShipping sx={{ color: '#444444' }} />
+                <LocalShipping sx={{ color: '#444444' }}/>
               </Box>
               <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
                 onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
@@ -72,7 +73,7 @@ function Order() {
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <Box>
                   {order?.items.map((orderItem, index) =>
-                    <OrderItem key={index} orderItem={orderItem} />)}
+                    <OrderItem key={index} orderItem={orderItem} orderStatus={order?.order_status}/>)}
                 </Box>
                 <Box>
                   <Typography variant='subtitle2' color={'#2e7d32'} >Phí vận chuyển: {formatCurrency(order?.fee_ship)}</Typography>
@@ -80,8 +81,12 @@ function Order() {
                 </Box>
               </Box>
               <Box sx={useStyles.flexBox}>
-                <Button variant='contained' color='error' size='small' sx={{ borderRadius: 10 }}
-                  onClick={() => navigate('order-detail', { state: order })} >Xem chi tiết</Button>
+                <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
+                  <Button variant='contained' color='error' size='small' sx={{ borderRadius: 2 }}
+                    onClick={() => navigate('order-detail', { state: order })} >Xem chi tiết
+                  </Button>
+                  {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setRerender={setRerender} rerender={reRender} />}
+                </Box>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
                   <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order.total)}</Typography>

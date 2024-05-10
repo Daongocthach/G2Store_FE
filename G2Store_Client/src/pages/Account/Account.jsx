@@ -6,7 +6,7 @@ import Order from './Order/Order'
 import EditAddress from './EditAddress/EditAddress'
 
 function Account() {
-  const [select, setSelect] = useState(0)
+  const [select, setSelect] = useState(1)
 
   return (
     <Container sx={{ mb: 2 }}>

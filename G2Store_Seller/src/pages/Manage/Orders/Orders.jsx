@@ -15,7 +15,6 @@ import UpdateOrder from './FormOrder/UpdateOrder'
 
 function Orders() {
   const [reRender, setRerender] = useState(false)
-  const navigate = useNavigate()
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
   const [page, setPage] = useState(0)
@@ -88,12 +87,12 @@ function Orders() {
                 {Array.isArray(orders) && orders?.map((order, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell >#{order?.order_id}</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>{format(new Date(order?.created_date), 'yyyy-MM-dd')}</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>#{order?.order_id}</TableCell>
+                      <TableCell >{format(new Date(order?.created_date), 'yyyy-MM-dd')}</TableCell>
                       <TableCell sx={{ color: '#cd3333', fontWeight: 'bold' }}>{formatCurrency(order?.total)}</TableCell>
                       <TableCell >{order?.address?.receiver_name}</TableCell>
                       <TableCell >{order?.address?.receiver_phone_no}</TableCell>
-                      <TableCell >{order?.payment_type}</TableCell>
+                      <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell ><ViewOrder order={order} /></TableCell>
                       <TableCell ><UpdateOrder order={order} reRender={reRender} setReRender={setRerender} /></TableCell>
                     </TableRow>

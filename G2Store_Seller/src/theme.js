@@ -36,9 +36,21 @@ const theme = extendTheme({
         }
       }
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          fontFamily: '"Roboto", sans-serif',
+          color: '#444444',
+          '&.MuiTypography': {
+            fontSize: '0.800rem',
+          },
+        }
+      }
+    },
     MuiTypography: {
       styleOverrides: {
         root: {
+          color: '#444444',
           fontFamily: '"Roboto", sans-serif',
           '&.MuiTypography-body1': {
             fontSize: '0.800rem',

@@ -41,9 +41,9 @@ const theme = extendTheme({
       styleOverrides: {
         root: {
           fontFamily: '"Roboto", sans-serif',
-          '&.MuiTypography-body1': {
-            fontSize: '0.800rem'
-          }
+          '&.MuiTypography': {
+            fontSize: '0.800rem',
+          },
         }
       }
     },
