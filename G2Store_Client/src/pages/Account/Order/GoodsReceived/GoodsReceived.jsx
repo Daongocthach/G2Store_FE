@@ -4,7 +4,7 @@ import orderApi from '../../../../apis/orderApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 
-function GoodsReceived({ orderId }) {
+function GoodsReceived({ orderId, reRender, setReRender }) {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
@@ -21,6 +21,7 @@ function GoodsReceived({ orderId }) {
         orderApi.goodsReceived(orderId)
             .then(() => {
                 setShowAlert(true)
+                setReRender(!reRender)
             })
             .catch(error => {
                 console.log(error)
@@ -42,8 +43,8 @@ function GoodsReceived({ orderId }) {
                     <Button onClick={handleClickGoodsReceived} sx={{ ':hover': { bgcolor: 'inherit' } }}>Xác nhận</Button>
                 </DialogActions>
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content='Đánh giá thành công' />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đánh giá thất bại'} isFail={true} />
+            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content='Nhận hàng thành công' />
+            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Nhận hàng thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

@@ -14,12 +14,14 @@ import Account from '../pages/Account/Account'
 import ShopPage from '../pages/ShopPage/ShopPage'
 import OrderFail from '../pages/OrderFail/OrderFail'
 import OrderDetail from '../pages/OrderDetail/OrderDetail'
+import Notification from '../pages/Notification/Notification'
 
 const publicRoutes = [
     { path:'/login', component: Login, layout: AuthLayout },
     { path:'/register', component: Register, layout: AuthLayout },
     { path:'/reset-password', component: ResetPassword, layout: AuthLayout },
     { path:'/', component: DashBoard },
+    { path:'/notification', component: Notification },
     { path:'/promotion', component: Promotion },
     { path:'/genre-detail', component: GenreDetail },
     { path:'/product-detail', component: ProductDetail },

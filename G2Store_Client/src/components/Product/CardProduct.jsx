@@ -1,6 +1,6 @@
-import { Button, Typography, Box, Rating, Tooltip, CardActions, CardMedia, CardContent, Card } from '@mui/material'
+import { Button, Typography, Box, Rating, Tooltip, CardActions, CardMedia, CardContent, Card, Divider } from '@mui/material'
 import { Help, Visibility, ShoppingCart } from '@mui/icons-material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -9,11 +9,13 @@ import cartItemApi from '../../apis/cartItemApi'
 import { formatCurrency } from '../../utils/price'
 import { addToCart } from '../../redux/actions/cart'
 import ShowAlert from '../ShowAlert/ShowAlert'
+import reviewApi from '../../apis/reviewApi'
 
 function CardProduct({ product }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth)
+  const [reviews, setReviews] = useState([])
   const [showAlertFail, setShowAlertFail] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
 
@@ -36,6 +38,13 @@ function CardProduct({ product }) {
         })
     }
   }
+  useEffect(() => {
+    reviewApi.getReviewByProductId(product?.product_id, 0, 8)
+      .then((response) => {
+        setReviews(response)
+      })
+      .catch((error) => console.log(error))
+  }, [])
   return (
     <Card sx={{ maxWidth: 300, cursor: 'pointer' }} >
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -46,9 +55,9 @@ function CardProduct({ product }) {
           title={product?.name}
         />
       </Box>
-      <CardContent>
-        <Typography variant='subtitle1' color={'#444444'} gutterBottom fontWeight={'bold'} sx={{ height: '50px' }} overflow={'hidden'}>
-          {product?.name}
+      <CardContent sx={{ height: 145 }}>
+        <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'}
+          sx={{ textOverflow: { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } }}> {product?.name}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'end', gap: 2 }}>
           {product?.special_price && <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#cb1c22' }} >{formatCurrency(product?.special_price)}</Typography>}
@@ -58,12 +67,19 @@ function CardProduct({ product }) {
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Rating size='small' value={5} precision={0.1} readOnly />
-          <Typography variant='subtitle2' fontSize={'13px'} sx={{ textAlign: 'center' }} color={'#00B2EE'}>{5 + ' Đánh giá'}</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Rating size='small' value={reviews?.avg_rate || 0} precision={0.1} readOnly />
+            <Typography variant='subtitle2' sx={{ textAlign: 'center' }} color={'#00B2EE'}>({reviews?.total_rate_count || 0})</Typography>
+          </Box>
+          <Typography variant='subtitle2' sx={{ textAlign: 'center' }} color={'#00B2EE'}> {product?.sold_quantity} Đã bán</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant='body2' sx={{ textAlign: 'center' }} color={'#777777'}> {product?.shop?.province}</Typography>
+          <Typography variant='body2' color={'#777777'}>Kho: {product?.stock_quantity}</Typography>
         </Box>
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Tooltip title="Xem chi tiết"><Button size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }} onClick={() => {navigate('/product-detail', { state: product })}}><Visibility /></Button></Tooltip>
+        <Tooltip title="Xem chi tiết"><Button size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }} onClick={() => { navigate('/product-detail', { state: product }) }}><Visibility /></Button></Tooltip>
         <Tooltip title="Thêm vào giỏ"><Button size="small" sx={{ color: 'black', ':hover': { bgcolor: 'inherit' } }} onClick={handleClickAddToCart}><ShoppingCart /></Button></Tooltip>
         <Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: 'black', ':hover': { bgcolor: 'inherit' } }}><Help /></Button></Tooltip>
       </CardActions>

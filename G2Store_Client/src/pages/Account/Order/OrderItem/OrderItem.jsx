@@ -27,7 +27,7 @@ function OrderItem({ orderItem, orderStatus, reRender, setReRender }) {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
                         <Typography variant='subtitle1' fontWeight={'bold'} color={'#cd3333'}>Tiền hàng: {formatCurrency(orderItem?.sub_total)}</Typography>
-                        {orderStatus === 'RECEIVED' && !orderItem?.is_reviewed && <ReviewProduct orderItem={orderItem} reRender={reRender} setRerender={setReRender} />}
+                        {orderStatus === 'RECEIVED' && !orderItem?.is_reviewed && <ReviewProduct orderItem={orderItem} reRender={reRender} setReRender={setReRender} />}
                     </Box>
                 </Box>
             </Box>

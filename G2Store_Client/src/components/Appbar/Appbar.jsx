@@ -30,7 +30,7 @@ function AppBar() {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         <Tooltip title="Thông báo">
           <Badge color="warning" badgeContent={1} sx={{ cursor: 'pointer' }}>
-            <Notifications sx={useStyles.button} onClick={() => navigate('/cart')} />
+            <Notifications sx={useStyles.button} onClick={() => navigate('/notification')} />
           </Badge>
         </Tooltip>
         <Tooltip title="Giỏ hàng">

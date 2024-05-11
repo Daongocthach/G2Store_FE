@@ -62,8 +62,8 @@ function ReviewProduct({ orderItem, reRender, setReRender }) {
         })
         reviewApi.addReview(formData)
             .then(() => {
-                setShowAlert(true)
                 setReRender(!reRender)
+                setShowAlert(true)
             })
             .catch(error => {
                 console.log(error)

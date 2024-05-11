@@ -11,7 +11,7 @@ function ProductDetail() {
   const product = location1.state
   const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(1)
-  const [size, setSize] = useState(8)
+  const [size, setSize] = useState(1)
   const [sortType, setSortType] = useState('')
   useEffect(() => {
     reviewApi.getReviewByProductId(product?.product_id, page - 1, size, sortType)
@@ -41,8 +41,7 @@ function ProductDetail() {
           </Grid>
         </Grid>
         {/* Reviews */}
-        {reviews?.total_rate_count > 0 &&
-          <Reviews reviews={reviews} page={page} setPage={setPage} setSortType={setSortType}/>}
+        <Reviews reviews={reviews} page={page} setPage={setPage} setSortType={setSortType} />
       </Container>
 
     </Box>

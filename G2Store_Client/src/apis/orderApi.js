@@ -12,6 +12,10 @@ const orderApi = {
   goodsReceived(order_id) {
     const url = `orders/${order_id}/me?orderStatus=RECEIVED`
     return axiosClient.put(url)
+  },
+  payUnPaidOrder(order_id) {
+    const url = `orders/${order_id}/pay-unpaid-order`
+    return axiosClient.post(url)
   }
 }
 

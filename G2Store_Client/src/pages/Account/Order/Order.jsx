@@ -8,10 +8,12 @@ import orderApi from '../../../apis/orderApi'
 import OrderItem from './OrderItem/OrderItem'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
 import { covertStringToDate } from '../../../utils/date'
+import Loading from '../../../components/Loading/Loading'
 
 function Order() {
   const [reRender, setReRender] = useState(false)
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
 
@@ -21,6 +23,23 @@ function Order() {
       .then((response) => {
         setOrders(response?.content)
       })
+  }
+  const handlePayment = (order_id) => {
+    setLoading(true)
+    orderApi.payUnPaidOrder(order_id)
+      .then((response) => {
+        if (response?.payment_url) {
+          location.assign(response?.payment_url)
+        }
+        else {
+          navigate('/order-fail')
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        navigate('/order-fail')
+      })
+      .finally(() => setLoading(false))
   }
   useEffect(() => {
     orderApi.getOrders(tab, 0, 16)
@@ -60,7 +79,7 @@ function Order() {
                   <Typography variant='subtitle2' color={'#444444'}>{covertStringToDate(order?.created_date, 'dd/MM/yyyy', '/')}</Typography>
                   <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
                 </Box>
-                <LocalShipping sx={{ color: '#444444' }}/>
+                <LocalShipping sx={{ color: '#444444' }} />
               </Box>
               <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
                 onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
@@ -71,7 +90,7 @@ function Order() {
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <Box>
                   {order?.items.map((orderItem, index) =>
-                    <OrderItem key={index} orderItem={orderItem} orderStatus={order?.order_status} reRender={reRender} setReRender={setReRender}/>)}
+                    <OrderItem key={index} orderItem={orderItem} orderStatus={order?.order_status} reRender={reRender} setReRender={setReRender} />)}
                 </Box>
                 <Box>
                   <Typography variant='subtitle2' color={'#2e7d32'} >Phí vận chuyển: {formatCurrency(order?.fee_ship)}</Typography>
@@ -82,6 +101,9 @@ function Order() {
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Button variant='contained' color='error' size='small' sx={{ borderRadius: 2 }}
                     onClick={() => navigate('order-detail', { state: order })} >Xem chi tiết
+                  </Button>
+                  <Button variant='contained' color='info' size='small' sx={{ borderRadius: 2 }}
+                    onClick={() => handlePayment(order?.order_id)} >Thanh toán
                   </Button>
                   {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} rerender={reRender} />}
                 </Box>
@@ -103,6 +125,7 @@ function Order() {
           </Box>}
         </Box>
       </Box>
+      {loading && <Loading />}
     </Box >
   )
 }
