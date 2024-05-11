@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import productApi from '../../../../apis/productApi'
 import ReviewProduct from '../ReviewProduct/ReviewProduct'
 
-function OrderItem({ orderItem, orderStatus }) {
+function OrderItem({ orderItem, orderStatus, reRender, setReRender }) {
     const navigate = useNavigate()
     const [productCart, setProductCart] = useState()
     useEffect(() => {
@@ -27,7 +27,7 @@ function OrderItem({ orderItem, orderStatus }) {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
                         <Typography variant='subtitle1' fontWeight={'bold'} color={'#cd3333'}>Tiền hàng: {formatCurrency(orderItem?.sub_total)}</Typography>
-                        {orderStatus==='RECEIVED' && !orderItem?.is_reviewed && <ReviewProduct orderItem={orderItem} />}
+                        {orderStatus === 'RECEIVED' && !orderItem?.is_reviewed && <ReviewProduct orderItem={orderItem} reRender={reRender} setRerender={setReRender} />}
                     </Box>
                 </Box>
             </Box>

@@ -33,7 +33,7 @@ function BoardBar() {
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                 <Chip icon={<Dehaze />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
                     onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
-                <Link to={'/manage/promotions'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
+                <Link to={'/promotion'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
             </Box>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
                 <MenuCategory categories={categories} />

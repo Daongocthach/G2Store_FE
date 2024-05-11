@@ -19,7 +19,7 @@ axiosClient.interceptors.request.use(async (config) => {
     const decodedToken = jwtDecode(atk)
     if (decodedToken.exp < date.getTime() / 1000) {
       try {
-        const res = await jwtAxios.post('customers/refresh-token', { refresh_token: rtk })
+        const res = await jwtAxios.post('admins/refresh-token', { refresh_token: rtk })
         const newatk = res.data.access_token
         const newrtk = res.data.refresh_token
         if (newatk) {

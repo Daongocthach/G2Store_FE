@@ -6,13 +6,11 @@ import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import OrderItem from './OrderItem/OrderItem'
-import DeleteOrder from './DeleteOrder/DeleteOrder'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
 import { covertStringToDate } from '../../../utils/date'
-import ReviewProduct from './ReviewProduct/ReviewProduct'
 
 function Order() {
-  const [reRender, setRerender] = useState(false)
+  const [reRender, setReRender] = useState(false)
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
@@ -27,7 +25,7 @@ function Order() {
   useEffect(() => {
     orderApi.getOrders(tab, 0, 16)
       .then((response) => { setOrders(response?.content) })
-  }, [])
+  }, [reRender])
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -73,7 +71,7 @@ function Order() {
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <Box>
                   {order?.items.map((orderItem, index) =>
-                    <OrderItem key={index} orderItem={orderItem} orderStatus={order?.order_status}/>)}
+                    <OrderItem key={index} orderItem={orderItem} orderStatus={order?.order_status} reRender={reRender} setReRender={setReRender}/>)}
                 </Box>
                 <Box>
                   <Typography variant='subtitle2' color={'#2e7d32'} >Phí vận chuyển: {formatCurrency(order?.fee_ship)}</Typography>
@@ -85,7 +83,7 @@ function Order() {
                   <Button variant='contained' color='error' size='small' sx={{ borderRadius: 2 }}
                     onClick={() => navigate('order-detail', { state: order })} >Xem chi tiết
                   </Button>
-                  {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setRerender={setRerender} rerender={reRender} />}
+                  {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} rerender={reRender} />}
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>

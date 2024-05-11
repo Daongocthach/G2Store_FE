@@ -5,7 +5,7 @@ import reviewApi from '../../../../apis/reviewApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 
-function ReviewProduct({ orderItem }) {
+function ReviewProduct({ orderItem, reRender, setReRender }) {
     const [open, setOpen] = useState(false)
     const [content, setContent] = useState('')
     const [rate, setRate] = useState(5)
@@ -63,6 +63,7 @@ function ReviewProduct({ orderItem }) {
         reviewApi.addReview(formData)
             .then(() => {
                 setShowAlert(true)
+                setReRender(!reRender)
             })
             .catch(error => {
                 console.log(error)
