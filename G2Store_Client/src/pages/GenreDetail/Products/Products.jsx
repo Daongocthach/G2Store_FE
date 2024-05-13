@@ -21,7 +21,7 @@ function Products() {
     const [districtId, setDistrictId] = useState('')
 
     const handleResetFilter = () => {
-        setSort('')
+        setSort('DEFAULT')
         setStartPrice('')
         setEndPrice('')
         setDistrictId('')
@@ -33,40 +33,31 @@ function Products() {
         const fetchData = async () => {
             setLoading(true)
             setTimeout(() => {
+                let apiCall
                 if (data?.category?.category_id) {
-                    productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 16, sort, startPrice, endPrice, districtId)
-                        .then((response) => {
-                            setProducts(response)
-                        })
-                        .catch((error) => console.log(error))
-                        .finally(() => setLoading(false))
+                    apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 16, sort, startPrice, endPrice, districtId)
+                } else if (data?.name) {
+                    apiCall = productApi.searchProducts(data?.name, page - 1, 16, sort, startPrice, endPrice, districtId)
+                } else {
+                    apiCall = productApi.getProducts(page - 1, 16)
                 }
-                else if (data?.name) {
-                    productApi.searchProducts(data?.name, page - 1, 16, sort, startPrice, endPrice, districtId)
-                        .then((response) => {
-                            setProducts(response)
-                        })
-                        .catch((error) => console.log(error))
-                        .finally(() => setLoading(false))
-                }
-                else {
-                    productApi.getProducts(page - 1, 16)
-                        .then((response) => {
-                            setProducts(response)
-                        })
-                        .catch((error) => console.log(error))
-                        .finally(() => setLoading(false))
-                }
+                apiCall.then((response) => {
+                    setProducts(response)
+                })
+                    .catch((error) => console.log(error))
+                    .finally(() => setLoading(false))
             }, 1000)
         }
 
         fetchData()
-    }, [page, data, sort, districtId, isFilter])
+    }, [page, data, sort, isFilter, districtId])
 
-    // useEffect(() => {
-    //     handleResetFilter()
-    // }, [data?.category?.category_id, data?.name])
-
+    useEffect(() => {
+        setSort('DEFAULT')
+    }, [isFilter])
+    useEffect(() => {
+        handleResetFilter()
+    }, [data])
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
             <Grid item xs={12} sm={12} md={2} lg={2} >
