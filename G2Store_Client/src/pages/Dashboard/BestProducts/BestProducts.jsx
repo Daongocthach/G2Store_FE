@@ -14,23 +14,18 @@ function BestProducts() {
             .catch((error) => console.log(error))
     }, [])
     return (
-        <Box>
-            <Typography variant='h6' fontWeight={500} marginY={2} color={'#444444'}>Sản phẩm nổi bật</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <Grid container spacing={1} maxWidth='lg' >
-                    {Array.isArray(products) && products.map((product, index) => (
-                        <Grid key={index} item xs={6} sm={6} md={3} lg={3} >
-                            <CardProduct product={product} />
-                        </Grid>
-                    ))}
-                </Grid>
-                <Button onClick={() => navigate('/genre-detail')} variant="contained" color="warning" sx={{ fontWeight:'bold', mt: 2, width: '50%' }} >
-                    Xem thêm
-                </Button>
-            </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
+            <Grid container spacing={1} maxWidth='lg' >
+                {Array.isArray(products) && products.map((product, index) => (
+                    <Grid key={index} item xs={6} sm={6} md={3} lg={3} >
+                        <CardProduct product={product} />
+                    </Grid>
+                ))}
+            </Grid>
+            <Button onClick={() => navigate('/genre-detail')} variant="contained" color="warning" sx={{ fontWeight: 'bold', mt: 2, width: '50%' }} >
+                Xem thêm
+            </Button>
         </Box>
-
-
     )
 }
 

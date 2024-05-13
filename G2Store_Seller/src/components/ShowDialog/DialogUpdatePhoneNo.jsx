@@ -3,27 +3,27 @@ import { TextField, Box, Dialog, DialogTitle, Button, DialogContent, DialogActio
 import { toast } from 'react-toastify'
 import authenApi from '../../apis/authenApi'
 
-function DialogUpdatePhoneNo() {
+function DialogUpdatePhoneNo({ reRender, setReRender }) {
     const [open, setOpen] = useState(false)
     const [new_phone_no, setPhoneNo] = useState('')
     const [touched, setTouched] = useState(false)
 
     const handleUpdatePhoneNo = async () => {
         if (new_phone_no) {
-            authenApi.updatePhone({ new_phone_no })
-                .then(() => {
-                    toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
-                })
-                .catch((err) => {
-                    console.log(err)
-                    toast.error('Cập nhật thất bại', { position: 'top-center', autoClose: 2000 })
-                })
-                .finally(() => setOpen(false))
+            // authenApi.updatePhone({ new_phone_no })
+            //     .then(() => {
+            //         toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
+            //     })
+            //     .catch((err) => {
+            //         console.log(err)
+            //         toast.error('Cập nhật thất bại', { position: 'top-center', autoClose: 2000 })
+            //     })
+            //     .finally(() => setOpen(false))
         }
         else {
             toast.error('Số điện thoại không được để trống', { position: 'top-center', autoClose: 2000 })
         }
-
+        setOpen(false)
     }
     return (
         <Box>

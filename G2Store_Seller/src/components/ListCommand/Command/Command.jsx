@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ExpandLess, ExpandMore, Receipt, Filter9Plus, People, Reorder, ThumbsUpDown, Equalizer, AddHomeWork, Money, Category } from '@mui/icons-material'
+import { ExpandLess, ExpandMore, Receipt, Filter9Plus, People, Reorder, ThumbsUpDown, Equalizer, AddHomeWork, Money } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, ListItemButton, List, Collapse } from '@mui/material'
 

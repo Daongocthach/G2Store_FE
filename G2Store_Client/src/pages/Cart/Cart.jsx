@@ -42,6 +42,7 @@ function Cart() {
         .then(response => {
           setCartItems(response)
           dispatch(setCart(response))
+          setIsSoldOut(false)
         })
     }
   }, [reRender])

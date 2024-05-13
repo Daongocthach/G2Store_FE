@@ -1,7 +1,7 @@
-import { Container, Grid, Typography, Button, Box, Radio, TextField, Breadcrumbs, Link, Chip, Divider } from '@mui/material'
+import { Container, Grid, Typography, Button, Box, Radio, TextField, Breadcrumbs, Link, Chip, Divider, Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Storefront, NavigateNext, CheckCircleOutline, LocalShipping } from '@mui/icons-material'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { formatCurrency } from '../../utils/price'
 import ProductComponent from '../../components/Product/ProductComponent'
@@ -20,6 +20,7 @@ import UpdateAddress from '../Account/EditAddress/FormAddress/UpdateAddress'
 function Checkout() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const point = useSelector(state => state.auth.point)
   const location1 = useLocation()
   const data = location1.state
   const [reRender, setReRender] = useState(false)
@@ -30,6 +31,7 @@ function Checkout() {
   const [feeShipData, setFeeShipData] = useState({})
   const [addresses, setAddresses] = useState([])
   const [address, setAddress] = useState()
+  const [is_point_spent, setIsPointSpent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertWarning, setShowAlertWaring] = useState(false)
@@ -37,7 +39,7 @@ function Checkout() {
   const [showAlertVoucher, setShowAlertVoucher] = useState(false)
   const [showAlertVoucherFail, setShowAlertVoucherFail] = useState(false)
   var totalProducts = data?.total
-  var total = totalProducts + feeShip
+  var total = totalProducts + feeShip - (is_point_spent ? point : 0)
 
   function handleClickPromotion() {
   }
@@ -198,10 +200,17 @@ function Checkout() {
             <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Giảm giá khuyến mãi: </Typography>
             <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>{formatCurrency(0)}</Typography>
           </Box>
-          {voucher && <Box sx={{ ...useStyles.flexBoxPrice, borderBottom: '1px solid gray' }}>
+          <Box sx={useStyles.flexBoxPrice}>
             <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Giảm giá voucher: </Typography>
-            <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>{formatCurrency(voucher?.value)}</Typography>
-          </Box>}
+            <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>{formatCurrency(voucher?.value || 0)}</Typography>
+          </Box>
+          <Box sx={{ ...useStyles.flexBoxPrice, borderBottom: '1px solid gray' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Sử dụng điểm tích lũy (-{formatCurrency(point || 0)})</Typography>
+              <Switch checked={is_point_spent} onChange={() => setIsPointSpent(!is_point_spent)} color="error" />
+            </Box>
+            <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>-{formatCurrency(is_point_spent ? (point || 0) : 0)}</Typography>
+          </Box>
           <Typography variant='h6' sx={{ mt: 3, color: '#4F4F4F' }}>Phương thức thanh toán</Typography>
           <Box sx={useStyles.flexBox}>
             <Radio sx={useStyles.radio} checked={paymentType == 'COD'} onChange={() => setPaymentType('COD')} />

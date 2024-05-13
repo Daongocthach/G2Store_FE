@@ -34,29 +34,17 @@ function UpdateOrder({ order, setReRender, reRender }) {
     handleClose()
   }
   const handleNext = () => {
-    if (activeStep === steps.length - 1)
+    if (activeStep === 0 || activeStep === 5 || activeStep === 9 )
       return
-    let nextStepIndex = activeStep + 1
-    while (nextStepIndex < steps.length && !canTransition(nextStepIndex)) {
-      nextStepIndex++
-    }
-    setActiveStep(nextStepIndex)
+    setActiveStep(activeStep + 1)
   }
 
   const handleBack = () => {
-    if (activeStep === 0 || activeStep === 2)
+    if (activeStep === 0 || activeStep === 6 || activeStep === 9 )
       return
-    let previousStepIndex = activeStep - 1
-    while (previousStepIndex >= 0 && !canTransition(previousStepIndex)) {
-      previousStepIndex--
-    }
-    setActiveStep(previousStepIndex)
+    setActiveStep(activeStep - 1)
   }
-  const canTransition = (nextStepIndex) => {
-    const nextStepValue = steps[nextStepIndex]?.value
-    const allowedStates = ['CONFIRMED', 'PACKED', 'DELIVERING', 'DELIVERED', 'REFUNDING']
-    return allowedStates.includes(nextStepValue)
-  }
+
   return (
     <Box>
       <Button variant="contained" color='warning' onClick={handleClickOpen}><Create /></Button>
@@ -97,9 +85,6 @@ const steps = [
   { index: 3, value: 'PACKED', label: 'Đóng gói' },
   { index: 4, value: 'DELIVERING', label: 'Đang giao hàng' },
   { index: 5, value: 'DELIVERED', label: 'Đã giao hàng' },
-  { index: 6, value: 'RECEIVED', label: 'Đã nhận hàng' },
-  { index: 7, value: 'CANCELED', label: 'Đã hủy' },
-  { index: 8, value: 'REFUNDING', label: 'Đang hoàn tiền' },
-  { index: 9, value: 'REFUNDED', label: 'Đã hoàn tiền' }
+  { index: 6, value: 'RECEIVED', label: 'Đã nhận hàng' }
 ]
 

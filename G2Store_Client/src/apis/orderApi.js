@@ -16,6 +16,10 @@ const orderApi = {
   payUnPaidOrder(order_id) {
     const url = `orders/${order_id}/pay-unpaid-order`
     return axiosClient.post(url)
+  },
+  cancelOrder(order_id) {
+    const url = `orders/${order_id}/me?orderStatus=CANCELED`
+    return axiosClient.put(url)
   }
 }
 

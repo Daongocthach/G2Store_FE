@@ -4,7 +4,7 @@ import Products from './Products/Products'
 function GenreDetail() {
 
   return (
-    <Container sx={{ mt: 1, minHeight: '100vh', borderRadius: 5, bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#E6E6FA') }}>
+    <Container fixed sx={{ mt: 1, mb:1, minHeight: '100vh', borderRadius: 1, bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#e6e6fa') }}>
       <Breadcrumbs sx={{ pt: 1 }}>
         <Link underline="hover" color="inherit" href="/" sx={{ fontSize: 15 }}>
           Trang chủ

@@ -29,7 +29,13 @@ function Login() {
           localStorage.setItem('rtk', response?.refresh_token)
           dispatch(login())
           authenApi.me()
-            .then((response) => dispatch(updateAvatar(response?.avatar)))
+            .then((response) => {
+              const data = {
+                avatar: response?.avatar,
+                point: response?.point
+              }
+              dispatch(updateAvatar(data))
+            })
           cartItemApi.getCartItemsIntended()
             .then((response) => dispatch(setCart(response)))
           navigate('/')

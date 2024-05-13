@@ -6,7 +6,7 @@ import Order from './Order/Order'
 import EditAddress from './EditAddress/EditAddress'
 
 function Account() {
-  const [select, setSelect] = useState(1)
+  const [select, setSelect] = useState(0)
 
   return (
     <Container sx={{ mb: 2 }}>
@@ -18,16 +18,16 @@ function Account() {
             <Link underline="hover" color="inherit" variant='subtitle1' >Tài khoản</Link>
           </Breadcrumbs>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button startIcon={<Inventory />} sx={useStyles.button} color={select == 1 ? 'info' : 'inherit'} onClick={() => { setSelect(0) }}>
-              <Typography variant='subtitle1' sx={{ ...useStyles.title, color: select == 1 ? '#0288d1' : '#4F4F4F' }}>Đơn hàng của tôi</Typography>
-            </Button>
-            <NavigateNext sx={{ color: select == 1 ? '#0288d1' : '#4F4F4F' }} />
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button startIcon={<AccountBox />} sx={useStyles.button} color={select == 0 ? 'info' : 'inherit'} onClick={() => { setSelect(1) }}>
-              <Typography variant='subtitle1' sx={{ ...useStyles.title, color: select == 0 ? '#0288d1' : '#4F4F4F' }}>Thông tin cá nhân</Typography>
+            <Button startIcon={<Inventory />} sx={useStyles.button} color={select == 0 ? 'info' : 'inherit'} onClick={() => { setSelect(0) }}>
+              <Typography variant='subtitle1' sx={{ ...useStyles.title, color: select == 0 ? '#0288d1' : '#4F4F4F' }}>Đơn hàng của tôi</Typography>
             </Button>
             <NavigateNext sx={{ color: select == 0 ? '#0288d1' : '#4F4F4F' }} />
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button startIcon={<AccountBox />} sx={useStyles.button} color={select == 1 ? 'info' : 'inherit'} onClick={() => { setSelect(1) }}>
+              <Typography variant='subtitle1' sx={{ ...useStyles.title, color: select == 1 ? '#0288d1' : '#4F4F4F' }}>Thông tin cá nhân</Typography>
+            </Button>
+            <NavigateNext sx={{ color: select == 1 ? '#0288d1' : '#4F4F4F' }} />
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Button startIcon={<EditLocationAlt />} sx={useStyles.button} color={select == 2 ? 'info' : 'inherit'} onClick={() => { setSelect(2) }}>

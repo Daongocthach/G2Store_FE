@@ -1,8 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
-function ProtectedRoute({ isAllowed, redirectPath = '/' }) {
+function ProtectedRoute({ isAllowed }) {
+    if (typeof isAllowed === 'undefined') {
+        return <div>Loading...</div>
+    }
     if (!isAllowed) {
-        return <Navigate to={redirectPath} replace />
+        return <Navigate to={'/'} replace />
     }
     return <Outlet />
 }

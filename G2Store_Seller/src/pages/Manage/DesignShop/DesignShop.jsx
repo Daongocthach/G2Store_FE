@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { Typography, IconButton, Tabs, Tab, Grid, Box, Breadcrumbs, Link, Menu, Chip } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { Typography, IconButton, Tabs, Tab, Box, Breadcrumbs, Link, Menu, Chip } from '@mui/material'
 import { ChatBubbleOutline, AddBusiness, Store, Dehaze, KeyboardArrowDown } from '@mui/icons-material'
 import authenApi from '../../../apis/authenApi'
 import imageShop from '../../../assets/img/shopDesign.png'
@@ -8,7 +8,8 @@ import categoryApi from '../../../apis/categoryApi'
 import MenuCategory from './MenuCategory/MenuCategory'
 
 function DesignShop() {
-    const [seller, setSeller] = useState()
+  const navigate = useNavigate()
+  const [seller, setSeller] = useState()
     const [categories, setCategories] = useState([])
     const [value, setValue] = useState(0)
     const [anchorEl, setAnchorEl] = useState(null)
@@ -28,7 +29,12 @@ function DesignShop() {
                 setSeller(response)
                 categoryApi.getShopCategories(response?.shop?.shop_id)
                     .then((response) => setCategories(response))
-                    .catch((error) => console.log(error))
+                    .catch((error) => {
+                        if (error?.response?.data?.message == 'Access Denied') {
+                          navigate('/seller/access-denied')
+                        }
+                        console.log(error)
+                      })
             })
             .catch((error) => console.log(error))
     }, [])
@@ -85,10 +91,10 @@ function DesignShop() {
             </Box>
 
             <TabPanel value={value} index={0}>
-                <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Tất cả sản phẩm</Typography>
+                Tất cả sản phẩm
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <Typography variant='h5' fontWeight={500} mb={2} color={'#444444'}>Hồ sơ</Typography>
+                Hồ sơ
             </TabPanel>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
                 <MenuCategory categories={categories} />

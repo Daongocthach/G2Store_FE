@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Box, Button, Stack, TextField, Container } from '@mui/material'
 import ReCAPTCHA from 'react-google-recaptcha'
@@ -22,6 +22,17 @@ function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
+  const [countdown, setCountdown] = useState(0)
+
+  useEffect(() => {
+    let timer
+    if (countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1)
+      }, 1000)
+    }
+    return () => clearTimeout(timer)
+  }, [countdown])
 
   const handleShowOTP = async () => {
     setLoading(true)
@@ -66,7 +77,7 @@ function Register() {
           top: '30%', left: '50%', bgcolor: 'black', opacity: 0.8, transform: 'translate(-50%, -30%)'
         }}>
           <h2 style={{ textAlign: 'center', color: 'white' }}>Đăng ký</h2>
-          <Stack component="form" sx={{ m: 3 }} spacing={4} >
+          <Stack component="form" sx={{ m: 3 }} spacing={2} >
             {!showOTP && <TextField variant="filled" size="small" placeholder='Email' sx={{ bgcolor: 'white', borderRadius: 3 }}
               onChange={e => setEmail(e.target.value)} error={!validateEmail(email)} helperText={validateEmail(email) ? '' : 'Email không đúng định dạng'}
             />}
@@ -85,6 +96,14 @@ function Register() {
             }
             {!showOTP ? <Button sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} onClick={() => handleShowOTP()}>Nhận OTP qua email</Button>
               : <Button sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} onClick={() => onFinish()}>Đăng ký</Button>}
+            {!showOTP && <Button variant='contained' color='warning' sx={{ fontWeight: 'bold', ':hover': { bgcolor: '#444444' } }}
+              onClick={() => { setShowOTP(true) }} >
+              Đã gửi? Xác nhận OTP
+            </Button>}
+            {showOTP && <Button variant='contained' color='warning' sx={{ fontWeight: 'bold', ':hover': { bgcolor: '#444444' } }}
+              onClick={() => { countdown > 0 ? null : handleShowOTP() }} >
+              {`Gửi lại OTP (${countdown}s)`}
+            </Button>}
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Link to={'/'} style={{ color: 'white' }}>Về trang chủ ?</Link>
               <Link to={'/login'} style={{ color: 'white' }}>Đăng nhập?</Link>

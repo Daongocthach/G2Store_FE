@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Typography, Box, Button, Tab, Tabs, Divider } from '@mui/material'
 import { LocalShipping, FiberManualRecord, Storefront, NavigateNext } from '@mui/icons-material'
+import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import OrderItem from './OrderItem/OrderItem'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
-import { covertStringToDate } from '../../../utils/date'
 import Loading from '../../../components/Loading/Loading'
+import DeleteOrder from './DeleteOrder/DeleteOrder'
 
 function Order() {
   const [reRender, setReRender] = useState(false)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [orders, setOrders] = useState([])
-  const [tab, setTab] = useState('UN_PAID')
+  const [tab, setTab] = useState('ORDERED')
 
   const handleChange = (event, newTab) => {
     setTab(newTab)
@@ -28,16 +29,12 @@ function Order() {
     setLoading(true)
     orderApi.payUnPaidOrder(order_id)
       .then((response) => {
-        if (response?.payment_url) {
-          location.assign(response?.payment_url)
-        }
-        else {
-          navigate('/order-fail')
-        }
+        if (response?.payment_url) { location.assign(response?.payment_url) }
+        else { navigate('/payment-fail') }
       })
       .catch((error) => {
         console.log(error)
-        navigate('/order-fail')
+        navigate('/payment-fail')
       })
       .finally(() => setLoading(false))
   }
@@ -76,7 +73,7 @@ function Order() {
                         order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'
                   }} />
                   <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold' }}>Đơn hàng</Typography>
-                  <Typography variant='subtitle2' color={'#444444'}>{covertStringToDate(order?.created_date, 'dd/MM/yyyy', '/')}</Typography>
+                  <Typography variant='subtitle2' color={'#444444'}>{format(order?.created_date, 'dd/MM/yyyy HH:mm:ss')}</Typography>
                   <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
                 </Box>
                 <LocalShipping sx={{ color: '#444444' }} />
@@ -100,11 +97,10 @@ function Order() {
               <Box sx={useStyles.flexBox}>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Button variant='contained' color='error' size='small' sx={{ borderRadius: 2 }}
-                    onClick={() => navigate('order-detail', { state: order })} >Xem chi tiết
-                  </Button>
-                  <Button variant='contained' color='info' size='small' sx={{ borderRadius: 2 }}
-                    onClick={() => handlePayment(order?.order_id)} >Thanh toán
-                  </Button>
+                    onClick={() => navigate('order-detail', { state: order })} >Xem chi tiết</Button>
+                  {(order?.order_status === 'ORDERED') && <DeleteOrder orderId={order?.order_id} reRender={reRender} setReRender={setReRender}/>}
+                  {order?.order_status === 'UN_PAID' && <Button variant='contained' color='info' size='small' sx={{ borderRadius: 2 }}
+                    onClick={() => handlePayment(order?.order_id)} >Thanh toán</Button>}
                   {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} rerender={reRender} />}
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>

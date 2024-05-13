@@ -28,7 +28,7 @@ function ViewOrder({ order }) {
                       order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'
                 }} />
                 <Typography variant='subtitle1' color={'#444444'} sx={{ fontWeight: 'bold' }}>Đơn hàng</Typography>
-                <Typography variant='subtitle2' color={'#444444'}>{format(new Date(order?.created_date), 'yyyy-MM-dd')}</Typography>
+                <Typography variant='subtitle2' color={'#444444'}>{format(new Date(order?.created_date), 'yyyy-MM-dd HH:mm:ss')}</Typography>
                 <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
               </Box>
               <LocalShipping sx={{ color: '#444444' }} />

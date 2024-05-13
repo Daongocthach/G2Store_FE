@@ -11,7 +11,6 @@ import productApi from '../../apis/productApi'
 function ProductComponent({ product, reRender, setReRender, setIsSoldOut, isCart, isCheckout }) {
     const navigate = useNavigate()
     const [changeQuantity, setChangeQuantity] = useState(product?.quantity)
-    const [productCart, setProductCart] = useState()
     const [soldOut, setSoldOut] = useState(false)
     const handleIncrease = () => {
         setChangeQuantity(changeQuantity + 1)
@@ -25,10 +24,12 @@ function ProductComponent({ product, reRender, setReRender, setIsSoldOut, isCart
     useEffect(() => {
         productApi.getProduct(product?.product_id)
             .then((response) => {
-                setProductCart(response)
                 if (response?.stock_quantity < 1 && isCart) {
                     setSoldOut(true)
                     setIsSoldOut(true)
+                }
+                else {
+                    setSoldOut(false)
                 }
             })
     }, [])
@@ -39,12 +40,12 @@ function ProductComponent({ product, reRender, setReRender, setIsSoldOut, isCart
     }, [changeQuantity])
     return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 2, cursor: 'pointer' }}>
-            <img src={product?.images} alt='omachi' onClick={() => { navigate('/product-detail', { state: productCart }) }}
+            <img src={product?.images} alt='omachi' onClick={() => { navigate('/product-detail', { state: product?.product_id }) }}
                 style={{ objectFit: 'cover', height: 90, width: 90, borderRadius: 5, opacity: (soldOut && isCart) ? 0.5 : 1 }} />
             <Box ml={2} minWidth={'300px'}>
                 <Typography variant='h6' color={'#444444'} maxWidth={'280px'}>{product?.name}</Typography>
                 <Box sx={{ display: 'flex', alignItems:'center', gap: 3 }}>
-                    <Typography variant='subtitle1' color={isCart ? '#cb1c22' : '#444444'} fontWeight={'bold'}>{formatCurrency(productCart?.special_price || productCart?.price)}</Typography>
+                    <Typography variant='subtitle1' color={isCart ? '#cb1c22' : '#444444'} fontWeight={'bold'}>{formatCurrency(product?.price)}</Typography>
                     {(isCheckout) && <Typography variant='body1' color={'#444444'} fontWeight={550} >x{product?.quantity}</Typography>}
                 </Box>
                 {isCheckout &&<Typography variant='h6' color={'#cb1c22'} fontWeight={550} >{formatCurrency(product?.sub_total)}</Typography>}

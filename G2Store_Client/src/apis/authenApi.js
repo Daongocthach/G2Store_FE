@@ -12,6 +12,17 @@ const authenApi = {
         const url = `customers/activate-account?verification-code=${otp}`
         return axiosClient.get(url)
     },
+    forgotPassword(email) {
+        const url = `customers/forgot-password?email=${email}`
+        return axiosClient.get(url)
+    },
+    resetPassword(code, new_pass) {
+        const data = {
+            code, new_pass
+        }
+        const url = 'customers/reset-password'
+        return axiosClient.get(url, data)
+    },
     logout() {
         const url = 'logout'
         return axiosClient.get(url)

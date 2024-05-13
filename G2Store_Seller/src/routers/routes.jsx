@@ -4,6 +4,7 @@ import Register from '../pages/Auth/Register/Register'
 import ResetPassword from '../pages/Auth/ResetPassword/ResetPassword'
 import NotFound from '../pages/NotFound/NotFound'
 import Profile from '../pages/Profile/Profile'
+import ShopProfile from '../pages/Profile/ShopProfile'
 import AuthLayout from '../layouts/AuthLayout'
 import Chat from '../pages/Chat/Chat'
 import AutoChat from '../pages/Chat/AutoChat/AutoChat'
@@ -17,6 +18,7 @@ import ManageReviews from '../pages/Manage/Orders/MangeReivews/ManageReviews'
 import AddSeller from '../pages/Manage/Sellers/AddSeller/AddSeller'
 import Categories from '../pages/Manage/Categories/Categories'
 import DesignShop from '../pages/Manage/DesignShop/DesignShop'
+import AccessDenied from '../pages/AccessDenied/AccessDenied'
 
 const publicRoutes = [
     { path:'/', component: Login, layout: AuthLayout },
@@ -27,6 +29,7 @@ const publicRoutes = [
 
 const privateRoutes = [
     { path:'dashboard', component: DashBoard },
+    { path:'shop-profile', component: ShopProfile },
     { path:'profile', component: Profile },
     { path:'chat', component: Chat },
     { path:'auto-chat', component: AutoChat },
@@ -39,7 +42,9 @@ const privateRoutes = [
     { path:'manage/orders', component: Orders },
     { path:'manage/reviews', component: ManageReviews },
     { path:'manage/categories', component: Categories },
-    { path:'manage/design-shop', component: DesignShop }
+    { path:'manage/design-shop', component: DesignShop },
+    { path:'access-denied', component: AccessDenied }
+
 
 ]
 

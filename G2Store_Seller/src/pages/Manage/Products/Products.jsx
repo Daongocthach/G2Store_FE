@@ -4,7 +4,6 @@ import {
 } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { AddCircle, Create } from '@mui/icons-material'
 import DeleteProduct from './FormProduct/DeleteProduct'
@@ -42,7 +41,10 @@ function Products() {
           setProducts(response?.content)
           setTotalElements(response?.totalElements)
         })
-        .catch(error => {
+        .catch((error) => {
+          if (error?.response?.data?.message == 'Access Denied') {
+            navigate('/seller/access-denied')
+          }
           console.log(error)
         })
     }

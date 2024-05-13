@@ -15,11 +15,20 @@ function Products() {
     const [products, setProducts] = useState()
     const [page, setPage] = useState(1)
     const [sort, setSort] = useState('DEFAULT')
-    const [startPrice, setStartPrice] = useState(0)
-    const [endPrice, setEndPrice] = useState(0)
+    const [startPrice, setStartPrice] = useState('')
+    const [endPrice, setEndPrice] = useState('')
     const [isFilter, setIsFilter] = useState(false)
-    const [districtId, setDistrictId] = useState(0)
+    const [districtId, setDistrictId] = useState('')
 
+    const handleResetFilter = () => {
+        setSort('')
+        setStartPrice('')
+        setEndPrice('')
+        setDistrictId('')
+    }
+    const handleChangePage = (event, value) => {
+        setPage(value)
+    }
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -33,7 +42,6 @@ function Products() {
                         .finally(() => setLoading(false))
                 }
                 else if (data?.name) {
-                    console.log(data?.name, page - 1, 16, sort, startPrice, endPrice, districtId)
                     productApi.searchProducts(data?.name, page - 1, 16, sort, startPrice, endPrice, districtId)
                         .then((response) => {
                             setProducts(response)
@@ -54,9 +62,10 @@ function Products() {
 
         fetchData()
     }, [page, data, sort, districtId, isFilter])
-    const handleChangePage = (event, value) => {
-        setPage(value)
-    }
+
+    // useEffect(() => {
+    //     handleResetFilter()
+    // }, [data?.category?.category_id, data?.name])
 
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
@@ -72,7 +81,8 @@ function Products() {
                                 sx={{ fontSize: 13, color: '#444444', cursor: 'pointer' }}>{child?.name}</Link>
                         </Box>
                     ))}
-                <FilterByPrice isFilter={isFilter} setIsFilter={setIsFilter} setStartPrice={setStartPrice} setEndPrice={setEndPrice} />
+                <FilterByPrice isFilter={isFilter} setIsFilter={setIsFilter} startPrice={startPrice} setStartPrice={setStartPrice}
+                    endPrice={endPrice} setEndPrice={setEndPrice} />
                 <FilterByDistrict />
             </Grid>
             <Grid mt={1} item xs={12} sm={12} md={10} lg={10} >
@@ -81,6 +91,7 @@ function Products() {
                         <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'} >Sắp xếp</Typography>
                         <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
                             <Select value={sort} onChange={(e) => setSort(e.target.value)} >
+                                <MenuItem color='#444444' value={''}>--</MenuItem>
                                 <MenuItem color='#444444' value={'TOP_SELLER'}>Bán chạy</MenuItem>
                                 <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
                                 <MenuItem color='#444444' value={'NEWEST'}>Mới nhất</MenuItem>

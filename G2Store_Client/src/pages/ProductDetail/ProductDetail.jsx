@@ -1,22 +1,30 @@
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Box, Typography, Container, Breadcrumbs, Link, Divider, Grid } from '@mui/material'
 import reviewApi from '../../apis/reviewApi'
 import LeftInformation from './LeftInformation/LeftInformation'
 import RightInformation from './RigthInformation/RightInformation'
 import Reviews from './Reviews/Reviews'
+import productApi from '../../apis/productApi'
 
 function ProductDetail() {
+  const navigate = useNavigate()
   const location1 = useLocation()
-  const product = location1.state
+  const product_id = location1.state
+  const [product, setProduct] = useState()
   const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(1)
-  const [size, setSize] = useState(1)
+  const [size, setSize] = useState(5)
   const [sortType, setSortType] = useState('')
   useEffect(() => {
-    reviewApi.getReviewByProductId(product?.product_id, page - 1, size, sortType)
+    reviewApi.getReviewByProductId(product_id, page - 1, size, sortType)
       .then((response) => { setReviews(response) })
-  }, [product, page, size, sortType])
+  }, [product_id, page, size, sortType])
+  useEffect(() => {
+    productApi.getProduct(product_id)
+      .then((response) => { setProduct(response) })
+      .catch(() => { navigate('/product-not-exist') })
+  }, [product_id])
   return (
     <Box sx={{ minHeight: '100%' }}>
       <Container fixed>
@@ -43,7 +51,6 @@ function ProductDetail() {
         {/* Reviews */}
         <Reviews reviews={reviews} page={page} setPage={setPage} setSortType={setSortType} />
       </Container>
-
     </Box>
   )
 }

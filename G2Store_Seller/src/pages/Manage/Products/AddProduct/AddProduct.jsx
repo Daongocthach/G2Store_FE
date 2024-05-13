@@ -64,29 +64,33 @@ function AddProduct() {
             setFiles(prevFiles => [...prevFiles, file])
             const reader = new FileReader()
             reader.onload = () => {
-                const imageUrl = reader.result
-                if (images.includes(imageUrl)) {
-                    setShowAlertWarning(true)
+                const file_url = reader.result
+                const file_type = file?.type
+                const file_name = file?.name
+                if (file.type.includes('image') || file.type.includes('video/mp4')) {
+                    if (images.some(image => image.file_name === file?.name)) {
+                        setShowAlertWarning(true)
+                    } else {
+                        setImages(prevImages => [...prevImages, { file, file_name, file_url, file_type }])
+                        setShowAlertWarning(false)
+                    }
                 } else {
-                    setImages(prevImages => [...prevImages, imageUrl])
-                    setShowAlertWarning(false)
+                    console.log('Unsupported file type.')
                 }
             }
             reader.readAsDataURL(file)
         }
     }
     const deleteImage = (imageData) => {
-        if (imageData?.id) {
+        const newImages = images.filter(image => image.file_url !== imageData.file_url)
+        setImages(newImages)
+        const newFiles = files.filter(file => file !== imageData?.file)
+        setFiles(newFiles)
+        if (imageData?.id)
             productApi.deleteImageProduct(imageData?.id)
-            const newImages = images.filter(image => image !== imageData)
-            setImages(newImages)
-        }
-        else {
-            const newImages = images.filter(image => image !== imageData)
-            setImages(newImages)
-        }
     }
     const handleClickAdd = async () => {
+        console.log(files)
         setLoading(true)
         const formData = new FormData()
         formData.append('name', name)
@@ -111,6 +115,10 @@ function AddProduct() {
                 .catch(error => {
                     console.log(error)
                     setShowAlertFail(true)
+                    if (error?.response?.data?.message == 'Access Denied') {
+                        navigate('/seller/access-denied')
+                    }
+                    console.log(error)
                 })
                 .finally(() => setLoading(false))
         }
@@ -123,6 +131,10 @@ function AddProduct() {
                 .catch(error => {
                     console.log(error)
                     setShowAlertFail(true)
+                    if (error?.response?.data?.message == 'Access Denied') {
+                        navigate('/seller/access-denied')
+                    }
+                    console.log(error)
                 })
                 .finally(() => setLoading(false))
         }
@@ -176,18 +188,6 @@ function AddProduct() {
                         />
                     </Box>
                     <Box sx={{ alignItems: 'center', gap: 1 }}>
-                        <Typography variant='subtitle2'>Giá đặc biệt (vnđ): </Typography>
-                        <NumericFormat
-                            customInput={TextField}
-                            size='small'
-                            type='text'
-                            thousandSeparator={true}
-                            value={special_price}
-                            onValueChange={(values) => setSpecialPrice(values.value)}
-                            inputProps={{ min: 0 }}
-                        />
-                    </Box>
-                    <Box sx={{ alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>
                             <Typography variant='subtitle2'>Số lượng sản phẩm: </Typography>
@@ -211,12 +211,17 @@ function AddProduct() {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
                         <Button component="label" htmlFor="upload-image" variant="contained" color="primary" sx={{ borderRadius: '10px', height: 70, width: 70 }} >
                             <AddCircle />
-                            <input id="upload-image" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} />
+                            <input id="upload-image" type="file" accept="image/*,video/mp4" style={{ display: 'none' }} onChange={handleImageChange} />
                         </Button>
                         {Array.isArray(images) &&
                             images.map((image, index) => (
                                 <Box key={index} sx={{ position: 'relative', height: 70, width: 70, bgcolor: 'black', borderRadius: '10px' }}>
-                                    <img src={image?.file_url || image} style={{ height: '100%', width: '100%', opacity: 0.5, borderRadius: '10px' }} />
+                                    {image?.file_type === 'video/mp4' ?
+                                        <video style={{ height: '100%', width: '100%', borderRadius: '10px' }}>
+                                            <source src={image?.file_url} type={image?.file_type} />
+                                        </video>
+                                        : <img src={image?.file_url} style={{ height: '100%', width: '100%', opacity: 0.5, borderRadius: '10px' }} />
+                                    }
                                     <Clear sx={{ position: 'absolute', top: '5px', right: '5px', color: 'white', cursor: 'pointer', fontSize: 15 }}
                                         onClick={() => deleteImage(image)} />
                                 </Box>

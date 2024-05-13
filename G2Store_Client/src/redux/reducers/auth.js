@@ -1,6 +1,7 @@
 const initialState = {
     keep_login: false,
-    avatar: ''
+    avatar: '',
+    point: 0
 }
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -14,7 +15,8 @@ const authReducer = (state = initialState, action) => {
         case 'UPDATE_AVATAR': {
             return {
                 ...state,
-                avatar: action?.payload
+                avatar: action?.payload?.avatar,
+                point: action?.payload?.point
             }
         }
         case 'LOGOUT': {
@@ -22,7 +24,8 @@ const authReducer = (state = initialState, action) => {
             localStorage.removeItem('rtk')
             return {
                 keep_login: false,
-                avatar: ''
+                avatar: '',
+                point: 0
             }
         }
 

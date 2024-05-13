@@ -34,6 +34,7 @@ const listButton = [
         commands: [
             { path: '/seller/manage/add-seller', name: 'Thêm người bán' },
             { path: '/seller/manage/sellers', name: 'Quản lý người bán' },
+            { path: '/seller/shop-profile', name: 'Cài đặt tài khoản shop' },
             { path: '/seller/profile', name: 'Cài đặt tài khoản' }
         ]
     },

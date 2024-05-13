@@ -1,4 +1,4 @@
-import { Button, Typography, Box, Rating, Tooltip, CardActions, CardMedia, CardContent, Card, Divider } from '@mui/material'
+import { Button, Typography, Box, Rating, Tooltip, CardActions, CardMedia, CardContent, Card } from '@mui/material'
 import { Help, Visibility, ShoppingCart } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -49,8 +49,8 @@ function CardProduct({ product }) {
     <Card sx={{ maxWidth: 300, cursor: 'pointer' }} >
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <CardMedia
-          onClick={() => { navigate('/product-detail', { state: product }) }}
-          sx={{ height: 250, width: 250, objectFit: 'contain', borderRadius: 1, m: 0.5 }}
+          onClick={() => { navigate('/product-detail', { state: product?.product_id }) }}
+          sx={{ width: 280, aspectRatio: 1/1, objectFit: 'contain', borderRadius: 1, m: 0.5 }}
           image={product?.images[0]?.file_url || null}
           title={product?.name}
         />
@@ -80,8 +80,8 @@ function CardProduct({ product }) {
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Tooltip title="Xem chi tiết"><Button size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }} onClick={() => { navigate('/product-detail', { state: product }) }}><Visibility /></Button></Tooltip>
-        <Tooltip title="Thêm vào giỏ"><Button size="small" sx={{ color: 'black', ':hover': { bgcolor: 'inherit' } }} onClick={handleClickAddToCart}><ShoppingCart /></Button></Tooltip>
-        <Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: 'black', ':hover': { bgcolor: 'inherit' } }}><Help /></Button></Tooltip>
+        <Tooltip title="Thêm vào giỏ"><Box><Button disabled={product?.stock_quantity < 1} size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }} onClick={handleClickAddToCart}><ShoppingCart /></Button></Box></Tooltip>
+        <Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}><Help /></Button></Tooltip>
       </CardActions>
       <ShowAlert setShowAlert={setShowAlert} showAlert={showAlert} content={'Thêm sản phẩm vào giỏ thành công'} />
       <ShowAlert setShowAlert={setShowAlertFail} showAlert={showAlertFail} content={'Thêm sản phẩm vào giỏ thất bại'} isFail={true} />

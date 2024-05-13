@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Typography, Box, Input, Button } from '@mui/material'
-import { AddCircle } from '@mui/icons-material'
+import { Typography, Box, Input, Button, InputAdornment, IconButton } from '@mui/material'
+import { AddCircle, MonetizationOn } from '@mui/icons-material'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
@@ -20,7 +20,7 @@ function Profile() {
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertFail, setShowAlertFail] = useState(false)
   const [user, setUser] = useState({})
-  const [avatar, setAvatar] = useState(user?.avatar)
+  const [avatar, setAvatar] = useState()
   useEffect(() => {
     authenApi.me()
       .then((response) => {
@@ -31,6 +31,7 @@ function Profile() {
           dob: response?.dob,
           point: response?.point
         })
+        setAvatar(response?.avatar)
       })
       .catch((error) => console.log(error))
   }, [reRender])
@@ -90,17 +91,22 @@ function Profile() {
       }
     }
   }
-
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
       <Box sx={{ mb: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1 }}>
           <Typography variant='subtitle1' sx={useStyles.inputTitle}>Email:</Typography>
-          <Input placeholder='Email' readOnly sx={useStyles.input} value={user?.email ? user?.email : ''} />
+          <Input placeholder='Email' readOnly sx={{ ...useStyles.input, color: 'gray' }} value={user?.email ? user?.email : ''} />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1 }}>
           <Typography variant='subtitle1' sx={useStyles.inputTitle}>Điện thoại:</Typography>
-          <Input placeholder='Nhập số điện thoại' readOnly sx={useStyles.input} value={user?.phoneNo ? user?.phoneNo : ''} />
+          <Input placeholder='Nhập số điện thoại' readOnly sx={{ ...useStyles.input, color: 'gray' }} value={user?.phoneNo ? user?.phoneNo : ''} />
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1 }}>
+          <Typography variant='subtitle1' sx={useStyles.inputTitle}>Điểm tích lũy:</Typography>
+          <Input placeholder='0' sx={{ ...useStyles.input, color: 'gray' }} value={0}
+            endAdornment={<InputAdornment position="end"> <IconButton> <MonetizationOn /> </IconButton></InputAdornment>}
+          />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1 }}>
           <Typography variant='subtitle1' sx={useStyles.inputTitle}>Họ và Tên:</Typography>
@@ -112,7 +118,8 @@ function Profile() {
           <Input id="dob" name="dob" fullWidth size='small' type='date' sx={useStyles.input} placeholder={'Ngày sinh'} value={formik.values.dob}
             onChange={formik.handleChange} />
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, flexWrap: 'wrap' }}>
+          <DialogUpdate handle={handleUpdate} />
           <Button component="label" htmlFor="upload-image" variant="contained" color="warning" sx={useStyles.button} >
             <AddCircle sx={{ mr: 1 }} />
             Ảnh đại diện
@@ -121,9 +128,8 @@ function Profile() {
           <img src={avatar || avatarNull} width={'50px'} height={'50px'} style={{ borderRadius: 10 }} />
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap:'wrap' }}>
-        <DialogUpdate handle={handleUpdate} />
-        <DialogUpdatePassword />
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
+        <DialogUpdatePassword reRender={reRender} setReRender={setReRender} />
         <DialogUpdatePhoneNo reRender={reRender} setReRender={setReRender} />
         <DialogUpdateEmail reRender={reRender} setReRender={setReRender} />
       </Box>

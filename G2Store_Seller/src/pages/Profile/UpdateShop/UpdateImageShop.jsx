@@ -40,7 +40,7 @@ function UpdateImageShop({ image, reRender, setReRender, setShowAlert, setShowAl
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1 }}>
             <Button component="label" htmlFor="upload-image-shop" variant="contained" color="warning" sx={{ fontWeight: 'bold', borderRadius: 2 }} >
                 <AddCircle sx={{ mr: 1 }} />
-                Ảnh đại điện shop
+                Ảnh đại điện
                 <input id="upload-image-shop" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} />
             </Button>
             <img src={imageShop || avatarNull} width={'50px'} height={'50px'} style={{ borderRadius: 10 }} />

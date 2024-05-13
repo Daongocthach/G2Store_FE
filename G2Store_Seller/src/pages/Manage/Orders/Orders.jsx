@@ -14,6 +14,7 @@ import UpdateOrder from './FormOrder/UpdateOrder'
 
 
 function Orders() {
+  const navigate = useNavigate()
   const [reRender, setRerender] = useState(false)
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
@@ -40,6 +41,12 @@ function Orders() {
   useEffect(() => {
     orderApi.getShopOrders(tab, 0, 16)
       .then((response) => { setOrders(response?.content) })
+      .catch((error) => {
+        if (error?.response?.data?.message == 'Access Denied') {
+          navigate('/seller/access-denied')
+        }
+        console.log(error)
+      })
   }, [reRender])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
