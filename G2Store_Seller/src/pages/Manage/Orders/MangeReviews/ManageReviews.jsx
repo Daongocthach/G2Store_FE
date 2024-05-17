@@ -1,22 +1,18 @@
 import {
-  Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Tooltip, Switch
+  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
+  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Tooltip
 } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { Create } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AddCircle, Create } from '@mui/icons-material'
-import DeleteProduct from './FormProduct/DeleteProduct'
-import productApi from '../../../apis/productApi'
-import { formatCurrency } from '../../../utils/price'
-import emptyImage from '../../../assets/img/empty-order.png'
+import reviewApi from '../../../../apis/reviewApi'
+import { formatCurrency } from '../../../../utils/price'
+import emptyImage from '../../../../assets/img/empty-order.png'
 
-
-function Products() {
+function ManageReviews() {
   const navigate = useNavigate()
-  const shop_id = useSelector(state => state.auth.shop_id)
   const [reRender, setReRender] = useState(false)
-  const [products, setProducts] = useState([])
+  const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(0)
   const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -31,24 +27,12 @@ function Products() {
   const handleChange = (event) => {
     setSelect(event.target.value)
   }
-  const handleClickUpdate = (product) => {
-    navigate('/seller/manage/add-product', { state: product })
+  const handleClickUpdate = () => {
+
   }
   useEffect(() => {
-    if (shop_id) {
-      productApi.getShopProducts(shop_id, page, rowsPerPage)
-        .then(response => {
-          setProducts(response?.content)
-          setTotalElements(response?.totalElements)
-        })
-        .catch((error) => {
-          if (error?.response?.data?.message == 'Access Denied') {
-            navigate('/seller/access-denied')
-          }
-          console.log(error)
-        })
-    }
-  }, [page, reRender, rowsPerPage, shop_id])
+
+  }, [page, reRender, rowsPerPage])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
       <Breadcrumbs>
@@ -56,14 +40,10 @@ function Products() {
           Trang chủ
         </Link>
         <Link underline="hover" color="inherit" href="/manage/orders">
-          Quản lý sản phẩm
+          Quản lý đánh giá
         </Link>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} startIcon={<AddCircle />} variant="outlined"
-          onClick={() => { navigate('/seller/manage/add-product') }}>
-          Thêm sản phẩm mới
-        </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
           <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
@@ -80,38 +60,46 @@ function Products() {
             <TableHead>
               <TableRow sx={{ bgcolor: '#2a99ff' }} >
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Thông tin sản phẩm</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá/Giá đặc biệt</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số lượng</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đang hoạt động</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đơn hàng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đánh giá</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Nội dung</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {Array.isArray(products) && products?.map((product, index) => {
+            <TableRow >
+                    <TableCell >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        {<img src={emptyImage} alt={'gaubong'} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                        <Typography variant='subtitle2' color={'#444444'}>{'Gấu bông'}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell >#123</TableCell>
+                    <TableCell >5 Sao</TableCell>
+                    <TableCell > <Typography>Chất lượng tốt</Typography> </TableCell>
+                    <TableCell >
+                      <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => handleClickUpdate()} /></Tooltip>
+                    </TableCell>
+                  </TableRow>
+              {/* {Array.isArray(reviews) && reviews?.map((review, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {<img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
-                        <Typography variant='subtitle2' color={'#444444'}>{product?.name}</Typography>
+                        {<img src={emptyImage} alt={review?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                        <Typography variant='subtitle2' color={'#444444'}>{'Gấu bông'}</Typography>
                       </Box>
                     </TableCell>
-                    <TableCell ><Typography>{formatCurrency(product?.special_price || product?.price)}</Typography></TableCell>
-                    <TableCell > <Typography>{product?.stock_quantity}</Typography> </TableCell>
+                    <TableCell ><Typography>{formatCurrency(review?.special_price || review?.price)}</Typography></TableCell>
+                    <TableCell > <Typography>{review?.stock_quantity}</Typography> </TableCell>
                     <TableCell >
-                      <Switch defaultChecked />
-                    </TableCell>
-                    <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor:'pointer' }} onClick={() => handleClickUpdate(product)} /></Tooltip>
-                        <DeleteProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} />
-                      </Box>
+                      <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => handleClickUpdate(review)} /></Tooltip>
                     </TableCell>
                   </TableRow>
                 )
-              })}
+              })} */}
             </TableBody>
-            {Array.isArray(products) && products.length > 0 && <TableFooter>
+            {Array.isArray(reviews) && reviews.length > 0 && <TableFooter>
               <TableRow>
                 <TablePagination
                   colSpan={12}
@@ -127,7 +115,7 @@ function Products() {
             </TableFooter>}
           </Table>
         </TableContainer>
-        {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+        {Array.isArray(reviews) && reviews.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
           <img src={emptyImage} />
           <Typography variant='h6' >Bạn chưa có sản phẩm nào</Typography>
         </Box>}
@@ -136,4 +124,4 @@ function Products() {
   )
 }
 
-export default Products
+export default ManageReviews

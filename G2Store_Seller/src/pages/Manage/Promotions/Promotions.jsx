@@ -70,14 +70,14 @@ function Promotions() {
         <TableContainer component={Paper} >
           <Table>
             <TableHead>
-              <TableRow >
-                <TableCell sx={{ fontWeight: 'bold' }} >Tên khuyến mãi</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Thời gian sử dụng</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Loại khuyến mãi</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Số lượng</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Giá trị khuyến mãi</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Update</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Delete</TableCell>
+            <TableRow sx={{ bgcolor: '#2a99ff' }} >
+                <TableCell sx={{ fontWeight: 'bold', color:'white' }} >Tên khuyến mãi</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'white' }} >Thời gian sử dụng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'white' }} >Loại khuyến mãi</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'white' }} >Số lượng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'white' }} >Giá trị khuyến mãi</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'white' }} >Update</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color:'white' }} >Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

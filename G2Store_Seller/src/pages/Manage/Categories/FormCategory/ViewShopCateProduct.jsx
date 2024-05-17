@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Button, Typography, Dialog, DialogContent, DialogTitle, Box } from '@mui/material'
+import { useState } from 'react'
+import { Button, Typography, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
 import { Visibility, Delete } from '@mui/icons-material'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
@@ -40,7 +40,7 @@ function ViewShopCateProduct({ shop_cate_id }) {
 
     return (
         <Box>
-            <Button className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'orange' } }} color='warning' onClick={() => handleOpen()}><Visibility /></Button>
+            <Tooltip title='Xem sản phẩm'><Button className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'orange' } }} color='warning' onClick={() => handleOpen()}><Visibility /></Button></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>

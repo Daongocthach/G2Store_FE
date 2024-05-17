@@ -77,14 +77,14 @@ function Sellers() {
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow >
-                <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Email</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Tên</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Số điện thoại</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Vai trò</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Trạng thái</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Là tài khoản chính</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Xóa</TableCell>
+            <TableRow sx={{ bgcolor: '#2a99ff' }} >
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Email</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tên</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số điện thoại</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Vai trò</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Là tài khoản chính</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

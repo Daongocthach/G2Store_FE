@@ -44,8 +44,8 @@ function Categories() {
         </Link>
       </Breadcrumbs>
       <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
-        <Box sx={{ display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant='h6' color={'#444444'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
+        <Box sx={{ bgcolor:'#2a99ff', display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
           <AddCategory isParent={true} reRender={reRender} setReRender={setReRender} />
         </Box>
         {Array.isArray(categories) && categories.map((category, index) => (

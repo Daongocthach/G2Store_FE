@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Tooltip } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import orderApi from '../../../../apis/orderApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
@@ -47,7 +47,7 @@ function UpdateOrder({ order, setReRender, reRender }) {
 
   return (
     <Box>
-      <Button variant="contained" color='warning' onClick={handleClickOpen}><Create /></Button>
+     <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor:'pointer' }} onClick={handleClickOpen} /></Tooltip>
       <Dialog open={open} onClose={handleClose} fullWidth >
         <DialogTitle sx={{ fontWeight: 'bold', color: '#444444' }}>Cập nhật trạng thái đơn hàng</DialogTitle>
         <DialogContent>

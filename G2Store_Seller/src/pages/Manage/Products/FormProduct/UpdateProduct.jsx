@@ -4,9 +4,10 @@ import {
   Typography, FormControl, Select, MenuItem, Alert, Snackbar
 } from '@mui/material'
 import { Create } from '@mui/icons-material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import productApi from '../../../../apis/productApi'
 import { updateProduct } from '../../../../redux/actions/products'
+import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 
 function UpdateProduct({ setUpdate, product }) {
   const dispatch = useDispatch()
@@ -68,19 +69,7 @@ function UpdateProduct({ setUpdate, product }) {
     handleClose()
   }
   return (
-    <div>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-        <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-          Cập nhật sản phẩm thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
-        <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-          Cập nhật sản phẩm thất bại!
-        </Alert>
-      </Snackbar>
+    <Box>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Update Product</DialogTitle>
@@ -147,7 +136,9 @@ function UpdateProduct({ setUpdate, product }) {
           <Button onClick={handleUpdate}>Update</Button>
         </DialogActions>
       </Dialog>
-    </div>
+      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật sản phẩm thành công!'} />
+      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Cập nhật sản phẩm thất bại'} isFail={true} />
+    </Box>
   )
 }
 export default UpdateProduct

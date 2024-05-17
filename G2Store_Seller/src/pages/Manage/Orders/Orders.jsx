@@ -79,15 +79,14 @@ function Orders() {
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
-                <TableRow >
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Đơn hàng</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Ngày đặt</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Tổng tiền</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Người nhận</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Số điện thoại</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Thanh toán</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Xem Đơn</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#444444' }} >Cập nhật</TableCell>
+                <TableRow sx={{ bgcolor: '#2a99ff' }} >
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đơn hàng</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Ngày đặt</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tổng tiền</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Người nhận</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số điện thoại</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Thanh toán</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -100,8 +99,12 @@ function Orders() {
                       <TableCell >{order?.address?.receiver_name}</TableCell>
                       <TableCell >{order?.address?.receiver_phone_no}</TableCell>
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
-                      <TableCell ><ViewOrder order={order} /></TableCell>
-                      <TableCell ><UpdateOrder order={order} reRender={reRender} setReRender={setRerender} /></TableCell>
+                      <TableCell >
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />
+                          <ViewOrder order={order} />
+                        </Box>
+                      </TableCell>
                     </TableRow>
                   )
                 })}

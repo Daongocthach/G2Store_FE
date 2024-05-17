@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, Tooltip } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import categoryApi from '../../../../apis/categoryApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
@@ -34,7 +34,7 @@ function UpdateCategory({ category, reRender, setReRender }) {
   }
   return (
     <div>
-      <Button className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen}><Create /></Button>
+      <Tooltip title='Sửa'><Button className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen}><Create /></Button></Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ textAlign: 'center' }}>Cập ngành hàng</DialogTitle>
         <DialogContent>

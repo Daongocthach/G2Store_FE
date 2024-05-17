@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Box, Input } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Box, Input, Tooltip } from '@mui/material'
 import { Visibility, LocalShipping, FiberManualRecord } from '@mui/icons-material'
 import { format } from 'date-fns'
 import OrderItem from '../OrderItem/OrderItem'
@@ -15,7 +15,7 @@ function ViewOrder({ order }) {
   }
   return (
     <Box>
-      <Button variant="contained" color='error' onClick={handleClickOpen}><Visibility /></Button>
+      <Tooltip title='Xem chi tiết'><Visibility sx={{ bgcolor: 'inherit', color: '#444444', cursor:'pointer' }} onClick={handleClickOpen} /></Tooltip>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle sx={{ fontWeight: 'bold', color:'#444444' }}>Thông tin đơn hàng</DialogTitle>
         <DialogContent>

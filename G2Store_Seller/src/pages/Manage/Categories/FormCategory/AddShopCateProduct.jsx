@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Box, Checkbox } from '@mui/material'
+import { Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Box, Checkbox, Tooltip } from '@mui/material'
 import { useSelector } from 'react-redux'
 import Add from '@mui/icons-material/Add'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
@@ -79,7 +79,7 @@ function AddShopCateProduct({ shop_cate_id }) {
 
     return (
         <Box>
-            <Button className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'orange' } }} color='warning' onClick={() => setOpen(true)}><Add /></Button>
+            <Tooltip title='Thêm sản phẩm'><Button className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'orange' } }} color='warning' onClick={() => setOpen(true)}><Add /></Button></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>

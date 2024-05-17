@@ -105,7 +105,7 @@ function Order() {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
-                  <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order.total)}</Typography>
+                  <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order?.total)}</Typography>
                 </Box>
               </Box>
               <Divider sx={{ mb: 2 }} />

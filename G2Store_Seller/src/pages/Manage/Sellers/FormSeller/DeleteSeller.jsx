@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle, Alert, Snackbar } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogTitle, Box, Tooltip } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import DeleteIcon from '@mui/icons-material/Delete'
 import productApi from '../../../../apis/productApi'
 import { updateProduct } from '../../../../redux/actions/products'
+import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 
 function DeleteSeller({ setUpdate, productId }) {
     const dispatch = useDispatch()
@@ -30,20 +31,8 @@ function DeleteSeller({ setUpdate, productId }) {
         handleClose()
     }
     return (
-        <div>
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-                <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-                    Xóa sản phẩm thành công!
-                </Alert>
-            </Snackbar>
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
-                <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-                    Xóa sản phẩm thất bại!
-                </Alert>
-            </Snackbar>
-            <Button sx={{ bgcolor: '#EE6363', color: 'black' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon /></Button>
+        <Box>
+            <Tooltip title='Xóa'><DeleteIcon sx={{ bgcolor: 'inherit', color: '#444444', cursor:'pointer' }} onClick={handleClickOpen} /></Tooltip>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Bạn muốn xóa người bán này?</DialogTitle>
                 <DialogActions>
@@ -51,7 +40,9 @@ function DeleteSeller({ setUpdate, productId }) {
                     <Button variant='contained' color='success' onClick={handleClickDelete}>Xóa</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Xóa người bán thành công!'} />
+            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Xóa người bán thất bại!'} isFail={true} />
+        </Box>
     )
 }
 export default DeleteSeller

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle, Typography } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogTitle, Tooltip, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import productApi from '../../../../apis/productApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
@@ -8,9 +8,6 @@ function DeleteProduct({ productId, reRender, setReRender }) {
     const [open, setOpen] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
-    const handleClickOpen = () => {
-        setOpen(true)
-    }
     const handleClose = () => {
         setOpen(false)
     }
@@ -28,7 +25,7 @@ function DeleteProduct({ productId, reRender, setReRender }) {
     }
     return (
         <div>
-            <Button sx={{ bgcolor: '#EE6363', color: '#363636' }} onClick={handleClickOpen}><DeleteIcon /></Button>
+            <Tooltip title='Xóa'><DeleteIcon sx={{ bgcolor: 'inherit', color: '#444444', cursor:'pointer' }} onClick={handleClickDelete}/></Tooltip>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >
                     <Typography variant={'h6'} minWidth={'100px'} fontWeight={'bold'}>Bạn có muốn xóa sản phẩm này?</Typography>

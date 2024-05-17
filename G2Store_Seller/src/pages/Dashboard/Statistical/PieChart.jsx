@@ -28,18 +28,27 @@ export default function BasicPie() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 430 }}>
       <PieChart
+        // series={[
+        //   {
+        //     data: [
+        //       { id: 0, value: weeklyData[1], label: 'Monday' },
+        //       { id: 1, value: weeklyData[2], label: 'Tuesday' },
+        //       { id: 2, value: weeklyData[3], label: 'Wednesday' },
+        //       { id: 3, value: weeklyData[4], label: 'Thursday' },
+        //       { id: 4, value: weeklyData[5], label: 'Friday' },
+        //       { id: 5, value: weeklyData[6], label: 'Saturday' },
+        //       { id: 6, value: weeklyData[0], label: 'Sunday' }
+        //     ]
+        //   }
+        // ]}
         series={[
           {
             data: [
-              { id: 0, value: weeklyData[1], label: 'Monday' },
-              { id: 1, value: weeklyData[2], label: 'Tuesday' },
-              { id: 2, value: weeklyData[3], label: 'Wednesday' },
-              { id: 3, value: weeklyData[4], label: 'Thursday' },
-              { id: 4, value: weeklyData[5], label: 'Friday' },
-              { id: 5, value: weeklyData[6], label: 'Saturday' },
-              { id: 6, value: weeklyData[0], label: 'Sunday' }
-            ]
-          }
+              { id: 0, value: 10, label: 'series A' },
+              { id: 1, value: 15, label: 'series B' },
+              { id: 2, value: 20, label: 'series C' },
+            ],
+          },
         ]}
         width={500}
         height={300}
