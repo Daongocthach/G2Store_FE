@@ -78,7 +78,7 @@ function Orders() {
       <Box sx={{ mb: 2 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
           <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
-            <Tab label='Tất cả' value={'ALL'} />
+            <Tab label='Tất cả' value={''} />
             <Tab label='Chưa thanh toán' value={'UN_PAID'} />
             <Tab label='Đã đặt hàng' value={'ORDERED'} />
             <Tab label='Đã xác nhận' value={'CONFIRMED'} />
