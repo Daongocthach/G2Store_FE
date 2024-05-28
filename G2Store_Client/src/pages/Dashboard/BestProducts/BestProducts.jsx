@@ -1,8 +1,8 @@
-import { Grid, Typography, Box, Button } from '@mui/material'
+import { Grid, Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import productApi from '../../../apis/productApi'
-import CardProduct from '../../../components/Product/CardProduct'
+import RelativeProduct from '../../../components/Product/RelativeProduct'
 
 function BestProducts() {
     const navigate = useNavigate()
@@ -17,8 +17,8 @@ function BestProducts() {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
             <Grid container spacing={1} maxWidth='lg' >
                 {Array.isArray(products) && products.map((product, index) => (
-                    <Grid key={index} item xs={6} sm={6} md={3} lg={3} >
-                        <CardProduct product={product} />
+                    <Grid key={index} item xs={6} sm={6} md={3} lg={2} >
+                        <RelativeProduct product={product} />
                     </Grid>
                 ))}
             </Grid>

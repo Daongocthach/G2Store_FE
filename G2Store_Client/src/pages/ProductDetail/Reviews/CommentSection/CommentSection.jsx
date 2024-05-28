@@ -48,8 +48,11 @@ function CommentSection({ review }) {
                             )}
                         </React.Fragment>
                     ))}
-
                 </Box>
+                {review?.shop_feed_back && <Typography variant='subtitle1' color={'#555555'} sx={{
+                        minWidth: { xs: 200, md: 500 },
+                        wordWrap: 'break-word'
+                    }}>{'* Phản hồi của người bán: ' + review?.shop_feed_back}</Typography>}
             </Box>
             <Dialog open={open} onClose={handleClose}>
                 {file_type == 'image/jpeg' ?

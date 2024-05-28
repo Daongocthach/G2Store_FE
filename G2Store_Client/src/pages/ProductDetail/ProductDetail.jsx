@@ -6,6 +6,7 @@ import LeftInformation from './LeftInformation/LeftInformation'
 import RightInformation from './RigthInformation/RightInformation'
 import Reviews from './Reviews/Reviews'
 import productApi from '../../apis/productApi'
+import RelativeProducts from './RelativeProducts/RelativeProducts'
 
 function ProductDetail() {
   const navigate = useNavigate()
@@ -14,7 +15,7 @@ function ProductDetail() {
   const [product, setProduct] = useState()
   const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(1)
-  const [size, setSize] = useState(5)
+  const [size, setSize] = useState(8)
   const [sortType, setSortType] = useState('')
   useEffect(() => {
     reviewApi.getReviewByProductId(product_id, page - 1, size, sortType)
@@ -50,6 +51,7 @@ function ProductDetail() {
         </Grid>
         {/* Reviews */}
         <Reviews reviews={reviews} page={page} setPage={setPage} setSortType={setSortType} />
+        {product?.category && <RelativeProducts category={product?.category} />}
       </Container>
     </Box>
   )

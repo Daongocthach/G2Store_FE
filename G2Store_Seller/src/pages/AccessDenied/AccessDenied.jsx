@@ -7,9 +7,9 @@ const AccessDenied = () => {
             <img src={accessDenied} alt='Page Not Found' style={{ height: 200, width: 200, borderRadius: 5 }} />
             <Alert severity="error">
                 <AlertTitle>Bạn không được cấp quyền truy cập tài nguyên này</AlertTitle>
-                Liên hệ với người quản lý của shop — <strong>check it o!</strong>
+                Liên hệ với người quản lý của shop — <strong>Vui lòng kiểm tra lại!</strong>
             </Alert>
-            <Link to={'/'}>
+            <Link to={'/seller/dashboard'}>
                 <Button sx={{ color: 'orange', ':hover': { bgcolor: 'pink' } }}>Back to Home</Button>
             </Link>
         </Box>

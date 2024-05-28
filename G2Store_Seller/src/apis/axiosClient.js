@@ -43,7 +43,7 @@ axiosClient.interceptors.response.use(
   (res) => res.data,
   (error) => {
     console.log(error?.response?.data?.message)
-    toast.error(error?.response?.data?.message, { autoClose: 2000 })
+    // toast.error(error?.response?.data?.message, { autoClose: 2000 })
     return Promise.reject(error)
   })
 export default axiosClient

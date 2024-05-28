@@ -26,7 +26,7 @@ function AddShopCateProduct({ shop_cate_id }) {
         const ids = checkedProducts
         if (shop_id) {
             productApi.addProductShopCategory(shop_cate_id, { ids })
-                .then(( ) => {
+                .then(() => {
                     setShowAlert(true)
                 })
                 .catch((error) => {
@@ -79,7 +79,7 @@ function AddShopCateProduct({ shop_cate_id }) {
 
     return (
         <Box>
-            <Tooltip title='Thêm sản phẩm'><Button className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'orange' } }} color='warning' onClick={() => setOpen(true)}><Add /></Button></Tooltip>
+            <Tooltip title='Thêm sản phẩm'><Add className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'green' } }} color='success' onClick={() => setOpen(true)} /></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>
@@ -96,18 +96,17 @@ function AddShopCateProduct({ shop_cate_id }) {
                                     <Checkbox checked={checkedProducts.includes(product?.product_id)} onChange={() => handleChecked(product?.product_id)} />
                                     <img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '70px', height: '70px', cursor: 'pointer', borderRadius: 3 }} />
                                     <Box>
-                                        <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'} sx={{}}>{product?.name}</Typography>
-                                        <Typography variant='subtitle2' color={'#444444'}>#{product?.product_id}</Typography>
+                                        <Typography variant='body1' color={'#444444'}>{product?.name}</Typography>
+                                        <Typography variant='caption' fontWeight={'bold'} color={'#cd3333'}>{formatCurrency(product?.price)}</Typography>
                                     </Box>
                                 </Box>
-                                <Typography variant='subtitle2' color={'#cd3333'}>{formatCurrency(product?.price)}</Typography>
                             </Box>
                         ))}
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant='contained' color='primary' onClick={() => { setOpen(false) }} size='small'>Hủy</Button>
-                    <Button variant='contained' color='warning' onClick={handleClickAdd} size='small' >Xác nhận</Button>
+                    <Button sx={{ ':hover': { bgcolor: 'inherit' } }} onClick={() => { setOpen(false) }} size='small'>Hủy</Button>
+                    <Button sx={{ ':hover': { bgcolor: 'inherit' } }} onClick={handleClickAdd} size='small' >Thêm</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />

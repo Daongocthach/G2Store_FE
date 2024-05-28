@@ -25,12 +25,12 @@ function DeleteCategory({ category_id, reRender, setReRender }) {
     }
     return (
         <div>
-            <Tooltip title='Xóa'><Button className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen}><DeleteIcon /></Button></Tooltip>
+            <Tooltip title='Xóa'><DeleteIcon className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen} /></Tooltip>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Bạn có muốn xóa ngành hàng này ?</DialogTitle>
                 <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 500, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-                    <Button onClick={() => handleClickDelete(category_id)} size='small' sx={{ fontWeight: 500, bgcolor: '#1E90FF', color: 'white' }} >Xóa</Button>
+                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }} >Hủy</Button>
+                    <Button onClick={() => handleClickDelete(category_id)} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }} >Xóa</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Xóa ngành hàng thành công!'} />

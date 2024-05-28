@@ -7,14 +7,8 @@ function MenuCategory({ categories, setCategoryId, setSelectedCategories }) {
     const handleClick = (category) => {
         if (category?.child_categories && category.child_categories.length === 0) {
             setCategoryId(category?.category_id)
-            //setSelectedCategories(prev => [...prev, category?.name])
             setSelectedCategories(category?.name)
         }
-        // else {
-        //     const categoryName = category?.child_categories.find(item => item?.name === category?.name)?.name
-        //     if (categoryName)
-        //         setSelectedCategories(prev => [...prev, categoryName])
-        // }
         setSelectCategory(category)
     }
     return (

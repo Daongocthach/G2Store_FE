@@ -24,8 +24,8 @@ const listButton = [
         name: 'Đơn hàng',
         commands: [
             { path: '/seller/manage/orders', name: 'Quản lý đơn hàng' },
-            { path: '/seller/manage/orders', name: 'Quản lý vận chuyển' },
-            { path: '/seller/manage/orders', name: 'Quản lý hoàn trả' },
+            // { path: '/seller/manage/orders', name: 'Quản lý vận chuyển' },
+            // { path: '/seller/manage/orders', name: 'Quản lý hoàn trả' },
             { path: '/seller/manage/reviews', name: 'Quản lý đánh giá' }
         ]
     },

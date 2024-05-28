@@ -2,9 +2,13 @@ import axiosClient from './axiosClient'
 
 
 const reviewApi = {
-  getShopreview(reviewId, feedback) {
-    const url = `reviews/${reviewId}/shop-feedback`
-    return axiosClient.put(url, { feedback })
+  shopFeedBack(reviewId, feedback) {
+    const url = `reviews/${reviewId}/shop-feedback?feedBack=${feedback}'`
+    return axiosClient.put(url)
+  },
+  getShopReviews() {
+    const url = 'reviews/shop-reviews'
+    return axiosClient.get(url)
   }
 }
 

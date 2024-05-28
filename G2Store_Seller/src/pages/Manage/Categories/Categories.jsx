@@ -13,24 +13,25 @@ function Categories() {
   const shop_id = useSelector(state => state.auth.shop_id)
   const [reRender, setReRender] = useState(false)
   const [categories, setCategories] = useState([])
+  const [isReset, setIsReset] = useState(false)
   const [loading, setLoading] = useState(false)
   useEffect(() => {
+    setIsReset(false)
     const fetchData = async () => {
-      setLoading(true)
-      categoryApi.getShopCategories(shop_id)
-        .then((response) => {
-          setCategories(response)
-        })
-        .catch((error) => {
-          if (error?.response?.data?.message == 'Access Denied') {
-            navigate('/seller/access-denied')
-          }
-          console.log(error)
-        })
-        .finally(() => setLoading(false))
+      try {
+        setLoading(true)
+        const response = await categoryApi.getShopCategories(shop_id)
+        setLoading(false)
+        setCategories(response)
+      } catch (error) {
+        if (error?.response?.data?.message == 'Access Denied') {
+          navigate('/seller/access-denied')
+        }
+        setLoading(false)
+        console.log(error)
+      }
     }
-    if (shop_id)
-      fetchData()
+    fetchData()
   }, [reRender])
 
   return (
@@ -44,13 +45,11 @@ function Categories() {
         </Link>
       </Breadcrumbs>
       <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
-        <Box sx={{ bgcolor:'#2a99ff', display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
+        <Box sx={{ bgcolor: '#2a99ff', display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Quản lý ngành hàng</Typography>
           <AddCategory isParent={true} reRender={reRender} setReRender={setReRender} />
         </Box>
-        {Array.isArray(categories) && categories.map((category, index) => (
-          <MenuCategory key={index} category={category} reRender={reRender} setReRender={setReRender} />
-        ))}
+        <MenuCategory categories={categories} reRender={reRender} setReRender={setReRender} isReset={isReset} setIsReset={setIsReset} />
         {Array.isArray(categories) && categories.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
           <img src={emptyImage} />
           <Typography variant='h6' >Bạn chưa có danh mục nào</Typography>

@@ -35,11 +35,12 @@ function Products() {
             setTimeout(() => {
                 let apiCall
                 if (data?.category?.category_id) {
-                    apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 16, sort, startPrice, endPrice, districtId)
+                    apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
                 } else if (data?.name) {
-                    apiCall = productApi.searchProducts(data?.name, page - 1, 16, sort, startPrice, endPrice, districtId)
-                } else {
-                    apiCall = productApi.getProducts(page - 1, 16)
+                    apiCall = productApi.searchProducts(data?.name, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
+                }
+                else {
+                    apiCall = productApi.getProducts(page - 1, 12)
                 }
                 apiCall.then((response) => {
                     setProducts(response)
@@ -51,17 +52,13 @@ function Products() {
 
         fetchData()
     }, [page, data, sort, isFilter, districtId])
-
-    useEffect(() => {
-        setSort('DEFAULT')
-    }, [isFilter])
     useEffect(() => {
         handleResetFilter()
-    }, [data])
+    }, [data?.name, data?.category?.category_id])
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
             <Grid item xs={12} sm={12} md={2} lg={2} >
-                <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'} mt={2}>Loại sản phẩm</Typography>
+                {data?.category?.name && <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'} mt={2}>Loại sản phẩm</Typography>}
                 <Link underline="hover" color="inherit" href="/genre-detail" sx={{ fontSize: 13, color: 'orange' }}>{data?.category?.name}</Link>
                 {data?.category?.child_categories && data?.category?.child_categories.length > 0 &&
                     <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'} mt={1}>Danh mục liên quan</Typography>}

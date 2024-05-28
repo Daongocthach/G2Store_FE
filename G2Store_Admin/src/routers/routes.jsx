@@ -9,6 +9,7 @@ import Categories from '../pages/Manage/Categories/Categories'
 import Orders from '../pages/Manage/Orders/Orders'
 import Products from '../pages/Manage/Products/Products'
 import Shops from '../pages/Manage/Shops/Shops'
+import Sellers from '../pages/Manage/Sellers/Sellers'
 const publicRoutes = [
     { path:'/', component: Login, layout: AuthLayout },
     { path:'*', component: NotFound, layout: AuthLayout }
@@ -21,6 +22,7 @@ const privateRoutes = [
     { path:'manage/products', component: Products },
     { path:'manage/orders', component: Orders },
     { path:'manage/shops', component: Shops },
+    { path:'manage/sellers', component: Sellers },
     { path:'manage/auto-chat', component: AutoChat },
     { path:'manage/chat', component: Chat }
 ]

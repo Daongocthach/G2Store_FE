@@ -1,36 +1,44 @@
 import {
   Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Checkbox, Switch
+  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Tooltip, Switch
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AddCircle } from '@mui/icons-material'
-// import UpdateProduct from './FormProduct/UpdateProduct'
-// import DeleteProduct from './FormProduct/DeleteProduct'
-// import SearchProduct from './SearchProduct/SearchProduct'
-// import UpdatePrice from './FormProduct/UpdatePrice'
-// import UpdateQuantity from './FormProduct/UpdateQuantity'
+import { AddCircle, Create } from '@mui/icons-material'
+import DeleteProduct from './FormProduct/DeleteProduct'
+import productApi from '../../../apis/productApi'
+import { formatCurrency } from '../../../utils/price'
+import emptyImage from '../../../assets/img/empty-order.png'
+
 
 function Products() {
   const navigate = useNavigate()
+  const [reRender, setReRender] = useState(false)
   const [products, setProducts] = useState([])
   const [page, setPage] = useState(0)
+  const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [select, setSelect] = useState(1)
-
-  const handleChangePage = (e, newPage) => {
+  const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const handleChange = (event) => {
-    setSelect(event.target.value)
-  }
   useEffect(() => {
+    productApi.getProducts(page, rowsPerPage)
+      .then(response => {
+        setProducts(response?.content)
+        setTotalElements(response?.totalElements)
+      })
+      .catch((error) => {
+        if (error?.response?.data?.message == 'Access Denied') {
+          navigate('/seller/access-denied')
+        }
+        console.log(error)
+      })
 
-  }, [])
+  }, [page, reRender, rowsPerPage])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
       <Breadcrumbs>
@@ -41,98 +49,56 @@ function Products() {
           Quản lý sản phẩm
         </Link>
       </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="outlined"
-          onClick={() => { navigate('/manage/add-product') }}>
-          Thêm sản phẩm mới
-        </Button>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
-          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange}>
-              <MenuItem value={1}>Mới nhất</MenuItem>
-              <MenuItem value={2}>Cũ nhất</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-      <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px  ' }}>
-        <TableContainer component={Paper}>
+      <Box sx={{ height: 'fit-content', boxShadow: '0px 0px 10px ', mt: 2 }}>
+        <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
           <Table>
             <TableHead>
-              <TableRow >
-                <TableCell sx={{ fontWeight: 'bold' }} ><Checkbox /></TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Thông tin sản phẩm</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Giá</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Số lượng</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Đang hoạt động</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Cập nhật</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Xóa</TableCell>
+              <TableRow sx={{ bgcolor: '#2a99ff' }} >
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Thông tin sản phẩm</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số lượng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {Array.isArray(products) && products?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((product, index) => {
+              {Array.isArray(products) && products?.map((product, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell align="center"><Checkbox/></TableCell>
-                    <TableCell align="center">{product?.name}</TableCell>
-                    <TableCell align="center">{product?.price}</TableCell>
-                    <TableCell align="center">{product?.description}</TableCell>
-                    <TableCell align="center">{product?.discount}</TableCell>
-                    <TableCell align="center">{product?.subCategory?.name}</TableCell>
-                    <TableCell align="center">{product?.provider?.name}</TableCell>
-                    <TableCell align="center">{<img src={product?.image} alt='avatar' width={'50px'} height={'50px'} />}</TableCell>
-                    <TableCell align="center">{product?.enabled == 1 ? 'Enable' : 'Disable'}</TableCell>
-                    <TableCell align="center"><UpdateProduct product={product} /></TableCell>
-                    {product.enabled == 1 && <TableCell align="center"><DeleteProduct productId={product?.id} /></TableCell>}
+                    <TableCell >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        {<img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                        <Typography variant='subtitle2' color={'#444444'}>{product?.name}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell ><Typography>{formatCurrency(product?.special_price || product?.price)}</Typography></TableCell>
+                    <TableCell > <Typography>{product?.stock_quantity}</Typography> </TableCell>
+                    <TableCell >
+                      <Switch defaultChecked />
+                    </TableCell>
                   </TableRow>
                 )
-              })} */}
-              <TableRow >
-                <TableCell ><Checkbox /></TableCell>
-                <TableCell >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {<img src={'https://forums.fanedit.org/data/avatars/l/27/27296.jpg?1671171104'} alt='avatar' style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
-                    <Box>
-                      <Typography variant='subtitle1' fontWeight={'bold'}>{'Bánh chuối chiên'}</Typography>
-                      <Typography variant='body2'>{'Seller SKU: #3456'}</Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography>{'12.000 vnđ'}</Typography>
-                    {/* <UpdatePrice /> */}
-                  </Box>
-                </TableCell>
-                <TableCell >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography>{'12.000 vnđ'}</Typography>
-                    {/* <UpdateQuantity /> */}
-                  </Box>
-                </TableCell>
-                <TableCell >
-                  <Switch defaultChecked />
-                </TableCell>
-                {/* <TableCell ><UpdateProduct /></TableCell>
-                <TableCell ><DeleteProduct /></TableCell> */}
-              </TableRow>
+              })}
             </TableBody>
-            <TableFooter>
+            {Array.isArray(products) && products.length > 0 && <TableFooter>
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[5, 10, { value: products?.length, label: 'All' }]}
-                  count={products?.length}
-                  rowsPerPage={rowsPerPage}
+                  labelRowsPerPage={'Số lượng mỗi trang'}
+                  rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
+                  count={totalElements}
                   page={page}
                   onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </TableRow>
-            </TableFooter>
+            </TableFooter>}
           </Table>
         </TableContainer>
+        {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+          <img src={emptyImage} />
+          <Typography variant='h6' >Bạn chưa có sản phẩm nào</Typography>
+        </Box>}
       </Box>
     </Box>
   )

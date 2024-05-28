@@ -4,13 +4,12 @@ import {
 } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import reviewApi from '../../../../apis/reviewApi'
 import { formatCurrency } from '../../../../utils/price'
 import emptyImage from '../../../../assets/img/empty-order.png'
+import FeedBack from './FeedBack/FeedBack'
 
 function ManageReviews() {
-  const navigate = useNavigate()
   const [reRender, setReRender] = useState(false)
   const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(0)
@@ -31,7 +30,13 @@ function ManageReviews() {
 
   }
   useEffect(() => {
-
+    reviewApi.getShopReviews()
+      .then((response) => {
+        setReviews(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }, [page, reRender, rowsPerPage])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
@@ -59,45 +64,40 @@ function ManageReviews() {
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: '#2a99ff' }} >
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Thông tin sản phẩm</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đơn hàng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hình ảnh</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Khách hàng</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đánh giá</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Nội dung</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-            <TableRow >
-                    <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {<img src={emptyImage} alt={'gaubong'} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
-                        <Typography variant='subtitle2' color={'#444444'}>{'Gấu bông'}</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell >#123</TableCell>
-                    <TableCell >5 Sao</TableCell>
-                    <TableCell > <Typography>Chất lượng tốt</Typography> </TableCell>
-                    <TableCell >
-                      <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => handleClickUpdate()} /></Tooltip>
-                    </TableCell>
-                  </TableRow>
-              {/* {Array.isArray(reviews) && reviews?.map((review, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {<img src={emptyImage} alt={review?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
-                        <Typography variant='subtitle2' color={'#444444'}>{'Gấu bông'}</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell ><Typography>{formatCurrency(review?.special_price || review?.price)}</Typography></TableCell>
-                    <TableCell > <Typography>{review?.stock_quantity}</Typography> </TableCell>
-                    <TableCell >
-                      <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => handleClickUpdate(review)} /></Tooltip>
-                    </TableCell>
-                  </TableRow>
-                )
-              })} */}
+              {Array.isArray(reviews) && reviews
+                ?.filter(review => review.shop_feed_back === null)
+                ?.map((review, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <img src={review?.files[0]?.file_url || emptyImage} alt={'Đánh giá'} style={{ width: '50px', height: '50px', borderRadius: 10 }} />
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Typography>{review?.customer_name}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography>{review?.content}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography>{review?.rate}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <FeedBack review={review} reRender={reRender} setReRender={setReRender} />
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+
             </TableBody>
             {Array.isArray(reviews) && reviews.length > 0 && <TableFooter>
               <TableRow>

@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Tooltip } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 import { Create } from '@mui/icons-material'
 import orderApi from '../../../../apis/orderApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 
 function UpdateOrder({ order, setReRender, reRender }) {
+  const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
@@ -21,47 +23,53 @@ function UpdateOrder({ order, setReRender, reRender }) {
   }
   const handleUpdate = async () => {
     setLoading(true)
-    orderApi.updateOrder(order?.order_id, steps[activeStep]?.value)
-      .then(() => {
-        setShowAlert(true)
-        setReRender(!reRender)
-      })
-      .catch(error => {
-        console.log(error)
-        setShowAlertFail(true)
-      })
-      .finally(setLoading(false))
+    if (activeStep === 2) {
+      navigate('/seller/manage/create-order-ghn', { state: order })
+    }
+    else {
+      orderApi.updateOrder(order?.order_id, steps[activeStep]?.value)
+        .then(() => {
+          setShowAlert(true)
+          setReRender(!reRender)
+        })
+        .catch(error => {
+          console.log(error)
+          setShowAlertFail(true)
+        })
+        .finally(setLoading(false))
+    }
     handleClose()
   }
   const handleNext = () => {
-    if (activeStep === 0 || activeStep === 5 || activeStep === 9 )
+    if (activeStep === 4)
       return
     setActiveStep(activeStep + 1)
   }
 
   const handleBack = () => {
-    if (activeStep === 0 || activeStep === 6 || activeStep === 9 )
+    if (activeStep === 0)
       return
     setActiveStep(activeStep - 1)
   }
 
   return (
     <Box>
-     <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor:'pointer' }} onClick={handleClickOpen} /></Tooltip>
+      <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>
       <Dialog open={open} onClose={handleClose} fullWidth >
-        <DialogTitle sx={{ fontWeight: 'bold', color: '#444444' }}>Cập nhật trạng thái đơn hàng</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 'bold', color: '#444444', textAlign: 'center' }}>Cập nhật trạng thái đơn hàng</DialogTitle>
         <DialogContent>
           <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((step) => (
               <Step key={step?.index} >
-                <StepLabel sx={{ color: '#444444' }}>{step?.label}</StepLabel>
+                <StepLabel>{step?.label}</StepLabel>
               </Step>
             ))}
           </Stepper>
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-            <Button onClick={handleBack} variant='contained' color='info' sx={{ '&:hover': { bgcolor: 'inherit' }, borderRadius: 10 }}>Trước
+            <Button onClick={handleBack} variant='contained' size='small' color='info' sx={{ borderRadius: 10 }}>Trước
             </Button>
-            <Button onClick={handleNext} variant='contained' color='info' sx={{ '&:hover': { bgcolor: 'inherit' }, borderRadius: 10 }}>Tiếp
+            <Button onClick={handleNext} variant='contained' size='small' color='info' sx={{ borderRadius: 10 }}>Tiếp
             </Button>
           </Box>
         </DialogContent>
@@ -79,12 +87,10 @@ function UpdateOrder({ order, setReRender, reRender }) {
 export default UpdateOrder
 
 const steps = [
-  { index: 0, value: 'UN_PAID', label: 'Chưa thanh toán' },
-  { index: 1, value: 'ORDERED', label: 'Đã đặt' },
-  { index: 2, value: 'CONFIRMED', label: 'Đã xác nhận' },
-  { index: 3, value: 'PACKED', label: 'Đóng gói' },
-  { index: 4, value: 'DELIVERING', label: 'Đang giao hàng' },
-  { index: 5, value: 'DELIVERED', label: 'Đã giao hàng' },
-  { index: 6, value: 'RECEIVED', label: 'Đã nhận hàng' }
+  { index: 0, value: 'ORDERED', label: 'Đã đặt' },
+  { index: 1, value: 'CONFIRMED', label: 'Đã xác nhận' },
+  { index: 2, value: 'PACKED', label: 'Đã đóng gói' },
+  { index: 3, value: 'DELIVERING', label: 'Đang giao hàng' },
+  { index: 4, value: 'DELIVERED', label: 'Đã giao hàng' }
 ]
 

@@ -1,4 +1,4 @@
-import { Box, Typography, FormControl, Select, MenuItem, Breadcrumbs, Link } from '@mui/material'
+import { Box, Typography, Breadcrumbs, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import categoryApi from '../../../apis/categoryApi'
 import MenuCategory from './MenuCategory/MenuCategory'
@@ -10,11 +10,9 @@ function Categories() {
   const [reRender, setReRender] = useState(false)
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(false)
-  const [select, setSelect] = useState(1)
-  const handleChange = (event) => {
-    setSelect(event.target.value)
-  }
+  const [isReset, setIsReset] = useState(false)
   useEffect(() => {
+    setIsReset(false)
     const fetchData = async () => {
       try {
         setLoading(true)
@@ -40,13 +38,11 @@ function Categories() {
         </Link>
       </Breadcrumbs>
       <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
-        <Box sx={{ display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant='h6' color={'#444444'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
-          <AddCategory isParent={true} reRender={reRender} setReRender={setReRender}/>
+        <Box sx={{ display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center', bgcolor: '#2a99ff' }}>
+          <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
+          <AddCategory isParent={true} reRender={reRender} setReRender={setReRender} />
         </Box>
-        {Array.isArray(categories) && categories.map((category, index) => (
-          <MenuCategory key={index} category={category} reRender={reRender} setReRender={setReRender}/>
-        ))}
+        <MenuCategory categories={categories} reRender={reRender} setReRender={setReRender} isReset={isReset} setIsReset={setIsReset}/>
         {Array.isArray(categories) && categories.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
           <img src={emptyImage} />
           <Typography variant='h7' >Bạn chưa có danh mục nào</Typography>

@@ -10,6 +10,10 @@ const shopApi = {
             'Content-Type': 'multipart/form-data'
         }
         return axiosClient.put(url, formData, headers)
+    },
+    getShopById(shop_id) {
+        const url = `shops/${shop_id}`
+        return axiosClient.get(url)
     }
 }
 export default shopApi

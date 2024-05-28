@@ -23,7 +23,7 @@ function AppBar() {
               fontWeight="bold" color={'white'}> G2Store</Typography>
           </Link>
         </Box>
-        <Link to={'/genre-detail'}><Button sx={{ ...useStyles.button, minWidth: 150 }} >Sản phẩm</Button></Link>
+        <Button sx={{ ...useStyles.button, minWidth: 150 }} onClick={() => navigate('/genre-detail')} >Sản phẩm</Button>
         <Search />
       </Box>
 

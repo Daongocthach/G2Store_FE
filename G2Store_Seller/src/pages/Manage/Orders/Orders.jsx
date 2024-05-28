@@ -2,16 +2,19 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link,
+  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link, Tooltip,
+  Checkbox, Button
 } from '@mui/material'
-import { format } from 'date-fns'
+import { Chat, Print } from '@mui/icons-material'
+import { format, addDays } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import ViewOrder from './FormOrder/ViewOrder'
 import UpdateOrder from './FormOrder/UpdateOrder'
-
+import OrderItem from './OrderItem/OrderItem'
+import ghnApi from '../../../apis/ghnApi'
 
 function Orders() {
   const navigate = useNavigate()
@@ -19,6 +22,7 @@ function Orders() {
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
   const [page, setPage] = useState(0)
+  const [order_codes, setOrderCodes] = useState(['LGT338', 'LGT33Y'])
   const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [showAlert, setShowAlert] = useState(false)
@@ -33,9 +37,20 @@ function Orders() {
 
   const handleChange = (event, newTab) => {
     setTab(newTab)
-    orderApi.getShopOrders(newTab, 0, 16)
+    orderApi.getShopOrders(newTab, 0, 8)
       .then((response) => {
         setOrders(response?.content)
+      })
+  }
+  const handlePrint = () => {
+    ghnApi.printOrder(order_codes)
+      .then((response) => {
+        location.assign('https://dev-online-gateway.ghn.vn/a5/public-api/printA5?token=' + response?.data?.data?.token)
+        setShowAlert(true)
+      })
+      .catch((err) => {
+        console.log(err)
+        setShowAlertFail(true)
       })
   }
   useEffect(() => {
@@ -63,6 +78,7 @@ function Orders() {
       <Box sx={{ mb: 2 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
           <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
+            <Tab label='Tất cả' value={'ALL'} />
             <Tab label='Chưa thanh toán' value={'UN_PAID'} />
             <Tab label='Đã đặt hàng' value={'ORDERED'} />
             <Tab label='Đã xác nhận' value={'CONFIRMED'} />
@@ -80,11 +96,12 @@ function Orders() {
             <Table>
               <TableHead>
                 <TableRow sx={{ bgcolor: '#2a99ff' }} >
-                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đơn hàng</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Sản phẩm</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Mã đơn hàng</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Ngày đặt</TableCell>
+                  {tab === 'ORDERED' && <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Xác nhận trước</TableCell>}
+                  {(tab === 'CONFIRMED' || tab === 'PACKED') && <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giao vận chuyển trước</TableCell>}
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tổng tiền</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Người nhận</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số điện thoại</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Thanh toán</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
                 </TableRow>
@@ -93,17 +110,28 @@ function Orders() {
                 {Array.isArray(orders) && orders?.map((order, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell sx={{ fontWeight: 'bold' }}>#{order?.order_id}</TableCell>
+                      <TableCell sx={{ width: 400 }}>
+                        <Box>
+                          {order?.items.map((orderItem, index) =>
+                            <OrderItem key={index} orderItem={orderItem} />)}
+                        </Box>
+                      </TableCell>
+                      <TableCell >#{order?.order_id}</TableCell>
                       <TableCell >{format(new Date(order?.created_date), 'yyyy-MM-dd')}</TableCell>
+                      {tab === 'ORDERED' && <TableCell >{format(addDays(new Date(order?.created_date), 1), 'yyyy-MM-dd HH:mm:ss')}</TableCell>}
+                      {(tab === 'CONFIRMED' || tab === 'PACKED') && <TableCell >{format(addDays(new Date(order?.created_date), 2), 'yyyy-MM-dd HH:mm:ss')}</TableCell>}
                       <TableCell sx={{ color: '#cd3333', fontWeight: 'bold' }}>{formatCurrency(order?.total)}</TableCell>
-                      <TableCell >{order?.address?.receiver_name}</TableCell>
-                      <TableCell >{order?.address?.receiver_phone_no}</TableCell>
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell >
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                          <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />
-                          <ViewOrder order={order} />
-                        </Box>
+                        {tab === 'UN_PAID' ?
+                          <Tooltip title='Chat với khách'><Chat sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} /></Tooltip>
+                          :
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />
+                            <ViewOrder order={order} />
+                            {tab === 'PACKED' &&
+                              <Tooltip title='In hóa đơn'><Print sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={handlePrint} /></Tooltip>}
+                          </Box>}
                       </TableCell>
                     </TableRow>
                   )
@@ -125,14 +153,14 @@ function Orders() {
               </TableFooter>}
             </Table>
           </TableContainer>
-          {Array.isArray(orders) && orders.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-            <img src={emptyOrder} />
-            <Typography variant='h6' >Bạn chưa có đơn hàng nào</Typography>
-          </Box>}
         </Box>
+        {Array.isArray(orders) && orders.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+          <img src={emptyOrder} />
+          <Typography variant='h6' >Bạn chưa có đơn hàng nào</Typography>
+        </Box>}
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Xuất file thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Xuất file thất bại'} isFail={true} />
+      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'In đơn thành công'} />
+      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'In đơn thất bại'} isFail={true} />
     </Box>
   )
 }

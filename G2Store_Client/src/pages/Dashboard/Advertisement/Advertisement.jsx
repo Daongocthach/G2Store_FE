@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, IconButton, Typography } from '@mui/material'
 import { Visibility, ShoppingCart, ArrowForwardIos, ArrowBackIos } from '@mui/icons-material'
 import { useState } from 'react'
 import { mockData } from '../../../apis/mockdata'
@@ -9,7 +9,7 @@ function Advertisement() {
   return (
     <Box sx={{ width: '100%', height: (theme) => theme.webCustom.promotionBannerHeight, position: 'relative' }} >
       <Box sx={{ width: '100%', height: '100%', bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#898989' : '#E6E6FA') }}>
-        <img src={notifications[index]?.image} alt='product' style={{ borderRadius: 10,  width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(60%)' }} />
+        <img src={notifications[index]?.image} alt='product' style={{ borderRadius: 10, width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(60%)' }} />
         <Typography variant={'h2'} sx={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', fontWeight: 'bold',
           fontFamily: 'Rubik Vinyl, cursive', width: '400px', textAlign: 'center'
@@ -22,10 +22,10 @@ function Advertisement() {
         <Button variant="contained" startIcon={<ShoppingCart />}
           sx={{ color: 'white', border: 'none', backgroundColor: '#1C1C1C', fontWeight: 'bold', minWidth: '200px' }}>Thêm vào giỏ</Button>
       </Box>
-      {index > 0 && <Button startIcon={<ArrowBackIos />} size='small' variant='contained' color='inherit'
-        sx={{ ...useStyles.btnNextPrev, left: '5%' }} onClick={() => { setIndex(index - 1) }}></Button>}
-      {index < notifications.length - 1 && <Button startIcon={<ArrowForwardIos />} size='small' variant='contained' color='inherit'
-        sx={{ ...useStyles.btnNextPrev, left: '95%' }} onClick={() => { setIndex(index + 1) }}></Button>}
+      {index > 0 && <IconButton
+        sx={{ ...useStyles.btnNextPrev, left: '5%' }} onClick={() => { setIndex(index - 1) }}><ArrowBackIos /></IconButton>}
+      {index < notifications.length - 1 && <IconButton
+        sx={{ ...useStyles.btnNextPrev, left: '95%' }} onClick={() => { setIndex(index + 1) }}><ArrowForwardIos /></IconButton>}
     </Box>
 
   )
@@ -35,6 +35,6 @@ export default Advertisement
 
 const useStyles = {
   btnNextPrev: {
-    position: 'absolute', fontWeight: 'bold', transform: 'translate(-50%, -50%)', top: '50%', opacity: 0.5
+    position: 'absolute', fontWeight: 'bold', transform: 'translate(-50%, -50%)', top: '50%', opacity: 0.5, ':hover': { bgcolor: 'gray' }
   }
 }

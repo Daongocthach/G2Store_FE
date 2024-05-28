@@ -40,7 +40,7 @@ function ViewShopCateProduct({ shop_cate_id }) {
 
     return (
         <Box>
-            <Tooltip title='Xem sản phẩm'><Button className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'orange' } }} color='warning' onClick={() => handleOpen()}><Visibility /></Button></Tooltip>
+            <Tooltip title='Xem sản phẩm'><Visibility className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'green' } }} color='success' onClick={() => handleOpen()} /></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>
@@ -50,14 +50,11 @@ function ViewShopCateProduct({ shop_cate_id }) {
                                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                                     <img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '70px', height: '70px', cursor: 'pointer', borderRadius: 3 }} />
                                     <Box>
-                                        <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'} sx={{}}>{product?.name}</Typography>
-                                        <Typography variant='subtitle2' color={'#444444'}>Còn lại: {shop_cate_id}</Typography>
+                                        <Typography variant='body1' color={'#444444'}>{product?.name}</Typography>
+                                        <Typography variant='caption' fontWeight={'bold'} color={'#cd3333'}>{formatCurrency(product?.price)}</Typography>
                                     </Box>
                                 </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography variant='subtitle2' color={'#cd3333'}>{formatCurrency(product?.price)}</Typography>
-                                    <Button size='small' variant='text' sx={{ ':hover': { bgcolor: 'inherit' } }} color='error'><Delete /></Button>
-                                </Box>
+                                <Tooltip title='Xóa sản phẩm'><Delete sx={{ ':hover': { bgcolor: 'inherit' }, color:'#444444', cursor:'pointer' }}/></Tooltip>
                             </Box>
                         ))}
                         {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>

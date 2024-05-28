@@ -7,13 +7,6 @@ export default function MenuCategory({ categories }) {
   const navigate = useNavigate()
   const [selectCategory, setSelectCategory] = useState()
   const handleClick = (category) => {
-    // if (category?.child_categories && category.child_categories.length === 0) {
-    //   navigate('/genre-detail', { state: category?.category_id })
-    // }
-    // else if (!category?.path.includes('/') && (selectCategory?.path.split('/').length - 1) > 1) {
-    //   setIsNotShow(true)
-    //   console.log('abc')
-    // }
     navigate('/genre-detail', { state: { category:  category } })
     setSelectCategory(category)
   }

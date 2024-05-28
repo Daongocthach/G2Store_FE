@@ -18,7 +18,7 @@ function DeleteOrder({ orderId, reRender, setReRender }) {
     }
     const handleClickCancel = async () => {
         setLoading(true)
-        orderApi.goodsReceived(orderId)
+        orderApi.cancelOrder(orderId)
             .then(() => {
                 setShowAlert(true)
                 setReRender(!reRender)

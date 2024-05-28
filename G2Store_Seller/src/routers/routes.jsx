@@ -19,6 +19,7 @@ import AddSeller from '../pages/Manage/Sellers/AddSeller/AddSeller'
 import Categories from '../pages/Manage/Categories/Categories'
 import DesignShop from '../pages/Manage/DesignShop/DesignShop'
 import AccessDenied from '../pages/AccessDenied/AccessDenied'
+import CreateOrderGhn from '../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'
 
 const publicRoutes = [
     { path:'/', component: Login, layout: AuthLayout },
@@ -43,7 +44,9 @@ const privateRoutes = [
     { path:'manage/reviews', component: ManageReviews },
     { path:'manage/categories', component: Categories },
     { path:'manage/design-shop', component: DesignShop },
-    { path:'access-denied', component: AccessDenied }
+    { path:'access-denied', component: AccessDenied },
+    { path:'manage/create-order-ghn', component: CreateOrderGhn },
+
 
 
 ]

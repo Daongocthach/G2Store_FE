@@ -17,32 +17,32 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
     const handleClickAdd = async () => {
         setLoading(true)
         categoryApi.addShopCategory({ name, parent_id })
-          .then(() => {
-            setShowAlert(true)
-            setReRender(!reRender)
-          })
-          .catch((error) => {
-            console.log(error)
-            setShowAlertFail(true)
-          })
-          .finally(() => setLoading(false))
+            .then(() => {
+                setShowAlert(true)
+                setReRender(!reRender)
+            })
+            .catch((error) => {
+                console.log(error)
+                setShowAlertFail(true)
+            })
+            .finally(() => setLoading(false))
         handleClose()
     }
     return (
         <Box >
-            <Tooltip title='Thêm'><Button className="action-buttons" sx={{
+            <Tooltip title='Thêm'><Add className="action-buttons" sx={{
                 fontSize: '20px', visibility: isParent ? 'visible' : 'hidden',
-                ':hover': { color: '#1E90FF', bgcolor:'inherit' }, bgcolor: isParent ? 'inherit' : 'inherit'
+                ':hover': { color: '#1E90FF', bgcolor: 'inherit' }, color: isParent ? 'white' : 'inherit'
             }}
-                onClick={() => setOpen(true)}><Add sx={{ color: isParent ? 'white' :'#333333' }}/></Button></Tooltip>
+                onClick={() => setOpen(true)} /></Tooltip>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle sx={{ textAlign: 'center' }}>Thêm ngành hàng</DialogTitle>
                 <DialogContent >
                     <TextField fullWidth size='small' sx={{ mt: 1 }} label="Tên ngành hàng" onChange={(e) => setName(e.target.value)} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 500, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-                    <Button onClick={handleClickAdd} size='small' sx={{ fontWeight: 500, bgcolor: '#1E90FF', color: 'white' }} >Ok</Button>
+                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }}>Hủy</Button>
+                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }}>Thêm</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />

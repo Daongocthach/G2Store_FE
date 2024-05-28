@@ -1,39 +1,56 @@
 import { useState } from 'react'
-import { Box, Typography, BottomNavigation, BottomNavigationAction, IconButton } from '@mui/material'
-import { ArrowBackIos, ArrowForwardIos, YouTube, Image } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
+import { Box, Typography, BottomNavigation, BottomNavigationAction, IconButton, Button } from '@mui/material'
+import { ArrowBackIos, ArrowForwardIos, YouTube, Image, NavigateNext } from '@mui/icons-material'
+
 function LeftInformation({ product }) {
+  const navigate = useNavigate()
   const [index, setIndex] = useState(0)
-  const [bottomTab, setBottomTab] = useState(0)
+    const [bottomTab, setBottomTab] = useState(0)
+    const imageFiles = product?.images?.filter(file => file.file_type.includes('image/')) || []
+    const videoFiles = product?.images?.filter(file => file.file_type.includes('video/')) || []
+
+    const currentFiles = bottomTab === 0 ? imageFiles : videoFiles
+
     return (
-        <Box >
-            <Box sx={{ width: '90%', height: '350px', position: 'relative', bgcolor: '#E6E6FA', borderRadius: 2, p: 1 }} >
+        <Box>
+            <Box sx={{ width: '90%', height: '350px', position: 'relative', bgcolor: '#E6E6FA', borderRadius: 2, p: 1 }}>
                 <Box sx={{
                     width: '100%', height: '100%', transition: 'transform 0.5s ease',
                     transform: 'translateX(0)'
                 }}>
-                    {bottomTab == 0 &&
-                        <img src={product?.images[index]?.file_url} alt='product' loading="lazy"
+                    {bottomTab === 0 && currentFiles[index]?.file_type.includes('image/') &&
+                        <img src={currentFiles[index]?.file_url} alt='product' loading="lazy"
                             style={{ width: '100%', height: '100%', objectFit: 'contain', transition: 'transform 0.5s' }} />}
-                    {bottomTab == 1 && <video controls width="100%" height='100%'>
-                        <source src={product?.images[index]?.file_url} type="video/mp4" />
-                    </video>}
+                    {bottomTab === 1 && currentFiles[index]?.file_type.includes('video') &&
+                        <video controls width="100%" height='100%'>
+                            <source src={currentFiles[index]?.file_url} type="video/mp4" />
+                        </video>}
                 </Box>
-                {bottomTab == 0 && index > 0 && <IconButton color="secondary"
+                {index > 0 && <IconButton color="secondary"
                     sx={{ position: 'absolute', transform: 'translate(-50%, -50%)', top: '50%', left: '10%', bgcolor: '#FFFFFF' }} onClick={() => { setIndex(index - 1) }}>
                     <ArrowBackIos sx={{ fontSize: 20, color: '#84898e' }} /></IconButton>}
-                {bottomTab == 0 && index < product?.images.length - 1 && <IconButton color='secondary'
+                {index < currentFiles.length - 1 && <IconButton color='secondary'
                     sx={{ position: 'absolute', transform: 'translate(-50%, -50%)', top: '50%', opacity: 0.8, left: '90%', bgcolor: '#FFFFFF' }} onClick={() => { setIndex(index + 1) }}>
                     <ArrowForwardIos sx={{ fontSize: 20, color: '#84898e' }} /></IconButton>}
             </Box>
-            <Box >
+            <Box>
                 <BottomNavigation sx={{ bgcolor: '#E6E6FA', width: '90%', borderBottomLeftRadius: 2, borderBottomRightRadius: 2 }}
-                    showLabels value={bottomTab} onChange={(event, newValue) => { setBottomTab(newValue) }} >
-                    <BottomNavigationAction label={'Hình ảnh' + ' (' + product?.images.length + ')'} icon={<Image sx={{ fontSize: 40 }} />} />
-                    <BottomNavigationAction label={'Video' + ' (' + 0 + ')'} icon={<YouTube sx={{ fontSize: 40 }} />} />
+                    showLabels value={bottomTab} onChange={(event, newValue) => { setBottomTab(newValue), setIndex(0) }}>
+                    <BottomNavigationAction label={'Hình ảnh (' + imageFiles.length + ')'} icon={<Image sx={{ fontSize: 40 }} />} />
+                    <BottomNavigationAction label={'Video (' + videoFiles.length + ')'} icon={<YouTube sx={{ fontSize: 40 }} />} />
                 </BottomNavigation>
             </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
+                    onClick={() => { navigate('/shop-page', { state: product?.shop?.shop_id }) }}>
+                    <img src={product?.shop?.image} style={{ borderRadius: '50%', width: 70, height: 70 }} />
+                    <Typography variant='subtitle1' sx={{ color: '#444444' }}>{product?.shop?.name}</Typography>
+                    <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
+                </Button>
+            </Box>
             <Typography variant='h5' mt={2} fontWeight={'bold'} color={'#444444'}>Thông tin sản phẩm</Typography>
-            <Typography variant='subtitle1' color={'#444444'} > {product?.description}</Typography>
+            <Typography variant='subtitle1' color={'#444444'}> {product?.description}</Typography>
         </Box>
     )
 }

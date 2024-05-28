@@ -34,20 +34,15 @@ function UpdateCategory({ category, reRender, setReRender }) {
   }
   return (
     <div>
-      <Tooltip title='Sửa'><Button className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen}><Create /></Button></Tooltip>
+      <Tooltip title='Sửa'><Create className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen} /></Tooltip>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle sx={{ textAlign: 'center' }}>Cập ngành hàng</DialogTitle>
+        <DialogTitle sx={{ textAlign: 'center' }}>Cập nhật ngành hàng</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '350px' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant='subtitle2' minWidth={'70px'}>Tên: </Typography>
-              <TextField fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
-            </Box>
-          </Box>
+          <TextField fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 500, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-          <Button onClick={handleUpdate} size='small' sx={{ fontWeight: 500, bgcolor: '#1E90FF', color: 'white' }} >Cập nhật</Button>
+          <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }} >Hủy</Button>
+          <Button onClick={handleUpdate} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }} >Cập nhật</Button>
         </DialogActions>
       </Dialog>
       <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập ngành hàng thành công!'} />

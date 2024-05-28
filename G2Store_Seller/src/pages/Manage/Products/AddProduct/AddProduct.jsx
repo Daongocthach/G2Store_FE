@@ -5,7 +5,7 @@ import { AddCircle, NavigateNext, Clear } from '@mui/icons-material'
 import { NumericFormat } from 'react-number-format'
 import productApi from '../../../../apis/productApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
-import MenuCategory from './SetCategory/MenuCategory/MenuCategory'
+import MenuCategory from './MenuCategory/MenuCategory'
 import categoryApi from '../../../../apis/categoryApi'
 import Loading from '../../../../components/Loading/Loading'
 

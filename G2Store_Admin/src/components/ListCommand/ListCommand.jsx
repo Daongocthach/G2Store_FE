@@ -34,18 +34,17 @@ const listButton = [
             { path: '/admin/manage/users', name: 'Quản lý người dùng' }
         ]
     },
-    {
-        name: 'Trò chuyện',
-        commands: [
-            { path: '/admin/manage/chat', name: 'Chat' },
-            { path: '/admin/manage/auto-chat', name: 'Trả lời tự động' }
-        ]
-    },
+    // {
+    //     name: 'Trò chuyện',
+    //     commands: [
+    //         { path: '/admin/manage/chat', name: 'Chat' },
+    //         { path: '/admin/manage/auto-chat', name: 'Trả lời tự động' }
+    //     ]
+    // },
     {
         name: 'Thống kê',
         commands: [
             { path: '/admin/dashboard', name: 'Thống kê dữ liệu' },
-            { path: '/admin/dashboard', name: 'Tình trạng vận hành' }
         ]
     },
     {
@@ -54,11 +53,11 @@ const listButton = [
             { path: '/admin/manage/categories', name: 'Quản lý danh mục' }
         ]
     },
-    {
-        name: 'Tài chính',
-        commands: [
-            { path: '/admin/dashboard', name: 'Thu nhập' },
-            { path: '/admin/dashboard', name: 'Số dư tài khoản' }
-        ]
-    }
+    // {
+    //     name: 'Tài chính',
+    //     commands: [
+    //         { path: '/admin/dashboard', name: 'Thu nhập' },
+    //         { path: '/admin/dashboard', name: 'Số dư tài khoản' }
+    //     ]
+    // }
 ]

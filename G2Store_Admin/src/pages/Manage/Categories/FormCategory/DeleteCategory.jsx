@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogTitle, Tooltip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import categoryApi from '../../../../apis/categoryApi'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
@@ -25,7 +25,9 @@ function DeleteCategory({ category_id, reRender, setReRender }) {
     }
     return (
         <div>
-            <Button className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen}><DeleteIcon /></Button>
+            <Tooltip title='Xóa'>
+                <DeleteIcon className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen} />
+            </Tooltip>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Bạn có muốn xóa danh mục này ?</DialogTitle>
                 <DialogActions>

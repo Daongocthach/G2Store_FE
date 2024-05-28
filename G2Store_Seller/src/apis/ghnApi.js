@@ -1,5 +1,6 @@
 import axios from 'axios'
 const token = 'da8bac8e-9519-11ee-8bfa-8a2dda8ec551'
+const shop_id = 190509
 const ghnApi = {
     getProvices() {
         const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province'
@@ -25,34 +26,29 @@ const ghnApi = {
             }
         })
     },
-    getMethodShip() {
-        const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services'
-        const requestData = {
-            shop_id: 190509,
-            from_district: 1542,
-            to_district: 1442
-        }
-        return axios.get(url, {
-            params: requestData,
+
+    createOrder(data) {
+        const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create'
+        return axios.post(url, data, {
+            headers: {
+                'token': token,
+                'shop_id': shop_id
+            }
+        })
+    },
+    printOrder(order_codes) {
+        const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/a5/gen-token'
+        return axios.post(url, {
+            order_codes: order_codes
+        }, {
             headers: {
                 'token': token
             }
         })
     },
-
-    calculateFeeShip( districtId ) {
-        const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee'
-        const requestData = {
-            service_id: 53320,
-            from_district_id: 3695,
-            to_district_id: districtId,
-            height: 10,
-            length: 10,
-            weight: 500,
-            width: 10
-        }
+    getPickShips() {
+        const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shift/date'
         return axios.get(url, {
-            params: requestData,
             headers: {
                 'token': token
             }

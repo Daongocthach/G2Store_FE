@@ -31,7 +31,12 @@ function Profile() {
           dob: response?.dob,
           point: response?.point
         })
+        const data = {
+          avatar: response?.avatar,
+          point: response?.point
+        }
         setAvatar(response?.avatar)
+        dispatch(updateAvatar(data))
       })
       .catch((error) => console.log(error))
   }, [reRender])
