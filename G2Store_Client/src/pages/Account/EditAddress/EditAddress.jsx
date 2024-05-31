@@ -27,7 +27,7 @@ function EditAddress() {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant='h6' fontWeight={'bold'}>Địa chỉ nhận hàng</Typography>
+        <Typography variant='h6' fontWeight={'bold'} color={'#444444'}>Địa chỉ nhận hàng</Typography>
         <AddAddress rerender={rerender} setRerender={setRerender} />
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

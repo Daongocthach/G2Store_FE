@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
-import Create from '@mui/icons-material/Create'
+import Feedback from '@mui/icons-material/Feedback'
 import reviewApi from '../../../../../apis/reviewApi'
 import ShowAlert from '../../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../../components/Loading/Loading'
@@ -30,15 +30,15 @@ function FeedBack({ review, reRender, setReRender }) {
     }
     return (
         <Box >
-            <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => setOpen(true)} /></Tooltip>
-            <Dialog open={open} onClose={handleClose} >
+            <Tooltip title='Phản hồi'><Feedback sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => setOpen(true)} /></Tooltip>
+            <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center' }}>Phản hồi</DialogTitle>
                 <DialogContent >
-                    <TextField fullWidth size='small' sx={{ mt: 1 }} label="Phản hồi" onChange={(e) => setContent(e.target.value)} />
+                    <TextField fullWidth size='small' multiline rows={3} sx={{ mt: 1 }} label="Phản hồi" onChange={(e) => setContent(e.target.value)} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }}>Hủy</Button>
-                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }}>Thêm</Button>
+                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight:'bold' }}>Hủy</Button>
+                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight:'bold' }}>Thêm</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Phản hồi thành công'} />

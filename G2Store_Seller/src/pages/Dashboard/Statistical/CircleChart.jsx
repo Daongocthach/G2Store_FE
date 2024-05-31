@@ -9,13 +9,13 @@ export default function CircleChart({ dayStatistical }) {
         series={[
           {
             data: [
-              { id: 0, value: dayStatistical?.mondayIncome, label: 'Thứ 2' },
-              { id: 1, value: dayStatistical?.tuesdayIncome, label: 'Thứ 3' },
-              { id: 2, value: dayStatistical?.wednesdayIncome, label: 'Thứ 4' },
-              { id: 3, value: dayStatistical?.thursdayIncome, label: 'Thứ 5' },
-              { id: 4, value: dayStatistical?.fridayIncome, label: 'Thứ 6' },
-              { id: 5, value: dayStatistical?.saturdayIncome, label: 'Thứ 7' },
-              { id: 6, value: dayStatistical?.sundayIncome, label: 'Chủ nhật' }
+              { id: 0, value: dayStatistical?.mondayIncome || 0, label: 'Thứ 2' },
+              { id: 1, value: dayStatistical?.tuesdayIncome || 0, label: 'Thứ 3' },
+              { id: 2, value: dayStatistical?.wednesdayIncome || 0, label: 'Thứ 4' },
+              { id: 3, value: dayStatistical?.thursdayIncome || 0, label: 'Thứ 5' },
+              { id: 4, value: dayStatistical?.fridayIncome || 0, label: 'Thứ 6' },
+              { id: 5, value: dayStatistical?.saturdayIncome || 0, label: 'Thứ 7' },
+              { id: 6, value: dayStatistical?.sundayIncome || 0, label: 'Chủ nhật' }
             ]
           }
         ]}

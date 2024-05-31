@@ -6,9 +6,13 @@ const reviewApi = {
     const url = `reviews/${reviewId}/shop-feedback?feedBack=${feedback}'`
     return axiosClient.put(url)
   },
-  getShopReviews() {
-    const url = 'reviews/shop-reviews'
-    return axiosClient.get(url)
+  getShopReviews(page, size, star) {
+    const params = {}
+    if (star) {
+      params.star = star
+    }
+    const url = `reviews?page=${page}&size=${size}`
+    return axiosClient.get(url, { params: params })
   }
 }
 

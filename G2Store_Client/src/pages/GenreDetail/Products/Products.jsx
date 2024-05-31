@@ -32,22 +32,20 @@ function Products() {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            setTimeout(() => {
-                let apiCall
-                if (data?.category?.category_id) {
-                    apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
-                } else if (data?.name) {
-                    apiCall = productApi.searchProducts(data?.name, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
-                }
-                else {
-                    apiCall = productApi.getProducts(page - 1, 12)
-                }
-                apiCall.then((response) => {
-                    setProducts(response)
-                })
-                    .catch((error) => console.log(error))
-                    .finally(() => setLoading(false))
-            }, 1000)
+            let apiCall
+            if (data?.category?.category_id) {
+                apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
+            } else if (data?.name) {
+                apiCall = productApi.searchProducts(data?.name, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
+            }
+            else {
+                apiCall = productApi.getProducts(page - 1, 12)
+            }
+            apiCall.then((response) => {
+                setProducts(response)
+            })
+                .catch((error) => console.log(error))
+                .finally(() => setLoading(false))
         }
 
         fetchData()

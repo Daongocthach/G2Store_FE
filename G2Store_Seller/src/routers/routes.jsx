@@ -1,25 +1,26 @@
-import DashBoard from '../pages/Dashboard/Dashboard'
-import Login from '../pages/Auth/Login/Login'
-import Register from '../pages/Auth/Register/Register'
-import ResetPassword from '../pages/Auth/ResetPassword/ResetPassword'
-import NotFound from '../pages/NotFound/NotFound'
-import Profile from '../pages/Profile/Profile'
-import ShopProfile from '../pages/Profile/ShopProfile'
-import AuthLayout from '../layouts/AuthLayout'
-import Chat from '../pages/Chat/Chat'
-import AutoChat from '../pages/Chat/AutoChat/AutoChat'
-import Sellers from '../pages/Manage/Sellers/Sellers'
-import Promotions from '../pages/Manage/Promotions/Promotions'
-import AddPromotion from '../pages/Manage/Promotions/AddPromotion/AddPromotion'
-import Orders from '../pages/Manage/Orders/Orders'
-import Products from '../pages/Manage/Products/Products'
-import AddProduct from '../pages/Manage/Products/AddProduct/AddProduct'
-import ManageReviews from '../pages/Manage/Orders/MangeReviews/ManageReviews'
-import AddSeller from '../pages/Manage/Sellers/AddSeller/AddSeller'
-import Categories from '../pages/Manage/Categories/Categories'
-import DesignShop from '../pages/Manage/DesignShop/DesignShop'
-import AccessDenied from '../pages/AccessDenied/AccessDenied'
-import CreateOrderGhn from '../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'
+import { lazy } from 'react'
+const Dashboard = lazy(() => import('../pages/Dashboard/Dashboard'))
+const Login = lazy(() => import('../pages/Auth/Login/Login'))
+const Register = lazy(() => import('../pages/Auth/Register/Register'))
+const ResetPassword = lazy(() => import('../pages/Auth/ResetPassword/ResetPassword'))
+const NotFound = lazy(() => import('../pages/NotFound/NotFound'))
+const Profile = lazy(() => import('../pages/Profile/Profile'))
+const ShopProfile = lazy(() => import('../pages/Profile/ShopProfile'))
+const AuthLayout = lazy(() => import('../layouts/AuthLayout'))
+const Chat = lazy(() => import('../pages/Chat/Chat'))
+const AutoChat = lazy(() => import('../pages/Chat/AutoChat/AutoChat'))
+const Sellers = lazy(() => import('../pages/Manage/Sellers/Sellers'))
+const Promotions = lazy(() => import('../pages/Manage/Promotions/Promotions'))
+const AddPromotion = lazy(() => import('../pages/Manage/Promotions/AddPromotion/AddPromotion'))
+const Orders = lazy(() => import('../pages/Manage/Orders/Orders'))
+const Products = lazy(() => import('../pages/Manage/Products/Products'))
+const AddProduct = lazy(() => import('../pages/Manage/Products/AddProduct/AddProduct'))
+const ManageReviews = lazy(() => import('../pages/Manage/Orders/MangeReviews/ManageReviews'))
+const AddSeller = lazy(() => import('../pages/Manage/Sellers/AddSeller/AddSeller'))
+const Categories = lazy(() => import('../pages/Manage/Categories/Categories'))
+const DesignShop = lazy(() => import('../pages/Manage/DesignShop/DesignShop'))
+const AccessDenied = lazy(() => import('../pages/AccessDenied/AccessDenied'))
+const CreateOrderGhn = lazy(() => import('../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'))
 
 const publicRoutes = [
     { path:'/', component: Login, layout: AuthLayout },
@@ -29,7 +30,7 @@ const publicRoutes = [
 ]
 
 const privateRoutes = [
-    { path:'dashboard', component: DashBoard },
+    { path:'dashboard', component: Dashboard },
     { path:'shop-profile', component: ShopProfile },
     { path:'profile', component: Profile },
     { path:'chat', component: Chat },

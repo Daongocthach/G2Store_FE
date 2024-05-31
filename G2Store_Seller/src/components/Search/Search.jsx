@@ -1,65 +1,48 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { InputAdornment, TextField, Autocomplete, Stack } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { Paper, Button, Box, TextField, CircularProgress } from '@mui/material'
+import { useState } from 'react'
+import productApi from '../../apis/productApi'
+import orderApi from '../../apis/orderApi'
+import ShowAlert from '../ShowAlert/ShowAlert'
 
-const data = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: 'Schindler List', year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 }]
-function Search() {
-    // const datas = useSelector(state => state.orders.orders)
-    const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-    // const handleDatasSelect = (event, value) => {
-    //     if (value !== null) {
-    //         orderApi.getOrderById(value.id)
-    //             .then(response => {
-    //                 setOrders([response.data])
-    //             })
-    //             .catch(err => { console.log(err) })
-    //     }
-    //     else { setOrders(sortByMaxId(datas)) }
+function SearchById({ setDatas, isProductId, setTab }) {
+    const [data_id, setDataId] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [showAlertFail, setShowAlertFail] = useState(false)
+    const handleSearch = async () => {
+        setLoading(true)
+        if (isProductId) {
+            productApi.getProduct(parseInt(data_id))
+                .then(response => { setDatas([response]) })
+                .catch(() => { setShowAlertFail(true) })
+                .finally(() => setLoading(false))
+        }
+        else {
+            orderApi.getOrder(parseInt(data_id))
+                .then(response => { setDatas([response]), setTab('') })
+                .catch(() => { setShowAlertFail(true) })
+                .finally(() => setLoading(false))
+        }
+    }
 
-    // }
     return (
-        <Stack spacing={2} sx={{ width: 300 }}>
-            <Autocomplete
-                freeSolo
-                options={data}
-                getOptionLabel={(data) => (data.title)}
-                // onChange={handleDatasSelect}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Tìm kiếm..."
-                        type="text"
-                        size='small'
-                        InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon sx={{ color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black') }} />
-                                </InputAdornment>
-                            )
-                        }}
-                        sx={{
-                            minWidth: '120px',
-                            maxWidth: '300px',
-                            '& label': { color: colorChangeByTheme },
-                            '& input': { color: colorChangeByTheme },
-                            '& label.Mui-focused': { fontWeight: 'bold' },
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': { borderColor: colorChangeByTheme },
-                                '&:hover fieldset': { borderColor: colorChangeByTheme },
-                                '&.Mui-focused fieldset': { borderColor: colorChangeByTheme }
-                            }
-                        }} 
-                        />)} />
-        </Stack>
+        <Box sx={{ flex: 1, display: 'flex' }}>
+            <Paper component="form" sx={{ display: 'flex', alignItems: 'center', height: 40 }}>
+                <TextField type='search' size='small' placeholder="Nhập mã sản phẩm" sx={{
+                    flex: 1, height: 40, fontSize: 14,
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': { borderColor: 'transparent' },
+                        '&:hover fieldset': { borderColor: 'transparent' }
+                    }
+                }} onChange={(e) => setDataId(e.target.value)} onFocus={(e) => e.target.select()} />
+                <Button type="button" onClick={handleSearch} sx={{ height: 40, bgcolor: '#EE7942', color: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
+                    <SearchIcon />
+                </Button>
+            </Paper>
+            {loading && <CircularProgress />}
+            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Id không được tìm thấy!'} isFail={true} />
+        </Box>
     )
 }
 
-export default Search
+export default SearchById

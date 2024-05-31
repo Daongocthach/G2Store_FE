@@ -1,13 +1,17 @@
 import axiosClient from './axiosClient'
 const productApi = {
-    getShopProducts(shopId, page, size) {
+    getShopProducts(shopId, page, size, sort) {
         if (!page) {
             page = 0
         }
         if (!size) {
             size = 8
         }
-        const url = `products/shop/${shopId}?page=${page}&size=${size}`
+        const url = `products/shop/${shopId}?page=${page}&size=${size}&shopProductSortType=${sort}`
+        return axiosClient.get(url)
+    },
+    getProduct(product_id) {
+        const url = `products/${product_id}`
         return axiosClient.get(url)
     },
     getShopCateProducts(shop_cate_id, page, size) {

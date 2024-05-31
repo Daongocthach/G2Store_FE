@@ -11,12 +11,10 @@ import productApi from '../../../apis/productApi'
 import { formatCurrency } from '../../../utils/price'
 import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
+import SearchById from '../../../components/Search/Search'
 
 function Products() {
   const navigate = useNavigate()
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const [loading, setLoading] = useState(false)
   const [checkedProducts, setCheckedProducts] = useState([])
   const [checkedAll, setCheckedAll] = useState(false)
@@ -26,16 +24,13 @@ function Products() {
   const [page, setPage] = useState(0)
   const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [select, setSelect] = useState(1)
+  const [sort, setSort] = useState('DEFAULT')
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
-  }
-  const handleChange = (event) => {
-    setSelect(event.target.value)
   }
   const handleClickUpdate = (product) => {
     navigate('/seller/manage/add-product', { state: product })
@@ -64,13 +59,14 @@ function Products() {
   const handleExport = async () => {
     setLoading(true)
     productApi?.exportExcel(checkedProducts, checkedAll)
-      .then(() => {})
-      .catch((error) => {console.log(error)})
+      .then(() => { })
+      .catch((error) => { console.log(error) })
       .finally(() => setLoading(false))
   }
   useEffect(() => {
-    if (shop_id) {
-      productApi.getShopProducts(shop_id, page, rowsPerPage)
+    const fetchData = async () => {
+      setLoading(true)
+      productApi.getShopProducts(shop_id, page, rowsPerPage, sort)
         .then(response => {
           setProducts(response?.content)
           setTotalElements(response?.totalElements)
@@ -81,8 +77,12 @@ function Products() {
           }
           console.log(error)
         })
+        .finally(() => setLoading(false))
     }
-  }, [page, reRender, rowsPerPage, shop_id])
+    if (shop_id) {
+      fetchData()
+    }
+  }, [page, sort, reRender, rowsPerPage, shop_id])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
       <Breadcrumbs>
@@ -104,12 +104,15 @@ function Products() {
             Xuất file excel
           </Button>}
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <SearchById setDatas={setProducts} isProductId={true} />
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange}>
-              <MenuItem value={1}>Mới nhất</MenuItem>
-              <MenuItem value={2}>Cũ nhất</MenuItem>
+            <Select value={sort} onChange={(e) => setSort(e.target.value)} >
+              <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
+              <MenuItem color='#444444' value={'STOCK_QUANTITY_DESC'}>Tồn kho giảm dần</MenuItem>
+              <MenuItem color='#444444' value={'STOCK_QUANTITY_ASC'}>Tồn kho tăng dần</MenuItem>
+              <MenuItem color='#444444' value={'SOLD_QUANTITY_DESC'}>Đã bán giảm dần</MenuItem>
+              <MenuItem color='#444444' value={'SOLD_QUANTITY_ASC'}>Đã bán tăng dần</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -121,8 +124,9 @@ function Products() {
               <TableRow sx={{ bgcolor: '#2a99ff' }} >
                 <TableCell sx={{ color: 'white' }} ><Checkbox onChange={handleChangeAll} sx={{ '&.Mui-checked': { color: 'white' } }} /></TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 400 }} >Thông tin sản phẩm</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số lượng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá (vnđ)</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tồn kho (sản phẩm)</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đã bán (sản phẩm)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đang hoạt động</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
@@ -135,11 +139,15 @@ function Products() {
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         {<img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
-                        <Typography variant='subtitle2' color={'#444444'}>{product?.name}</Typography>
+                        <Box>
+                          <Typography variant='subtitle2' color={'#444444'}>{product?.name}</Typography>
+                          <Typography> Mã sản phẩm: #{product?.product_id}</Typography>
+                        </Box>
                       </Box>
                     </TableCell>
                     <TableCell ><Typography>{formatCurrency(product?.price)}</Typography></TableCell>
                     <TableCell ><Typography>{product?.stock_quantity}</Typography> </TableCell>
+                    <TableCell ><Typography>{product?.sold_quantity}</Typography> </TableCell>
                     <TableCell ><Switch defaultChecked /> </TableCell>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
+import { CircularProgress } from '@mui/material'
+import { Suspense } from 'react'
 import DefaultLayout from './layouts/DefaultLayout'
 import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
@@ -21,14 +23,18 @@ function App() {
                 key={index}
                 path={route.path}
                 element={
-                  <Layout>
-                    <Page />
-                  </Layout>
+                  <Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <CircularProgress />
+                    Đang tải các tài nguyên vui lòng đợi...
+                  </div>}>
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  </Suspense>
                 }
               />)
-          }
-          )}
-          <Route path="/seller" element={<ProtectedRoute isAllowed={keep_login}/>}>
+          })}
+          <Route path="/seller" element={<ProtectedRoute isAllowed={keep_login} />}>
             {privateRoutes.map((route, index) => {
               const Page = route.component
               const Layout = route.layout || DefaultLayout
@@ -36,10 +42,14 @@ function App() {
                 <Route
                   key={index}
                   path={route.path}
-                  element={
+                  element={<Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <CircularProgress />
+                    Đang tải các tài nguyên vui lòng đợi...
+                  </div>}>
                     <Layout>
                       <Page />
                     </Layout>
+                  </Suspense>
                   }
                 />
               )

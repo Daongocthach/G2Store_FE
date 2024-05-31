@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link, Tooltip,
-  Checkbox, Button
+  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link, Tooltip
 } from '@mui/material'
 import { Chat, Print } from '@mui/icons-material'
 import { format, addDays } from 'date-fns'
@@ -15,6 +14,7 @@ import ViewOrder from './FormOrder/ViewOrder'
 import UpdateOrder from './FormOrder/UpdateOrder'
 import OrderItem from './OrderItem/OrderItem'
 import ghnApi from '../../../apis/ghnApi'
+import SearchById from '../../../components/Search/Search'
 
 function Orders() {
   const navigate = useNavigate()
@@ -73,7 +73,10 @@ function Orders() {
           Quản lý đơn hàng
         </Link>
       </Breadcrumbs>
-      <Typography variant='h5' sx={{ fontWeight: 'bold', minWidth: '100px', m: 2 }}>Quản lý đơn hàng</Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <Typography variant='h5' sx={{ fontWeight: 'bold', minWidth: '100px', m: 2 }}>Quản lý đơn hàng</Typography>
+        <SearchById setDatas={setOrders} setTab={setTab}/>
+      </Box>
       <Divider />
       <Box sx={{ mb: 2 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>

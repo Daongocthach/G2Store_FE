@@ -5,7 +5,6 @@ import ReviewProduct from '../ReviewProduct/ReviewProduct'
 
 function OrderItem({ orderItem, orderStatus, reRender, setReRender }) {
     const navigate = useNavigate()
-    console.log('abc', orderItem?.image)
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1, mb: 1, justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', gap: 2, mt: 1, mb: 1, justifyContent: 'space-between' }}>
