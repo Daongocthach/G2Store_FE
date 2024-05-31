@@ -6,6 +6,8 @@ import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import productApi from '../../../../apis/productApi'
 import { formatCurrency } from '../../../../../../G2Store_Client/src/utils/price'
+import emptyImage from '../../../../assets/img/empty-order.png'
+
 
 function AddShopCateProduct({ shop_cate_id }) {
     const shop_id = useSelector(state => state.auth.shop_id)
@@ -50,7 +52,6 @@ function AddShopCateProduct({ shop_cate_id }) {
             setCheckedAll(allSelected)
             setCheckedProducts(list)
         }
-
     }
 
     const handleChangeAll = () => {
@@ -102,6 +103,10 @@ function AddShopCateProduct({ shop_cate_id }) {
                                 </Box>
                             </Box>
                         ))}
+                        {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
+                            <img src={emptyImage} />
+                            <Typography variant='h6' >Không có sản phẩm nào chưa có danh mục!</Typography>
+                        </Box>}
                     </Box>
                 </DialogContent>
                 <DialogActions>

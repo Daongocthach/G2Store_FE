@@ -52,7 +52,7 @@ const productApi = {
     },
     exportExcel(product_ids, is_all_products) {
         const url = 'products/export/excel'
-        return axiosClient.post(url, { product_ids: product_ids, is_all_products: is_all_products })
+        return axiosClient.post(url, { product_ids: product_ids, is_all_products: is_all_products }, { responseType: 'blob' })
     }
 }
 

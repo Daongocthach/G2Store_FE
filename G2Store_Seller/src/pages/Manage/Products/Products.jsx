@@ -56,10 +56,20 @@ function Products() {
     }
     setCheckedAll(!checkedAll)
   }
+
   const handleExport = async () => {
     setLoading(true)
     productApi?.exportExcel(checkedProducts, checkedAll)
-      .then(() => { })
+      .then((response) => {
+        var link = document.createElement('a')
+        var fileUrl = URL.createObjectURL(response)
+        link.href = fileUrl
+        link.style = 'visibility:hidden'
+        link.download = 'products.xlsx'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      })
       .catch((error) => { console.log(error) })
       .finally(() => setLoading(false))
   }
@@ -122,7 +132,7 @@ function Products() {
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: '#2a99ff' }} >
-                <TableCell sx={{ color: 'white' }} ><Checkbox onChange={handleChangeAll} sx={{ '&.Mui-checked': { color: 'white' } }} /></TableCell>
+                <TableCell><Checkbox onChange={handleChangeAll} sx={{ color: 'white', '&.Mui-checked': { color: 'white', outline: '2px auto rgba(19,124,189,.6)' } }} /></TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 400 }} >Thông tin sản phẩm</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá (vnđ)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tồn kho (sản phẩm)</TableCell>

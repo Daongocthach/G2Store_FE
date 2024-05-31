@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Typography, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
+import { Typography, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
 import { Visibility, Delete } from '@mui/icons-material'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
@@ -59,7 +59,7 @@ function ViewShopCateProduct({ shop_cate_id }) {
                         ))}
                         {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
                             <img src={emptyImage} />
-                            <Typography variant='h6' >Bạn chưa có danh mục nào</Typography>
+                            <Typography variant='h6' >Chưa có sản phẩm thuộc danh mục này!</Typography>
                         </Box>}
                     </Box>
                 </DialogContent>
