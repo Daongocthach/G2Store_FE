@@ -14,7 +14,6 @@ function ViewShopCateProduct({ shop_cate_id }) {
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
 
-
     const handleClose = () => {
         setOpen(false)
     }
@@ -27,7 +26,6 @@ function ViewShopCateProduct({ shop_cate_id }) {
         setLoading(true)
         productApi.getShopCateProducts(shop_cate_id, 0, 16)
             .then((response) => {
-                console.log(response?.content)
                 setProducts(response?.content)
             })
             .catch((error) => console.log(error))
@@ -35,12 +33,11 @@ function ViewShopCateProduct({ shop_cate_id }) {
                 setLoading(false)
                 setOpen(true)
             })
-
     }
 
     return (
         <Box>
-            <Tooltip title='Xem sản phẩm'><Visibility className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'green' } }} color='success' onClick={() => handleOpen()} /></Tooltip>
+            <Tooltip title='Xem sản phẩm'><Visibility className="action-buttons" sx={{ visibility: 'hidden' }} color='info' onClick={() => handleOpen()} /></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>

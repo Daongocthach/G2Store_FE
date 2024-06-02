@@ -19,6 +19,8 @@ const ProductNotExist = lazy(() => import('../pages/ErrorPage/ProductNotExist/Pr
 const OrderDetail = lazy(() => import('../pages/OrderDetail/OrderDetail'))
 const Notification = lazy(() => import('../pages/Notification/Notification'))
 const PaymentFail = lazy(() => import('../pages/ErrorPage/PaymentFail/PaymentFail'))
+const Chat = lazy(() => import('../pages/Chat/Chat'))
+
 
 const publicRoutes = [
     { path: '/login', component: Login, layout: AuthLayout },
@@ -40,7 +42,9 @@ const privateRoutes = [
     { path: '/checkout', component: Checkout },
     { path: '/profile/order-detail', component: OrderDetail },
     { path: '/thanks', component: Thanks },
-    { path: '/cart', component: Cart }
+    { path: '/cart', component: Cart },
+    { path: '/chat', component: Chat }
+
 ]
 
 export { publicRoutes, privateRoutes }

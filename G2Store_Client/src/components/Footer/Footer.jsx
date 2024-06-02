@@ -1,6 +1,5 @@
 import { Box, Grid, InputBase, Paper, IconButton, Typography } from '@mui/material'
 import { YouTube, Facebook, Twitter, Google, Send } from '@mui/icons-material'
-
 export default function Footer() {
 
     return (

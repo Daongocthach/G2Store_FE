@@ -30,7 +30,7 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
     }
     return (
         <Box >
-            <Tooltip title='Thêm'><Add className="action-buttons" sx={{
+            <Tooltip title='Thêm ngành hàng'><Add className="action-buttons" sx={{
                 fontSize: '20px', visibility: isParent ? 'visible' : 'hidden',
                 ':hover': { color: '#1E90FF', bgcolor: 'inherit' }, color: isParent ? 'white' : 'inherit'
             }}
@@ -41,8 +41,8 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
                     <TextField fullWidth size='small' sx={{ mt: 1 }} label="Tên ngành hàng" onChange={(e) => setName(e.target.value)} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }}>Hủy</Button>
-                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }}>Thêm</Button>
+                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Hủy</Button>
+                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Thêm</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />

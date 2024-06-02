@@ -34,7 +34,7 @@ function UpdateCategory({ category, reRender, setReRender }) {
   }
   return (
     <div>
-      <Tooltip title='Sửa'><Create className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen} /></Tooltip>
+      <Tooltip title='Sửa ngành hàng'><Create className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen} /></Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ textAlign: 'center' }}>Cập nhật ngành hàng</DialogTitle>
         <DialogContent>

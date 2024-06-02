@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Container, Grid, Typography, Button, Box, Breadcrumbs, Link } from '@mui/material'
 import { Inventory, EditLocationAlt, NavigateNext, AccountBox } from '@mui/icons-material'
 import Profile from './Profile/Profile'
@@ -7,7 +8,13 @@ import EditAddress from './EditAddress/EditAddress'
 
 function Account() {
   const [select, setSelect] = useState(0)
+  const location = useLocation()
+  const tab = location.state
 
+  useEffect(() => {
+    if (tab)
+      setSelect(tab)
+  }, [tab])
   return (
     <Container sx={{ mb: 2 }}>
       <Grid container mt={2} spacing={3} >

@@ -26,7 +26,6 @@ function AppBar() {
         <Button sx={{ ...useStyles.button, minWidth: 150 }} onClick={() => navigate('/genre-detail')} >Sản phẩm</Button>
         <Search />
       </Box>
-
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         <Tooltip title="Thông báo">
           <Badge color="warning" badgeContent={1} sx={{ cursor: 'pointer' }}>

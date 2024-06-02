@@ -66,7 +66,7 @@ function AddShopCateProduct({ shop_cate_id }) {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            productApi.getShopProducts(shop_id, 0, 16)
+            productApi.getShopProducts(shop_id, 0, 16, '')
                 .then((response) => {
                     setProducts(response?.content)
                     setCheckedProducts([])
@@ -80,18 +80,18 @@ function AddShopCateProduct({ shop_cate_id }) {
 
     return (
         <Box>
-            <Tooltip title='Thêm sản phẩm'><Add className="action-buttons" sx={{ visibility: 'hidden', ':hover': { color: 'green' } }} color='success' onClick={() => setOpen(true)} /></Tooltip>
+            <Tooltip title='Thêm sản phẩm'><Add className="action-buttons" sx={{ visibility: 'hidden' }} color='info' onClick={() => setOpen(true)} /></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
+                    {Array.isArray(products) && products.length > 0 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
                         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Checkbox checked={checkedAll} onChange={handleChangeAll} />
                                 <Typography variant='subtitle1' color={'#666666'}>Chọn tất cả</Typography>
                             </Box>
                         </Box>
-                        {Array.isArray(products) && products.map((product, index) => (
+                        {products.map((product, index) => (
                             <Box key={index} sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                                     <Checkbox checked={checkedProducts.includes(product?.product_id)} onChange={() => handleChecked(product?.product_id)} />
@@ -103,15 +103,15 @@ function AddShopCateProduct({ shop_cate_id }) {
                                 </Box>
                             </Box>
                         ))}
-                        {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
-                            <img src={emptyImage} />
-                            <Typography variant='h6' >Không có sản phẩm nào chưa có danh mục!</Typography>
-                        </Box>}
-                    </Box>
+                    </Box>}
+                    {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
+                        <img src={emptyImage} />
+                        <Typography variant='h6' >Không có sản phẩm nào chưa có danh mục!</Typography>
+                    </Box>}
                 </DialogContent>
                 <DialogActions>
-                    <Button sx={{ ':hover': { bgcolor: 'inherit' } }} onClick={() => { setOpen(false) }} size='small'>Hủy</Button>
-                    <Button sx={{ ':hover': { bgcolor: 'inherit' } }} onClick={handleClickAdd} size='small' >Thêm</Button>
+                    <Button sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} onClick={() => { setOpen(false) }} size='small'>Hủy</Button>
+                    <Button sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} onClick={handleClickAdd} size='small' >Thêm</Button>
                 </DialogActions>
             </Dialog>
             <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />

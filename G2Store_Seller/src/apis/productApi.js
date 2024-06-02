@@ -7,8 +7,12 @@ const productApi = {
         if (!size) {
             size = 8
         }
+        const params = {}
+        if (sort) {
+          params.shopProductSortType = sort
+        }
         const url = `products/shop/${shopId}?page=${page}&size=${size}&shopProductSortType=${sort}`
-        return axiosClient.get(url)
+        return axiosClient.get(url, { params: params })
     },
     getProduct(product_id) {
         const url = `products/${product_id}`
