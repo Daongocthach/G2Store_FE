@@ -3,10 +3,8 @@ const Dashboard = lazy(() => import('../pages/Dashboard/Dashboard'))
 const Login = lazy(() => import('../pages/Auth/Login/Login'))
 const Register = lazy(() => import('../pages/Auth/Register/Register'))
 const ResetPassword = lazy(() => import('../pages/Auth/ResetPassword/ResetPassword'))
-const NotFound = lazy(() => import('../pages/NotFound/NotFound'))
 const Profile = lazy(() => import('../pages/Profile/Profile'))
 const ShopProfile = lazy(() => import('../pages/Profile/ShopProfile'))
-const AuthLayout = lazy(() => import('../layouts/AuthLayout'))
 const Chat = lazy(() => import('../pages/Chat/Chat'))
 const AutoChat = lazy(() => import('../pages/Chat/AutoChat/AutoChat'))
 const Sellers = lazy(() => import('../pages/Manage/Sellers/Sellers'))
@@ -21,6 +19,9 @@ const Categories = lazy(() => import('../pages/Manage/Categories/Categories'))
 const DesignShop = lazy(() => import('../pages/Manage/DesignShop/DesignShop'))
 const AccessDenied = lazy(() => import('../pages/AccessDenied/AccessDenied'))
 const CreateOrderGhn = lazy(() => import('../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'))
+
+import AuthLayout from '../layouts/AuthLayout'
+import NotFound from '../pages/NotFound/NotFound'
 
 const publicRoutes = [
     { path:'/', component: Login, layout: AuthLayout },

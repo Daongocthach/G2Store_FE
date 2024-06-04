@@ -8,9 +8,7 @@ const Cart = lazy(() => import('../pages/Cart/Cart'))
 const Checkout = lazy(() => import('../pages/Checkout/Checkout'))
 const Promotion = lazy(() => import('../pages/Promotion/Promotion'))
 const GenreDetail = lazy(() => import('../pages/GenreDetail/GenreDetail'))
-const NotFound = lazy(() => import('../pages/ErrorPage/NotFound/NotFound'))
 const ProductDetail = lazy(() => import('../pages/ProductDetail/ProductDetail'))
-const AuthLayout = lazy(() => import('../layouts/AuthLayout'))
 const Thanks = lazy(() => import('../pages/Thanks/Thanks'))
 const Account = lazy(() => import('../pages/Account/Account'))
 const ShopPage = lazy(() => import('../pages/ShopPage/ShopPage'))
@@ -21,6 +19,8 @@ const Notification = lazy(() => import('../pages/Notification/Notification'))
 const PaymentFail = lazy(() => import('../pages/ErrorPage/PaymentFail/PaymentFail'))
 const Chat = lazy(() => import('../pages/Chat/Chat'))
 
+import AuthLayout from '../layouts/AuthLayout'
+import NotFound from '../pages/ErrorPage/NotFound/NotFound'
 
 const publicRoutes = [
     { path: '/login', component: Login, layout: AuthLayout },

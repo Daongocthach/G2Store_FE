@@ -1,24 +1,39 @@
-import { useState } from 'react'
-import { Breadcrumbs, Link, Container, Paper } from '@mui/material'
-import Messages from './Messages/Messages'
-import Rooms from './Rooms/Rooms'
+import { Box, List, ListItemButton, ListItemAvatar, ListItemText, Avatar } from '@mui/material'
+import { useState, useEffect } from 'react'
+import roomApi from '../../../apis/roomApi'
+import authenApi from '../../../apis/authenApi'
 
-export default function Chat() {
-    const [room, setRoom] = useState()
+function Rooms({ setRoom }) {
+    const [rooms, setRooms] = useState([])
+    
+    useEffect(() => {
+        roomApi.getRoomsBySenderName()
+            .then((response) => setRooms(response?.data))
+            .catch((error) => console.log(error))
+        // authenApi.me()
+        //     .then((response) => {
+                
+        //     })
+        //     .catch((error) => console.log(error))
+    }, [])
     return (
-        <Container >
-            <Breadcrumbs sx={{ pt: 1 }}>
-                <Link underline="hover" color="inherit" href="/" sx={{ fontSize: 15 }}> Trang chủ</Link>
-                <Link underline="hover" color="inherit" sx={{ fontSize: 15 }}>Trò chuyện</Link>
-            </Breadcrumbs>
-            <Paper elevation={4} sx={{ display: 'flex', mt: 2, height: '80vh' }}>
-                <Rooms setRoom={setRoom}/>
-                <Messages room={room}/>
-            </Paper>
-        </Container >
-
+        <Box sx={{ maxWidth: 350, overflow: 'scroll' }} >
+            <List>
+                {Array.isArray(rooms) && rooms.map((room, index) => (
+                    <ListItemButton key={index} onClick={() => setRoom(room)}>
+                        <ListItemAvatar>
+                            <Avatar alt="Ảnh đại diện" src={'https://www.lolsolved.gg/static/wiki/Gwen_0.jpg'} />
+                        </ListItemAvatar>
+                        <ListItemText primary={room?.receiverName} secondary={room?.lastMessage || 'Bánh khoai mỡ ăn ngấy.'} />
+                    </ListItemButton>
+                ))}
+            </List>
+        </Box>
     )
 }
+
+export default Rooms
+
 
 const messageExamples = [
     {
