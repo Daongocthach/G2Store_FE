@@ -1,6 +1,6 @@
 import Footer from '../components/Footer/Footer'
 
-function DefaultLayout({ children }) {
+function AuthLayout({ children }) {
   return (
     <div>
       {children}
@@ -9,4 +9,4 @@ function DefaultLayout({ children }) {
   )
 }
 
-export default DefaultLayout
+export default AuthLayout
