@@ -11,9 +11,8 @@ import shopApi from '../../apis/shopApi'
 import Loading from '../../components/Loading/Loading'
 import avatarNull from '../../assets/img/avatar.png'
 import CardProduct from '../../components/Product/CardProduct'
-import RelativeProduct from '../../components/Product/RelativeProduct'
 import productApi from '../../apis/productApi'
-import SpeedDialTooltipOpen from '../../components/Chat/Chat'
+// import SpeedDialTooltipOpen from '../../components/Chat/Chat'
 
 function ShopPage() {
     const location = useLocation()
@@ -131,7 +130,7 @@ function ShopPage() {
                     {!loading && <Grid container spacing={1} maxWidth='lg' >
                         {Array.isArray(top5products) && top5products.map((product, index) => (
                             <Grid key={index} item xs={6} sm={6} md={3} lg={2} >
-                                <RelativeProduct product={product} />
+                                <CardProduct product={product} isShort={true}/>
                             </Grid>
                         ))}
                     </Grid>}

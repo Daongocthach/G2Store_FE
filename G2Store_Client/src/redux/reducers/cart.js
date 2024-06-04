@@ -9,17 +9,6 @@ const cartReducer = (state = initialState, action) => {
                 cartItems: [...state.cartItems, action.payload]
             }
         }
-        case 'UPDATE_QUANTITY': {
-            const updatedCartItem = action.payload
-            const productId = updatedCartItem.id.productId
-            const updatedList = state.cartItems.map((cartItem) =>
-                productId === cartItem.id.productId ? updatedCartItem : cartItem
-            )
-            return {
-                ...state,
-                cartItems: updatedList
-            }
-        }
         case 'REMOVE_CART': {
             const productId = action.payload
             const updatedList = state.cartItems.filter(

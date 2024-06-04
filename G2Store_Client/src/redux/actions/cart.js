@@ -16,12 +16,6 @@ export const deleteAllCart = () => {
         type: 'DELETE_ALL_CART'
     }
 }
-export const updateQuantity = (data) => {
-    return {
-        type: 'UPDATE_QUANTITY',
-        payload: data
-    }
-}
 export const setCart = (data) => {
     return {
         type: 'SET_CART',

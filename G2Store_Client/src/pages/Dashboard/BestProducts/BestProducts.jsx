@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import productApi from '../../../apis/productApi'
 import RelativeProduct from '../../../components/Product/RelativeProduct'
+import CardProduct from '../../../components/Product/CardProduct'
 
 function BestProducts() {
     const navigate = useNavigate()
@@ -18,7 +19,7 @@ function BestProducts() {
             <Grid container spacing={1} maxWidth='lg' >
                 {Array.isArray(products) && products.map((product, index) => (
                     <Grid key={index} item xs={6} sm={6} md={3} lg={2} >
-                        <RelativeProduct product={product} />
+                        <CardProduct product={product} isShort={true} />
                     </Grid>
                 ))}
             </Grid>
