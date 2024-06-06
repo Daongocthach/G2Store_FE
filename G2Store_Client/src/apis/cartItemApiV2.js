@@ -9,14 +9,22 @@ const cartItemV2Api = {
     const url = 'cart-item-v2'
     return axiosClient.post(url, data)
   },
-  updateQuantity(data) {
+  updateQuantity(shopItemId, quantity) {
+    const url = `shop-items/${shopItemId}?quantity=${quantity}`
+    return axiosClient.put(url)
+  },
+  deleteCartItems(cartItemId) {
+    const url = `cart-item-v2/${cartItemId}`
+    return axiosClient.delete(url)
+  },
+  deleteShopItem(shopItemId) {
+    const url = `shop-items/${shopItemId}`
+    return axiosClient.delete(url)
+  },
+  applyCartVoucher(data) {
     const url = 'cart-item-v2'
     return axiosClient.put(url, data)
   },
-  deleteCartItem(cartItemId) {
-    const url = `cart-item-v2/${cartItemId}`
-    return axiosClient.delete(url)
-  }
 }
 
 export default cartItemV2Api

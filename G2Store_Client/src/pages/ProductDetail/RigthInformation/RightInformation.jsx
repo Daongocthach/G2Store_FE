@@ -8,7 +8,7 @@ import { formatCurrency } from '../../../utils/price'
 import cartItemApi from '../../../apis/cartItemApi'
 import { addToCart } from '../../../redux/actions/cart'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
-import ProductPromotion from '../ProductPromotion/ProductPromotion'
+import ProductVouchers from '../../../components/ProductVouchers/ProductVouchers'
 
 function RightInformation({ product, reviews }) {
     const dispatch = useDispatch()
@@ -49,7 +49,7 @@ function RightInformation({ product, reviews }) {
                 {product?.special_price && <Typography variant='h5' fontWeight={'bold'} sx={{ color: '#cb1c22' }} >{formatCurrency(product?.special_price)}</Typography>}
                 <Typography variant={product?.special_price ? 'h6' : 'h5'} fontWeight={product?.special_price ? 500 : 600}
                     sx={{ color: product?.special_price ? ' #444444' : '#cb1c22', textDecoration: product?.special_price ? 'line-through' : 'none' }}>
-                    {product?.special_price ? formatCurrency(product?.price) : formatCurrency(product?.price)}
+                    {formatCurrency(product?.price)}
                 </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -96,7 +96,7 @@ function RightInformation({ product, reviews }) {
                 </Box>
             </Box>
             {/* Promotions*/}
-            <ProductPromotion />
+            <ProductVouchers productId={product?.product_id} />
             {/* Quantity */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => { handleClickAddToCart() }}>Mua Ngay</Button>

@@ -55,10 +55,10 @@ function Checkout() {
             name: item.name,
             price: item.price,
             quantity: item.quantity,
-            customer_id: item.customer_id,
-            product_id: item.product_id,
-            shop_id: item.shop_id,
-            sub_total: item.sub_total
+            // customer_id: item.customer_id,
+            // product_id: item.product_id,
+            // shop_id: item.shop_id,
+            // sub_total: item.sub_total
           }
         }),
         shop_id: order?.shop?.shop_id,
@@ -70,7 +70,7 @@ function Checkout() {
   async function handleClickOrder() {
     if (address) {
       setLoading(true)
-      const order = convertDataToOrderFormat(data?.cartItems)
+      const order = convertDataToOrderFormat(data?.cart)
       orderApi.addOrder(order)
         .then((response) => {
           setShowAlert(true)
@@ -97,7 +97,7 @@ function Checkout() {
   const getFeeShip = async (address) => {
     const feeShipData = {}
     let totalFeeShip = 0
-    await Promise.all(data?.cartItems.map(async (cartItem) => {
+    await Promise.all(data?.cart.map(async (cartItem) => {
       const height = 5
       const length = 5
       const weight = 100
@@ -161,29 +161,31 @@ function Checkout() {
             <UpdateAddress address={address} rerender={reRender} setRerender={setReRender} isCheckout={true} />
           </Box>
           <Typography variant="h6" color={'#444444'} mt={2}>Thông tin đơn hàng</Typography>
-          {Array.isArray(data?.cartItems) && data?.cartItems.map((cartItem, index) => (
+          {Array.isArray(data?.cart) && data?.cart.map((cartItem, index) => (
             <Box key={index} mt={2} >
               <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                onClick={() => { navigate('/shop-page', { state: cartItem?.shop?.shop_id }) }}>
+                onClick={() => { navigate('/shop-page', { state: cartItem?.shop_id }) }}>
                 <Storefront sx={{ fontSize: 25, color: '#444444' }} />
-                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{cartItem?.shop?.name}</Typography>
+                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{cartItem?.shop_name}</Typography>
                 <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
               </Button>
               <Divider />
-              {Array.isArray(cartItem?.items) && cartItem?.items.map((product, index) => (
-                <ProductComponent key={index} product={product} isCheckout={true} reRender={reRender} setReRender={setReRender} />
-              ))}
-              <Chip color='success' icon={<CheckCircleOutline sx={{ color: 'green' }} />} sx={{ mt: 2 }} variant="outlined"
-                label={'Phí vận chuyển: ' + formatCurrency(feeShipData[cartItem?.shop?.shop_id] ? feeShipData[cartItem?.shop?.shop_id] : 0)} />
+              <Box sx={{ pl: 5 }}>
+                {Array.isArray(cartItem?.shop_items) && cartItem?.shop_items.map((product, index) => (
+                  <ProductComponent key={index} product={product} isCheckout={true} reRender={reRender} setReRender={setReRender} />
+                ))}
+                <Chip color='success' icon={<CheckCircleOutline sx={{ color: 'green' }} />} sx={{ mt: 2 }} variant="outlined"
+                  label={'Phí vận chuyển: ' + formatCurrency(feeShipData[cartItem?.shop_id] ? feeShipData[cartItem?.shop_id] : 0)} />
+              </Box>
             </Box>))}
         </Grid>
         {/* Phần tổng cộng và thanh toán */}
         <Grid item xs={12} sm={6} md={6} lg={6}>
-          <Box sx={{ ...useStyles.flexBoxPrice, alignItems: 'center', gap: 2 }}>
+          {/* <Box sx={{ ...useStyles.flexBoxPrice, alignItems: 'center', gap: 2 }}>
             <TextField fullWidth value={code} size='small' label='Mã khuyến mãi' onChange={(e) => { setCode(e.target.value) }} />
             <Button sx={useStyles.buttonVoucher} onClick={handleClickPromotion}>Nhập</Button>
-          </Box>
-          <Divider sx={{ mt: 2 }} />
+          </Box> */}
+          {/* <Divider sx={{ mt: 2 }} /> */}
           <Box sx={{ ...useStyles.flexBoxPrice }}>
             <Typography variant='h6' sx={{ color: '#4F4F4F' }}>Tổng tiền: </Typography>
             <Typography variant='h6' sx={{ color: '#cb1c22', fontWeight: 'bold' }}>{formatCurrency(total)}</Typography>

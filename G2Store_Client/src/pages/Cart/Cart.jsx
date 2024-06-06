@@ -8,6 +8,7 @@ import { formatCurrency } from '../../utils/price'
 import emptyOrder from '../../assets/img/empty-order.png'
 import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import cartItemV2Api from '../../apis/cartItemApiV2'
+import DeleteItem from './DeleteItem/DeleteItem'
 
 function Cart() {
   const navigate = useNavigate()
@@ -17,19 +18,21 @@ function Cart() {
   const [isSoldOut, setIsSoldOut] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertWarning, setShowAlertWaring] = useState(false)
-
+  var total = 0
+  if (Array.isArray(cart) && cart.length > 0)
+    cart?.map((cartItem) => { total = total + cartItem?.shop_subtotal })
   const handleClickCheckout = () => {
-    // if (cart.length < 1)
-    //   setShowAlert(true)
-    // else if (isSoldOut) {
-    //   setShowAlertWaring(true)
-    // }
-    // else {
-    //   const data = {
-    //     total, cart
-    //   }
-    //   navigate('/checkout', { state: data })
-    // }
+    if (cart.length < 1)
+      setShowAlert(true)
+    else if (isSoldOut) {
+      setShowAlertWaring(true)
+    }
+    else {
+      const data = {
+        total, cart
+      }
+      navigate('/checkout', { state: data })
+    }
   }
   useEffect(() => {
     if (keep_login) {
@@ -39,7 +42,7 @@ function Cart() {
           setIsSoldOut(false)
         })
     }
-  }, [reRender])
+  }, [reRender, keep_login])
   return (
     <Container maxWidth='lg' sx={{ mb: 2 }}>
       <Grid container spacing={3} mt={2} >
@@ -53,7 +56,7 @@ function Cart() {
               Giỏ hàng
             </Link>
           </Breadcrumbs>
-          <Typography variant="h6" fontWeight={'bold'} color={'#444444'} mb={5} >Có {0} Sản phẩm trong giỏ hàng</Typography>
+          <Typography variant="h6" fontWeight={'bold'} color={'#444444'} mb={5} >Có {cart?.length} Sản phẩm trong giỏ hàng</Typography>
           {Array.isArray(cart) && cart.length <= 0 ?
             <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
               <img src={emptyOrder} style={{ objectFit: 'cover', height: '200px', width: '200px' }} />
@@ -64,15 +67,20 @@ function Cart() {
             <Box>
               {cart.map((cartItem, index) => (
                 <Box key={index} mt={2} >
-                  <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                    onClick={() => { navigate('/shop-page', { state: cartItem?.shop_id }) }}>
-                    <Storefront sx={{ fontSize: 25, color: '#444444' }} />
-                    <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{cartItem?.shop_name}</Typography>
-                    <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
-                  </Button>
-                  {Array.isArray(cartItem?.shop_items) && cartItem?.shop_items.map((product, index) => (
-                    <ProductComponent key={index} product={product} reRender={reRender} setReRender={setReRender} setIsSoldOut={setIsSoldOut} isCart={true} />
-                  ))}
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
+                      onClick={() => { navigate('/shop-page', { state: cartItem?.shop_id }) }}>
+                      <Storefront sx={{ fontSize: 25, color: '#444444' }} />
+                      <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{cartItem?.shop_name}</Typography>
+                      <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
+                    </Button>
+                    {<DeleteItem cartItemId={cartItem?.cart_item_id} reRender={reRender} setReRender={setReRender} />}
+                  </Box>
+                  <Box sx={{ pl: 5 }}>
+                    {Array.isArray(cartItem?.shop_items) && cartItem?.shop_items.map((product, index) => (
+                      <ProductComponent key={index} product={product} reRender={reRender} setReRender={setReRender} setIsSoldOut={setIsSoldOut} isCart={true} />
+                    ))}
+                  </Box> 
                 </Box>))}
             </Box>}
         </Grid>
@@ -80,7 +88,7 @@ function Cart() {
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <Box sx={{ display: 'flex', alignItem: 'center', justifyContent: 'space-between', mt: 2 }}>
             <Typography variant='h6' color={'#444444'}>Tổng tiền: </Typography>
-            <Typography variant='h6' sx={{ color: '#cb1c22' }}>{formatCurrency(0)}</Typography>
+            <Typography variant='h6' sx={{ color: '#cb1c22' }}>{formatCurrency(total)}</Typography>
           </Box>
           <Button color='error' variant='contained' fullWidth sx={{ borderRadius: 2, fontWeight: 'bold' }}
             onClick={handleClickCheckout}>
