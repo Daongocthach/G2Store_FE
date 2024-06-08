@@ -1,23 +1,22 @@
 import {
-  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
-  Paper, TableFooter, TablePagination, FormControl, Select, MenuItem, Breadcrumbs, Link, Switch, Alert
+  Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter,
+  TablePagination, TableContainer
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { listShops } from '../../../redux/actions/shops'
 import shopApi from '../../../apis/shopApi'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
-import UpdateShop from './FormShop/UpdateShop'
-import DeleteShop from './FormShop/DeleteShop'
+import emptyImage from '../../../assets/img/empty-order.png'
+import Loading from '../../../components/Loading/Loading'
+import { formatCurrency } from '../../../utils/price'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import DeleteItem from '../../../components/DeleteItem/DeleteItem'
 
 function Shops() {
-  const dispatch = useDispatch()
-  const shops = useSelector(state => state.shops.shops)
+  const [loading, setLoading] = useState(false)
+  const [reRender, setReRender] = useState(false)
+  const [shops, setShops] = useState([])
   const [page, setPage] = useState(0)
+  const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [select, setSelect] = useState(1)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
@@ -27,87 +26,83 @@ function Shops() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-
-  const handleChange = (event) => {
-    setSelect(event.target.value)
-  }
-  const handleUpdateStatus = (id, enabled) => {
-
-  }
   useEffect(() => {
-    shopApi.getShops()
-      .then((response) => {
-        dispatch(listShops(response.data))
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }, [])
-
+    const fetchData = async () => {
+      setLoading(true)
+      shopApi.getShops(page, rowsPerPage)
+        .then(response => {
+          setShops(response?.content)
+          setTotalElements(response?.totalElements)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .finally(() => setLoading(false))
+    }
+    fetchData()
+  }, [page, reRender, rowsPerPage])
   return (
-    <Box sx={{ m: 5 }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/manage/shops">
-          Quản lý nhà bán hàng
-        </Link>
-      </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
-          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange} defaultValue={1} >
-              <MenuItem value={1}>Mới nhất</MenuItem>
-              <MenuItem value={2}>Cũ nhất</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-      <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
-        <TableContainer component={Paper}>
+    <Box sx={{ m: 5, height: '100vh' }}>
+      <BreadCrumbs links={[{ name: 'Quản lý cửa hàng', href: '/seller/manage/shops' }]} />
+      <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 1 }}>
+        <TableContainer component={Paper} >
           <Table>
             <TableHead>
-              <TableRow >
-                <TableCell sx={{ fontWeight: 'bold' }} >Email</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Vai trò</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Trạng thái</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Cập nhật</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }} >Xóa</TableCell>
+              <TableRow sx={{ bgcolor: '#2a99ff' }} >
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Thôg tin shop</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Địa chỉ</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Doanh thu</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Array.isArray(shops) && shops?.map((shop, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell >{shop?.name}</TableCell>
-                    <TableCell sx={{ color: 'blue' }}>{'NBH-Toàn quyền truy cập'}</TableCell>
-                    <TableCell ><Switch /></TableCell>
-                    <TableCell ><UpdateShop /></TableCell>
-                    <TableCell ><DeleteShop /></TableCell>
+                    <TableCell >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        {<img src={shop?.image} alt={shop?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                        <Box>
+                          <Typography variant='subtitle2' color={'#444444'}>{shop?.name}</Typography>
+                          <Typography>Id: #{shop?.shop_id}</Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell >
+                      <Typography>{shop?.province ? (shop?.street + ', ' + shop?.ward + ', ' + shop?.district + ', ' + shop?.province) : 'Chưa cập nhật'}</Typography>
+                    </TableCell>
+                    <TableCell ><Typography>{formatCurrency(shop?.balance)}</Typography></TableCell>
+                    <TableCell >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <DeleteItem id={shop?.shop_id} content={'Bạn muốn khóa shop này ?'}/>
+                      </Box>
+                    </TableCell>
                   </TableRow>
                 )
               })}
             </TableBody>
-            <TableFooter>
+            {Array.isArray(shops) && shops.length > 0 && <TableFooter>
               <TableRow>
                 <TablePagination
                   colSpan={12}
-                  rowsPerPageOptions={[5, 10, { value: shops?.length, label: 'All' }]}
-                  count={Array.isArray(shops) ? shops.length : 0}
-                  rowsPerPage={rowsPerPage}
+                  labelRowsPerPage={'Số lượng mỗi trang'}
+                  rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
+                  count={totalElements}
                   page={page}
                   onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </TableRow>
-            </TableFooter>
+            </TableFooter>}
           </Table>
         </TableContainer>
+        {Array.isArray(shops) && shops.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+          <img src={emptyImage} />
+          <Typography variant='subtitle1' color={'#444444'} >Hệ thống chưa có cửa hàng nào</Typography>
+        </Box>}
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Cập nhật thất bại'} isFail={true} />
+      {loading && <Loading />}
     </Box>
   )
 }

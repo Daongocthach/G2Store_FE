@@ -3,12 +3,13 @@ import { Rating, Box, Typography, Button, ToggleButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { Storefront, NavigateNext, AddShoppingCart, Remove, Add } from '@mui/icons-material'
+import { NavigateNext, AddShoppingCart, Remove, Add } from '@mui/icons-material'
 import { formatCurrency } from '../../../utils/price'
-import cartItemApi from '../../../apis/cartItemApi'
+import cartItemV2Api from '../../../apis/cartItemApiV2'
 import { addToCart } from '../../../redux/actions/cart'
 import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import ProductVouchers from '../../../components/ProductVouchers/ProductVouchers'
+import Shop from '../../../components/Shop/Shop'
 
 function RightInformation({ product, reviews }) {
     const dispatch = useDispatch()
@@ -31,10 +32,11 @@ function RightInformation({ product, reviews }) {
             navigate('/login')
         }
         else {
-            cartItemApi.addToCart({ quantity: quantity, product_id: product?.product_id })
+            cartItemV2Api.addToCart({ quantity: 1, product_id: product?.product_id })
                 .then((response) => {
-                    if (response?.quantity == quantity)
+                    if (response?.quantity == 1) {
                         dispatch(addToCart(response))
+                    }
                     setShowAlert(true)
                 })
                 .catch((error) => {
@@ -58,13 +60,7 @@ function RightInformation({ product, reviews }) {
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'}>Gian hàng:</Typography>
-                <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                    onClick={() => { navigate('/shop-page', { state: product?.shop?.shop_id }) }}>
-                    {/* <Storefront sx={{ fontSize: 25, color: '#444444' }} /> */}
-                    <img src={product?.shop?.image} style={{ borderRadius: '50%', width: 40, height: 40 }} />
-                    <Typography variant='subtitle1' sx={{ color: '#444444' }}>{product?.shop?.name}</Typography>
-                    <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
-                </Button>
+                <Shop shop_id={product?.shop?.shop_id} shop_name={product?.shop?.name} shop_image={product?.shop?.image} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'} >Danh mục:</Typography>

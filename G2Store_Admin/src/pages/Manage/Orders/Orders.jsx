@@ -7,10 +7,10 @@ import orderApi from '../../../apis/orderApi'
 function Orders() {
   const [orders, setOrders] = useState([])
   useEffect(() => {
-    orderApi.getOrders()
-      .then((response) => {
-        setOrders(response)
-      })
+    // orderApi.getOrders()
+    //   .then((response) => {
+    //     setOrders(response)
+    //   })
   }, [])
 
   return (

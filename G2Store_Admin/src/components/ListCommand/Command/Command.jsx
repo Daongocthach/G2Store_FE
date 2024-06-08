@@ -11,7 +11,7 @@ function Command({ open, button }) {
     const iconMap = {
         'Sản phẩm': <Filter9Plus sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Đơn hàng': <Reorder sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
-        'Tài khoản': <People sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
+        'Người dùng': <People sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Trò chuyện': <ThumbsUpDown sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Thống kê': <Equalizer sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Danh mục': <Category sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,

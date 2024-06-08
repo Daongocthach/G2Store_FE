@@ -1,5 +1,5 @@
 import { Container, Grid, Typography, Button, Box, Breadcrumbs, Link, Divider } from '@mui/material'
-import { Storefront, NavigateNext } from '@mui/icons-material'
+import { NavigateNext } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
@@ -9,14 +9,12 @@ import emptyOrder from '../../assets/img/empty-order.png'
 import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import cartItemV2Api from '../../apis/cartItemApiV2'
 import DeleteItem from './DeleteItem/DeleteItem'
+import Shop from '../../components/Shop/Shop'
 
 function Cart() {
   const navigate = useNavigate()
   const keep_login = useSelector(state => state.auth.keep_login)
   const [feeShip, setFeeShip] = useState(0)
-  const [feeShipData, setFeeShipData] = useState({})
-  const [addresses, setAddresses] = useState([])
-  const [address, setAddress] = useState()
   const [reRender, setReRender] = useState(false)
   const [cart, setCart] = useState([])
   const [isSoldOut, setIsSoldOut] = useState(false)
@@ -74,13 +72,8 @@ function Cart() {
               {cart.map((cartItem, index) => (
                 <Box key={index} mt={2} >
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                      onClick={() => { navigate('/shop-page', { state: cartItem?.shop_id }) }}>
-                      <Storefront sx={{ fontSize: 25, color: '#444444' }} />
-                      <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{cartItem?.shop_name}</Typography>
-                      <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
-                    </Button>
-                    {<DeleteItem cartItemId={cartItem?.cart_item_id} reRender={reRender} setReRender={setReRender} />}
+                    <Shop shop_id={cartItem?.shop?.shop_id} shop_name={cartItem?.shop?.name} shop_image={cartItem?.shop?.image}/>
+                    <DeleteItem cartItemId={cartItem?.cart_item_id} reRender={reRender} setReRender={setReRender} />
                   </Box>
                   <Box sx={{ pl: 5 }}>
                     {Array.isArray(cartItem?.shop_items) && cartItem?.shop_items.map((product, index) => (

@@ -115,7 +115,6 @@ function Sellers() {
                 )
               })}
             </TableBody>
-
           </Table>
         </TableContainer>
       </Box>

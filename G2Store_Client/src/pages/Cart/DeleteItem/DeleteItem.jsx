@@ -44,10 +44,10 @@ function DeleteItem({ shopItemId, cartItemId, reRender, setReRender }) {
         handleClose()
     }
     return (
-        <div>
+        <div style={{ marginTop: 4 }}>
             <Tooltip title={shopItemId ? 'Xóa' : 'Xóa tất cả sản phẩm của shop'}><DeleteOutline sx={{ color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>
             <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >{shopItemId ? 'Xóa sản phẩm khỏi giỏ?' : 'Xóa tất cả sản phẩm của shop này?' }</DialogTitle>
+                <DialogTitle >{shopItemId ? 'Xóa sản phẩm khỏi giỏ?' : 'Xóa tất cả sản phẩm của shop này?'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Bạn muốn xóa sản phẩm này khỏi giỏ hàng, bấm 'Chấp nhận' để tiếp tục, 'Hủy' để thoát
