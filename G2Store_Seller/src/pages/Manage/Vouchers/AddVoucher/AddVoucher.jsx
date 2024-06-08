@@ -1,20 +1,19 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, TextField, Box, Typography, FormControlLabel, RadioGroup, Radio, InputAdornment, OutlinedInput, FormHelperText } from '@mui/material'
-import promotionApi from '../../../../apis/promotionApi'
-import { addPromotion } from '../../../../redux/actions/promotions'
+import voucherApi from '../../../../apis/voucherApi'
 import { formatDate } from '../../../../utils/date'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 
-function AddPromotion() {
+function AddVoucher() {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const location = useLocation()
+    const voucher = location.state
     const [name, setName] = useState('')
     const [startDate, setStartDate] = useState(formatDate(new Date()))
     const [endDate, setEndDate] = useState(formatDate(new Date()))
     const [voucherType, setVoucherType] = useState('SHOP_VOUCHER')
-    const [minSpend, setMinSpend] = useState(8000)
+    const [minSpend, setMinSpend] = useState(1000)
     const [percentReduce, setPercentReduce] = useState(0)
     const [priceReduce, setPriceReduce] = useState(0)
     const [quantity, setQuantity] = useState(10)
@@ -23,15 +22,37 @@ function AddPromotion() {
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertWarning, setShowAlertWarning] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
+    useEffect(() => {
+        if (voucher) {
+            setName(voucher?.name)
+            setStartDate(formatDate(new Date(voucher?.start_date)))
+            setEndDate(formatDate(new Date(voucher?.start_date)))
+            setVoucherType(voucher?.voucher_type)
+            setMinSpend(voucher?.min_spend)
+            setPercentReduce(voucher?.reduce_percent)
+            setPriceReduce(voucher?.reduce_price)
+            setMaxUsePerCus(voucher?.max_use_per_cus)
+            setDiscoutType(voucher?.discount_type)
+        }
+    }, [])
     const checkOverMinSpend = () => {
         if (discoutType == 'PRICE') {
             return (priceReduce / minSpend) > 0.3
         }
         return (percentReduce / 100) > 0.3
     }
+    const checkCondition = () => {
+        if (!name || !startDate || !endDate || !minSpend || !quantity || !maxUsePerCus) {
+            return false
+        }
+        if (minSpend < 0 || (discoutType === 'PRICE' && priceReduce < 0) ||
+            (discoutType === 'PERCENTAGE' && (percentReduce < 0 || percentReduce > 100)))
+            return false
+        return true
+    }
     const handleClickAdd = async () => {
-        if (name && startDate && endDate && minSpend && quantity && maxUsePerCus ) {
-            const promotionData = {
+        if (checkCondition()) {
+            const voucherData = {
                 name: name,
                 quantity: quantity,
                 start_date: startDate,
@@ -43,13 +64,12 @@ function AddPromotion() {
                 reduce_percent: discoutType == 'PERCENTAGE' ? percentReduce : null,
                 max_use_per_cus: maxUsePerCus
             }
-            promotionApi.addPromotion(promotionData)
-                .then((response) => {
+            voucherApi.addVoucher(voucherData)
+                .then(() => {
                     setShowAlert(true)
-                    dispatch(addPromotion(response.data))
                     setTimeout(() => {
-                        navigate('/seller/manage/promotions')
-                      }, 1000)
+                        navigate('/seller/manage/vouchers')
+                    }, 1000)
                 })
                 .catch(error => {
                     console.log(error)
@@ -84,8 +104,8 @@ function AddPromotion() {
                         <Typography variant='body1'>Ngày kết thúc: </Typography>
                     </Box>
                     <TextField fullWidth size='small' error={startDate > endDate} type='datetime-local' value={endDate}
-                    helperText={startDate > endDate ? 'Ngày kết thúc phải lớn hơn ngày bắt đầu' : ''}
-                    onChange={(e) => setEndDate(e.target.value)} />
+                        helperText={startDate > endDate ? 'Ngày kết thúc phải lớn hơn ngày bắt đầu' : ''}
+                        onChange={(e) => setEndDate(e.target.value)} />
                 </Box>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -117,8 +137,10 @@ function AddPromotion() {
                             <Typography variant='body1'>Giá trị đơn hàng tối thiểu: </Typography>
                         </Box>
                         <Box>
-                            <OutlinedInput size='small' type='number' endAdornment={<InputAdornment position='end'>đ</InputAdornment>} onFocus={(e) => e.target.select()}
-                                inputProps={{ min: 0 }} sx={{ width: 200 }} error={!minSpend} value={minSpend} onChange={(e) => setMinSpend(e.target.value)} />
+                            <OutlinedInput size='small' type='number'
+                                endAdornment={<InputAdornment position='end'>đ</InputAdornment>} onFocus={(e) => e.target.select()}
+                                inputProps={{ min: 0 }} sx={{ width: 200 }} error={!minSpend} value={minSpend}
+                                onChange={(e) => setMinSpend(e.target.value)} />
                             <FormHelperText error sx={{ visibility: !minSpend ? 'visible' : 'hidden' }}>Không được để trống</FormHelperText>
                         </Box>
 
@@ -130,14 +152,21 @@ function AddPromotion() {
                         </Box>
                         {discoutType == 'PRICE' ?
                             <Box>
-                                <OutlinedInput size='small' sx={{ width: 200 }} type='number' endAdornment={<InputAdornment position='end'>đ</InputAdornment>} onFocus={(e) => e.target.select()}
-                                    inputProps={{ min: 0, inputMode: 'numeric' }} error={checkOverMinSpend()} value={priceReduce} onChange={(e) => setPriceReduce(e.target.value)} />
-                                <FormHelperText sx={{ color: 'orange', visibility: checkOverMinSpend() ? 'visible' : 'hidden' }}> Giảm giá vượt quá 30%</FormHelperText>
+                                <OutlinedInput size='small' sx={{ width: 200 }} type='number'
+                                    endAdornment={<InputAdornment position='end'>đ</InputAdornment>} onFocus={(e) => e.target.select()}
+                                    inputProps={{ min: 1000, inputMode: 'numeric' }}
+                                    error={checkOverMinSpend()}
+                                    value={priceReduce} onChange={(e) => setPriceReduce(e.target.value)} />
+                                <FormHelperText sx={{ color: 'orange', visibility: checkOverMinSpend() ? 'visible' : 'hidden' }}>
+                                    Giảm giá vượt quá 30%
+                                </FormHelperText>
                             </Box>
                             :
                             <Box>
-                                <OutlinedInput size='small' sx={{ width: 200 }} type='number' endAdornment={<InputAdornment position='end'>%</InputAdornment>} onFocus={(e) => e.target.select()}
-                                    inputProps={{ min: 0, max: 100 }} error={checkOverMinSpend()} value={percentReduce} onChange={(e) => setPercentReduce(e.target.value)} />
+                                <OutlinedInput size='small' sx={{ width: 200 }} type='number'
+                                    endAdornment={<InputAdornment position='end'>%</InputAdornment>} onFocus={(e) => e.target.select()}
+                                    inputProps={{ min: 0, max: 100 }} error={checkOverMinSpend()} value={percentReduce}
+                                    onChange={(e) => setPercentReduce(e.target.value)} />
                                 <FormHelperText sx={{ color: 'orange', visibility: checkOverMinSpend() ? 'visible' : 'hidden' }}> Giảm giá vượt quá 30%</FormHelperText>
                             </Box>
                         }
@@ -175,4 +204,4 @@ function AddPromotion() {
         </Box>
     )
 }
-export default AddPromotion
+export default AddVoucher

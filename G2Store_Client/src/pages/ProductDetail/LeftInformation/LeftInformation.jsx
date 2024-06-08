@@ -1,15 +1,12 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Box, Typography, BottomNavigation, BottomNavigationAction, IconButton, Button } from '@mui/material'
-import { ArrowBackIos, ArrowForwardIos, YouTube, Image, NavigateNext } from '@mui/icons-material'
+import { Box, Typography, BottomNavigation, BottomNavigationAction, IconButton } from '@mui/material'
+import { ArrowBackIos, ArrowForwardIos, YouTube, Image } from '@mui/icons-material'
 
 function LeftInformation({ product }) {
-  const navigate = useNavigate()
   const [index, setIndex] = useState(0)
     const [bottomTab, setBottomTab] = useState(0)
     const imageFiles = product?.images?.filter(file => file.file_type.includes('image/')) || []
     const videoFiles = product?.images?.filter(file => file.file_type.includes('video/')) || []
-
     const currentFiles = bottomTab === 0 ? imageFiles : videoFiles
 
     return (
@@ -40,14 +37,6 @@ function LeftInformation({ product }) {
                     <BottomNavigationAction label={'Hình ảnh (' + imageFiles.length + ')'} icon={<Image sx={{ fontSize: 40 }} />} />
                     <BottomNavigationAction label={'Video (' + videoFiles.length + ')'} icon={<YouTube sx={{ fontSize: 40 }} />} />
                 </BottomNavigation>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                    onClick={() => { navigate('/shop-page', { state: product?.shop?.shop_id }) }}>
-                    <img src={product?.shop?.image} style={{ borderRadius: '50%', width: 70, height: 70 }} />
-                    <Typography variant='subtitle1' sx={{ color: '#444444' }}>{product?.shop?.name}</Typography>
-                    <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
-                </Button>
             </Box>
             <Typography variant='h5' mt={2} fontWeight={'bold'} color={'#444444'}>Thông tin sản phẩm</Typography>
             <Typography variant='subtitle1' color={'#444444'}> {product?.description}</Typography>

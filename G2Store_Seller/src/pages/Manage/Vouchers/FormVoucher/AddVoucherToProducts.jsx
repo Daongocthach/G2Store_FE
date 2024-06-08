@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Box, Checkbox, Tooltip } from '@mui/material'
 import { useSelector } from 'react-redux'
-import Add from '@mui/icons-material/Add'
+import Attachment from '@mui/icons-material/Attachment'
 import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import productApi from '../../../../apis/productApi'
-import { formatCurrency } from '../../../../utils/price'
 import emptyImage from '../../../../assets/img/empty-order.png'
+import { formatCurrency } from '../../../../utils/price'
+import voucherApi from '../../../../apis/voucherApi'
 
-
-function AddShopCateProduct({ shop_cate_id }) {
+function AddVoucherToProducts({ voucher_id }) {
     const shop_id = useSelector(state => state.auth.shop_id)
     const [checkedProducts, setCheckedProducts] = useState([])
     const [checkedAll, setCheckedAll] = useState(false)
@@ -18,16 +18,14 @@ function AddShopCateProduct({ shop_cate_id }) {
     const [products, setProducts] = useState([])
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
-
     const handleClose = () => {
         setOpen(false)
     }
-
     const handleClickAdd = async () => {
         setLoading(true)
-        const ids = checkedProducts
+        const product_ids = checkedProducts
         if (shop_id) {
-            productApi.addProductShopCategory(shop_cate_id, { ids })
+            voucherApi.addVoucherToProducts(voucher_id, { product_ids })
                 .then(() => {
                     setShowAlert(true)
                 })
@@ -39,7 +37,6 @@ function AddShopCateProduct({ shop_cate_id }) {
         }
         handleClose()
     }
-
     const handleChecked = (product_id) => {
         if (checkedProducts.includes(product_id)) {
             const list = checkedProducts.filter(id => id !== product_id)
@@ -53,7 +50,6 @@ function AddShopCateProduct({ shop_cate_id }) {
             setCheckedProducts(list)
         }
     }
-
     const handleChangeAll = () => {
         if (checkedAll) {
             setCheckedProducts([])
@@ -62,7 +58,6 @@ function AddShopCateProduct({ shop_cate_id }) {
         }
         setCheckedAll(!checkedAll)
     }
-
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -80,7 +75,7 @@ function AddShopCateProduct({ shop_cate_id }) {
 
     return (
         <Box>
-            <Tooltip title='Thêm sản phẩm'><Add className="action-buttons" sx={{ visibility: 'hidden' }} color='info' onClick={() => setOpen(true)} /></Tooltip>
+            <Tooltip title='Gắn mã vào sản phẩm'><Attachment sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => setOpen(true)} /></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>
@@ -106,7 +101,7 @@ function AddShopCateProduct({ shop_cate_id }) {
                     </Box>}
                     {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
                         <img src={emptyImage} />
-                        <Typography variant='h6' >Không có sản phẩm nào chưa có danh mục!</Typography>
+                        <Typography variant='h6' >Không có sản phẩm nào chưa gắn mã!</Typography>
                     </Box>}
                 </DialogContent>
                 <DialogActions>
@@ -114,10 +109,10 @@ function AddShopCateProduct({ shop_cate_id }) {
                     <Button sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} onClick={handleClickAdd} size='small' >Thêm</Button>
                 </DialogActions>
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm ngành hàng thất bại'} isFail={true} />
+            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm mã giảm giá thành công'} />
+            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm mã giảm giá thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )
 }
-export default AddShopCateProduct
+export default AddVoucherToProducts

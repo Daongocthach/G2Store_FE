@@ -3,10 +3,9 @@ import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, B
 import { Create } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import { format } from 'date-fns'
-import promotionApi from '../../../../apis/promotionApi'
-import { updatePromotion } from '../../../../redux/actions/promotions'
+import voucherApi from '../../../../apis/voucherApi'
 
-function UpdatePromotion({ setUpdate, promotion }) {
+function UpdateVoucher({ setUpdate, voucher }) {
   const dispatch = useDispatch()
   const [startDate, setStartDate] = useState()
   const [endDate, setEndDate] = useState()
@@ -16,21 +15,20 @@ function UpdatePromotion({ setUpdate, promotion }) {
   const [open, setOpen] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
-    setStartDate(format(new Date(promotion?.startDate), 'yyyy-MM-dd'))
-    setEndDate(format(new Date(promotion?.endDate), 'yyyy-MM-dd'))
-    setCode(promotion?.code)
-    setValue(promotion?.value)
-    setQuantity(promotion?.quantity)
+    setStartDate(format(new Date(voucher?.startDate), 'yyyy-MM-dd'))
+    setEndDate(format(new Date(voucher?.endDate), 'yyyy-MM-dd'))
+    setCode(voucher?.code)
+    setValue(voucher?.value)
+    setQuantity(voucher?.quantity)
   }
   const handleClose = () => {
     setOpen(false)
   }
   const handleUpdate = () => {
-    promotionApi.updatePromotion(promotion?.id, startDate, endDate, code, value, quantity)
+    voucherApi.updateVoucher(voucher?.id, startDate, endDate, code, value, quantity)
     .then((response) => {
         alert('Update Success')
         setUpdate(response.data.id)
-        dispatch(updatePromotion(response.data))
     })
     .catch(error => {
         console.log(error)
@@ -42,7 +40,7 @@ function UpdatePromotion({ setUpdate, promotion }) {
     <div>
       <Button sx={{ bgcolor: 'orange', color: 'black' }} variant="outlined" onClick={handleClickOpen}><Create /></Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Update Promotion</DialogTitle>
+        <DialogTitle>Update Voucher</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '350px' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -75,4 +73,4 @@ function UpdatePromotion({ setUpdate, promotion }) {
     </div>
   )
 }
-export default UpdatePromotion
+export default UpdateVoucher

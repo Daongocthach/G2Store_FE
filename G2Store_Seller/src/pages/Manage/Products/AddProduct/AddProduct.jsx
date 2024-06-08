@@ -32,7 +32,7 @@ function AddProduct() {
     const [showAlertWarning, setShowAlertWarning] = useState(false)
     const [showAlertFail, setShowAlertFail] = useState(false)
 
-    const fetchData = async () => {
+    useEffect(() => {
         if (product) {
             setName(product?.name)
             setPrice(product?.price)
@@ -47,11 +47,6 @@ function AddProduct() {
             const deepestCategory = getDeepestCategory(product?.category)
             setCategoryId(deepestCategory?.category_id)
             setSelectedCategories(deepestCategory?.name)
-        }
-    }
-    useEffect(() => {
-        if (product) {
-            fetchData()
         }
         categoryApi.getCategories()
             .then((response) => { setCategories(response) })

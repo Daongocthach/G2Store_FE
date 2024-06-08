@@ -41,8 +41,8 @@ const listButton = [
     {
         name: 'Khuyến mãi',
         commands: [
-            { path: '/seller/manage/add-promotion', name: 'Thêm khuyến mãi' },
-            { path: '/seller/manage/promotions', name: 'Quản lý khuyến mãi' }
+            { path: '/seller/manage/add-voucher', name: 'Thêm khuyến mãi' },
+            { path: '/seller/manage/vouchers', name: 'Quản lý khuyến mãi' }
         ]
     },
     {

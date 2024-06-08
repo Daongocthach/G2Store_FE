@@ -41,22 +41,19 @@ function Checkout() {
   var totalProducts = data?.total
   var total = totalProducts + feeShip - (is_point_spent ? point : 0)
 
-  function handleClickPromotion() {
-  }
   const convertDataToOrderFormat = (data) => {
     const address_id = address?.address_id
     const payment_type = paymentType
     const is_point_spent = false
     const orders = data.map(order => {
       return {
-        items: order.items.map(item => {
+        items: order?.shop_items.map(item => {
           return {
-            images: item.images,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
+            name: item?.name,
+            price: item?.price,
+            quantity: item?.quantity,
+            product_id: item?.product_id,
             // customer_id: item.customer_id,
-            // product_id: item.product_id,
             // shop_id: item.shop_id,
             // sub_total: item.sub_total
           }

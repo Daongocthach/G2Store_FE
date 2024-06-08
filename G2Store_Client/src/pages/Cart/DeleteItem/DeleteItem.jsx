@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
+import DeleteOutline from '@mui/icons-material/DeleteOutline'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
@@ -45,7 +45,7 @@ function DeleteItem({ shopItemId, cartItemId, reRender, setReRender }) {
     }
     return (
         <div>
-            <Tooltip title={shopItemId ? 'Xóa' : 'Xóa tất cả sản phẩm của shop'}><DeleteIcon sx={{ color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>
+            <Tooltip title={shopItemId ? 'Xóa' : 'Xóa tất cả sản phẩm của shop'}><DeleteOutline sx={{ color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >{shopItemId ? 'Xóa sản phẩm khỏi giỏ?' : 'Xóa tất cả sản phẩm của shop này?' }</DialogTitle>
                 <DialogContent>

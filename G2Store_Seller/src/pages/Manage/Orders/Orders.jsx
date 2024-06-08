@@ -99,7 +99,7 @@ function Orders() {
             <Table>
               <TableHead>
                 <TableRow sx={{ bgcolor: '#2a99ff' }} >
-                  <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Sản phẩm</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 300 }} >Sản phẩm</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Mã đơn hàng</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Ngày đặt</TableCell>
                   {tab === 'ORDERED' && <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Xác nhận trước</TableCell>}
@@ -113,17 +113,17 @@ function Orders() {
                 {Array.isArray(orders) && orders?.map((order, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell sx={{ width: 400 }}>
+                      <TableCell>
                         <Box>
                           {order?.items.map((orderItem, index) =>
                             <OrderItem key={index} orderItem={orderItem} />)}
                         </Box>
                       </TableCell>
-                      <TableCell >#{order?.order_id}</TableCell>
-                      <TableCell >{format(new Date(order?.created_date), 'yyyy-MM-dd')}</TableCell>
-                      {tab === 'ORDERED' && <TableCell >{format(addDays(new Date(order?.created_date), 1), 'yyyy-MM-dd HH:mm:ss')}</TableCell>}
-                      {(tab === 'CONFIRMED' || tab === 'PACKED') && <TableCell >{format(addDays(new Date(order?.created_date), 2), 'yyyy-MM-dd HH:mm:ss')}</TableCell>}
-                      <TableCell sx={{ color: '#cd3333', fontWeight: 'bold' }}>{formatCurrency(order?.total)}</TableCell>
+                      <TableCell><Typography>#{order?.order_id}</Typography></TableCell>
+                      <TableCell><Typography>{format(new Date(order?.created_date), 'yyyy-MM-dd')}</Typography></TableCell>
+                      {tab === 'ORDERED' && <TableCell ><Typography>{format(addDays(new Date(order?.created_date), 1), 'yyyy-MM-dd HH:mm:ss')}</Typography></TableCell>}
+                      {(tab === 'CONFIRMED' || tab === 'PACKED') && <TableCell><Typography>{format(addDays(new Date(order?.created_date), 2), 'yyyy-MM-dd HH:mm:ss')}</Typography></TableCell>}
+                      <TableCell ><Typography variant='subtitle2'>{formatCurrency(order?.total)}</Typography></TableCell>
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell >
                         {tab === 'UN_PAID' ?

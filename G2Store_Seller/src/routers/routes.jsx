@@ -8,8 +8,8 @@ const ShopProfile = lazy(() => import('../pages/Profile/ShopProfile'))
 const Chat = lazy(() => import('../pages/Chat/Chat'))
 const AutoChat = lazy(() => import('../pages/Chat/AutoChat/AutoChat'))
 const Sellers = lazy(() => import('../pages/Manage/Sellers/Sellers'))
-const Promotions = lazy(() => import('../pages/Manage/Promotions/Promotions'))
-const AddPromotion = lazy(() => import('../pages/Manage/Promotions/AddPromotion/AddPromotion'))
+const Vouchers = lazy(() => import('../pages/Manage/Vouchers/Vouchers'))
+const AddVoucher = lazy(() => import('../pages/Manage/Vouchers/AddVoucher/AddVoucher'))
 const Orders = lazy(() => import('../pages/Manage/Orders/Orders'))
 const Products = lazy(() => import('../pages/Manage/Products/Products'))
 const AddProduct = lazy(() => import('../pages/Manage/Products/AddProduct/AddProduct'))
@@ -40,8 +40,8 @@ const privateRoutes = [
     { path:'manage/add-seller', component: AddSeller },
     { path:'manage/products', component: Products },
     { path:'manage/add-product', component: AddProduct },
-    { path:'manage/promotions', component: Promotions },
-    { path:'manage/add-promotion', component: AddPromotion },
+    { path:'manage/vouchers', component: Vouchers },
+    { path:'manage/add-voucher', component: AddVoucher },
     { path:'manage/orders', component: Orders },
     { path:'manage/reviews', component: ManageReviews },
     { path:'manage/categories', component: Categories },

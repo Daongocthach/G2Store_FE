@@ -57,7 +57,7 @@ function ProductComponent({ product, reRender, setReRender, setIsSoldOut, isCart
                     </Box>
                     {isCheckout && <Typography variant='subtitle1' color={'#cb1c22'} fontWeight={550} >{formatCurrency(product?.subtotal)}</Typography>}
                     {soldOut && isCart && <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'}>Hết hàng</Typography>}
-                    {!soldOut && isCart && <Box>
+                    {!soldOut && isCart && <Box sx={{ mt: 0.5 }}>
                         <ToggleButton value="left" key="left" sx={{ width: 30, height: 27, borderColor: 'white' }} size='small' onClick={handleDecrease}>
                             <Remove sx={{ fontSize: 15 }} />
                         </ToggleButton>

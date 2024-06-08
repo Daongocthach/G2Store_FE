@@ -187,7 +187,7 @@ function Products() {
         </TableContainer>
         {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
           <img src={emptyImage} />
-          <Typography variant='h6' >Bạn chưa có sản phẩm nào</Typography>
+          <Typography variant='subtitle1' color={'#444444'} >Bạn chưa có sản phẩm nào</Typography>
         </Box>}
       </Box>
       {loading && <Loading />}

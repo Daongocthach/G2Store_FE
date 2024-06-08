@@ -57,20 +57,20 @@ function RightInformation({ product, reviews }) {
                 <Typography variant='subtitle2' color={'#016afa'}>{(reviews?.total_rate_count || 0) + ' Đánh giá'}</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'} >Danh mục:</Typography>
+                <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'}>Gian hàng:</Typography>
                 <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                    onClick={() => { navigate('/genre-detail', { state: { category:  product?.category } }) }}>
-                    <Typography variant='subtitle1' color={'#444444'}>{product?.category?.name}</Typography>
+                    onClick={() => { navigate('/shop-page', { state: product?.shop?.shop_id }) }}>
+                    {/* <Storefront sx={{ fontSize: 25, color: '#444444' }} /> */}
+                    <img src={product?.shop?.image} style={{ borderRadius: '50%', width: 40, height: 40 }} />
+                    <Typography variant='subtitle1' sx={{ color: '#444444' }}>{product?.shop?.name}</Typography>
                     <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
                 </Button>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'}>Gian hàng:</Typography>
+                <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'} >Danh mục:</Typography>
                 <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                    onClick={() => { navigate('/shop-page', { state: product?.shop?.shop_id }) }}>
-                    <Storefront sx={{ fontSize: 25, color: '#444444' }} />
-                    <img src={product?.shop?.image} style={{ borderRadius: '50%', width: 40, height: 40 }} />
-                    <Typography variant='subtitle1' sx={{ color: '#444444' }}>{product?.shop?.name}</Typography>
+                    onClick={() => { navigate('/genre-detail', { state: { category: product?.category } }) }}>
+                    <Typography variant='subtitle1' color={'#444444'}>{product?.category?.name}</Typography>
                     <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
                 </Button>
             </Box>

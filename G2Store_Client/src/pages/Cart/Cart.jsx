@@ -1,4 +1,4 @@
-import { Container, Grid, Typography, Button, Box, Breadcrumbs, Link } from '@mui/material'
+import { Container, Grid, Typography, Button, Box, Breadcrumbs, Link, Divider } from '@mui/material'
 import { Storefront, NavigateNext } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -13,14 +13,20 @@ import DeleteItem from './DeleteItem/DeleteItem'
 function Cart() {
   const navigate = useNavigate()
   const keep_login = useSelector(state => state.auth.keep_login)
+  const [feeShip, setFeeShip] = useState(0)
+  const [feeShipData, setFeeShipData] = useState({})
+  const [addresses, setAddresses] = useState([])
+  const [address, setAddress] = useState()
   const [reRender, setReRender] = useState(false)
   const [cart, setCart] = useState([])
   const [isSoldOut, setIsSoldOut] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [showAlertWarning, setShowAlertWaring] = useState(false)
-  var total = 0
-  if (Array.isArray(cart) && cart.length > 0)
-    cart?.map((cartItem) => { total = total + cartItem?.shop_subtotal })
+  var totalProducts = 0
+  cart.forEach(cartItem => totalProducts += cartItem?.shop_subtotal)
+  var total = totalProducts + feeShip
+  // if (Array.isArray(cart) && cart.length > 0)
+  //   cart?.map((cartItem) => { total = total + cartItem?.shop_subtotal })
   const handleClickCheckout = () => {
     if (cart.length < 1)
       setShowAlert(true)
@@ -80,16 +86,33 @@ function Cart() {
                     {Array.isArray(cartItem?.shop_items) && cartItem?.shop_items.map((product, index) => (
                       <ProductComponent key={index} product={product} reRender={reRender} setReRender={setReRender} setIsSoldOut={setIsSoldOut} isCart={true} />
                     ))}
-                  </Box> 
+                  </Box>
                 </Box>))}
             </Box>}
         </Grid>
         {/* Phần tổng cộng và đặt hàng */}
         <Grid item xs={12} sm={12} md={12} lg={4}>
-          <Box sx={{ display: 'flex', alignItem: 'center', justifyContent: 'space-between', mt: 2 }}>
-            <Typography variant='h6' color={'#444444'}>Tổng tiền: </Typography>
-            <Typography variant='h6' sx={{ color: '#cb1c22' }}>{formatCurrency(total)}</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, marginTop: 1 }}>
+            <Typography variant='h6' sx={{ color: '#4F4F4F' }}>Tổng tiền: </Typography>
+            <Typography variant='h6' sx={{ color: '#cb1c22', fontWeight: 'bold' }}>{formatCurrency(total)}</Typography>
           </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, marginTop: 1 }}>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Tiền hàng: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#cb1c22' }}>{formatCurrency(0)}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, marginTop: 1 }}>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Phí vận chuyển: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#6ca46f' }}>{formatCurrency(feeShip)}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, marginTop: 1 }}>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Giảm giá khuyến mãi: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>{formatCurrency(0)}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, marginTop: 1 }}>
+            <Typography variant='subtitle1' sx={{ color: '#4F4F4F' }}>Giảm giá voucher: </Typography>
+            <Typography variant='subtitle2' sx={{ color: '#4F4F4F' }}>{formatCurrency(0)}</Typography>
+          </Box>
+          <Divider sx={{ mb: 2 }} />
           <Button color='error' variant='contained' fullWidth sx={{ borderRadius: 2, fontWeight: 'bold' }}
             onClick={handleClickCheckout}>
             Thanh toán
