@@ -22,20 +22,6 @@ const theme = extendTheme({
     menuItemLight: 'black'
   },
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          borderWidth: '0.5px',
-          fontFamily: 'sans-serif',
-          ':hover': { backgroundColor: '#666666' },
-          '&.MuiButtonBase-root': {
-            fontSize: '17px',
-            backgroundColor: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-          }
-        }
-      }
-    },
     MuiTableCell: {
       styleOverrides: {
         root: {

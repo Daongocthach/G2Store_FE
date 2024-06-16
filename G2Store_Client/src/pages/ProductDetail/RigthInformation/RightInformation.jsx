@@ -2,22 +2,20 @@ import { useState } from 'react'
 import { Rating, Box, Typography, Button, ToggleButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
 import { NavigateNext, AddShoppingCart, Remove, Add } from '@mui/icons-material'
 import { formatCurrency } from '../../../utils/price'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
 import { addToCart } from '../../../redux/actions/cart'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import ProductVouchers from '../../../components/ProductVouchers/ProductVouchers'
-import Shop from '../../../components/Shop/Shop'
+import GoToShop from '../../../components/GoToShop/GoToShop'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function RightInformation({ product, reviews }) {
+    const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [quantity, setQuantity] = useState(1)
     const user = useSelector(state => state.auth)
-    const [showAlertFail, setShowAlertFail] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
     const handleIncrease = () => {
         setQuantity(quantity + 1)
     }
@@ -28,7 +26,7 @@ function RightInformation({ product, reviews }) {
     }
     function handleClickAddToCart() {
         if (!user?.keep_login) {
-            toast.error('Bạn cần đăng nhập để thực hiện chức năng này!', { autoClose: 2000 })
+            triggerAlert('Bạn cần đăng nhập để thực hiện chức năng này!', true, false)
             navigate('/login')
         }
         else {
@@ -37,11 +35,11 @@ function RightInformation({ product, reviews }) {
                     if (response?.quantity == 1) {
                         dispatch(addToCart(response))
                     }
-                    setShowAlert(true)
+                    triggerAlert('Thêm sản phẩm vào giỏ thành công!', false, false)
                 })
                 .catch((error) => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Thêm sản phẩm vào giỏ thất bại!', true, false)
                 })
         }
     }
@@ -60,7 +58,7 @@ function RightInformation({ product, reviews }) {
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'}>Gian hàng:</Typography>
-                <Shop shop_id={product?.shop?.shop_id} shop_name={product?.shop?.name} shop_image={product?.shop?.image} />
+                <GoToShop shop_id={product?.shop?.shop_id} shop_name={product?.shop?.name} shop_image={product?.shop?.image} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'} >Danh mục:</Typography>
@@ -92,14 +90,12 @@ function RightInformation({ product, reviews }) {
                 </Box>
             </Box>
             {/* Promotions*/}
-            <ProductVouchers productId={product?.product_id} />
+            <ProductVouchers product={product} />
             {/* Quantity */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button variant='contained' fullWidth color='error' disabled={product?.stock_quantity < 1} onClick={() => { handleClickAddToCart() }}>Mua Ngay</Button>
                 <Button variant='contained' color='info' fullWidth disabled={product?.stock_quantity < 1} startIcon={<AddShoppingCart />} onClick={handleClickAddToCart}>Thêm vào giỏ</Button>
             </Box>
-            <ShowAlert setShowAlert={setShowAlert} showAlert={showAlert} content={'Thêm sản phẩm vào giỏ thành công'} />
-            <ShowAlert setShowAlert={setShowAlertFail} showAlert={showAlertFail} content={'Thêm sản phẩm vào giỏ thất bại'} isFail={true} />
         </Box>
     )
 }

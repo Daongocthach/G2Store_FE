@@ -1,5 +1,5 @@
 import { ShoppingCart, Notifications } from '@mui/icons-material'
-import { Box, Button, Badge, Tooltip, Typography } from '@mui/material'
+import { Box, Badge, Tooltip, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Account from './Account/Account'
@@ -11,30 +11,32 @@ function AppBar() {
   const cartItems = useSelector(state => state.cart.cartItems)
 
   return (
-    <Box sx={{
-      position: 'static', width: '100%', height: (theme) => theme.webCustom.appBarHeight, display: 'flex',
-      alignItems: 'center', justifyContent: 'space-between', border: 'none', overflow: 'auto', bgcolor: '#2f3640'
-    }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, paddingX: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <img src={G2Logo} style={{ height: '65px', width: '65px' }} />
-          <Link to={'/'} style={{ textDecoration: 'none' }}>
-            <Typography variant="h5" sx={{ display: { xs: 'none', sm: 'flex' } }}
-              fontWeight="bold" color={'white'}> G2Store</Typography>
+    <Box className="static w-full flex items-center justify-between overflow-auto bg-gray-800" style={{ height: 'var(--app-bar-height)' }}>
+      <Box className="flex items-center gap-2 px-4">
+        <Box className="flex items-center">
+          <img src={G2Logo} className="h-16 w-16" />
+          <Link to="/" className="no-underline">
+            <Typography variant="h5" fontWeight={'bold'} className="hidden sm:flex text-white hover:text-orange-300">
+              G2Store
+            </Typography>
           </Link>
         </Box>
-        <Button sx={{ ...useStyles.button, minWidth: 150 }} onClick={() => navigate('/genre-detail')} >Sản phẩm</Button>
+        <Typography fontWeight={'bold'}
+          className="text-white font-bold py-2 px-4 rounded cursor-pointer hover:text-orange-300"
+          onClick={() => navigate('/genre-detail')}>
+          Sản phẩm
+        </Typography>
         <Search />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+      <Box className="flex items-center gap-5">
         <Tooltip title="Thông báo">
-          <Badge color="warning" badgeContent={1} sx={{ cursor: 'pointer' }}>
-            <Notifications sx={useStyles.button} onClick={() => navigate('/notification')} />
+          <Badge color="warning" badgeContent={1} className="cursor-pointer">
+            <Notifications className="text-white" onClick={() => navigate('/notification')} />
           </Badge>
         </Tooltip>
         <Tooltip title="Giỏ hàng">
-          <Badge color="warning" badgeContent={cartItems.length} sx={{ cursor: 'pointer' }}>
-            <ShoppingCart sx={useStyles.button} onClick={() => navigate('/cart')} />
+          <Badge color="warning" badgeContent={cartItems.length} className="cursor-pointer">
+            <ShoppingCart className="text-white" onClick={() => navigate('/cart')} />
           </Badge>
         </Tooltip>
         <Account />
@@ -44,10 +46,3 @@ function AppBar() {
 }
 
 export default AppBar
-
-const useStyles = {
-  button: {
-    color: 'white', fontSize: 25,
-    border: 'none', fontWeight: 'bold', '&:hover': { color: 'orange', bgcolor: 'inherit' }
-  }
-}

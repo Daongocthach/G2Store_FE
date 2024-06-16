@@ -1,21 +1,19 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, Rating } from '@mui/material'
+import { Button, TextField, Dialog, DialogContent, DialogTitle, Box, Typography, Rating } from '@mui/material'
 import { AddCircle, Clear } from '@mui/icons-material'
 import reviewApi from '../../../../apis/reviewApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
+import DialogAction from '../../../../components/Dialog/DialogAction'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function ReviewProduct({ orderItem, reRender, setReRender }) {
-    const [open, setOpen] = useState(false)
+  const triggerAlert = useAlert()
+  const [open, setOpen] = useState(false)
     const [content, setContent] = useState('')
     const [rate, setRate] = useState(5)
     const [files, setFiles] = useState([])
     const [images, setImages] = useState([])
     const [loading, setLoading] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertWarning, setShowAlertWarning] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
-
     const handleClickOpen = () => {
         setOpen(true)
         setImages([])
@@ -33,12 +31,12 @@ function ReviewProduct({ orderItem, reRender, setReRender }) {
                 const fileUrl = reader.result
                 if (file.type.includes('image') || file.type.includes('video/mp4')) {
                     if (images.some(image => image.file === file)) {
-                        setShowAlertWarning(true)
+                        triggerAlert('Vui lòng không chọn cùng ảnh/video!', false, true)
                     } else {
                         setImages(prevImages => [...prevImages, { file, fileUrl }])
-                        setShowAlertWarning(false)
                     }
                 } else {
+                    triggerAlert('File không được hỗ trợ!', false, true)
                     console.log('Unsupported file type.')
                 }
             }
@@ -63,11 +61,11 @@ function ReviewProduct({ orderItem, reRender, setReRender }) {
         reviewApi.addReview(formData)
             .then(() => {
                 setReRender(!reRender)
-                setShowAlert(true)
+                triggerAlert('Đánh giá sản phẩm thành công!', false, false)
             })
             .catch(error => {
                 console.log(error)
-                setShowAlertFail(true)
+                triggerAlert('Đánh giá sản phẩm thất bại!', true, false)
             })
             .finally(() => setLoading(false))
         handleClose()
@@ -111,14 +109,8 @@ function ReviewProduct({ orderItem, reRender, setReRender }) {
                         </Box>
                     </Box>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' } }}>Hủy</Button>
-                    <Button onClick={handleClickAdd} sx={{ ':hover': { bgcolor: 'inherit' } }}>Gửi đi</Button>
-                </DialogActions>
+                <DialogAction setOpen={setOpen} handleClick={handleClickAdd} />
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content='Đánh giá thành công' />
-            <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Vui lòng không chọn cùng ảnh/video!'} isWarning={true} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đánh giá thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

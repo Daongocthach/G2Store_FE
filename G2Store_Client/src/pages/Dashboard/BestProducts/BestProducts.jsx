@@ -2,7 +2,6 @@ import { Grid, Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import productApi from '../../../apis/productApi'
-import RelativeProduct from '../../../components/Product/RelativeProduct'
 import CardProduct from '../../../components/Product/CardProduct'
 
 function BestProducts() {

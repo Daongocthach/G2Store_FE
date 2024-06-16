@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react'
-import { Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Box, Checkbox, Tooltip } from '@mui/material'
+import { Typography, Dialog, DialogContent, DialogTitle, Box, Checkbox, Tooltip } from '@mui/material'
 import { useSelector } from 'react-redux'
 import Attachment from '@mui/icons-material/Attachment'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import productApi from '../../../../apis/productApi'
 import emptyImage from '../../../../assets/img/empty-order.png'
 import { formatCurrency } from '../../../../utils/price'
 import voucherApi from '../../../../apis/voucherApi'
+import DialogAction from '../../../../components/Dialog/DialogAction'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function AddVoucherToProducts({ voucher_id }) {
+    const triggerAlert = useAlert()
     const shop_id = useSelector(state => state.auth.shop_id)
     const [checkedProducts, setCheckedProducts] = useState([])
     const [checkedAll, setCheckedAll] = useState(false)
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [products, setProducts] = useState([])
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClose = () => {
         setOpen(false)
     }
@@ -27,11 +27,11 @@ function AddVoucherToProducts({ voucher_id }) {
         if (shop_id) {
             voucherApi.addVoucherToProducts(voucher_id, { product_ids })
                 .then(() => {
-                    setShowAlert(true)
+                    triggerAlert('Thêm thành công!', false, false)
                 })
                 .catch((error) => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Thêm thất bại!', true, false)
                 })
                 .finally(() => setLoading(false))
         }
@@ -104,13 +104,8 @@ function AddVoucherToProducts({ voucher_id }) {
                         <Typography variant='h6' >Không có sản phẩm nào chưa gắn mã!</Typography>
                     </Box>}
                 </DialogContent>
-                <DialogActions>
-                    <Button sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} onClick={() => { setOpen(false) }} size='small'>Hủy</Button>
-                    <Button sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} onClick={handleClickAdd} size='small' >Thêm</Button>
-                </DialogActions>
+                <DialogAction setOpen={setOpen} handleClick={handleClickAdd}/>
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm mã giảm giá thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm mã giảm giá thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

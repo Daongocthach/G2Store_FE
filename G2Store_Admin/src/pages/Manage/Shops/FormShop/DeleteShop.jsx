@@ -1,56 +1,24 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle, Alert, Snackbar } from '@mui/material'
-import { useDispatch } from 'react-redux'
-import DeleteIcon from '@mui/icons-material/Delete'
-import productApi from '../../../../apis/productApi'
-import { updateProduct } from '../../../../redux/actions/products'
+import { Tooltip } from '@mui/material'
+import HighlightOff from '@mui/icons-material/HighlightOff'
+import shopApi from '../../../../apis/shopApi'
+import DialogTextOnly from '../../../../components/Dialog/DialogTextOnly'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
-function DeleteShop({ setUpdate, productId }) {
-    const dispatch = useDispatch()
-    const [open, setOpen] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
-    const handleClickOpen = () => {
-        setOpen(true)
-    }
-    const handleClose = () => {
-        setOpen(false)
-    }
+function DeleteShop({ id }) {
+  const triggerAlert = useAlert()
+  const [open, setOpen] = useState(false)
+
     const handleClickDelete = () => {
-        productApi.deleteProduct(productId)
-            .then((response) => {
-                setShowAlert(true)
-                dispatch(updateProduct(response.data))
-                setUpdate(productId)
-            })
-            .catch(error => {
-                console.log(error)
-                setShowAlertFail(true)
-            })
-        handleClose()
+        shopApi.lockedShop(id)
+            .then(() => triggerAlert('Xóa thành công!', false, false))
+            .catch((error) => { triggerAlert('Xóa thất bại!', true, false), console.log(error) })
+        setOpen(false)
     }
     return (
         <div>
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={showAlert} autoHideDuration={1000} onClose={() => setShowAlert(false)}>
-                <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-                    Xóa sản phẩm thành công!
-                </Alert>
-            </Snackbar>
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={showAlertFail} autoHideDuration={1000} onClose={() => setShowAlertFail(false)}>
-                <Alert severity="error" variant='filled' onClose={() => setShowAlertFail(false)}>
-                    Xóa sản phẩm thất bại!
-                </Alert>
-            </Snackbar>
-            <Button sx={{ bgcolor: '#EE6363', color: 'black' }} variant="outlined" onClick={handleClickOpen}><DeleteIcon /></Button>
-            <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >Are you sure you want to delete this item?</DialogTitle>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClickDelete}>Delete</Button>
-                </DialogActions>
-            </Dialog>
+            <Tooltip title='Khóa Shop'><HighlightOff sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => setOpen(true)} /></Tooltip>
+            <DialogTextOnly handleClick={handleClickDelete} open={open} setOpen={setOpen} title={'Khóa shop'} content={'Bạn muốn khóa Shop này, không thể hoàn tác!'} />
         </div>
     )
 }

@@ -24,7 +24,6 @@ const listButton = [
         name: 'Đơn hàng',
         commands: [
             { path: '/seller/manage/orders', name: 'Quản lý đơn hàng' },
-            // { path: '/seller/manage/orders', name: 'Quản lý vận chuyển' },
             // { path: '/seller/manage/orders', name: 'Quản lý hoàn trả' },
             { path: '/seller/manage/reviews', name: 'Quản lý đánh giá' }
         ]
@@ -58,14 +57,12 @@ const listButton = [
         icon: 'Equalizer',
         commands: [
             { path: '/seller/dashboard', name: 'Thống kê dữ liệu' },
-            { path: '/seller/dashboard', name: 'Tình trạng vận hành' }
         ]
     },
     {
         name: 'Gian hàng',
         icon: 'AddHomeWork',
         commands: [
-            { path: '/seller/manage/design-shop', name: 'Thiết kế gian hàng' },
             { path: '/seller/manage/categories', name: 'Thiết lập ngành hàng' }
         ]
     },

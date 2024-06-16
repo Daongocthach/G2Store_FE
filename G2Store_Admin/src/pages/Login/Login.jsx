@@ -51,7 +51,7 @@ function Login() {
         position: 'relative',
         bgcolor: 'black'
       }}>
-        <img src={loginImage} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5, filter: 'blur(1px)' }} />
+        <img src={loginImage} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
         <Box sx={{
           position: 'absolute', width: { xs: '90%', sm: '70%', md: '30%' }, height: 'auto', borderRadius: '5px', top: '30%',
           left: '50%', bgcolor: 'black', opacity: 0.8, transform: 'translate(-50%, -30%)'

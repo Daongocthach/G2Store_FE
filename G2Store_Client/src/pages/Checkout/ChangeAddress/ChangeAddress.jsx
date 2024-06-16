@@ -2,7 +2,7 @@ import { Box, Menu, Chip } from '@mui/material'
 import { useState } from 'react'
 import Address from '../../../components/Address/Address'
 
-function ChangeAddress({ addresses, setAddress, reRender, setReRender }) {
+function ChangeAddress({ addresses, setAddress, setFeeShips, reRender, setReRender }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
@@ -14,14 +14,15 @@ function ChangeAddress({ addresses, setAddress, reRender, setReRender }) {
 
     const handleChangeAddress = (address) => {
         setAddress(address)
+        setFeeShips([])
         setReRender(!reRender)
         handleClose()
     }
     return (
         <Box>
-            <Chip color='error' sx={{ mt: 2 }} variant="filled" label={'Đổi địa chỉ'} onClick={handleClick} />
+            <Chip color='error' variant="filled" label={'Đổi địa chỉ'} onClick={handleClick} />
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} >
-                {addresses.map((address, index) =>
+                {Array.isArray(addresses) && addresses.map((address, index) =>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:'space-between', gap: 2, p: 1 }} key={index}>
                         <Address address={address} />
                         <Chip color='warning' variant="filled" label={'Chọn'} onClick={() => handleChangeAddress(address)}/>

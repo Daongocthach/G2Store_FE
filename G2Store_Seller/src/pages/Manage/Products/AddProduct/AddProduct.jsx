@@ -4,12 +4,13 @@ import { Button, TextField, Box, Typography, Paper } from '@mui/material'
 import { AddCircle, NavigateNext, Clear } from '@mui/icons-material'
 import { NumericFormat } from 'react-number-format'
 import productApi from '../../../../apis/productApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import MenuCategory from './MenuCategory/MenuCategory'
 import categoryApi from '../../../../apis/categoryApi'
 import Loading from '../../../../components/Loading/Loading'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function AddProduct() {
+    const triggerAlert = useAlert()
     const location = useLocation()
     const product = location.state
     const navigate = useNavigate()
@@ -28,9 +29,6 @@ function AddProduct() {
     const [images, setImages] = useState([])
     const [files, setFiles] = useState([])
     const [loading, setLoading] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertWarning, setShowAlertWarning] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
 
     useEffect(() => {
         if (product) {
@@ -64,10 +62,9 @@ function AddProduct() {
                 const file_name = file?.name
                 if (file.type.includes('image') || file.type.includes('video/mp4')) {
                     if (images.some(image => image.file_name === file?.name)) {
-                        setShowAlertWarning(true)
+                        triggerAlert('Vui lòng không chọn cùng ảnh!', false, true)
                     } else {
                         setImages(prevImages => [...prevImages, { file, file_name, file_url, file_type }])
-                        setShowAlertWarning(false)
                     }
                 } else {
                     console.log('Unsupported file type.')
@@ -85,7 +82,6 @@ function AddProduct() {
             productApi.deleteImageProduct(imageData?.id)
     }
     const handleClickAdd = async () => {
-        console.log(files)
         setLoading(true)
         const formData = new FormData()
         formData.append('name', name)
@@ -104,12 +100,12 @@ function AddProduct() {
         if (product) {
             productApi.updateProduct(product?.product_id, formData)
                 .then(() => {
-                    setShowAlert(true)
+                    triggerAlert('Cập nhật sản phẩm thành công!', false, false)
                     setTimeout(() => { navigate('/seller/manage/products') }, 1000)
                 })
                 .catch(error => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Cập nhật sản phẩm thất bại!', true, false)
                     if (error?.response?.data?.message == 'Access Denied') {
                         navigate('/seller/access-denied')
                     }
@@ -120,12 +116,12 @@ function AddProduct() {
         else {
             productApi.addProduct(formData)
                 .then(() => {
-                    setShowAlert(true)
+                    triggerAlert('Thêm sản phẩm thành công!', false, false)
                     setTimeout(() => { navigate('/seller/manage/products') }, 1000)
                 })
                 .catch(error => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Thêm sản phẩm thất bại!', true, false)
                     if (error?.response?.data?.message == 'Access Denied') {
                         navigate('/seller/access-denied')
                     }
@@ -260,9 +256,6 @@ function AddProduct() {
             <Box sx={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'end', pr: 5 }}>
                 <Button onClick={() => { handleClickAdd() }} sx={{ bgcolor: '#1a71ff', color: 'white', fontWeight: '500', ':hover': { bgcolor: '#00B2EE' } }}>Gửi đi</Button>
             </Box>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={product ? 'Cập nhật sản phẩm thành công' : 'Thêm sản phẩm thành công'} />
-            <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Vui lòng không chọn cùng ảnh!'} isWarning={true} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={product ? 'Cập nhật sản phẩm thất bại' : 'Thêm sản phẩm thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

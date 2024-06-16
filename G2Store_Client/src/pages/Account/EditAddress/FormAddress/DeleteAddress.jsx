@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle, DialogContent } from '@mui/material'
+import { Button } from '@mui/material'
 import { toast } from 'react-toastify'
 import addressApi from '../../../../apis/addressApi'
 import Loading from '../../../../components/Loading/Loading'
+import DialogTextOnly from '../../../../components/Dialog/DialogTextOnly'
 
 function DeleteAddress({ addressId, rerender, setRerender }) {
     const [loading, setLoading] = useState(false)
@@ -29,17 +30,8 @@ function DeleteAddress({ addressId, rerender, setRerender }) {
     return (
         <div>
             <Button color='inherit' sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }}
-                 onClick={() => setOpen(true)}>Xóa</Button>
-            <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
-                <DialogTitle sx={{ textAlign: 'center', fontWeight: 550 }}>Xóa địa chỉ</DialogTitle>
-                <DialogContent>
-                    Bạn muốn xóa địa chỉ này!
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-                    <Button onClick={handleClickDelete} size='small' sx={{ fontWeight: 600, bgcolor: '#1E90FF', color: 'white' }} >Xóa</Button>
-                </DialogActions>
-            </Dialog>
+                onClick={() => setOpen(true)}>Xóa</Button>
+            <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickDelete} title={'Xóa địa chỉ'} content={'Bạn muốn xóa địa chỉ này? Không thể hoàn tác!'} />
             {loading && <Loading />}
         </div>
     )

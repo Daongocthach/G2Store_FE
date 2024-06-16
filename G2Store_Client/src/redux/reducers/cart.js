@@ -12,7 +12,7 @@ const cartReducer = (state = initialState, action) => {
         case 'REMOVE_CART': {
             const productId = action.payload
             const updatedList = state.cartItems.filter(
-                (cartItem) => cartItem?.product_id !== productId
+                (cartItem) => cartItem !== productId
             )
             return {
                 ...state,
@@ -25,10 +25,12 @@ const cartReducer = (state = initialState, action) => {
             }
         }
         case 'SET_CART': {
-            const cartItems = action.payload.flatMap(item => item.items)
+            const productIds = action.payload.flatMap(item =>
+                item.shop_items.map(shopItem => shopItem.product_id)
+            )
             return {
                 ...state,
-                cartItems: cartItems
+                cartItems: productIds
             }
         }
         default:

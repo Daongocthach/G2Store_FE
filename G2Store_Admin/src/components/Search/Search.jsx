@@ -1,57 +1,66 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { InputAdornment, TextField, Autocomplete, Stack, ListItem, ListItemText } from '@mui/material'
+import { Paper, Autocomplete, Button, Box, TextField, CircularProgress } from '@mui/material'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-function SearchProvider({ datas }) {
-    const colorChangeByTheme = (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black')
-    const [searchValue, setSearchValue] = useState('')
-    const handleDatasSelect = (event, value) => {
-        // if (value) {
-        //   navigate(`/product-detail?${value.id}`)
-        // }
+function Search() {
+    const navigate = useNavigate()
+    const [name, setName] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const handleSearch = async () => {
+        // setLoading(true)
+        // productApi.searchProducts(name, 0, 100)
+        //     .then(response => {
+        //         setProducts(response?.content)
+        //         setLoading(false)
+        //     })
+        //     .catch(() => {
+        //         setProducts([])
+        //         setLoading(false)
+        //     })
     }
+
+    const handleChange = (event) => {
+        const newName = event.target.value
+        setName(newName)
+        // if (searchTimeout) {
+        //     clearTimeout(searchTimeout)
+        // }
+        // setSearchTimeout(setTimeout(() => {
+        //     handleSearch()
+        // }, 500))
+    }
+
     return (
-        <Stack spacing={2} sx={{ width: 300 }}>
-            <Autocomplete
-                freeSolo
-                id="free-solo-2-demo"
-                options={datas}
-                getOptionLabel={(data) => (data && data.name) || ''}
-                onChange={handleDatasSelect}
-                renderOption={(props, data) => (
-                    <ListItem {...props}>
-                        <ListItemText primary={data.name} />
-                    </ListItem>
-                )}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        id="outlined-search"
-                        label="Search..."
-                        type="text"
-                        size='small'
-                        InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon sx={{ color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black') }} />
-                                </InputAdornment>
-                            )
-                        }}
-                        sx={{
-                            minWidth: '120px',
-                            maxWidth: '300px',
-                            '& label': { color: colorChangeByTheme },
-                            '& input': { color: colorChangeByTheme },
-                            '& label.Mui-focused': { fontWeight: 'bold' },
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': { borderColor: colorChangeByTheme },
-                                '&:hover fieldset': { borderColor: colorChangeByTheme },
-                                '&.Mui-focused fieldset': { borderColor: colorChangeByTheme }
-                            }
-                        }} />)} />
-        </Stack>
+        <Box sx={{ flex: 1, display: 'flex' }}>
+            <Paper component="form" sx={{ display: 'flex', alignItems: 'center', minWidth: 400, height: 40 }}>
+                <Autocomplete
+                    options={top100Films}
+                    getOptionLabel={(option) => option.title}
+                    sx={{ width: '100%' }}
+                    clearIcon={false}
+                    popupIcon={false}
+                    renderInput={(params) => <TextField {...params} variant='outlined' type='search' size='small' placeholder="Tìm kiếm" sx={{
+                        flex: 1, fontSize: 14,
+                        '& .MuiOutlinedInput-root': {
+                            '&.Mui-focused fieldset': { borderColor: 'transparent' },
+                            '&:hover fieldset': { borderColor: 'transparent' }
+                        }
+                    }} onChange={handleChange} onFocus={(e) => e.target.select()} />}
+                />
+                <Button type="button" onClick={handleSearch} sx={{ height: 40, bgcolor: '#EE7942', color: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
+                    <SearchIcon />
+                </Button>
+            </Paper>
+            {loading && <CircularProgress />}
+        </Box>
     )
 }
 
-export default SearchProvider
+export default Search
+const top100Films = [
+    { title: 'Bánh', year: 1994 },
+    { title: 'Điện thoại', year: 1972 },
+    { title: 'Pepsi', year: 1974 }
+]

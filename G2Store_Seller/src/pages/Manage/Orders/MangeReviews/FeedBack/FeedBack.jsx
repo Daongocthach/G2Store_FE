@@ -2,15 +2,15 @@ import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
 import Feedback from '@mui/icons-material/Feedback'
 import reviewApi from '../../../../../apis/reviewApi'
-import ShowAlert from '../../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../../components/Loading/Loading'
+import { useAlert } from '../../../../../components/ShowAlert/ShowAlert'
+import DialogAction from '../../../../../components/Dialog/DialogAction'
 
 function FeedBack({ review, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [content, setContent] = useState('')
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClose = () => {
         setOpen(false)
     }
@@ -18,12 +18,12 @@ function FeedBack({ review, reRender, setReRender }) {
         setLoading(true)
         reviewApi.shopFeedBack(review?.review_id, content)
             .then(() => {
-                setShowAlert(true)
+                triggerAlert('Phản hồi thành công!', false, false)
                 setReRender(!reRender)
             })
             .catch((error) => {
+                triggerAlert('Phản hồi thất bại!', true, false)
                 console.log(error)
-                setShowAlertFail(true)
             })
             .finally(() => setLoading(false))
         handleClose()
@@ -36,13 +36,8 @@ function FeedBack({ review, reRender, setReRender }) {
                 <DialogContent >
                     <TextField fullWidth size='small' multiline rows={3} sx={{ mt: 1 }} label="Phản hồi" onChange={(e) => setContent(e.target.value)} />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight:'bold' }}>Hủy</Button>
-                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight:'bold' }}>Thêm</Button>
-                </DialogActions>
+                <DialogAction setOpen={setOpen} handleClick={handleClickAdd}/>
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Phản hồi thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Phản hồi thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

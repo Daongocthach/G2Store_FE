@@ -5,6 +5,7 @@ import MenuCategory from './MenuCategory/MenuCategory'
 import Loading from '../../../components/Loading/Loading'
 import AddCategory from './FormCategory/AddCategory'
 import emptyImage from '../../../assets/img/empty-order.png'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 
 function Categories() {
   const [reRender, setReRender] = useState(false)
@@ -29,14 +30,7 @@ function Categories() {
 
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="admin/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/admin/manage/categories">
-          Quản lý danh mục
-        </Link>
-      </Breadcrumbs>
+      <BreadCrumbs links={[{ name: 'Quản lý danh mục', href: '/admin/manage/categories' }]} />
       <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
         <Box sx={{ display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center', bgcolor: '#2a99ff' }}>
           <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>

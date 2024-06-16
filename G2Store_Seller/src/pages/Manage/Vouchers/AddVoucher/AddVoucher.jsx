@@ -3,9 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, TextField, Box, Typography, FormControlLabel, RadioGroup, Radio, InputAdornment, OutlinedInput, FormHelperText } from '@mui/material'
 import voucherApi from '../../../../apis/voucherApi'
 import { formatDate } from '../../../../utils/date'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function AddVoucher() {
+    const triggerAlert = useAlert()
     const navigate = useNavigate()
     const location = useLocation()
     const voucher = location.state
@@ -13,15 +14,11 @@ function AddVoucher() {
     const [startDate, setStartDate] = useState(formatDate(new Date()))
     const [endDate, setEndDate] = useState(formatDate(new Date()))
     const [voucherType, setVoucherType] = useState('SHOP_VOUCHER')
-    const [minSpend, setMinSpend] = useState(1000)
-    const [percentReduce, setPercentReduce] = useState(0)
-    const [priceReduce, setPriceReduce] = useState(0)
-    const [quantity, setQuantity] = useState(10)
-    const [maxUsePerCus, setMaxUsePerCus] = useState(1)
+    const [minSpend, setMinSpend] = useState(8000)
+    const [percentReduce, setPercentReduce] = useState(1)
+    const [priceReduce, setPriceReduce] = useState(1000)
+    const [quantity, setQuantity] = useState(100)
     const [discoutType, setDiscoutType] = useState('PRICE')
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertWarning, setShowAlertWarning] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     useEffect(() => {
         if (voucher) {
             setName(voucher?.name)
@@ -31,7 +28,6 @@ function AddVoucher() {
             setMinSpend(voucher?.min_spend)
             setPercentReduce(voucher?.reduce_percent)
             setPriceReduce(voucher?.reduce_price)
-            setMaxUsePerCus(voucher?.max_use_per_cus)
             setDiscoutType(voucher?.discount_type)
         }
     }, [])
@@ -41,17 +37,15 @@ function AddVoucher() {
         }
         return (percentReduce / 100) > 0.3
     }
-    const checkCondition = () => {
-        if (!name || !startDate || !endDate || !minSpend || !quantity || !maxUsePerCus) {
-            return false
-        }
-        if (minSpend < 0 || (discoutType === 'PRICE' && priceReduce < 0) ||
-            (discoutType === 'PERCENTAGE' && (percentReduce < 0 || percentReduce > 100)))
-            return false
-        return true
-    }
     const handleClickAdd = async () => {
-        if (checkCondition()) {
+        if (!name || !startDate || !endDate || !minSpend || !quantity) {
+            triggerAlert('Vui lòng kiểm tra lại thông tin!', false, true)
+        }
+        else if (minSpend < 0 || (discoutType === 'PRICE' && priceReduce < 0) ||
+            (discoutType === 'PERCENTAGE' && (percentReduce < 0 || percentReduce > 100))) {
+            triggerAlert('Thông tin không đúng! vui lòng đặt lại các giá trị!', false, true)
+        }
+        else {
             const voucherData = {
                 name: name,
                 quantity: quantity,
@@ -61,23 +55,19 @@ function AddVoucher() {
                 voucher_type: voucherType,
                 min_spend: minSpend,
                 reduce_price: discoutType == 'PRICE' ? priceReduce : null,
-                reduce_percent: discoutType == 'PERCENTAGE' ? percentReduce : null,
-                max_use_per_cus: maxUsePerCus
+                reduce_percent: discoutType == 'PERCENTAGE' ? percentReduce : null
             }
             voucherApi.addVoucher(voucherData)
                 .then(() => {
-                    setShowAlert(true)
+                    triggerAlert('Thêm thành công!', false, false)
                     setTimeout(() => {
                         navigate('/seller/manage/vouchers')
                     }, 1000)
                 })
                 .catch(error => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Thêm thất bại!', true, false)
                 })
-        }
-        else {
-            setShowAlertWarning(true)
         }
     }
     return (
@@ -107,7 +97,7 @@ function AddVoucher() {
                         helperText={startDate > endDate ? 'Ngày kết thúc phải lớn hơn ngày bắt đầu' : ''}
                         onChange={(e) => setEndDate(e.target.value)} />
                 </Box>
-                <Box sx={{ alignItems: 'center', gap: 1 }}>
+                <Box >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
                         <Typography variant='body1'>Mã giảm được áp dụng cho: </Typography>
@@ -167,40 +157,32 @@ function AddVoucher() {
                                     endAdornment={<InputAdornment position='end'>%</InputAdornment>} onFocus={(e) => e.target.select()}
                                     inputProps={{ min: 0, max: 100 }} error={checkOverMinSpend()} value={percentReduce}
                                     onChange={(e) => setPercentReduce(e.target.value)} />
-                                <FormHelperText sx={{ color: 'orange', visibility: checkOverMinSpend() ? 'visible' : 'hidden' }}> Giảm giá vượt quá 30%</FormHelperText>
+                                <FormHelperText sx={{ color: 'orange', visibility: checkOverMinSpend() ? 'visible' : 'hidden' }}>
+                                    Giảm giá vượt quá 30%
+                                </FormHelperText>
                             </Box>
                         }
                     </Box>
-                    <Box sx={{ alignItems: 'center', gap: 1 }}>
+                    <Box className='items-center gap-1' sx={{ alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
                             <Typography variant='body1'>Số lượng mã giảm giá: </Typography>
                         </Box>
                         <Box>
-                            <OutlinedInput size='small' type='number' endAdornment={<InputAdornment position='end'>đ</InputAdornment>} onFocus={(e) => e.target.select()}
-                                inputProps={{ min: 0 }} sx={{ width: 200 }} error={!quantity} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                            <FormHelperText error sx={{ visibility: !quantity ? 'visible' : 'hidden' }}>Không được để trống</FormHelperText>
-                        </Box>
-                    </Box>
-                    <Box sx={{ alignItems: 'center', gap: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
-                            <Typography variant='body1'>Số lượng cho mỗi khách hàng: </Typography>
-                        </Box>
-                        <Box>
-                            <OutlinedInput size='small' type='number' endAdornment={<InputAdornment position='end'>đ</InputAdornment>} onFocus={(e) => e.target.select()}
-                                inputProps={{ min: 0 }} sx={{ width: 200 }} error={!maxUsePerCus} value={maxUsePerCus} onChange={(e) => setMaxUsePerCus(e.target.value)} />
-                            <FormHelperText error sx={{ visibility: !maxUsePerCus ? 'visible' : 'hidden' }}>Không được để trống</FormHelperText>
+                            <OutlinedInput size='small' type='number' onFocus={(e) => e.target.select()}
+                                inputProps={{ min: 0 }} sx={{ width: 200 }} error={!quantity} value={quantity}
+                                onChange={(e) => setQuantity(e.target.value)} />
+                            <FormHelperText error sx={{ visibility: !quantity ? 'visible' : 'hidden' }}>
+                                Không được để trống
+                            </FormHelperText>
                         </Box>
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'end', pr: 5 }}>
-                <Button onClick={() => { handleClickAdd() }} sx={{ bgcolor: '#1a71ff', color: 'white', fontWeight: '500', ':hover': { bgcolor: '#00B2EE' } }}>Gửi</Button>
+            <Box className='flex flex-row items-end justify-end pr-5'>
+                <Button onClick={() => { handleClickAdd() }}
+                    sx={{ bgcolor: '#1a71ff', color: 'white', fontWeight: '500', ':hover': { bgcolor: '#00B2EE' } }}>Gửi</Button>
             </Box>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm thành công'} />
-            <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Vui lòng kiểm tra lại thông tin'} isWarning={true} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm thất bại'} isFail={true} />
         </Box>
     )
 }

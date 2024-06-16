@@ -1,12 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Box, Typography, Container, Breadcrumbs, Link, Divider, Grid } from '@mui/material'
+import { Box, Typography, Container, Divider, Grid } from '@mui/material'
 import reviewApi from '../../apis/reviewApi'
 import LeftInformation from './LeftInformation/LeftInformation'
 import RightInformation from './RigthInformation/RightInformation'
 import Reviews from './Reviews/Reviews'
 import productApi from '../../apis/productApi'
 import RelativeProducts from './RelativeProducts/RelativeProducts'
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
 function ProductDetail() {
   const navigate = useNavigate()
@@ -15,12 +16,11 @@ function ProductDetail() {
   const [product, setProduct] = useState()
   const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(1)
-  const [size, setSize] = useState(8)
   const [sortType, setSortType] = useState('')
   useEffect(() => {
-    reviewApi.getReviewByProductId(product_id, page - 1, size, sortType)
+    reviewApi.getReviewByProductId(product_id, page - 1, 8, sortType)
       .then((response) => { setReviews(response) })
-  }, [product_id, page, size, sortType])
+  }, [product_id, page, sortType])
   useEffect(() => {
     productApi.getProduct(product_id)
       .then((response) => { setProduct(response) })
@@ -29,14 +29,7 @@ function ProductDetail() {
   return (
     <Box sx={{ minHeight: '100%' }}>
       <Container fixed>
-        <Breadcrumbs sx={{ mt: 2 }}>
-          <Link underline="hover" color="inherit" href="/" variant='subtitle1'>
-            Trang chủ
-          </Link>
-          <Link underline="hover" color="inherit" variant='subtitle1' >
-            Chi tiết sản phẩm
-          </Link>
-        </Breadcrumbs>
+        <BreadCrumbs links={[{ name: 'Chi tiết sản phẩm', href: '' }]} />
         <Typography variant='h5' fontWeight={'bold'} color={'#444444'} sx={{ mb: 1 }}>{product?.name}</Typography>
         <Divider />
         <Grid container spacing={1} mt={3}>

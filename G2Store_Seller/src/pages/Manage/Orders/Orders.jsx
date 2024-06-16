@@ -2,21 +2,23 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Breadcrumbs, Link, Tooltip
+  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Tooltip
 } from '@mui/material'
 import { Chat, Print } from '@mui/icons-material'
 import { format, addDays } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import ViewOrder from './FormOrder/ViewOrder'
 import UpdateOrder from './FormOrder/UpdateOrder'
 import OrderItem from './OrderItem/OrderItem'
 import ghnApi from '../../../apis/ghnApi'
 import SearchById from '../../../components/Search/Search'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function Orders() {
+  const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [reRender, setRerender] = useState(false)
   const [orders, setOrders] = useState([])
@@ -25,8 +27,6 @@ function Orders() {
   const [order_codes, setOrderCodes] = useState(['LGT338', 'LGT33Y'])
   const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
@@ -46,11 +46,12 @@ function Orders() {
     ghnApi.printOrder(order_codes)
       .then((response) => {
         location.assign('https://dev-online-gateway.ghn.vn/a5/public-api/printA5?token=' + response?.data?.data?.token)
-        setShowAlert(true)
+        triggerAlert('In đơn thành công!', false, false)
       })
       .catch((err) => {
         console.log(err)
-        setShowAlertFail(true)
+        triggerAlert('In đơn thất bại!', true, false)
+
       })
   }
   useEffect(() => {
@@ -65,17 +66,10 @@ function Orders() {
   }, [reRender])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <Breadcrumbs sx={{ m: 2 }}>
-        <Link underline="hover" color="inherit" href="/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/manage/orders">
-          Quản lý đơn hàng
-        </Link>
-      </Breadcrumbs>
+      <BreadCrumbs links={[{ name: 'Quản lý đơn hàng', href: '' }]} />
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
         <Typography variant='h5' sx={{ fontWeight: 'bold', minWidth: '100px', m: 2 }}>Quản lý đơn hàng</Typography>
-        <SearchById setDatas={setOrders} setTab={setTab}/>
+        <SearchById setDatas={setOrders} setTab={setTab} />
       </Box>
       <Divider />
       <Box sx={{ mb: 2 }}>
@@ -162,8 +156,6 @@ function Orders() {
           <Typography variant='h6' >Bạn chưa có đơn hàng nào</Typography>
         </Box>}
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'In đơn thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'In đơn thất bại'} isFail={true} />
     </Box>
   )
 }

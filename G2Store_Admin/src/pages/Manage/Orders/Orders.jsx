@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import orderApi from '../../../apis/orderApi'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 
 function Orders() {
   const [orders, setOrders] = useState([])
@@ -15,14 +16,7 @@ function Orders() {
 
   return (
     <Box sx={{ m: 5 }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/manage/orders">
-          Quản lý đơn hàng
-        </Link>
-      </Breadcrumbs>
+      <BreadCrumbs links={[{ name: 'Quản lý đơn hàng', href: 'admin/manage/orders' }]} />
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px  ', mt: 2 }}>
         <TableContainer component={Paper}>
           <Table aria-label="custom pagination table">
@@ -47,9 +41,9 @@ function Orders() {
                     <TableCell >{order?.address?.receiver_phone_no}</TableCell>
                     <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                   </TableRow>
-                )})}
+                )
+              })}
             </TableBody>
-
           </Table>
         </TableContainer>
       </Box>

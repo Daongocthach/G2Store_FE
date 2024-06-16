@@ -30,9 +30,9 @@ const listButton = [
     {
         name: 'Người dùng',
         commands: [
-            { path: '/admin/manage/sellers', name: 'Quản lý người bán' },
+            // { path: '/admin/manage/sellers', name: 'Quản lý người bán' },
             { path: '/admin/manage/shops', name: 'Quản lý cửa hàng' },
-            { path: '/admin/manage/users', name: 'Quản lý người mua' }
+            { path: '/admin/manage/users', name: 'Quản lý người dùng' }
         ]
     },
     {

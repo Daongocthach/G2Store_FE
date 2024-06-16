@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, TextField, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import ghnApi from '../../../../apis/ghnApi'
 import orderApi from '../../../../apis/orderApi'
 import authenApi from '../../../../apis/authenApi'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function CreateOrderGhn() {
+    const triggerAlert = useAlert()
     const navigate = useNavigate()
     const location = useLocation()
     const order = location.state
@@ -17,12 +18,9 @@ function CreateOrderGhn() {
     const [pickShipId, setPickShipId] = useState()
     const [pickShips, setPickShips] = useState([])
     const [loading, setLoading] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertWarning, setShowAlertWarning] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClickAdd = async () => {
         if (!requiredNote || !content || !pickShipId) {
-            setShowAlertWarning(true)
+            triggerAlert('Vui lòng điền đủ thông tin!', false, true)
         }
         else {
             setLoading(true)
@@ -57,17 +55,17 @@ function CreateOrderGhn() {
                     console.log(response?.data?.data?.order_code)
                     orderApi.updateOrder(order?.order_id, 'PACKED')
                         .then(() => {
-                            setShowAlert(true)
+                            triggerAlert('Tạo đơn thành công', false, false)
                             navigate('/seller/manage/orders')
                         })
                         .catch(error => {
                             console.log(error)
-                            setShowAlertFail(true)
+                            triggerAlert('Tạo đơn thất bại!', true, false)
                         })
                 })
                 .catch(error => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Tạo đơn thất bại!', true, false)
                 })
                 .finally(setLoading(false))
         }
@@ -128,9 +126,6 @@ function CreateOrderGhn() {
             <Box sx={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'end', pr: 5 }}>
                 <Button onClick={() => { handleClickAdd() }} variant='contained' sx={{ ':hover': { bgcolor: '#00B2EE' } }}>Tạo đơn hàng</Button>
             </Box>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Tạo đơn thành công'} />
-            <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Vui lòng điền đủ thông tin!'} isWarning={true} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Tạo đơn thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

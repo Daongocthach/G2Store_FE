@@ -12,6 +12,7 @@ import { formatCurrency } from '../../../utils/price'
 import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
 import SearchById from '../../../components/Search/Search'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 
 function Products() {
   const navigate = useNavigate()
@@ -95,14 +96,7 @@ function Products() {
   }, [page, sort, reRender, rowsPerPage, shop_id])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/manage/orders">
-          Quản lý sản phẩm
-        </Link>
-      </Breadcrumbs>
+      <BreadCrumbs links={[{ name: 'Quản lý sản phẩm', href: '' }]} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} startIcon={<AddCircle />} variant="outlined"
@@ -137,7 +131,7 @@ function Products() {
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá (vnđ)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tồn kho (sản phẩm)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đã bán (sản phẩm)</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đang hoạt động</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>

@@ -3,7 +3,7 @@ import { Breadcrumbs, Link } from '@mui/material'
 function BreadCrumbs({ links }) {
     return (
         <Breadcrumbs>
-            <Link underline="hover" color="inherit" href="/seller/dashboard">
+            <Link underline="hover" color="inherit" href="/admin/dashboard">
                 Trang chủ
             </Link>
             {Array.isArray(links) && links.map((link, index) => (

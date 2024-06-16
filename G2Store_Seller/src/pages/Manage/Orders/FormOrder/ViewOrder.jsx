@@ -84,7 +84,7 @@ function ViewOrder({ order }) {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' } }}>Tắt</Button>
+          <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' }, color: '#444444' }}>Tắt</Button>
         </DialogActions>
       </Dialog>
     </Box>

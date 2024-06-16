@@ -8,7 +8,7 @@ import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
 import { formatCurrency } from '../../../utils/price'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
-import DeleteItem from '../../../components/DeleteItem/DeleteItem'
+import DeleteShop from './FormShop/DeleteShop'
 
 function Shops() {
   const [loading, setLoading] = useState(false)
@@ -17,7 +17,6 @@ function Shops() {
   const [page, setPage] = useState(0)
   const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-
   const handleChangePage = (e, newPage) => {
     setPage(newPage)
   }
@@ -43,7 +42,7 @@ function Shops() {
   }, [page, reRender, rowsPerPage])
   return (
     <Box sx={{ m: 5, height: '100vh' }}>
-      <BreadCrumbs links={[{ name: 'Quản lý cửa hàng', href: '/seller/manage/shops' }]} />
+      <BreadCrumbs links={[{ name: 'Quản lý cửa hàng', href: 'admin/manage/shops' }]} />
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 1 }}>
         <TableContainer component={Paper} >
           <Table>
@@ -74,7 +73,7 @@ function Shops() {
                     <TableCell ><Typography>{formatCurrency(shop?.balance)}</Typography></TableCell>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <DeleteItem id={shop?.shop_id} content={'Bạn muốn khóa shop này ?'}/>
+                        <DeleteShop id={shop?.shop_id} />
                       </Box>
                     </TableCell>
                   </TableRow>

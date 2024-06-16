@@ -1,23 +1,10 @@
-import { Box, Typography, Breadcrumbs, Link } from '@mui/material'
-import { useEffect, useState } from 'react'
-
+import { Box } from '@mui/material'
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 function Notification() {
-    // const [notifications, setNotifications] = useState([])
-    // useEffect(() => {
-    //     notificationApi.getAllNotifications()
-    //         .then(response => {
-    //             setNotifications(response.data)
-    //         })
-    //         .catch(err => [
-    //             console.log(err)
-    //         ])
-    // }, [])
+
     return (
         <Box sx={{ m: 10 }}>
-            <Breadcrumbs sx={{ mt: 2 }}>
-                <Link underline="hover" color="inherit" href="/" variant='subtitle1'> Trang chủ</Link>
-                <Link underline="hover" color="inherit" variant='subtitle1' >Thông báo</Link>
-            </Breadcrumbs>
+            <BreadCrumbs links={[{ name: 'Thông báo', href: '' }]} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
                 <img src='https://phanphoiled.net/wp-content/uploads/2019/10/den-led-tron-rang-dong-A70N1-12w-gia-bong-den-led-rang-dong.jpg' alt='image'
                     style={{ objectFit: 'cover', borderRadius: '5px', height: '200px', with: '200px' }} />

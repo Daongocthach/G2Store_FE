@@ -2,36 +2,34 @@ import { useState } from 'react'
 import { Button, TextField, Box, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import sellerApi from '../../../../apis/sellerApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import { validateEmail } from '../../../../utils/email'
-
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function AddSeller() {
+    const triggerAlert = useAlert()
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const [role, setRole] = useState(3)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
-
     const handleChangeRole = (event) => {
         setRole(event.target.value)
     }
     const handleClickAdd = () => {
         if (!validateEmail(email) || password !== rePassword || !role) {
-            setShowAlertFail(true)
+            triggerAlert('Vui lòng kiểm tra lại thông tin!', false, true)
         }
         else {
             setLoading(true)
             sellerApi.addShopSeller(email, password, role)
                 .then(() => {
-                    setShowAlert(true)
+                    triggerAlert('Đăng ký thành công!', false, false)
                     navigate('/seller/manage/sellers')
                 })
                 .catch(error => {
+                    triggerAlert('Đăng ký thất bại!', true, false)
                     console.log(error)
                 })
                 .finally(() => {
@@ -99,13 +97,9 @@ function AddSeller() {
                     />
                 </Box>
             </Box>
-
             <Box sx={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'end', pr: 5 }}>
                 <Button onClick={() => { handleClickAdd() }} sx={{ bgcolor: '#1a71ff', color: 'white', fontWeight: '500', ':hover': { bgcolor: '#00B2EE' } }}>Đăng ký</Button>
             </Box>
-
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng ký thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đăng ký thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

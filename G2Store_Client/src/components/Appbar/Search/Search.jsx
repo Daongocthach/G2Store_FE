@@ -1,40 +1,18 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { Paper, Autocomplete, Button, Box, TextField, CircularProgress } from '@mui/material'
+import { Paper, Autocomplete, Button, Box, TextField } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function Search() {
     const navigate = useNavigate()
     const [name, setName] = useState('')
-    const [products, setProducts] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [searchTimeout, setSearchTimeout] = useState(null)
-
     const handleSearch = async () => {
-        // setLoading(true)
-        // productApi.searchProducts(name, 0, 100)
-        //     .then(response => {
-        //         setProducts(response?.content)
-        //         setLoading(false)
-        //     })
-        //     .catch(() => {
-        //         setProducts([])
-        //         setLoading(false)
-        //     })
         navigate('/genre-detail', { state: { name: name } })
     }
-
     const handleChange = (event) => {
         const newName = event.target.value
         setName(newName)
-        // if (searchTimeout) {
-        //     clearTimeout(searchTimeout)
-        // }
-        // setSearchTimeout(setTimeout(() => {
-        //     handleSearch()
-        // }, 500))
     }
-
     return (
         <Box sx={{ flex: 1, display: 'flex' }}>
             <Paper component="form" sx={{ display: 'flex', alignItems: 'center', minWidth: 400, height: 40 }}>
@@ -56,7 +34,6 @@ function Search() {
                     <SearchIcon />
                 </Button>
             </Paper>
-            {loading && <CircularProgress />}
         </Box>
     )
 }

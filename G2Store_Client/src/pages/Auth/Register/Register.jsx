@@ -1,23 +1,20 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Box, Button, Stack, TextField, Container } from '@mui/material'
+import { Box, Button, Stack, TextField, Container, Typography } from '@mui/material'
 import ReCAPTCHA from 'react-google-recaptcha'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import { validateEmail } from '../../../utils/email'
 import authenApi from '../../../apis/authenApi'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../components/Loading/Loading'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function Register() {
+  const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const siteKey = import.meta.env.VITE_SITE_KEY
   const [captcha, setCaptCha] = useState(null)
   const [otp, setOTP] = useState('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertOTP, setShowAlertOTP] = useState(false)
-  const [showAlertWarning, setShowAlertWarning] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const [showOTP, setShowOTP] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,18 +34,18 @@ function Register() {
   const handleShowOTP = async () => {
     setLoading(true)
     if (!validateEmail(email) || password !== repeatPassword || !captcha) {
-      setShowAlertWarning(true)
+      triggerAlert('Vui lòng điền đầy đủ thông tin!', false, true)
       setLoading(false)
     } else {
       authenApi.register(captcha, email, password)
         .then(() => {
-          setShowAlertOTP(true)
+          triggerAlert('Đã gửi email chứa OTP! Vui lòng kiểm tra hộp thư của bạn', false, false)
           setShowOTP(true)
           setLoading(false)
         })
         .catch((error) => {
           console.log(error)
-          setShowAlertFail(true)
+          triggerAlert('Gửi OTP thất bại!', true, false)
         })
         .finally(() => setLoading(false))
     }
@@ -57,66 +54,116 @@ function Register() {
     setLoading(true)
     authenApi.activeAccount(otp)
       .then(() => {
-        setShowAlert(true)
+        triggerAlert('Xác thực thành công! G2Store xin chào', false, false)
         setTimeout(() => {
           navigate('/login')
         }, 1000)
         setLoading(false)
       })
       .catch(() => {
-        setShowAlertFail(true)
+        triggerAlert('Xác thực thất bại!', true, false)
       })
       .finally(() => setLoading(false))
   }
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      <Box sx={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', bgcolor: 'black' }}>
-        <img src={loginImage} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5, filter: 'blur(1px)' }} />
-        <Box sx={{
-          position: 'absolute', width: { xs: '90%', sm: '70%', md: '30%' }, height: 'auto', borderRadius: '5px',
-          top: '30%', left: '50%', bgcolor: 'black', opacity: 0.8, transform: 'translate(-50%, -30%)'
-        }}>
-          <h2 style={{ textAlign: 'center', color: 'white' }}>Đăng ký</h2>
-          <Stack component="form" sx={{ m: 3 }} spacing={2} >
-            {!showOTP && <TextField variant="filled" size="small" placeholder='Email' sx={{ bgcolor: 'white', borderRadius: 3 }}
-              onChange={e => setEmail(e.target.value)} error={!validateEmail(email)} helperText={validateEmail(email) ? '' : 'Email không đúng định dạng'}
-            />}
-            {!showOTP && <TextField placeholder='Mật khẩu' variant="filled" size="small" type='password'
-              sx={{ bgcolor: 'white', borderRadius: 3 }} onChange={e => setPassword(e.target.value)}
-            />}
-            {!showOTP && <TextField placeholder="Nhập lại mật khẩu" variant="filled" size="small" type='password'
-              sx={{ bgcolor: 'white', borderRadius: 3 }} onChange={e => setRepeatPassword(e.target.value)}
-              error={password !== repeatPassword} helperText={password !== repeatPassword ? 'Password không trùng khớp' : ''}
-            />}
-            {showOTP && <TextField placeholder='Nhập OTP' variant="filled" size="small" type='text'
-              sx={{ bgcolor: 'white', borderRadius: 1 }} onChange={e => setOTP(e.target.value)}
-            />}
-            {!showOTP &&
-              <ReCAPTCHA sitekey={siteKey} type='image' onChange={(val) => setCaptCha(val)} />
-            }
-            {!showOTP ? <Button sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} onClick={() => handleShowOTP()}>Nhận OTP qua email</Button>
-              : <Button sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'red' } }} onClick={() => onFinish()}>Đăng ký</Button>}
-            {!showOTP && <Button variant='contained' color='warning' sx={{ fontWeight: 'bold', ':hover': { bgcolor: '#444444' } }}
-              onClick={() => { setShowOTP(true) }} >
-              Đã gửi? Xác nhận OTP
-            </Button>}
-            {showOTP && <Button variant='contained' color='warning' sx={{ fontWeight: 'bold', ':hover': { bgcolor: '#444444' } }}
-              onClick={() => { countdown > 0 ? null : handleShowOTP() }} >
-              {`Gửi lại OTP (${countdown}s)`}
-            </Button>}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Link to={'/'} style={{ color: 'white' }}>Về trang chủ ?</Link>
-              <Link to={'/login'} style={{ color: 'white' }}>Đăng nhập?</Link>
+    <Container disableGutters maxWidth={false} className="h-screen">
+      <Box className="w-full h-full overflow-hidden relative bg-black">
+        <img src={loginImage} className="w-full h-full object-cover opacity-50 blur-sm" />
+        <Box className="absolute w-[90%] sm:w-[70%] md:w-[30%] h-auto rounded-md top-[30%] left-1/2 bg-black opacity-80 transform -translate-x-1/2 -translate-y-1/3 p-8">
+          <Typography variant='h6' className="text-center text-white font-bold">Đăng ký</Typography>
+          <Stack component="form" className="mt-6 space-y-4">
+            {!showOTP && (
+              <TextField
+                variant="filled"
+                size="small"
+                placeholder="Email"
+                className="bg-white rounded-md"
+                onChange={e => setEmail(e.target.value)}
+                error={!validateEmail(email)}
+                helperText={validateEmail(email) ? '' : 'Email không đúng định dạng'}
+              />
+            )}
+            {!showOTP && (
+              <TextField
+                placeholder="Mật khẩu"
+                variant="filled"
+                size="small"
+                type="password"
+                className="bg-white rounded-md"
+                onChange={e => setPassword(e.target.value)}
+              />
+            )}
+            {!showOTP && (
+              <TextField
+                placeholder="Nhập lại mật khẩu"
+                variant="filled"
+                size="small"
+                type="password"
+                className="bg-white rounded-md"
+                onChange={e => setRepeatPassword(e.target.value)}
+                error={password !== repeatPassword}
+                helperText={password !== repeatPassword ? 'Password không trùng khớp' : ''}
+              />
+            )}
+            {showOTP && (
+              <TextField
+                placeholder="Nhập OTP"
+                variant="filled"
+                size="small"
+                type="text"
+                className="bg-white rounded-md"
+                onChange={e => setOTP(e.target.value)}
+              />
+            )}
+            {!showOTP && (
+              <ReCAPTCHA sitekey={siteKey} type="image" onChange={val => setCaptCha(val)} />
+            )}
+            {!showOTP ? (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleShowOTP()}
+              >
+                Nhận OTP qua email
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={() => onFinish()}
+              >
+                Đăng ký
+              </Button>
+            )}
+            {!showOTP && (
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={() => setShowOTP(true)}
+              >
+                Đã gửi? Xác nhận OTP
+              </Button>
+            )}
+            {showOTP && (
+              <Button
+                variant="contained"
+                color="error"
+                className="font-bold hover:bg-gray-700"
+                onClick={() => (countdown > 0 ? null : handleShowOTP())}
+              >
+                {`Gửi lại OTP (${countdown}s)`}
+              </Button>
+            )}
+            <Box className="flex flex-row items-center justify-between">
+              <Link to="/" className="text-white">Về trang chủ ?</Link>
+              <Link to="/login" className="text-white">Đăng nhập?</Link>
             </Box>
           </Stack>
         </Box>
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng ký thành công'} />
-      <ShowAlert showAlert={showAlertOTP} setShowAlert={setShowAlertOTP} content={'Gửi thành công, Vui lòng kiểm tra email của bạn!'} />
-      <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Vui lòng điền đây đủ thông tin'} isWarning={true} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đăng ký thất bại'} isFail={true} />
       {loading && <Loading />}
     </Container>
+
   )
 }
 

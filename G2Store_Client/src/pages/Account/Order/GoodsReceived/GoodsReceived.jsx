@@ -1,15 +1,14 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Box } from '@mui/material'
+import { Button, Box } from '@mui/material'
 import orderApi from '../../../../apis/orderApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import DialogTextOnly from '../../../../components/Dialog/DialogTextOnly'
 
 function GoodsReceived({ orderId, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
-
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -20,12 +19,12 @@ function GoodsReceived({ orderId, reRender, setReRender }) {
         setLoading(true)
         orderApi.goodsReceived(orderId)
             .then(() => {
-                setShowAlert(true)
+                triggerAlert('Xác nhận nhận hàng thành công', false, false)
                 setReRender(!reRender)
             })
             .catch(error => {
                 console.log(error)
-                setShowAlertFail(true)
+                triggerAlert('Xác nhận nhận hàng thất bại!', true, false)
             })
             .finally(() => setLoading(false))
         handleClose()
@@ -35,16 +34,7 @@ function GoodsReceived({ orderId, reRender, setReRender }) {
             <Button variant="contained" color='success' size='small' sx={{ borderRadius: 2 }} onClick={handleClickOpen}>
                 Đã nhận hàng
             </Button>
-            <Dialog open={open} onClose={handleClose} >
-                <DialogTitle sx={{ color: '#444444' }}>Bạn xác nhận đã nhận hàng?</DialogTitle>
-                <DialogContent>Không thể hoàn tác!</DialogContent>
-                <DialogActions>
-                <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' } }}>Hủy</Button>
-                    <Button onClick={handleClickGoodsReceived} sx={{ ':hover': { bgcolor: 'inherit' } }}>Xác nhận</Button>
-                </DialogActions>
-            </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content='Nhận hàng thành công' />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Nhận hàng thất bại'} isFail={true} />
+            <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickGoodsReceived} title={'Xóa địa chỉ'} content={'Bạn xác nhận đã nhận hàng? Không thể hoàn tác!'} />
             {loading && <Loading />}
         </Box>
     )

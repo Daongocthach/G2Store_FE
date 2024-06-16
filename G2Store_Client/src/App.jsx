@@ -6,11 +6,12 @@ import { useSelector } from 'react-redux'
 import DefaultLayout from './layouts/DefaultLayout'
 import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
+import AlertProvider from './components/ShowAlert/ShowAlert'
 
 function App() {
   const keep_login = useSelector(state => state.auth.keep_login)
   return (
-    <div>
+    <AlertProvider>
       <ToastContainer />
       <Router>
         <Routes>
@@ -58,7 +59,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
-    </div>
+    </AlertProvider>
   )
 }
 

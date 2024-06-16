@@ -1,39 +1,36 @@
 import { useState, useEffect } from 'react'
-import { Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Box, Checkbox, Tooltip } from '@mui/material'
+import { Typography, Dialog, DialogContent, DialogTitle, Box, Checkbox, Tooltip } from '@mui/material'
 import { useSelector } from 'react-redux'
 import Add from '@mui/icons-material/Add'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import productApi from '../../../../apis/productApi'
 import { formatCurrency } from '../../../../utils/price'
 import emptyImage from '../../../../assets/img/empty-order.png'
-
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import DialogAction from '../../../../components/Dialog/DialogAction'
 
 function AddShopCateProduct({ shop_cate_id }) {
+    const triggerAlert = useAlert()
     const shop_id = useSelector(state => state.auth.shop_id)
     const [checkedProducts, setCheckedProducts] = useState([])
     const [checkedAll, setCheckedAll] = useState(false)
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [products, setProducts] = useState([])
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
-
     const handleClose = () => {
         setOpen(false)
     }
-
     const handleClickAdd = async () => {
         setLoading(true)
         const ids = checkedProducts
         if (shop_id) {
             productApi.addProductShopCategory(shop_cate_id, { ids })
                 .then(() => {
-                    setShowAlert(true)
+                    triggerAlert('Thêm thành công!', false, false)
                 })
                 .catch((error) => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Thêm thất bại!', true, false)
                 })
                 .finally(() => setLoading(false))
         }
@@ -109,13 +106,8 @@ function AddShopCateProduct({ shop_cate_id }) {
                         <Typography variant='h6' >Không có sản phẩm nào chưa có danh mục!</Typography>
                     </Box>}
                 </DialogContent>
-                <DialogActions>
-                    <Button sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} onClick={() => { setOpen(false) }} size='small'>Hủy</Button>
-                    <Button sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} onClick={handleClickAdd} size='small' >Thêm</Button>
-                </DialogActions>
+                <DialogAction setOpen={setOpen} handleClick={handleClickAdd} />
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm ngành hàng thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

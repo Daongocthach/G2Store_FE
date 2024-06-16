@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Typography, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
+import { Typography, Dialog, DialogContent, DialogTitle, Box, Tooltip, DialogActions, Button } from '@mui/material'
 import { Visibility, Delete } from '@mui/icons-material'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
 import productApi from '../../../../apis/productApi'
 import { formatCurrency } from '../../../../utils/price'
@@ -11,8 +10,6 @@ function ViewShopCateProduct({ shop_cate_id }) {
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [products, setProducts] = useState([])
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
 
     const handleClose = () => {
         setOpen(false)
@@ -51,7 +48,7 @@ function ViewShopCateProduct({ shop_cate_id }) {
                                         <Typography variant='caption' fontWeight={'bold'} color={'#cd3333'}>{formatCurrency(product?.price)}</Typography>
                                     </Box>
                                 </Box>
-                                <Tooltip title='Xóa sản phẩm'><Delete sx={{ ':hover': { bgcolor: 'inherit' }, color:'#444444', cursor:'pointer' }}/></Tooltip>
+                                <Tooltip title='Xóa sản phẩm'><Delete sx={{ ':hover': { bgcolor: 'inherit' }, color: '#444444', cursor: 'pointer' }} /></Tooltip>
                             </Box>
                         ))}
                         {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
@@ -60,9 +57,10 @@ function ViewShopCateProduct({ shop_cate_id }) {
                         </Box>}
                     </Box>
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' }, color: '#444444' }}>Tắt</Button>
+                </DialogActions>
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm ngành hàng thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

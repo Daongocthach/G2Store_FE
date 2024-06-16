@@ -9,7 +9,7 @@ function RelativeProducts({ category }) {
     const [products, setProducts] = useState()
 
     useEffect(() => {
-        productApi.getProductsByCategoryId(category?.category_id, 0, 8)
+        productApi.getProductsByCategoryId(category?.category_id, 0, 16)
             .then((response) => setProducts(response?.content))
             .catch((error) => console.log(error))
     }, [])

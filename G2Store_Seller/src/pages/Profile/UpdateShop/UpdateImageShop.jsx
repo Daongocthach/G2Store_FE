@@ -4,8 +4,10 @@ import { AddCircle } from '@mui/icons-material'
 import shopApi from '../../../apis/shopApi'
 import avatarNull from '../../../assets/img/avatar.png'
 import Loading from '../../../components/Loading/Loading'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
-function UpdateImageShop({ image, reRender, setReRender, setShowAlert, setShowAlertFail }) {
+function UpdateImageShop({ image, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [imageShop, setImageShop] = useState(image)
     const [loading, setLoading] = useState(false)
     const handleImageChange = async (e) => {
@@ -26,12 +28,13 @@ function UpdateImageShop({ image, reRender, setReRender, setShowAlert, setShowAl
                       setImageShop(reader.result)
                     }
                     reader.readAsDataURL(file)
-                    setShowAlert(true)
+                    triggerAlert('Cập nhật thành công!', false, false)
                     setReRender(!reRender)
                 })
                 .catch((error) => {
                     console.log(error)
-                    setShowAlertFail(true)
+                    triggerAlert('Cập nhật thất bại!', true, false)
+
                 })
                 .finally(() => setLoading(false))
         }

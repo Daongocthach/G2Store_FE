@@ -21,7 +21,7 @@ export default function SpeedDialTooltipOpen() {
     return (
         <SpeedDial
             ariaLabel="SpeedDial controlled open example"
-            sx={{ position: 'fixed', bottom: 16, right: 16 }}
+            className='fixed bottom-4 right-4'
             icon={<SpeedDialIcon />}
             onClose={handleClose}
             onOpen={handleOpen}

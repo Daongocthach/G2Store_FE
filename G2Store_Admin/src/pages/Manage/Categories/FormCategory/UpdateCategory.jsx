@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, Tooltip } from '@mui/material'
+import { TextField, Dialog, DialogContent, DialogTitle, Box, Typography, Tooltip } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import categoryApi from '../../../../apis/categoryApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
+import DialogAction from '../../../../components/Dialog/DialogAction'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function UpdateCategory({ category, reRender, setReRender }) {
+  const triggerAlert = useAlert()
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState()
   const [open, setOpen] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
     setName(category?.name)
@@ -22,12 +22,13 @@ function UpdateCategory({ category, reRender, setReRender }) {
     setLoading(true)
     categoryApi.updateCategory(category?.category_id, name)
       .then(() => {
-        setShowAlert(true)
+        triggerAlert('Cập nhật danh mục thành công!', false, false)
         setReRender(!reRender)
       })
       .catch((error) => {
         console.log(error)
-        setShowAlertFail(true)
+        triggerAlert('Cập nhật danh mục thất bại!', true, false)
+
       })
       .finally(() => setLoading(false))
     handleClose()
@@ -39,20 +40,10 @@ function UpdateCategory({ category, reRender, setReRender }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ textAlign: 'center' }}>Cập nhật danh mục</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '350px' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant='subtitle2' minWidth={'70px'}>Tên: </Typography>
-              <TextField fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
-            </Box>
-          </Box>
+          <TextField fullWidth variant='filled' size='small' sx={{ mt: 1 }} label="Tên danh mục" value={name} onChange={(e) => setName(e.target.value)} />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 500, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-          <Button onClick={handleUpdate} size='small' sx={{ fontWeight: 500, bgcolor: '#1E90FF', color: 'white' }} >Cập nhật</Button>
-        </DialogActions>
+        <DialogAction handleClick={handleUpdate} setOpen={setOpen} />
       </Dialog>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật danh mục thành công!'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} isFail={true} content={'Cập nhật danh mục thất bại!'} />
       {loading && <Loading />}
     </Box>
   )

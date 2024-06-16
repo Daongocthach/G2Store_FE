@@ -5,19 +5,16 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import { validateEmail } from '../../../utils/email'
 import authenApi from '../../../apis/authenApi'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../components/Loading/Loading'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function Register() {
+  const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const siteKey = import.meta.env.VITE_SITE_KEY
   const [captcha, setCaptCha] = useState(null)
   const [otp, setOTP] = useState('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertOTP, setShowAlertOTP] = useState(false)
-  const [showAlertWarning, setShowAlertWarning] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const [showOTP, setShowOTP] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -26,18 +23,18 @@ function Register() {
   const handleShowOTP = async () => {
     setLoading(true)
     if (!validateEmail(email) || password !== repeatPassword || !captcha) {
-      setShowAlertWarning(true)
+      triggerAlert('Vui lòng điền đây đủ thông tin!', false, true)
       setLoading(false)
     } else {
       authenApi.register(captcha, email, password)
         .then(() => {
-          setShowAlertOTP(true)
+          triggerAlert('Gửi thành công, Vui lòng kiểm tra email của bạn!', false, false)
           setShowOTP(true)
           setLoading(false)
         })
         .catch((error) => {
           console.log(error)
-          setShowAlertFail(true)
+          triggerAlert('Gửi OTP thất bại!', true, false)
         })
         .finally(() => setLoading(false))
     }
@@ -46,14 +43,12 @@ function Register() {
     setLoading(true)
     authenApi.activeAccount(otp)
       .then(() => {
-        setShowAlert(true)
-        setTimeout(() => {
-          navigate('/')
-        }, 1000)
+        triggerAlert('Đăng ký thành công!', false, false)
+        navigate('/')
         setLoading(false)
       })
       .catch(() => {
-        setShowAlertFail(true)
+        triggerAlert('Đăng ký thất bại!', true, false)
       })
       .finally(() => setLoading(false))
   }
@@ -92,10 +87,6 @@ function Register() {
           </Stack>
         </Box>
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng ký thành công'} />
-      <ShowAlert showAlert={showAlertOTP} setShowAlert={setShowAlertOTP} content={'Gửi thành công, Vui lòng kiểm tra email của bạn!'} />
-      <ShowAlert showAlert={showAlertWarning} setShowAlert={setShowAlertWarning} content={'Vui lòng điền đây đủ thông tin'} isWarning={true} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đăng ký thất bại'} isFail={true} />
       {loading && <Loading />}
     </Container>
   )

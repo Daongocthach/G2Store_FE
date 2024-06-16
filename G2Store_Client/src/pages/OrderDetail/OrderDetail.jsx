@@ -1,37 +1,20 @@
-import { Box, Typography, LinearProgress, Container, Breadcrumbs, Link, Divider, Input, Button } from '@mui/material'
+import { Box, Typography, Container, Divider, Input, Button } from '@mui/material'
 import { LocalShipping, FiberManualRecord, Storefront, NavigateNext, Receipt } from '@mui/icons-material'
-import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { covertStringToDate } from '../../utils/date'
 import OrderItem from '../Account/Order/OrderItem/OrderItem'
 import { formatCurrency } from '../../utils/price'
 import { mockData } from '../../apis/mockdata'
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
 function OrderDetail() {
-  const navigate = useNavigate()
-  const location = useLocation()
+    const navigate = useNavigate()
+    const location = useLocation()
     const order = location.state
-
-    const [rerender, setRerender] = useState(false)
-    const [loading, setLoading] = useState(false)
-
     return (
         <Box sx={{ minHeight: '100%', paddingX: { xs: 0, sm: 10, md: 20, lg: 50 } }}>
             <Container fixed>
-                <Breadcrumbs sx={{ mt: 2 }}>
-                    <Link underline="hover" color="inherit" href="/" variant='subtitle2'>
-                        Trang chủ
-                    </Link>
-                    <Link underline="hover" color="inherit" href="/profile" variant='subtitle2' >
-                        Tài khoản
-                    </Link>
-                    <Link underline="hover" color="inherit" variant='subtitle2' >
-                        Đơn hàng
-                    </Link>
-                    <Link underline="hover" color="inherit" variant='subtitle2' >
-                        Chi tiết đơn hàng
-                    </Link>
-                </Breadcrumbs>
+                <BreadCrumbs links={[{ name: 'Tài khoản', href: '/profile' }, { name: 'Chi tiết đơn hàng', href: '' }]} />
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Box sx={useStyles.flexBox}>
                         <Box sx={useStyles.flexBox}>
@@ -100,7 +83,7 @@ function OrderDetail() {
                             <Typography variant='subtitle1' sx={useStyles.inputTitle}>Tổng tiền:</Typography>
                             <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order?.total)}</Typography>
                         </Box>
-                        <Divider/>
+                        <Divider />
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 1, mb: 1, flexWrap: 'wrap' }}>
                             <Typography variant='subtitle1' sx={useStyles.inputTitle}>Phí vận chuyển:</Typography>
                             <Typography variant='subtitle1' color={'#2e7d32'} >{formatCurrency(order?.fee_ship)}</Typography>
@@ -118,7 +101,6 @@ function OrderDetail() {
                             <Typography variant='subtitle1' >{formatCurrency(order?.point_spent)}</Typography>
                         </Box>
                     </Box>
-                    {loading && <LinearProgress color="secondary" sx={{ mt: 2 }} />}
                 </Box>
             </Container>
         </Box>

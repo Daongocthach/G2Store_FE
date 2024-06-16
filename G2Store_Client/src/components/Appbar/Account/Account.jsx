@@ -7,15 +7,15 @@ import { logout } from '../../../redux/actions/auth'
 import { persistor } from '../../../redux/store'
 import authenApi from '../../../apis/authenApi'
 import avatarNull from '../../../assets/img/avatar.png'
-import ShowAlert from '../../ShowAlert/ShowAlert'
+import { useAlert } from '../../ShowAlert/ShowAlert'
 
 function Account() {
+    const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = useSelector(state => state.auth)
     const atk = localStorage.getItem('atk')
     const [anchorEl, setAnchorEl] = useState(null)
-    const [showAlert, setShowAlert] = useState(false)
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
@@ -27,8 +27,8 @@ function Account() {
         authenApi.logout()
         dispatch(logout())
         persistor.purge()
-        setShowAlert(true)
         handleClose()
+        triggerAlert('Đăng xuất thành công!', false, false)
         navigate('/')
     }
     return (
@@ -46,7 +46,7 @@ function Account() {
                     <img src={user?.avatar || avatarNull} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
                 </Avatar>}
             </IconButton>
-            <Menu open={open} anchorEl={anchorEl} anchorOrigin={{ vertical: 'bottom', horizontal: 'left', }} onClose={handleClose}>
+            <Menu open={open} anchorEl={anchorEl} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} onClose={handleClose}>
                 {atk && <MenuItem onClick={handleClose}>
                     <Link to={'/profile'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <AccountCircle fontSize="small" sx={{ mr: 1 }} />
@@ -65,7 +65,6 @@ function Account() {
                     Đăng xuất
                 </MenuItem>}
             </Menu>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng xuất thành công!'} />
         </Box>
     )
 }

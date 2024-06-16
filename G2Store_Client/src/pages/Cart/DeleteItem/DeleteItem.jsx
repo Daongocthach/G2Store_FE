@@ -1,16 +1,13 @@
-import { Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip } from '@mui/material'
-import DeleteOutline from '@mui/icons-material/DeleteOutline'
+import { Tooltip } from '@mui/material'
+import { DeleteForever } from '@mui/icons-material'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
-import { removeFromCart } from '../../../redux/actions/cart'
+import DialogTextOnly from '../../../components/Dialog/DialogTextOnly'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
-function DeleteItem({ shopItemId, cartItemId, reRender, setReRender }) {
-    const dispatch = useDispatch()
+function DeleteItem({ shopItemId, cartItemId, reRender, setReRender, isDeleteAll }) {
+    const triggerAlert = useAlert()
     const [open, setOpen] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -18,48 +15,62 @@ function DeleteItem({ shopItemId, cartItemId, reRender, setReRender }) {
         setOpen(false)
     }
     const handleClickDelete = () => {
-        if (cartItemId) {
+        if (isDeleteAll) {
+            cartItemV2Api.deleteAllCart()
+                .then(() => {
+                    triggerAlert('Xóa thành công!', false, false)
+                    setReRender(!reRender)
+                })
+                .catch(err => { console.log(err) })
+        }
+        else if (cartItemId) {
             cartItemV2Api.deleteCartItems(cartItemId)
                 .then(() => {
-                    setShowAlert(true)
+                    triggerAlert('Đã xóa cả sản phẩm khỏi giỏ!', false, false)
                     setReRender(!reRender)
                 })
                 .catch(err => {
                     console.log(err)
-                    setShowAlertFail(true)
+                    triggerAlert('Xóa sản phẩm khỏi giỏ thất bại!', true, false)
+
                 })
         }
         else {
             cartItemV2Api.deleteShopItem(shopItemId)
                 .then(() => {
-                    setShowAlert(true)
-                    dispatch(removeFromCart(shopItemId))
+                    triggerAlert('Đã xóa sản phẩm của shop khỏi giỏ', false, false)
                     setReRender(!reRender)
                 })
                 .catch(err => {
                     console.log(err)
-                    setShowAlertFail(true)
+                    triggerAlert('Xóa sản phẩm khỏi giỏ thất bại!', true, false)
+
                 })
         }
+
+
         handleClose()
     }
     return (
-        <div style={{ marginTop: 4 }}>
-            <Tooltip title={shopItemId ? 'Xóa' : 'Xóa tất cả sản phẩm của shop'}><DeleteOutline sx={{ color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>
-            <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >{shopItemId ? 'Xóa sản phẩm khỏi giỏ?' : 'Xóa tất cả sản phẩm của shop này?'}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Bạn muốn xóa sản phẩm này khỏi giỏ hàng, bấm 'Chấp nhận' để tiếp tục, 'Hủy' để thoát
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Hủy</Button>
-                    <Button onClick={handleClickDelete} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} >Chấp nhận</Button>
-                </DialogActions>
-            </Dialog>
-            <ShowAlert setShowAlert={setShowAlert} showAlert={showAlert} content={'Xóa sản phẩm khỏi giỏ thành công'} />
-            <ShowAlert setShowAlert={setShowAlertFail} showAlert={showAlertFail} content={'Xóa sản phẩm khỏi giỏ thất bại'} isFail={true} />
+        <div>
+            {isDeleteAll ?
+                <Tooltip title='Xóa tất cả khỏi giỏ'>
+                    <DeleteForever className='text-gray-700 cursor-pointer' onClick={handleClickOpen} />
+                </Tooltip>
+                :
+                <Tooltip title={shopItemId ? 'Xóa' : 'Xóa tất cả sản phẩm của shop'}>
+                    <DeleteForever className='text-gray-600 cursor-pointer' onClick={handleClickOpen} />
+                </Tooltip>
+            }
+            {isDeleteAll ?
+                <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickDelete}
+                    title={'Xóa tất cả sản phẩm khỏi giỏ?'}
+                    content={'Bạn muốn xóa tất cả sản phẩm khỏi giỏ hàng, bấm Chấp nhận để tiếp tục, Hủy để thoát'} />
+                :
+                <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickDelete}
+                    title={shopItemId ? 'Xóa sản phẩm khỏi giỏ?' : 'Xóa tất cả sản phẩm của shop này?'}
+                    content={'Bạn muốn xóa sản phẩm này khỏi giỏ hàng, bấm Chấp nhận để tiếp tục, Hủy để thoát'} />
+            }
         </div>
     )
 }

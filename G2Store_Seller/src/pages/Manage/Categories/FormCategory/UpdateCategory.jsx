@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, Tooltip } from '@mui/material'
+import { TextField, Dialog, DialogContent, DialogTitle, Tooltip } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import categoryApi from '../../../../apis/categoryApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
+import DialogAction from '../../../../components/Dialog/DialogAction'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function UpdateCategory({ category, reRender, setReRender }) {
+  const triggerAlert = useAlert()
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState()
   const [open, setOpen] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
     setName(category?.name)
@@ -22,12 +22,12 @@ function UpdateCategory({ category, reRender, setReRender }) {
     setLoading(true)
     categoryApi.updateShopCategory(category?.shop_cate_id, name)
       .then(() => {
-        setShowAlert(true)
+        triggerAlert('Cập nhật thành công!', false, false)
         setReRender(!reRender)
       })
       .catch((error) => {
         console.log(error)
-        setShowAlertFail(true)
+        triggerAlert('Cập nhật thất bại!', true, false)
       })
       .finally(() => setLoading(false))
     handleClose()
@@ -38,15 +38,10 @@ function UpdateCategory({ category, reRender, setReRender }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ textAlign: 'center' }}>Cập nhật ngành hàng</DialogTitle>
         <DialogContent>
-          <TextField fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
+          <TextField variant='filled' fullWidth size='small' value={name} onChange={(e) => setName(e.target.value)} />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }} >Hủy</Button>
-          <Button onClick={handleUpdate} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }} >Cập nhật</Button>
-        </DialogActions>
+        <DialogAction setOpen={setOpen} handleClick={handleUpdate} />
       </Dialog>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập ngành hàng thành công!'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} isFail={true} content={'Cập ngành hàng thất bại!'} />
       {loading && <Loading />}
     </div>
   )

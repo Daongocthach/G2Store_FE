@@ -4,23 +4,21 @@ import {
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import customerApi from '../../../apis/userApi'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../components/Loading/Loading'
 
 function Customers() {
   const [loading, setLoading] = useState(false)
   const [customers, setCustomers] = useState([])
   const [role, setRole] = useState(0)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
+
   useEffect(() => {
-    customerApi.getCustomers()
-      .then(response => {
-        setCustomers(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    // customerApi.getCustomers()
+    //   .then(response => {
+    //     setCustomers(response)
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
   }, [role])
 
   return (
@@ -62,8 +60,7 @@ function Customers() {
           </Table>
         </TableContainer>
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Cập nhật thất bại'} isFail={true} />
+
       {loading && <Loading />}
     </Box>
   )

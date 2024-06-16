@@ -2,18 +2,16 @@ import { useState } from 'react'
 import { Container, TextField, Stack, Button, Box } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setCookie } from '../../../utils/cookie'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../components/Loading/Loading'
 import { login, updateProfile } from '../../../redux/actions/auth'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 function Login() {
+  const triggerAlert = useAlert()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -23,32 +21,30 @@ function Login() {
       if (email !== '' && password !== '') {
         const response = await authenApi.login({ email, password })
         if (response) {
-          setShowAlert(true)
+          triggerAlert('Đăng nhập thành công!', false, false)
           localStorage.setItem('atk', response?.access_token)
           localStorage.setItem('rtk', response?.refresh_token)
           dispatch(login())
           authenApi.me()
             .then((response) => {
               const data = {
-                avatar : response?.avatar,
+                avatar: response?.avatar,
                 shop_id: response?.shop?.shop_id
               }
               dispatch(updateProfile(data))
-             })
-          setTimeout(() => {
-            navigate('/seller/dashboard')
-          }, 1000)
+            })
+          navigate('/seller/dashboard')
           setLoading(false)
         }
         else {
           console.log(response)
-          setShowAlertFail(true)
+          triggerAlert('Đăng nhập thất bại!', true, false)
         }
       }
       setLoading(false)
     } catch (error) {
       setLoading(false)
-      setShowAlertFail(true)
+      triggerAlert('Đăng nhập thất bại!', true, false)
       console.log(error)
     }
   }
@@ -83,8 +79,6 @@ function Login() {
           </Stack>
         </Box>
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng nhập thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đăng nhập thất bại'} isFail={true} />
       {loading && <Loading />}
     </Container>
   )

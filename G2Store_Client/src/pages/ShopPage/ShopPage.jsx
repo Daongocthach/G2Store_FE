@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import {
-    Typography, Grid, Box, Breadcrumbs, Link, Menu, Chip, Avatar, CircularProgress, Input,
+    Typography, Grid, Box, Menu, Chip, Avatar, CircularProgress, Input,
     Rating, Pagination, Tooltip, Tabs, Tab
 } from '@mui/material'
 import { ChatBubbleOutline, AddBusiness, Dehaze, KeyboardArrowDown, RestartAlt } from '@mui/icons-material'
 import { useLocation } from 'react-router-dom'
 import imageShop from '../../assets/img/shopDesign.png'
-import MenuCategory from './MenuCategory/MenuCategory'
+import MenuCategory from '../../components/MenuCategory/MenuCategory'
 import shopApi from '../../apis/shopApi'
 import Loading from '../../components/Loading/Loading'
 import avatarNull from '../../assets/img/avatar.png'
 import CardProduct from '../../components/Product/CardProduct'
 import productApi from '../../apis/productApi'
-// import SpeedDialTooltipOpen from '../../components/Chat/Chat'
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
 function ShopPage() {
     const location = useLocation()
@@ -70,10 +70,7 @@ function ShopPage() {
     }, [page, shop_id, category])
     return (
         <Box sx={{ minHeight: '100vh', p: 2 }} >
-            <Breadcrumbs>
-                <Link underline="hover" color="inherit" href="/" > Trang chủ </Link>
-                <Link underline="hover" color="inherit" > Gian hàng </Link>
-            </Breadcrumbs>
+            <BreadCrumbs links={[{ name: 'Cửa hàng', href: '' }]} />
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', bgcolor: 'orange', height: 120, position: 'relative', }}>
                 <img src={imageShop} style={{ objectFit: 'cover', height: 120, width: '100%' }} />
                 <Box sx={{ position: 'absolute', display: 'flex', alignItems: 'center', bgcolor: 'white', height: 90, ml: 2, paddingX: 2, gap: 3, borderRadius: 2 }}>
@@ -85,11 +82,11 @@ function ShopPage() {
                         <Typography variant="subtitle2" noWrap color={'#555555'}>Theo dõi: 10</Typography>
                         <Typography variant="subtitle2" noWrap color={'#555555'}> Đánh giá tích cực: 90% </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor:'pointer' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                         <ChatBubbleOutline sx={{ fontSize: 30, color: '#193744' }} />
                         <Typography variant="subtitle2" noWrap color={'#555555'}>Chat</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor:'pointer' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                         <AddBusiness sx={{ fontSize: 30, color: '#193744' }} />
                         <Typography variant="subtitle2" noWrap color={'#555555'}> Theo dõi </Typography>
                     </Box>
@@ -130,7 +127,7 @@ function ShopPage() {
                     {!loading && <Grid container spacing={1} maxWidth='lg' >
                         {Array.isArray(top5products) && top5products.map((product, index) => (
                             <Grid key={index} item xs={6} sm={6} md={3} lg={2} >
-                                <CardProduct product={product} isShort={true}/>
+                                <CardProduct product={product} isShort={true} />
                             </Grid>
                         ))}
                     </Grid>}
@@ -162,42 +159,14 @@ function ShopPage() {
                     </Box>
                 </Box>
             </Box>}
-
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
-                <MenuCategory categories={categories} setCategory={setCategory} />
+                <MenuCategory categories={categories} setCategory={setCategory} isShopPage={true} />
             </Menu>
             {loading && <Loading />}
         </Box>
     )
 }
 export default ShopPage
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`
-    }
-}
-function TabPanel(props) {
-    const { children, value, index, ...other } = props
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    )
-}
-
 
 const useStyles = {
     chip: {

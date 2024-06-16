@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
+import { TextField, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
 import Add from '@mui/icons-material/Add'
 import categoryApi from '../../../../apis/categoryApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import DialogAction from '../../../../components/Dialog/DialogAction'
 
 function AddCategory({ parent_id, isParent, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClose = () => {
         setOpen(false)
     }
@@ -18,12 +18,12 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
         setLoading(true)
         categoryApi.addShopCategory({ name, parent_id })
             .then(() => {
-                setShowAlert(true)
+                triggerAlert('Thêm thành công!', false, false)
                 setReRender(!reRender)
             })
             .catch((error) => {
                 console.log(error)
-                setShowAlertFail(true)
+                triggerAlert('Thêm thất bại!', true, false)
             })
             .finally(() => setLoading(false))
         handleClose()
@@ -40,13 +40,8 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
                 <DialogContent >
                     <TextField fullWidth size='small' sx={{ mt: 1 }} label="Tên ngành hàng" onChange={(e) => setName(e.target.value)} />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Hủy</Button>
-                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Thêm</Button>
-                </DialogActions>
+                <DialogAction setOpen={setOpen} handleClick={handleClickAdd} />
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm ngành hàng thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm ngành hàng thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

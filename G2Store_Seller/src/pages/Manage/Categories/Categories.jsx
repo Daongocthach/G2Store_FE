@@ -1,4 +1,4 @@
-import { Box, Typography, Breadcrumbs, Link } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import MenuCategory from './MenuCategory/MenuCategory'
 import Loading from '../../../components/Loading/Loading'
 import AddCategory from './FormCategory/AddCategory'
 import emptyImage from '../../../assets/img/empty-order.png'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 
 function Categories() {
   const navigate = useNavigate()
@@ -36,14 +37,7 @@ function Categories() {
 
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="seller/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/seller/manage/categories">
-          Quản lý ngành hàng
-        </Link>
-      </Breadcrumbs>
+      <BreadCrumbs links={[{ name: 'Quản lý danh mục', href: '' }]} />
       <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
         <Box sx={{ bgcolor: '#2a99ff', display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Quản lý ngành hàng</Typography>

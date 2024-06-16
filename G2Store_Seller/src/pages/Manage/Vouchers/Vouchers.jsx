@@ -1,6 +1,6 @@
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter,
-  TablePagination, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Button, Tooltip
+  TablePagination, TableContainer, FormControl, Select, MenuItem, Button, Tooltip
 } from '@mui/material'
 import { AddCircle, Create } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
 import SearchById from '../../../components/Search/Search'
 import AddVoucherToProducts from './FormVoucher/AddVoucherToProducts'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 
 function Vouchers() {
   const navigate = useNavigate()
@@ -55,14 +56,7 @@ function Vouchers() {
   }, [page, status, reRender, rowsPerPage, voucherName])
   return (
     <Box sx={{ m: 5, height: '100vh' }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/seller/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/seller/manage/vouchers">
-          Quản lý khuyến mãi
-        </Link>
-      </Breadcrumbs>
+      <BreadCrumbs links={[{ name: 'Quản lý mã giảm giá', href: '' }]} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} startIcon={<AddCircle />} variant="outlined"
           onClick={() => { navigate('/seller/manage/add-voucher') }}>
@@ -121,7 +115,7 @@ function Vouchers() {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => handleClickUpdate(voucher)} /></Tooltip>
                         <DeleteVoucher voucherId={voucher?.voucher_id} reRender={reRender} setReRender={setReRender} />
-                        <AddVoucherToProducts voucher_id={voucher?.id}/>
+                        <AddVoucherToProducts voucher_id={voucher?.id} />
                       </Box>
                     </TableCell>
                   </TableRow>
@@ -133,8 +127,8 @@ function Vouchers() {
                 <TablePagination
                   colSpan={12}
                   labelRowsPerPage={'Số lượng mỗi trang'}
-                  rowsPerPageOptions={[5, { value: 5, label: 'Tất cả' }]}
-                  count={5}
+                  rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
+                  count={totalElements}
                   page={page}
                   onPageChange={handleChangePage}
                   rowsPerPage={rowsPerPage}

@@ -1,26 +1,26 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import categoryApi from '../../../../apis/categoryApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
+import DialogTextOnly from '../../../../components/Dialog/DialogTextOnly'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function DeleteCategory({ category_id, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [open, setOpen] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
     }
     const handleClose = () => {
         setOpen(false)
     }
-    const handleClickDelete = async (category_id) => {
+    const handleClickDelete = async () => {
         categoryApi.deleteCategory(category_id)
             .then(() => {
-                setShowAlert(true)
+                triggerAlert('Xóa danh mục thành công!', false, false)
                 setReRender(!reRender)
             })
-            .catch((error) => console.log(error))
+            .catch((error) => console.log(error), triggerAlert('Xóa danh mục thất bại!', true, false))
         handleClose()
     }
     return (
@@ -28,15 +28,7 @@ function DeleteCategory({ category_id, reRender, setReRender }) {
             <Tooltip title='Xóa'>
                 <DeleteIcon className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen} />
             </Tooltip>
-            <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >Bạn có muốn xóa danh mục này ?</DialogTitle>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ fontWeight: 500, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-                    <Button onClick={() => handleClickDelete(category_id)} size='small' sx={{ fontWeight: 500, bgcolor: '#1E90FF', color: 'white' }} >Xóa</Button>
-                </DialogActions>
-            </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Xóa danh mục thành công!'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Xóa danh mục thất bại!'} isFail={true} />
+            <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickDelete} title={'Xóa danh mục'} content={'Bạn có muốn xóa danh mục này? Không thể hoàn tác!'} />
         </div>
     )
 }

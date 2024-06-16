@@ -3,9 +3,9 @@ import { Check } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { formatCurrency } from '../../utils/price'
 
+{/**Use for shopPage Top Products and ProductDetail */}
 function RelativeProduct({ product }) {
   const navigate = useNavigate()
-
   return (
     <Card sx={{ maxWidth: 300, cursor: 'pointer' }} >
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>

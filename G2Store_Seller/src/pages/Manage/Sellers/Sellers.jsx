@@ -1,24 +1,23 @@
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Button,
-  Paper, FormControl, Select, MenuItem, Breadcrumbs, Link, Switch, Alert
+  Paper, FormControl, Select, MenuItem, Switch, Alert
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { AddCircle } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import sellerApi from '../../../apis/sellerApi'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
 import DeleteSeller from './FormSeller/DeleteSeller'
 import Loading from '../../../components/Loading/Loading'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
+import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 
 function Sellers() {
+  const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [sellers, setSellers] = useState([])
   const [role, setRole] = useState(0)
   const [select, setSelect] = useState(1)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
-
   const handleChange = (event) => {
     setSelect(event.target.value)
   }
@@ -28,11 +27,11 @@ function Sellers() {
     sellerApi.updateSellerRole(sellerId, newRole)
       .then(() => {
         setRole(newRole)
-        setShowAlert(true)
+        triggerAlert('Cập nhật thành công!', false, false)
       })
       .catch(error => {
         console.log(error)
-        setShowAlertFail(true)
+        triggerAlert('Cập nhật thất bại!', true, false)
       })
       .finally(() => {
         setLoading(false)
@@ -50,14 +49,7 @@ function Sellers() {
 
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/seller/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/seller/manage/sellers">
-          Quản lý tài khoản người bán
-        </Link>
-      </Breadcrumbs>
+      <BreadCrumbs links={[{ name: 'Quản lý người bán', href: '' }]} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
           <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }} startIcon={<AddCircle />} variant="outlined"
@@ -77,7 +69,7 @@ function Sellers() {
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-            <TableRow sx={{ bgcolor: '#2a99ff' }} >
+              <TableRow sx={{ bgcolor: '#2a99ff' }} >
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Email</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tên</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số điện thoại</TableCell>
@@ -96,8 +88,8 @@ function Sellers() {
                     <TableCell ><Typography maxWidth={150} overflow={'clip'}>{seller?.phone_no || '(Chưa cập nhật)'}</Typography></TableCell>
                     <TableCell>
                       <FormControl fullWidth>
-                        <Select size='small' variant={seller?.is_main_acc ? 'standard' : 'outlined' } color='primary' value={seller?.role_id} 
-                        readOnly={seller?.is_main_acc ? true : false}
+                        <Select size='small' variant={seller?.is_main_acc ? 'standard' : 'outlined'} color='primary' value={seller?.role_id}
+                          readOnly={seller?.is_main_acc ? true : false}
                           onChange={(event) => handleChangeRole(event, seller?.seller_id)}>
                           <MenuItem value={3}>Quản lý khuyến mãi</MenuItem>
                           <MenuItem value={4}>Toàn quyền</MenuItem>
@@ -110,7 +102,7 @@ function Sellers() {
                     </TableCell>
                     <TableCell ><Switch checked={seller?.is_enabled} /></TableCell>
                     <TableCell >{seller?.is_main_acc && <Alert severity='success' />}</TableCell>
-                    <TableCell >{!seller?.is_main_acc &&<DeleteSeller />}</TableCell>
+                    <TableCell >{!seller?.is_main_acc && <DeleteSeller />}</TableCell>
                   </TableRow>
                 )
               })}
@@ -118,8 +110,6 @@ function Sellers() {
           </Table>
         </TableContainer>
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Cập nhật thất bại'} isFail={true} />
       {loading && <Loading />}
     </Box>
   )

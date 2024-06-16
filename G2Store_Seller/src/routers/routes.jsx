@@ -16,7 +16,6 @@ const AddProduct = lazy(() => import('../pages/Manage/Products/AddProduct/AddPro
 const ManageReviews = lazy(() => import('../pages/Manage/Orders/MangeReviews/ManageReviews'))
 const AddSeller = lazy(() => import('../pages/Manage/Sellers/AddSeller/AddSeller'))
 const Categories = lazy(() => import('../pages/Manage/Categories/Categories'))
-const DesignShop = lazy(() => import('../pages/Manage/DesignShop/DesignShop'))
 const AccessDenied = lazy(() => import('../pages/AccessDenied/AccessDenied'))
 const CreateOrderGhn = lazy(() => import('../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'))
 
@@ -45,7 +44,6 @@ const privateRoutes = [
     { path:'manage/orders', component: Orders },
     { path:'manage/reviews', component: ManageReviews },
     { path:'manage/categories', component: Categories },
-    { path:'manage/design-shop', component: DesignShop },
     { path:'access-denied', component: AccessDenied },
     { path:'manage/create-order-ghn', component: CreateOrderGhn },
 

@@ -53,15 +53,6 @@ const productApi = {
         const url = `products/search?page=${page}&size=${size}&seed=${seed}&name=${name}`
         return axiosClient.get(url, { params: params })
     },
-    getShopProducts(shop_id, page, size) {
-        var seed = sessionStorage.getItem('seed')
-        if (!seed) {
-            sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
-            seed = sessionStorage.getItem('seed')
-        }
-        const url = `products/shop/${shop_id}?page=${page}&size=${size}&seed=${seed}`
-        return axiosClient.get(url)
-    },
     getProductsByShopCategoryId(categoryId, page, size) {
         const url = `products/shop-category/${categoryId}?page=${page}&size=${size}`
         return axiosClient.get(url)
@@ -70,6 +61,10 @@ const productApi = {
         const url = `products/${productId}`
         return axiosClient.get(url)
     },
+    lockedProduct(productId, isBanned) {
+        const url = `products/${productId}/banned?isBanned=${isBanned}`
+        return axiosClient.put(url)
+    }
 }
 
 export default productApi

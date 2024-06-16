@@ -6,11 +6,13 @@ import { CircularProgress } from '@mui/material'
 import DefaultLayout from './layouts/DefaultLayout'
 import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
+import AlertProvider from './components/ShowAlert/ShowAlert'
 
 function App() {
   const atk = useSelector(state => state.auth.atk)
+
   return (
-    <div>
+    <AlertProvider>
       <ToastContainer />
       <Router>
         <Routes>
@@ -44,13 +46,13 @@ function App() {
                   path={route.path}
                   element={
                     <Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <CircularProgress />
-                    Đang tải các tài nguyên vui lòng đợi...
-                  </div>}>
-                    <Layout>
-                      <Page />
-                    </Layout>
-                  </Suspense>
+                      <CircularProgress />
+                      Đang tải các tài nguyên vui lòng đợi...
+                    </div>}>
+                      <Layout>
+                        <Page />
+                      </Layout>
+                    </Suspense>
                   }
                 />
               )
@@ -58,7 +60,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
-    </div>
+    </AlertProvider>
   )
 }
 

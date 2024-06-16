@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Tooltip } from '@mui/material'
+import { Button, Dialog, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Tooltip } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Create } from '@mui/icons-material'
 import orderApi from '../../../../apis/orderApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import DialogAction from '../../../../components/Dialog/DialogAction'
 
 function UpdateOrder({ order, setReRender, reRender }) {
+  const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
     const orderStatusIndex = steps.findIndex(step => step?.value === order?.order_status)
@@ -29,12 +29,12 @@ function UpdateOrder({ order, setReRender, reRender }) {
     else {
       orderApi.updateOrder(order?.order_id, steps[activeStep]?.value)
         .then(() => {
-          setShowAlert(true)
+          triggerAlert('Cập nhật thành công!', false, false)
           setReRender(!reRender)
         })
         .catch(error => {
           console.log(error)
-          setShowAlertFail(true)
+          triggerAlert('Cập nhật thất bại!', true, false)
         })
         .finally(setLoading(false))
     }
@@ -65,7 +65,6 @@ function UpdateOrder({ order, setReRender, reRender }) {
               </Step>
             ))}
           </Stepper>
-
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
             <Button onClick={handleBack} variant='contained' size='small' color='info' sx={{ borderRadius: 10 }}>Trước
             </Button>
@@ -73,13 +72,8 @@ function UpdateOrder({ order, setReRender, reRender }) {
             </Button>
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Hủy</Button>
-          <Button onClick={handleUpdate} sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }}>Lưu</Button>
-        </DialogActions>
+        <DialogAction setOpen={setOpen} handleClick={handleUpdate} />
       </Dialog>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật đơn hàng thành công!'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Cập nhật đơn hàng thất bại'} isFail={true} />
       {loading && <Loading />}
     </Box>
   )

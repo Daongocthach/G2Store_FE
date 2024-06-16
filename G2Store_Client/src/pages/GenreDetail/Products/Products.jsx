@@ -47,7 +47,6 @@ function Products() {
                 .catch((error) => console.log(error))
                 .finally(() => setLoading(false))
         }
-
         fetchData()
     }, [page, data, sort, isFilter, districtId])
     useEffect(() => {

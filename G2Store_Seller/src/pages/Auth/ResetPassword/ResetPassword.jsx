@@ -4,20 +4,20 @@ import { useNavigate, Link } from 'react-router-dom'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import { validateEmail } from '../../../utils/email'
-import ShowAlert from '../../../components/ShowAlert/ShowAlert'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function ResetPassword() {
+  const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const onFinish = () => {
     if (!validateEmail(email)) {
-      setShowAlertFail(true)
+      triggerAlert('Vui lòng kiểm tra lại email!', false, true)
+
     }
     else {
       authenApi.forgotPassword(email)
-      setShowAlert(true)
+      triggerAlert('Gửi thành công, kiểm tra mật khẩu trong mail!', false, false)
       navigate('/login')
     }
   }
@@ -67,8 +67,6 @@ function ResetPassword() {
           </Stack>
         </Box>
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Gửi mail mật khẩu mới thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Vui lòng kiểm tra lại thông tin'} isFail={true} />
     </Container>
   )
 }

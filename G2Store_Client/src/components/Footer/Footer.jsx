@@ -3,17 +3,16 @@ import { YouTube, Facebook, Twitter, Google, Send } from '@mui/icons-material'
 export default function Footer() {
 
     return (
-        <Box sx={{
-            bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#1C1C1C' : '#2f3640'),
-            bottom: 0, width: '100%', height: (theme) => theme.webCustom.footerHeight,
-            alignItems: 'center', justifyContent: 'center', display: 'flex', p: 2
+        <Box className='bg-gray-800 flex flex-row items-center justify-center p-2 w-full' sx={{
+            bottom: 0, height: (theme) => theme.webCustom.footerHeight
         }} >
-            <Grid container spacing={{ xs: 1, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ color: 'white', fontFamily: 'inherit' }}>
-                <Grid item xs={4} sm={8} md={12} sx={{ fontSize: '30px', color: 'orange', fontFamily: 'Merriweather", serif' }}>
-                    <Typography variant='h4' sx={{ fontWeight: 'bold', color: 'orange', fontFamily: 'Merriweather", serif' }}>G2Store</Typography>
+            <Grid container spacing={{ xs: 1, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }}
+             className='text-white'>
+                <Grid item xs={4} sm={8} md={12}>
+                    <Typography variant='h4' className='text-orange-500' sx={{ fontWeight: 'bold', fontFamily: 'Merriweather", serif' }}>G2Store</Typography>
                 </Grid>
                 <Grid item xs={12} sm={4} md={3} >
-                    Liên hệ: 0795759436
+                    Liên hệ: 0373060206
                 </Grid>
                 <Grid item xs={12} sm={4} md={3}>
                     Báo lỗi dịch vụ
@@ -34,9 +33,9 @@ export default function Footer() {
                     Khuyến mãi
                 </Grid>
                 <Grid item xs={2} sm={4} md={3} display={{ xs: 'none', md: 'inherit' }}>
-                    <Paper component="form" sx={{ display: 'flex', alignItems: 'center', width: '150px', height: 30 }} >
-                        <InputBase placeholder="Send Email" sx={{ ml: 1 }} />
-                        <IconButton type="button" sx={{ p: '10px', ':hover': { color: 'blue' } }}>
+                    <Paper component="form" className='flex flex-row items-center w-36 h-8' >
+                        <InputBase placeholder="Gửi email" sx={{ ml: 1 }} />
+                        <IconButton type="button" className='p-3'>
                             <Send />
                         </IconButton>
                     </Paper>
@@ -54,7 +53,6 @@ export default function Footer() {
                     <YouTube /><Facebook /><Twitter /><Google />
                 </Grid>
             </Grid>
-
         </Box>
     )
 }

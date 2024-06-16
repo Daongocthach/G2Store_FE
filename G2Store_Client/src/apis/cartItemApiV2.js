@@ -21,10 +21,14 @@ const cartItemV2Api = {
     const url = `shop-items/${shopItemId}`
     return axiosClient.delete(url)
   },
-  applyCartVoucher(data) {
-    const url = 'cart-item-v2'
-    return axiosClient.put(url, data)
+  deleteAllCart() {
+    const url = 'cart-item-v2/my-cart'
+    return axiosClient.delete(url)
   },
+  applyCartVoucher(cartItemId, voucherId) {
+    const url = `cart-item-v2/${cartItemId}/vouchers/${voucherId}`
+    return axiosClient.put(url)
+  }
 }
 
 export default cartItemV2Api

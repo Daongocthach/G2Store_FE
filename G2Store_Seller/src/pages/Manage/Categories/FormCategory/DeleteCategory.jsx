@@ -1,40 +1,40 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogTitle, Tooltip } from '@mui/material'
+import { Dialog, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import categoryApi from '../../../../apis/categoryApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import DialogAction from '../../../../components/Dialog/DialogAction'
 
 function DeleteCategory({ category_id, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [open, setOpen] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
     }
     const handleClose = () => {
         setOpen(false)
     }
-    const handleClickDelete = async (category_id) => {
+    const handleClickDelete = async () => {
         categoryApi.deleteShopCategory(category_id)
             .then(() => {
-                setShowAlert(true)
+                triggerAlert('Xóa thành công!', false, false)
                 setReRender(!reRender)
             })
-            .catch((error) => console.log(error))
+            .catch((error) => console.log(error), triggerAlert('Xóa thất bại!', true, false))
         handleClose()
     }
     return (
         <div>
             <Tooltip title='Xóa ngành hàng'><DeleteIcon className="action-buttons" sx={{ color: '#666666', fontSize: '20px', visibility: 'hidden', ':hover': { color: '#1E90FF' } }} onClick={handleClickOpen} /></Tooltip>
             <Dialog open={open} onClose={handleClose} >
-                <DialogTitle >Bạn có muốn xóa ngành hàng này?</DialogTitle>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} >Hủy</Button>
-                    <Button onClick={() => handleClickDelete(category_id)} size='small' sx={{ ':hover': { bgcolor: 'inherit' }, fontWeight: 'bold' }} >Xóa</Button>
-                </DialogActions>
+                <DialogTitle >Xóa ngành hàng</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Bạn có muốn xóa ngành hàng này? Không thể hoàn tác!
+                    </DialogContentText>
+                </DialogContent>
+                <DialogAction setOpen={setOpen} handleClick={handleClickDelete} />
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Xóa ngành hàng thành công!'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Xóa ngành hàng thất bại!'} isFail={true} />
         </div>
     )
 }

@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
+import { TextField, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
 import Add from '@mui/icons-material/Add'
 import categoryApi from '../../../../apis/categoryApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
+import DialogAction from '../../../../components/Dialog/DialogAction'
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function AddCategory({ parent_id, isParent, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
     const handleClose = () => {
         setOpen(false)
     }
@@ -18,12 +18,12 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
         setLoading(true)
         categoryApi.addCategory({ name, parent_id })
             .then(() => {
-                setShowAlert(true)
+                triggerAlert('Thêm danh mục thành công!', false, false)
                 setReRender(!reRender)
             })
             .catch((error) => {
                 console.log(error)
-                setShowAlertFail(true)
+                triggerAlert('Thêm danh mục thất bại', true, false)
             })
             .finally(() => setLoading(false))
         handleClose()
@@ -37,15 +37,10 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Thêm danh mục</DialogTitle>
                 <DialogContent >
-                    <TextField fullWidth size='small' sx={{ mt: 1 }} label="Tên danh mục" onChange={(e) => setName(e.target.value)} />
+                    <TextField fullWidth variant='filled' size='small' sx={{ mt: 1 }} label="Tên danh mục" onChange={(e) => setName(e.target.value)} />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }}>Hủy</Button>
-                    <Button onClick={handleClickAdd} size='small' sx={{ ':hover': { bgcolor: 'inherit' } }} >Thêm</Button>
-                </DialogActions>
+                <DialogAction setOpen={setOpen} handleClick={handleClickAdd} />
             </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Thêm danh mục thành công'} />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Thêm danh mục thất bại'} isFail={true} />
             {loading && <Loading />}
         </Box>
     )

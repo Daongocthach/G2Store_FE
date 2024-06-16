@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, MenuItem } from '@mui/material'
+import { Button, TextField, Dialog, DialogContent, DialogTitle, Box, Typography, MenuItem } from '@mui/material'
 import ghnApi from '../../../apis/ghnApi'
 import Loading from '../../../components/Loading/Loading'
 import shopApi from '../../../apis/shopApi'
+import DialogAction from '../../../components/Dialog/DialogAction'
 
 function UpdateShop({ shop, rerender, setRerender }) {
     const [open, setOpen] = useState(false)
@@ -133,29 +134,12 @@ function UpdateShop({ shop, rerender, setRerender }) {
                             </TextField>}
                         </Box>
                         <TextField fullWidth inputMode='text' size='small' label="Đường/Tòa nhà" value={street} onChange={(e) => setStreet(e.target.value)} />
-                        {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1 }}>
-                            <Button component="label" htmlFor="upload-image" variant="contained" color="warning" sx={useStyles.button} >
-                                <AddCircle sx={{ mr: 1 }} />
-                                Ảnh của shop
-                                <input id="upload-image" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageShopChange} />
-                            </Button>
-                            <img src={imageShop || avatarNull} width={'50px'} height={'50px'} style={{ borderRadius: 10 }} />
-                        </Box> */}
                     </Box>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }} size='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#696969', color: 'white' }}>Hủy</Button>
-                    <Button onClick={handleClickUpdate} size='small' sx={{ height: 35, fontWeight: 600, bgcolor: '#1E90FF', color: 'white' }} >Cập nhật</Button>
-                </DialogActions>
+                <DialogAction setOpen={setOpen} handleClick={handleClickUpdate} />
             </Dialog>
             {loading && <Loading />}
         </div>
     )
 }
 export default UpdateShop
-
-const useStyles = {
-    button: {
-        color: 'white', fontWeight: 'bold', height: '40px', borderRadius: 2
-    }
-}

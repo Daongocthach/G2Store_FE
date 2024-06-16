@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Box } from '@mui/material'
+import { Button, Box } from '@mui/material'
 import orderApi from '../../../../apis/orderApi'
-import ShowAlert from '../../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../../components/Loading/Loading'
-
+import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import DialogTextOnly from '../../../../components/Dialog/DialogTextOnly'
 function DeleteOrder({ orderId, reRender, setReRender }) {
+    const triggerAlert = useAlert()
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [showAlert, setShowAlert] = useState(false)
-    const [showAlertFail, setShowAlertFail] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -20,12 +19,12 @@ function DeleteOrder({ orderId, reRender, setReRender }) {
         setLoading(true)
         orderApi.cancelOrder(orderId)
             .then(() => {
-                setShowAlert(true)
+                triggerAlert('Hủy đơn thành công!', false, false)
                 setReRender(!reRender)
             })
             .catch(error => {
                 console.log(error)
-                setShowAlertFail(true)
+                triggerAlert('Hủy đơn thất bại!', true, false)
             })
             .finally(() => setLoading(false))
         handleClose()
@@ -34,16 +33,7 @@ function DeleteOrder({ orderId, reRender, setReRender }) {
         <Box>
             <Button variant='contained' color='warning' size='small' sx={{ borderRadius: 2 }}
                 onClick={() => handleClickOpen()} >Hủy đơn</Button>
-            <Dialog open={open} onClose={handleClose} >
-                <DialogTitle sx={{ color: '#444444' }}>Bạn xác nhận hủy đơn hàng này?</DialogTitle>
-                <DialogContent>Không thể hoàn tác!</DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} sx={{ ':hover': { bgcolor: 'inherit' } }}>Hủy</Button>
-                    <Button onClick={handleClickCancel} sx={{ ':hover': { bgcolor: 'inherit' } }}>Xác nhận</Button>
-                </DialogActions>
-            </Dialog>
-            <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content='Hủy đơn thành công' />
-            <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Hủy đơn thất bại'} isFail={true} />
+            <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickCancel} title={'Hủy đơn hàng'} content={'Bạn muốn hủy đơn hàng này? Không thể hoàn tác!'} />
             {loading && <Loading />}
         </Box>
     )

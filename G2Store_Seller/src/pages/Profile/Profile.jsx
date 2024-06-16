@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Typography, Box, Input, Paper } from '@mui/material'
 import authenApi from '../../apis/authenApi'
-import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import Loading from '../../components/Loading/Loading'
-import DialogUpdate from '../../components/ShowDialog/DialogUpdate'
-import DialogUpdatePassword from '../../components/ShowDialog/DialogUpdatePassword'
-import DialogUpdateEmail from '../../components/ShowDialog/DialogUpdateEmail'
-import DialogUpdatePhoneNo from '../../components/ShowDialog/DialogUpdatePhoneNo'
+// import DialogUpdate from '../../components/Dialog/DialogUpdate'
 import UpdateAvatar from './UpdateSeller/UpdateAvatar'
 
 function Profile() {
   const [reRender, setReRender] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const [seller, setSeller] = useState({})
   const [fullName, setFullName] = useState(seller?.full_name)
 
@@ -56,18 +50,16 @@ function Profile() {
           <Input placeholder='Nhập họ và tên' sx={{ ...useStyles.input, color: 'gray' }} value={fullName} onChange={e => setFullName(e.target.value)} />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
-          <DialogUpdate handle={handleUpdate} />
+          {/* <DialogUpdate handle={handleUpdate} /> */}
           {/*Avatar */}
-          <UpdateAvatar setShowAlert={setShowAlert} setShowAlertFail={setShowAlertFail} reRender={reRender} setReRender={setReRender} />
+          <UpdateAvatar reRender={reRender} setReRender={setReRender} />
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
+        {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
           <DialogUpdatePassword />
           <DialogUpdatePhoneNo />
           <DialogUpdateEmail />
-        </Box>
+        </Box> */}
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Cập nhật thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Vui lòng kiểm tra lại thông tin!'} isFail={true} />
       {loading && <Loading />}
     </Paper>
   )
