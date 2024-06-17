@@ -13,6 +13,7 @@ import { IOSSwitch } from '../../../components/Switch/Switch'
 import ghnApiV2 from '../../../apis/ghnApiV2'
 
 function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
+    console.log('abc')
     const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -20,13 +21,16 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
     const [is_point_spent, setIsPointSpent] = useState(false)
     const [loading, setLoading] = useState(false)
     const [paymentType, setPaymentType] = useState('COD')
-    var totalProducts = cartItems.reduce((totalPrice, cartItem) => totalPrice + cartItem?.shop_subtotal, 0)
+    const totals = cartItems.reduce((acc, cartItem) => {
+        acc.totalProducts += cartItem?.shop_subtotal || 0
+        acc.totalFeeShipReduce += cartItem?.shop_free_ship_reduce || 0
+        acc.totalShopVoucher += cartItem?.shop_voucher_reduce || 0
+        return acc
+    }, { totalProducts: 0, totalFeeShipReduce: 0, totalShopVoucher: 0 })
     var totalFeeShip = feeShips.reduce((totalFeeShip, feeShip) => totalFeeShip + feeShip?.fee, 0)
-    var totalFeeShipReduce = cartItems.reduce((totalFeeShipReduce, cartItem) => totalFeeShipReduce + cartItem?.shop_free_ship_reduce, 0)
-    var totalShopVoucher = cartItems.reduce((totalShopVoucher, cartItem) => totalShopVoucher + cartItem?.shop_voucher_reduce, 0)
-    var total = totalProducts + totalFeeShip - (is_point_spent ? point : 0)
+    var total = totals?.totalProducts + totalFeeShip - (is_point_spent ? point : 0)
     useEffect(() => {
-        if (Array.isArray(cartItems) && cartItems.length > 0) {
+        if (Array.isArray(cartItems)) {
             let feeShipsTemp = []
             const fetchFeeShips = async () => {
                 for (let cartItem of cartItems) {
@@ -58,7 +62,7 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
                         product_id: item?.product_id
                     }
                 }),
-                fee_ship: feeShips.find(feeShip => feeShip.shop_id === order?.shop?.shop_id)
+                fee_ship: feeShips.find(feeShip => feeShip.shop_id === order?.shop?.shop_id)?.fee
             }
         })
         return { orders, address_id, payment_type, is_point_spent }
@@ -94,7 +98,7 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
         <Box className='flex flex-col gap-3'>
             <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Tiền hàng ({Array.isArray(cartItems) && cartItems.length}) </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalProducts || 0)}</Typography>
+                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totals?.totalProducts || 0)}</Typography>
             </Box>
             <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Phí vận chuyển: </Typography>
@@ -102,11 +106,11 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
             </Box>
             <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Giảm giá vận chuyển: </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalFeeShipReduce)}</Typography>
+                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totals?.totalFeeShipReduce)}</Typography>
             </Box>
             <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Giảm giá của shop: </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalShopVoucher)}</Typography>
+                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totals?.totalShopVoucher)}</Typography>
             </Box>
             <Box className='flex items-center justify-between border-b border-gray-500 pb-1' >
                 <Box className='flex flex-row items-center gap-2' >
@@ -123,7 +127,7 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
             <Divider sx={{ mb: 2 }} />
             <Box className='flex items-center justify-start gap-1 mt-1'>
                 <Radio className='h-[30px] w-[30px]' checked={paymentType == 'COD'} onChange={() => setPaymentType('COD')} />
-                <Typography sx={{ color: '#4F4F4F' }} variant='subtitle1'>Thanh toán khi nhận hàng</Typography>
+                <Typography className='text-gray-600' fontSize={14}>Thanh toán khi nhận hàng</Typography>
             </Box>
             <Box className='flex items-center justify-start gap-1 mt-1 mb-1'>
                 <Radio className='h-[30px] w-[30px]' checked={paymentType == 'VNPAY'} onChange={() => setPaymentType('VNPAY')} />
