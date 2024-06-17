@@ -3,7 +3,6 @@ import { Box, Typography, Popover, Divider, Chip } from '@mui/material'
 import { KeyboardArrowDown, Close, Receipt } from '@mui/icons-material'
 import voucherApi from '../../apis/voucherApi'
 import emptyOrder from '../../assets/img/empty-order.png'
-import cartItemV2Api from '../../apis/cartItemApiV2'
 import Voucher from './Voucher/Voucher'
 
 {/**Component Use for ProductDetail, Checkout */ }
@@ -38,7 +37,7 @@ function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReR
           deleteIcon={<KeyboardArrowDown sx={{ fontSize: 20 }} />} />
       }
       <Popover open={open} anchorEl={anchorEl} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} >
-        <Box className='flex flex-row items-center justify-between p-2 bg-blue-500'>
+        <Box className='flex flex-row items-center justify-between p-2 bg-blue-500 h-12'>
           <Box className='flex flex-row items-center gap-2'>
             <Receipt className='text-white' />
             <Typography fontWeight={'bold'} className='text-white'>Các khuyến mãi của shop</Typography>
@@ -52,7 +51,8 @@ function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReR
           ))
           :
           vouchers.map((shopVoucher, index) => (
-            <Voucher voucher={shopVoucher?.voucher} key={index} cart_item_id={cart_item_id}/>
+            <Voucher voucher={shopVoucher?.voucher} isSelected={shopVoucher?.is_selected}
+              key={index} cart_item_id={cart_item_id} reRender={reRender} setReRender={setReRender} handleClose={handleClose}/>
           ))
         }
         {Array.isArray(vouchers) && vouchers?.length < 1 &&

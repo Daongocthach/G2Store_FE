@@ -11,11 +11,10 @@ import Loading from '../../../components/Loading/Loading'
 import ProductVouchers from '../../../components/ProductVouchers/ProductVouchers'
 import ShopFeeShip from '../ShopFeeShip/ShopFeeShip'
 
-function LeftInformation({ cartItems, paymentType, totalFeeShip, setTotalFeeShip }) {
+function LeftInformation({ address, setAddress, cartItems, feeShips, reRender, setRerender }) {
     const navigate = useNavigate()
-    const [reRender, setReRender] = useState(false)
+    const [changeAddress, setChangeAddress] = useState(false)
     const [addresses, setAddresses] = useState([])
-    const [address, setAddress] = useState()
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         const fetchData = async () => {
@@ -25,27 +24,22 @@ function LeftInformation({ cartItems, paymentType, totalFeeShip, setTotalFeeShip
                     setAddresses(response)
                     if (!address) {
                         const defaultAddress = response.find(address => address?.is_default)
-                        if (defaultAddress) {
-                            setAddress(defaultAddress)
-                        }
-                        else {
-                            setAddress(response[0])
-                        }
+                        if (defaultAddress) { setAddress(defaultAddress) }
+                        else { setAddress(response[0]) }
                     }
                 })
-                .catch((error) => {
-                    console.error('Error fetching data:', error)
-                })
+                .catch((error) => { console.error('Error fetching data:', error) })
                 .finally(() => setLoading(false))
         }
         fetchData()
-    }, [reRender])
+    }, [])
+
     return (
         <Box>
             <Box className='flex items-center mt-2 gap-2'>
-                <ChangeAddress addresses={addresses} setAddress={setAddress} reRender={reRender} setReRender={setReRender} />
+                <ChangeAddress addresses={addresses} setAddress={setAddress} />
                 <Divider orientation='vertical' variant="middle" flexItem />
-                <UpdateAddress address={address} rerender={reRender} setRerender={setReRender} />
+                <UpdateAddress address={address} rerender={changeAddress} setRerender={setChangeAddress} />
             </Box>
             <Box className='flex items-center mt-2'>
                 <Address address={address} />
@@ -94,9 +88,9 @@ function LeftInformation({ cartItems, paymentType, totalFeeShip, setTotalFeeShip
                             </TableBody>
                         </Table>
                         <Box className='flex flex-row gap-2 mb-1 items-center mt-1'>
-                            <ProductVouchers shopVouchers={cartItem?.vouchers} isCheckout={true} cart_item_id={cartItem?.cart_item_id} />
-                            <ShopFeeShip address_id={address?.address_id} paymentType={paymentType}
-                                cartItem={cartItem} totalFeeShip={totalFeeShip} setTotalFeeShip={setTotalFeeShip} />
+                            <ProductVouchers shopVouchers={cartItem?.vouchers} isCheckout={true}
+                                cart_item_id={cartItem?.cart_item_id} reRender={reRender} setReRender={setRerender} />
+                            <ShopFeeShip feeShips={feeShips} shop_id={cartItem?.shop?.shop_id} />
                         </Box>
                     </Box>
                 ))}

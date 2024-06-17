@@ -1,17 +1,21 @@
 import { Box, Typography, Divider, Button } from '@mui/material'
-import { Storefront, ErrorOutline, LocalShipping } from '@mui/icons-material'
+import { Storefront, LocalShipping } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
+import HtmlTooltip from '../../HtmlTooltip/HtmlTooltip'
 
-function Voucher({ voucher, isSelected, cart_item_id, reRender, setReRender }) {
+function Voucher({ voucher, isSelected, cart_item_id, reRender, setReRender, handleClose }) {
     const handleClickVoucher = () => {
         cartItemV2Api.applyCartVoucher(cart_item_id, voucher?.id)
-            .then(() => setReRender(!reRender))
+            .then(() => {
+                setReRender(!reRender)
+                handleClose()
+            })
             .catch(error => console.log(error))
     }
     return (
-        <Box className='flex flex-row items-center p-2 gap-6'>
+        <Box className={`flex flex-row items-center p-2 gap-6 ${isSelected && 'bg-green-100'}`}>
             <Box className='w-14 flex flex-col items-center gap-1'>
                 {voucher?.voucher_type === 'SHOP_VOUCHER' ?
                     <Storefront className='text-blue-600' sx={{ fontSize: 30 }} />
@@ -36,8 +40,11 @@ function Voucher({ voucher, isSelected, cart_item_id, reRender, setReRender }) {
                 </Typography>
             </Box>
             <Box className='flex flex-col gap-5 justify-end items-end ml-5' >
-                <ErrorOutline className='text-blue-700' sx={{ fontSize: 20 }} />
-                {cart_item_id && (isSelected ? <Button size='small' variant='contained' onClick={handleClickVoucher}>Bỏ chọn</Button> :
+                <HtmlTooltip voucher={voucher} />
+                {cart_item_id && (isSelected ?
+                    <Button size='small' variant='contained' color='warning' onClick={handleClickVoucher}>
+                        Bỏ chọn
+                    </Button> :
                     <Button size='small' variant='contained' onClick={handleClickVoucher}>Áp dụng</Button>)}
             </Box>
         </Box>

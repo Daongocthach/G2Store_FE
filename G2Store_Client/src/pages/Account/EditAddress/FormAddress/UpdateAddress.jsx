@@ -8,6 +8,7 @@ import DialogAction from '../../../../components/Dialog/DialogAction'
 import { IOSSwitch } from '../../../../components/Switch/Switch'
 import DialogAddress from '../../../../components/Dialog/DialogAddress'
 
+{/**use for Checkout Change address LeftInformation and Account update address */}
 function UpdateAddress({ address, rerender, setRerender }) {
     const [open, setOpen] = useState(false)
     const [openProvince, setOpenProvince] = useState(false)

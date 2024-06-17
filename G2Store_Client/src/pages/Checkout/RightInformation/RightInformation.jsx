@@ -1,5 +1,5 @@
-import { Typography, Button, Box, Radio, Divider, Switch } from '@mui/material'
-import { useState } from 'react'
+import { Typography, Button, Box, Radio, Divider } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteAllCart } from '../../../redux/actions/cart'
@@ -9,16 +9,41 @@ import imgVNPAY2 from '../../../assets/img/vnpay.png'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import orderApi from '../../../apis/orderApi'
 import Loading from '../../../components/Loading/Loading'
+import { IOSSwitch } from '../../../components/Switch/Switch'
+import ghnApiV2 from '../../../apis/ghnApiV2'
 
-function RightInformation({ cartItems, address, paymentType, setPaymentType, totalFeeShip }) {
+function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
     const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const point = useSelector(state => state.auth.point)
     const [is_point_spent, setIsPointSpent] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [paymentType, setPaymentType] = useState('COD')
     var totalProducts = cartItems.reduce((totalPrice, cartItem) => totalPrice + cartItem?.shop_subtotal, 0)
+    var totalFeeShip = feeShips.reduce((totalFeeShip, feeShip) => totalFeeShip + feeShip?.fee, 0)
+    var totalFeeShipReduce = cartItems.reduce((totalFeeShipReduce, cartItem) => totalFeeShipReduce + cartItem?.shop_free_ship_reduce, 0)
+    var totalShopVoucher = cartItems.reduce((totalShopVoucher, cartItem) => totalShopVoucher + cartItem?.shop_voucher_reduce, 0)
     var total = totalProducts + totalFeeShip - (is_point_spent ? point : 0)
+    useEffect(() => {
+        if (Array.isArray(cartItems) && cartItems.length > 0) {
+            let feeShipsTemp = []
+            const fetchFeeShips = async () => {
+                for (let cartItem of cartItems) {
+                    try {
+                        const response = await ghnApiV2.getFeeShip(address?.address_id, paymentType, cartItem?.cart_item_id)
+                        const fee = response?.data?.total - cartItem?.shop_free_ship_reduce
+                        feeShipsTemp.push({ shop_id: cartItem?.shop?.shop_id, fee })
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+                setFeeShips(feeShipsTemp)
+            }
+            fetchFeeShips()
+        }
+    }, [address])
+
     const convertDataToOrderFormat = (data) => {
         const address_id = address?.address_id
         const payment_type = paymentType
@@ -33,8 +58,7 @@ function RightInformation({ cartItems, address, paymentType, setPaymentType, tot
                         product_id: item?.product_id
                     }
                 }),
-                shop_id: order?.shop?.shop_id,
-                fee_ship: 0
+                fee_ship: feeShips.find(feeShip => feeShip.shop_id === order?.shop?.shop_id)
             }
         })
         return { orders, address_id, payment_type, is_point_spent }
@@ -67,31 +91,31 @@ function RightInformation({ cartItems, address, paymentType, setPaymentType, tot
 
     }
     return (
-        <Box>
-            <Box className='flex items-center justify-between mt-2'>
+        <Box className='flex flex-col gap-3'>
+            <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Tiền hàng ({Array.isArray(cartItems) && cartItems.length}) </Typography>
                 <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalProducts || 0)}</Typography>
             </Box>
-            <Box className='flex items-center justify-between mt-2'>
+            <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Phí vận chuyển: </Typography>
                 <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalFeeShip)}</Typography>
             </Box>
-            <Box className='flex items-center justify-between mt-2'>
+            <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Giảm giá vận chuyển: </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(0)}</Typography>
+                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalFeeShipReduce)}</Typography>
             </Box>
-            <Box className='flex items-center justify-between mt-2'>
+            <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Giảm giá của shop: </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(0)}</Typography>
+                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalShopVoucher)}</Typography>
             </Box>
-            <Box className='flex items-center justify-between mt-2 border-b border-gray-500' >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box className='flex items-center justify-between border-b border-gray-500 pb-1' >
+                <Box className='flex flex-row items-center gap-2' >
                     <Typography className='text-gray-600' fontSize={14}>Sử dụng điểm tích lũy (-{formatCurrency(point || 0)})</Typography>
-                    <Switch checked={is_point_spent} onChange={() => setIsPointSpent(!is_point_spent)} color="error" />
+                    <IOSSwitch checked={is_point_spent} onChange={() => setIsPointSpent(!is_point_spent)} color="error" />
                 </Box>
                 <Typography className='text-gray-600' fontSize={13}>-{formatCurrency(is_point_spent ? (point || 0) : 0)}</Typography>
             </Box>
-            <Box className="flex items-center justify-between gap-2 mt-4">
+            <Box className="flex items-center justify-between gap-2 mt-2">
                 <Typography fontSize={17} className="text-gray-700">Tổng cộng:</Typography>
                 <Typography fontSize={17} fontWeight={'bold'} className="text-red-600">{formatCurrency(total)}</Typography>
             </Box>
