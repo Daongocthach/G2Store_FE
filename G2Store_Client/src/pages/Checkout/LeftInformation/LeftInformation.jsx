@@ -10,9 +10,10 @@ import GoToShop from '../../../components/GoToShop/GoToShop'
 import Loading from '../../../components/Loading/Loading'
 import ProductVouchers from '../../../components/ProductVouchers/ProductVouchers'
 import ShopFeeShip from '../ShopFeeShip/ShopFeeShip'
+import AddAddress from '../../Account/EditAddress/FormAddress/AddAddress'
+import OrderItem from '../../../components/Product/OrderItem'
 
 function LeftInformation({ address, setAddress, cartItems, feeShips, reRender, setRerender }) {
-    const navigate = useNavigate()
     const [changeAddress, setChangeAddress] = useState(false)
     const [addresses, setAddresses] = useState([])
     const [loading, setLoading] = useState(false)
@@ -27,19 +28,26 @@ function LeftInformation({ address, setAddress, cartItems, feeShips, reRender, s
                         if (defaultAddress) { setAddress(defaultAddress) }
                         else { setAddress(response[0]) }
                     }
+                    else {
+                        const addressUpdated = response.find(addressResponse => addressResponse?.address_id == address?.address_id)
+                        if (addressUpdated)
+                            setAddress(addressUpdated)
+                    }
                 })
                 .catch((error) => { console.error('Error fetching data:', error) })
                 .finally(() => setLoading(false))
         }
         fetchData()
-    }, [])
+    }, [changeAddress])
 
     return (
         <Box>
             <Box className='flex items-center mt-2 gap-2'>
-                <ChangeAddress addresses={addresses} setAddress={setAddress} />
+                {address?.address_id && <ChangeAddress addresses={addresses} setAddress={setAddress} />}
                 <Divider orientation='vertical' variant="middle" flexItem />
-                <UpdateAddress address={address} rerender={changeAddress} setRerender={setChangeAddress} />
+                <AddAddress rerender={changeAddress} setRerender={setChangeAddress} />
+                <Divider orientation='vertical' variant="middle" flexItem />
+                {address?.address_id && <UpdateAddress address={address} rerender={changeAddress} setRerender={setChangeAddress} />}
             </Box>
             <Box className='flex items-center mt-2'>
                 <Address address={address} />
@@ -64,19 +72,7 @@ function LeftInformation({ address, setAddress, cartItems, feeShips, reRender, s
                                     cartItem?.shop_items.map((shop_item, index) => (
                                         <TableRow key={index}>
                                             <TableCell className='w-72'>
-                                                <Box className='flex flex-row gap-2'>
-                                                    <img src={shop_item?.image} alt='omachi'
-                                                        onClick={() => { navigate('/product-detail', { state: shop_item?.product_id }) }}
-                                                        className="object-cover h-20 w-20 rounded-md cursor-pointer"
-                                                    />
-                                                    <Box>
-                                                        <Typography fontSize={14} className="text-gray-700 w-36 line-clamp-2">
-                                                            {shop_item?.name}
-                                                        </Typography>
-                                                        <Typography fontSize={13} className='text-gray-600'>{formatCurrency(shop_item?.price)}</Typography>
-                                                        <Typography fontSize={13} className='text-gray-600'>x{shop_item?.quantity}</Typography>
-                                                    </Box>
-                                                </Box>
+                                                <OrderItem isCheckout={true} shop_item={shop_item} />
                                             </TableCell>
                                             <TableCell className='w-36'>
                                                 <Typography fontWeight={'bold'} className='text-red-600'>

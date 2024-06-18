@@ -36,12 +36,10 @@ const theme = extendTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          color: '#444444',
           fontFamily: '"Roboto", sans-serif',
-          '&.MuiTypography-body1': {
+          '&.MuiTypography': {
             fontSize: '0.800rem',
-            color: '#444444'
-          }
+          },
         }
       }
     },

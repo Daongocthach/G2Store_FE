@@ -18,15 +18,17 @@ export default function MenuCategory({ categories, isShopPage, setCategory }) {
     }
   }
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Box sx={{ overflow: 'auto' }}>
+    <Box className='flex flex-row overflow-x-auto' >
+      <Box className='overflow-auto flex flex-col gap-1 p-2'>
         {Array.isArray(categories) && categories.map((category, index) => (
-          <Button sx={{ display: 'flex', gap: 2, color: '#555555', ':hover': { bgcolor: 'inherit' } }}
+          <Box className='flex flex-row gap-1 text-gray-600 cursor-pointer'
             key={index} onClick={() => handleClick(category)}>
-            <Typography color={selectCategory === category ? '#2a99ff' : '#555555'} sx={{ width: 120, textAlign: 'left' }} >{category?.name}</Typography>
+            <Typography sx={{ fontSize: 15 }} className={`${selectCategory === category ? 'text-blue-500' : 'text-gray-600'} w-32 text-left`}>
+              {category?.name}
+            </Typography>
             {Array.isArray(category?.child_categories) && category.child_categories.length > 0 &&
               <ArrowForwardIos sx={{ color: '#666666', fontSize: 10 }} />}
-          </Button>
+          </Box>
         ))}
       </Box>
       {Array.isArray(selectCategory?.child_categories) && selectCategory.child_categories.length > 0 && <Box>

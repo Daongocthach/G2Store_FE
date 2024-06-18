@@ -5,30 +5,26 @@ import { useSelector } from 'react-redux'
 import Account from './Account/Account'
 import Search from './Search/Search'
 import G2Logo from '../../assets/img/G2Logo.png'
+import DrawerMenu from '../DrawerMenu/DrawerMenu'
 
 function AppBar() {
   const navigate = useNavigate()
   const cartItems = useSelector(state => state.cart.cartItems)
-
+  const user = useSelector(state => state.auth)
+  const atk = localStorage.getItem('atk')
   return (
-    <Box className="static w-full flex items-center justify-between overflow-auto bg-gray-800" style={{ height: 'var(--app-bar-height)' }}>
-      <Box className="flex items-center gap-2 px-4">
-        <Box className="flex items-center">
-          <img src={G2Logo} className="h-16 w-16" />
+    <Box className="static w-full flex items-center justify-between overflow-auto bg-gray-800 h-16 sm:px-2 md:px-10">
+      <Box className="flex items-center gap-3 flex-1 px-1">
+        <Box className="flex items-center gap-1">
+          <img src={G2Logo} className="h-16 w-16 hidden lg:flex" />
           <Link to="/" className="no-underline">
-            <Typography variant="h5" fontWeight={'bold'} className="hidden sm:flex text-white hover:text-orange-300">
-              G2Store
-            </Typography>
+            <Typography variant="h5" fontWeight={'bold'} className="hidden sm:flex text-white hover:text-orange-300">G2Store</Typography>
           </Link>
+          <DrawerMenu atk={atk}/>
         </Box>
-        <Typography fontWeight={'bold'}
-          className="text-white font-bold py-2 px-4 rounded cursor-pointer hover:text-orange-300"
-          onClick={() => navigate('/genre-detail')}>
-          Sản phẩm
-        </Typography>
         <Search />
       </Box>
-      <Box className="flex items-center gap-5">
+      <Box className="items-center gap-5 hidden lg:flex">
         <Tooltip title="Thông báo">
           <Badge color="warning" badgeContent={1} className="cursor-pointer">
             <Notifications className="text-white" onClick={() => navigate('/notification')} />
@@ -39,7 +35,7 @@ function AppBar() {
             <ShoppingCart className="text-white" onClick={() => navigate('/cart')} />
           </Badge>
         </Tooltip>
-        <Account />
+        <Account atk={atk} avatar={user?.avatar}/>
       </Box>
     </Box>
   )

@@ -13,7 +13,6 @@ import { IOSSwitch } from '../../../components/Switch/Switch'
 import ghnApiV2 from '../../../apis/ghnApiV2'
 
 function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
-    console.log('abc')
     const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -30,22 +29,20 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
     var totalFeeShip = feeShips.reduce((totalFeeShip, feeShip) => totalFeeShip + feeShip?.fee, 0)
     var total = totals?.totalProducts + totalFeeShip - (is_point_spent ? point : 0)
     useEffect(() => {
-        if (Array.isArray(cartItems)) {
-            let feeShipsTemp = []
-            const fetchFeeShips = async () => {
-                for (let cartItem of cartItems) {
-                    try {
-                        const response = await ghnApiV2.getFeeShip(address?.address_id, paymentType, cartItem?.cart_item_id)
-                        const fee = response?.data?.total - cartItem?.shop_free_ship_reduce
-                        feeShipsTemp.push({ shop_id: cartItem?.shop?.shop_id, fee })
-                    } catch (error) {
-                        console.log(error)
-                    }
+        let feeShipsTemp = []
+        const fetchFeeShips = async () => {
+            for (let cartItem of cartItems) {
+                try {
+                    const response = await ghnApiV2.getFeeShip(address?.address_id, paymentType, cartItem?.cart_item_id)
+                    const fee = response?.data?.total - cartItem?.shop_free_ship_reduce
+                    feeShipsTemp.push({ shop_id: cartItem?.shop?.shop_id, fee })
+                } catch (error) {
+                    console.log(error)
                 }
-                setFeeShips(feeShipsTemp)
             }
-            fetchFeeShips()
+            setFeeShips(feeShipsTemp)
         }
+        fetchFeeShips()
     }, [address])
 
     const convertDataToOrderFormat = (data) => {

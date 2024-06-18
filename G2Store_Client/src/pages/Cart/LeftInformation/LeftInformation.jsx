@@ -6,6 +6,7 @@ import DeleteItem from './../DeleteItem/DeleteItem'
 import GoToShop from '../../../components/GoToShop/GoToShop'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
 import { formatCurrency } from '../../../utils/price'
+import OrderItem from '../../../components/Product/OrderItem'
 
 function LeftInformation({ cartItems, reRender, setReRender }) {
     const navigate = useNavigate()
@@ -59,17 +60,7 @@ function LeftInformation({ cartItems, reRender, setReRender }) {
                                     cartItem?.shop_items.map((shop_item, index) => (
                                         <TableRow key={index}>
                                             <TableCell className='w-72'>
-                                                <Box className='flex flex-row gap-2'>
-                                                    <img src={shop_item?.image} alt='omachi'
-                                                        onClick={() => { navigate('/product-detail', { state: shop_item?.product_id }) }}
-                                                        className="object-cover h-16 w-16 rounded-md cursor-pointer"
-                                                    />
-                                                    <Box>
-                                                        <Typography fontSize={14} className="text-gray-700 w-36 line-clamp-2">
-                                                            {shop_item?.name}
-                                                        </Typography><Typography fontSize={13} className='text-gray-600'>{formatCurrency(shop_item?.price)}</Typography>
-                                                    </Box>
-                                                </Box>
+                                                <OrderItem shop_item={shop_item} />
                                             </TableCell>
                                             <TableCell className='w-36'>
                                                 <ToggleButton value="left" key="left" size='small'

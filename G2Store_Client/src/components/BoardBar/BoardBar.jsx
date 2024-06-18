@@ -1,5 +1,5 @@
 import { Box, Menu, Chip } from '@mui/material'
-import { KeyboardArrowDown, Dehaze, MoneyOff } from '@mui/icons-material'
+import { KeyboardArrowDown, Widgets, MoneyOff, Category } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import MenuCategory from '../MenuCategory/MenuCategory'
@@ -26,14 +26,12 @@ function BoardBar() {
             })
     }, [])
     return (
-        <Box sx={{
-            height: (theme) => theme.webCustom.boardBarHeight, display: 'flex', alignItems: 'center', borderTop: '1px solid #D3D3D3',
-            bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#363636' : '#E6E6FA')
-        }} paddingX={{ xs: 0, md: 1 }}>
+        <Box className='h-10 bg-gray-200 flex flex-row items-center border-t border-gray-300 sm:px-0 md:px-10'>
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-                <Chip icon={<Dehaze />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
+                <Chip icon={<Category />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
                     onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
                 <Link to={'/promotion'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
+                <Link to={'/genre-detail'}><Chip icon={<Widgets />} label={'Sản phẩm'} clickable sx={useStyles.chip} ></Chip></Link>
             </Box>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
                 <MenuCategory categories={categories} />

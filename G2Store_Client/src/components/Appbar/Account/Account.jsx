@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Menu, Box, Divider, MenuItem, Avatar, IconButton, Chip, Typography } from '@mui/material'
-import { Settings, Login, AccountCircle, Person, PersonAdd } from '@mui/icons-material'
+import { Logout, Login, AccountCircle, Person, PersonAdd } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../../redux/actions/auth'
 import { persistor } from '../../../redux/store'
@@ -9,12 +9,11 @@ import authenApi from '../../../apis/authenApi'
 import avatarNull from '../../../assets/img/avatar.png'
 import { useAlert } from '../../ShowAlert/ShowAlert'
 
-function Account() {
+function Account({ atk, avatar }) {
     const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const user = useSelector(state => state.auth)
-    const atk = localStorage.getItem('atk')
+
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
@@ -33,36 +32,34 @@ function Account() {
     }
     return (
         <Box>
-            <IconButton
-                size="small"
-                onClick={handleClick}
-                sx={{ padding: 0, marginRight: '10px', color: 'white' }}
-            >
-                {!atk && <Box sx={{ display: 'flex', gap: 2 }}>
+            <IconButton size="small" onClick={handleClick} className='p-0 text-white' >
+                {!atk && <Box className='flex flex-row gap-1'>
                     <Link to={'/login'} ><Chip icon={<Person />} label='Đăng nhập' sx={{ bgcolor: '#DDDDDD' }} /></Link>
                     <Link to={'/register'} ><Chip icon={<PersonAdd />} label='Đăng Ký' sx={{ bgcolor: '#DDDDDD' }} /></Link>
                 </Box>}
-                {atk && <Avatar sx={{ width: 40, height: 40 }} >
-                    <img src={user?.avatar || avatarNull} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+                {atk && <Avatar className='w-10 h-10' >
+                    <img src={avatar || avatarNull} className='w-full h-full object-contain' />
                 </Avatar>}
             </IconButton>
             <Menu open={open} anchorEl={anchorEl} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} onClose={handleClose}>
                 {atk && <MenuItem onClick={handleClose}>
-                    <Link to={'/profile'} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <AccountCircle fontSize="small" sx={{ mr: 1 }} />
+                    <Link to={'/profile'} className=' text-gray-700 flex flex-row items-center justify-between gap-2' >
+                        <AccountCircle fontSize="small" />
                         Tài khoản
                     </Link>
                 </MenuItem>}
                 <Divider />
                 {!atk && <MenuItem onClick={handleClose}>
-                    <Link to={'/login'} style={{ textDecoration: 'none', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Link to={'/login'} className='text-gray-700 flex-row items-center justify-between gap-2' >
                         <Login fontSize="small" />
                         <Typography >Đăng nhập</Typography>
                     </Link>
                 </MenuItem>}
                 {atk && <MenuItem onClick={handleLogout}>
-                    <Settings fontSize="small" sx={{ mr: 1 }} />
-                    Đăng xuất
+                    <Link className='text-gray-700 flex flex-row items-center justify-between gap-2' >
+                        <Logout fontSize="small" />
+                        <Typography >Đăng xuất</Typography>
+                    </Link>
                 </MenuItem>}
             </Menu>
         </Box>

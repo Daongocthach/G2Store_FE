@@ -8,7 +8,7 @@ import DialogAction from '../../../../components/Dialog/DialogAction'
 import { IOSSwitch } from '../../../../components/Switch/Switch'
 import DialogAddress from '../../../../components/Dialog/DialogAddress'
 
-{/**use for Checkout Change address LeftInformation and Account update address */}
+{/**use for Checkout Change address LeftInformation and Account update address */ }
 function UpdateAddress({ address, rerender, setRerender }) {
     const [open, setOpen] = useState(false)
     const [openProvince, setOpenProvince] = useState(false)
@@ -104,7 +104,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Chỉnh sửa thông tin nhận hàng</DialogTitle>
                 <DialogContent >
-                <Box className='flex flex-col gap-2 w-[550px]'>
+                    <Box className='flex flex-col gap-2 w-[550px]'>
                         <Typography className=' min-w-fit text-gray-800'>Thông tin người nhận</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <TextField fullWidth size='small' label="Nhập họ và tên" value={receiverName} onChange={(e) => setReceiverName(e.target.value)} />

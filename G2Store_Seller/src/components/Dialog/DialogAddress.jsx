@@ -9,8 +9,8 @@ function DialogAddress({ datas, isProvince, isDistrict, isWard, open, setOpen, h
         <Menu
             aria-labelledby="demo-positioned-button"
             open={open}
-            anchorEl={null}
             onClose={() => setOpen(false)}
+            anchorEl={null}
             anchorOrigin={{
                 vertical: 'center',
                 horizontal: 'center'

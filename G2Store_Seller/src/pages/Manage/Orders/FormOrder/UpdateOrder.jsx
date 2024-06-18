@@ -23,21 +23,17 @@ function UpdateOrder({ order, setReRender, reRender }) {
   }
   const handleUpdate = async () => {
     setLoading(true)
-    if (activeStep === 2) {
-      navigate('/seller/manage/create-order-ghn', { state: order })
-    }
-    else {
-      orderApi.updateOrder(order?.order_id, steps[activeStep]?.value)
-        .then(() => {
-          triggerAlert('Cập nhật thành công!', false, false)
-          setReRender(!reRender)
-        })
-        .catch(error => {
-          console.log(error)
-          triggerAlert('Cập nhật thất bại!', true, false)
-        })
-        .finally(setLoading(false))
-    }
+    orderApi.updateOrder(order?.order_id, steps[activeStep]?.value)
+      .then(() => {
+        triggerAlert('Cập nhật thành công!', false, false)
+        setReRender(!reRender)
+      })
+      .catch(error => {
+        console.log(error)
+        triggerAlert('Cập nhật thất bại!', true, false)
+      })
+      .finally(setLoading(false))
+
     handleClose()
   }
   const handleNext = () => {

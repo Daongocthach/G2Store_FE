@@ -1,15 +1,11 @@
 import { useState } from 'react'
 import { Box, Tooltip } from '@mui/material'
-import { useDispatch } from 'react-redux'
 import DeleteIcon from '@mui/icons-material/Delete'
-import productApi from '../../../../apis/productApi'
-import { updateProduct } from '../../../../redux/actions/products'
 import DialogTextOnly from '../../../../components/Dialog/DialogTextOnly'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
-function DeleteSeller({ setUpdate, productId }) {
+function DeleteSeller() {
     const triggerAlert = useAlert()
-    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const handleClickOpen = () => {
         setOpen(true)
@@ -18,16 +14,7 @@ function DeleteSeller({ setUpdate, productId }) {
         setOpen(false)
     }
     const handleClickDelete = () => {
-        productApi.deleteProduct(productId)
-            .then((response) => {
-                triggerAlert('Xóa thành công!', false, false)
-                dispatch(updateProduct(response.data))
-                setUpdate(productId)
-            })
-            .catch(error => {
-                console.log(error)
-                triggerAlert('Xóa thất bại!', true, false)
-            })
+
         handleClose()
     }
     return (

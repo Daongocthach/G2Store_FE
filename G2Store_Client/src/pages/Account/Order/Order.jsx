@@ -10,6 +10,7 @@ import OrderItem from './OrderItem/OrderItem'
 import GoodsReceived from './GoodsReceived/GoodsReceived'
 import Loading from '../../../components/Loading/Loading'
 import DeleteOrder from './DeleteOrder/DeleteOrder'
+import GoToShop from '../../../components/GoToShop/GoToShop'
 
 function Order() {
   const [reRender, setReRender] = useState(false)
@@ -76,14 +77,9 @@ function Order() {
                   <Typography variant='subtitle2' color={'#444444'}>{format(order?.created_date, 'dd/MM/yyyy HH:mm:ss')}</Typography>
                   <Typography variant='subtitle2' color={'#444444'}>#{order?.order_id}</Typography>
                 </Box>
-                <LocalShipping sx={{ color: '#444444' }} />
+                <LocalShipping className='text-gray-600'/>
               </Box>
-              <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
-                onClick={() => { navigate('/shop-page', { state: order?.shop_id }) }}>
-                <Storefront sx={{ fontSize: 25, color: '#444444' }} />
-                <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#444444' }}>{order?.shop_name}</Typography>
-                <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
-              </Button>
+              <GoToShop shop_id={order?.shop_id} shop_name={order?.shop_name} shop_image={order?.shop?.image} />
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <Box>
                   {order?.items.map((orderItem, index) =>
@@ -105,7 +101,7 @@ function Order() {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Typography color={'#444444'} variant='subtitle1' >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
-                  <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order?.total)}</Typography>
+                  <Typography color={'#cd3333'} variant='h6' fontWeight={'bold'}>{formatCurrency(order?.grand_total)}</Typography>
                 </Box>
               </Box>
               <Divider sx={{ mb: 2 }} />

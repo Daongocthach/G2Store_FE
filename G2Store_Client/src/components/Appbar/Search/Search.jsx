@@ -14,23 +14,24 @@ function Search() {
         setName(newName)
     }
     return (
-        <Box sx={{ flex: 1, display: 'flex' }}>
-            <Paper component="form" sx={{ display: 'flex', alignItems: 'center', minWidth: 400, height: 40 }}>
+        <Box className='flex-row md:w-auto w-full'>
+            <Paper component="form" className='flex flex-row items-center md:w-96 sm:w-full h-10'>
                 <Autocomplete
                     options={top100Films}
                     getOptionLabel={(option) => option.title}
                     sx={{ width: '100%' }}
                     clearIcon={false}
                     popupIcon={false}
-                    renderInput={(params) => <TextField {...params} variant='outlined' type='search' size='small' placeholder="Tìm kiếm trên G2Store" sx={{
-                        flex: 1, fontSize: 14,
-                        '& .MuiOutlinedInput-root': {
-                            '&.Mui-focused fieldset': { borderColor: 'transparent' },
-                            '&:hover fieldset': { borderColor: 'transparent' }
-                        }
-                    }} onChange={handleChange} onFocus={(e) => e.target.select()} />}
+                    renderInput={(params) => <TextField {...params} variant='outlined' type='search' size='small' placeholder="Tìm kiếm trên G2Store"
+                        sx={{
+                            flex: 1, fontSize: 14,
+                            '& .MuiOutlinedInput-root': {
+                                '&.Mui-focused fieldset': { borderColor: 'transparent' },
+                                '&:hover fieldset': { borderColor: 'transparent' }
+                            }
+                        }} onChange={handleChange} onFocus={(e) => e.target.select()} />}
                 />
-                <Button type="button" onClick={handleSearch} sx={{ height: 40, bgcolor: '#EE7942', color: 'white', borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
+                <Button variant='contained' color='warning' onClick={handleSearch} sx={{ borderRadius: 0 }} className='h-full'>
                     <SearchIcon />
                 </Button>
             </Paper>

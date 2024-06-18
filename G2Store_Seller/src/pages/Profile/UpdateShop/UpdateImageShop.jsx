@@ -8,7 +8,7 @@ import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function UpdateImageShop({ image, reRender, setReRender }) {
     const triggerAlert = useAlert()
-    const [imageShop, setImageShop] = useState(image)
+    let imageShop = image
     const [loading, setLoading] = useState(false)
     const handleImageChange = async (e) => {
         const image = e.target.files[0]
@@ -25,7 +25,7 @@ function UpdateImageShop({ image, reRender, setReRender }) {
                 .then(() => {
                     const reader = new FileReader()
                     reader.onload = () => {
-                      setImageShop(reader.result)
+                      imageShop = reader.result
                     }
                     reader.readAsDataURL(file)
                     triggerAlert('Cập nhật thành công!', false, false)

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Container, Grid, Typography, Button, Box } from '@mui/material'
+import { Container, Grid, Typography, IconButton, Box } from '@mui/material'
 import { Inventory, EditLocationAlt, NavigateNext, AccountBox } from '@mui/icons-material'
 import Profile from './Profile/Profile'
 import Order from './Order/Order'
@@ -24,21 +24,24 @@ function Account() {
         <Grid item xs={12} sm={12} md={3} lg={3} >
           <BreadCrumbs links={[{ name: 'Tài khoản', href: '' }]} />
           <Box className='flex flex-row justify-between items-center'>
-            <Button startIcon={<Inventory sx={{ color: select == 0 ? '#0288d1' : '#4F4F4F' }} />} onClick={() => { setSelect(0) }}>
-              <Typography className='text-gray-600' sx={{ fontWeight: 500, color: select == 0 ? '#0288d1' : '#4F4F4F' }}>Đơn hàng của tôi</Typography>
-            </Button>
+            <IconButton onClick={() => { setSelect(0) }} className='flex flex-row gap-2'>
+              <Inventory className={`${select === 0 ? 'text-blue-400' : 'text-gray-500'}`} />
+              <Typography sx={{ fontWeight: 500, color: select == 0 ? '#0288d1' : '#4F4F4F' }}>Đơn hàng của tôi</Typography>
+            </IconButton>
             <NavigateNext sx={{ color: select == 0 ? '#0288d1' : '#4F4F4F' }} />
           </Box>
           <Box className='flex flex-row justify-between items-center'>
-            <Button startIcon={<AccountBox sx={{ color: select == 1 ? '#0288d1' : '#4F4F4F' }} />} onClick={() => { setSelect(1) }}>
-              <Typography className='text-gray-600' sx={{ fontWeight: 500, color: select == 1 ? '#0288d1' : '#4F4F4F' }}>Thông tin cá nhân</Typography>
-            </Button>
+            <IconButton className='flex flex-row gap-2' onClick={() => { setSelect(1) }} >
+              <AccountBox className={`${select === 1 ? 'text-blue-400' : 'text-gray-500'}`} />
+              <Typography sx={{ fontWeight: 500, color: select == 1 ? '#0288d1' : '#4F4F4F' }}>Thông tin cá nhân</Typography>
+            </IconButton>
             <NavigateNext sx={{ color: select == 1 ? '#0288d1' : '#4F4F4F' }} />
           </Box>
           <Box className='flex flex-row justify-between items-center'>
-            <Button startIcon={<EditLocationAlt sx={{ color: select == 2 ? '#0288d1' : '#4F4F4F' }} />} onClick={() => { setSelect(2) }}>
-              <Typography className='text-gray-600' sx={{ fontWeight: 500, color: select == 2 ? '#0288d1' : '#4F4F4F' }}>Sổ địa chỉ</Typography>
-            </Button>
+            <IconButton className='flex flex-row gap-2' onClick={() => { setSelect(2) }}>
+              <EditLocationAlt className={`${select === 2 ? 'text-blue-400' : 'text-gray-500'}`} />
+              <Typography sx={{ fontWeight: 500, color: select == 2 ? '#0288d1' : '#4F4F4F' }}>Sổ địa chỉ</Typography>
+            </IconButton>
             <NavigateNext sx={{ color: select == 2 ? '#0288d1' : '#4F4F4F' }} />
           </Box>
         </Grid>
@@ -57,7 +60,7 @@ function Account() {
 export default Account
 
 const useStyles = {
-  button: {
+  IconButton: {
     ':hover': { bgcolor: 'inherit' }, fontWeight: 500
   }
 }
