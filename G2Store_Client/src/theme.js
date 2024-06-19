@@ -27,8 +27,8 @@ const theme = extendTheme({
         root: {
           fontFamily: '"Roboto", sans-serif',
           '&.MuiTypography': {
-            fontSize: '0.800rem',
-          },
+            fontSize: '0.800rem'
+          }
         }
       }
     },

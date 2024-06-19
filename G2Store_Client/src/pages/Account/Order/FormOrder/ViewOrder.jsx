@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Box, Input, Tooltip, TextField } from '@mui/material'
-import { Visibility } from '@mui/icons-material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Box, TextField } from '@mui/material'
 import { format } from 'date-fns'
 import OrderItem from '../OrderItem/OrderItem'
 import { formatCurrency } from '../../../../utils/price'
@@ -15,9 +14,7 @@ function ViewOrder({ order }) {
   }
   return (
     <Box>
-      <Tooltip title="Xem chi tiết">
-        <Visibility className="bg-inherit text-gray-700 cursor-pointer" onClick={handleClickOpen} />
-      </Tooltip>
+      <Button variant='contained' color='error' size='small' onClick={handleClickOpen}>Xem chi tiết</Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle fontSize={17} className=" text-gray-700">
           Đơn hàng #{order?.order_id} ({format(new Date(order?.created_date), 'yyyy-MM-dd')})
@@ -38,7 +35,7 @@ function ViewOrder({ order }) {
             <Box className='flex flex-col gap-1'>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
                 <Typography sx={{ fontSize: 17 }} className="min-w-[100px] text-gray-700">Tổng tiền:</Typography>
-                <Typography className="text-red-800 text-[15px]">{formatCurrency(order?.grand_total)}</Typography>
+                <Typography className="text-red-700 text-[15px]" fontWeight={'bold'}>{formatCurrency(order?.grand_total)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
                 <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Tiền hàng:</Typography>
@@ -50,15 +47,15 @@ function ViewOrder({ order }) {
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
                 <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Giảm giá shop:</Typography>
-                <Typography sx={{ fontSize: 15 }} className="text-green-800">-{formatCurrency(order?.shop_voucher_price_reduce)}</Typography>
+                <Typography sx={{ fontSize: 15 }} className="text-red-700">-{formatCurrency(order?.shop_voucher_price_reduce)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
                 <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Giảm giá vận chuyển:</Typography>
-                <Typography sx={{ fontSize: 15 }} className="text-green-800">-{formatCurrency(order?.fee_ship_reduce)}</Typography>
+                <Typography sx={{ fontSize: 15 }} className="text-red-700">-{formatCurrency(order?.fee_ship_reduce)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
                 <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Giảm giá bằng điểm:</Typography>
-                <Typography sx={{ fontSize: 15 }} className="text-green-800">-{formatCurrency(order?.point_spent)}</Typography>
+                <Typography sx={{ fontSize: 15 }} className="text-red-700">-{formatCurrency(order?.point_spent)}</Typography>
               </Box>
             </Box>
           </Box>

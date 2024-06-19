@@ -1,5 +1,5 @@
 import { Typography, Button, Box, Radio, Divider } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteAllCart } from '../../../redux/actions/cart'
@@ -10,16 +10,14 @@ import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import orderApi from '../../../apis/orderApi'
 import Loading from '../../../components/Loading/Loading'
 import { IOSSwitch } from '../../../components/Switch/Switch'
-import ghnApiV2 from '../../../apis/ghnApiV2'
 
-function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
+function RightInformation({ cartItems, address, feeShips, paymentType, setPaymentType }) {
     const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const point = useSelector(state => state.auth.point)
     const [is_point_spent, setIsPointSpent] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [paymentType, setPaymentType] = useState('COD')
     const totals = cartItems.reduce((acc, cartItem) => {
         acc.totalProducts += cartItem?.shop_subtotal || 0
         acc.totalFeeShipReduce += cartItem?.shop_free_ship_reduce || 0
@@ -27,24 +25,8 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
         return acc
     }, { totalProducts: 0, totalFeeShipReduce: 0, totalShopVoucher: 0 })
     var totalFeeShip = feeShips.reduce((totalFeeShip, feeShip) => totalFeeShip + feeShip?.fee, 0)
-    var total = totals?.totalProducts + totalFeeShip - (is_point_spent ? point : 0)
-    useEffect(() => {
-        let feeShipsTemp = []
-        const fetchFeeShips = async () => {
-            for (let cartItem of cartItems) {
-                try {
-                    const response = await ghnApiV2.getFeeShip(address?.address_id, paymentType, cartItem?.cart_item_id)
-                    const fee = response?.data?.total - cartItem?.shop_free_ship_reduce
-                    feeShipsTemp.push({ shop_id: cartItem?.shop?.shop_id, fee })
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-            setFeeShips(feeShipsTemp)
-        }
-        fetchFeeShips()
-    }, [address])
-
+    var total = totals?.totalProducts + totalFeeShip - (totals?.totalFeeShipReduce || 0) - (totals?.totalShopVoucher || 0) -
+        (is_point_spent ? point : 0)
     const convertDataToOrderFormat = (data) => {
         const address_id = address?.address_id
         const payment_type = paymentType
@@ -89,7 +71,6 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
         } else {
             triggerAlert('Vui lòng chọn địa chỉ giao hàng!', false, true)
         }
-
     }
     return (
         <Box className='flex flex-col gap-3'>
@@ -99,22 +80,22 @@ function RightInformation({ cartItems, address, feeShips, setFeeShips }) {
             </Box>
             <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Phí vận chuyển: </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totalFeeShip)}</Typography>
+                <Typography className='text-green-700' fontSize={14}>{formatCurrency(totalFeeShip)}</Typography>
             </Box>
             <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Giảm giá vận chuyển: </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totals?.totalFeeShipReduce)}</Typography>
+                <Typography className='text-red-700' fontSize={14}>-{formatCurrency(totals?.totalFeeShipReduce)}</Typography>
             </Box>
             <Box className='flex items-center justify-between'>
                 <Typography className='text-gray-600' fontSize={14}>Giảm giá của shop: </Typography>
-                <Typography className='text-gray-600' fontSize={14}>{formatCurrency(totals?.totalShopVoucher)}</Typography>
+                <Typography className='text-red-700' fontSize={14}>-{formatCurrency(totals?.totalShopVoucher)}</Typography>
             </Box>
             <Box className='flex items-center justify-between border-b border-gray-500 pb-1' >
                 <Box className='flex flex-row items-center gap-2' >
                     <Typography className='text-gray-600' fontSize={14}>Sử dụng điểm tích lũy (-{formatCurrency(point || 0)})</Typography>
                     <IOSSwitch checked={is_point_spent} onChange={() => setIsPointSpent(!is_point_spent)} color="error" />
                 </Box>
-                <Typography className='text-gray-600' fontSize={13}>-{formatCurrency(is_point_spent ? (point || 0) : 0)}</Typography>
+                <Typography className='text-red-700' fontSize={13}>-{formatCurrency(is_point_spent ? (point || 0) : 0)}</Typography>
             </Box>
             <Box className="flex items-center justify-between gap-2 mt-2">
                 <Typography fontSize={17} className="text-gray-700">Tổng cộng:</Typography>

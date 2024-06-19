@@ -1,5 +1,4 @@
 import { Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, Typography, Divider } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { formatCurrency } from '../../../utils/price'
 import addressApi from '../../../apis/addressApi'

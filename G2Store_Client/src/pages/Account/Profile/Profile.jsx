@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Box, InputAdornment, ButtonGroup, IconButton, TextField } from '@mui/material'
-import { AddCircle, MonetizationOn, Edit } from '@mui/icons-material'
+import { AddCircle, Edit } from '@mui/icons-material'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
@@ -108,22 +108,22 @@ function Profile() {
       </Box>
       <Box className="mb-2 flex flex-col gap-2 w-full">
         <TextField variant='standard' label='Họ và tên' readOnly fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-100' value={formik.values.full_name}
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={formik.values.full_name}
           InputProps={{ endAdornment: (<InputAdornment position="end"><Edit sx={{ mr: 1, fontSize: 15 }} /></InputAdornment>) }}
           onChange={formik.handleChange} />
         <TextField variant='standard' label='Ngày sinh' readOnly fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-100' value={formik.values.dob} placeholder={'Ngày sinh'}
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={formik.values.dob} placeholder={'Ngày sinh'}
           InputProps={{ endAdornment: (<InputAdornment position="end"><Edit sx={{ mr: 1, fontSize: 15 }} /></InputAdornment>) }}
           onChange={formik.handleChange} />
         <TextField variant='standard' label='Email' disabled fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-100' value={user?.email ? user?.email : ''} />
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.email ? user?.email : ''} />
         <TextField variant='standard' label='Điện thoại' disabled fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-100' value={user?.phoneNo ? user?.phoneNo : ''} />
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.phoneNo ? user?.phoneNo : ''} />
         <TextField variant='standard' label='Tích điểm' disabled fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-100' value={user?.point || 0} />
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.point || 0} />
       </Box>
-      <UpdateDobAndName handle={handleUpdate} />
-      <ButtonGroup variant="contained" aria-label="Basic button group" className='mt-1'>
+      <ButtonGroup variant="contained" color='info' aria-label="Basic button group" className='mt-1'>
+        <UpdateDobAndName handle={handleUpdate} />
         <UpdatePassword reRender={reRender} setReRender={setReRender} />
         <UpdatePhoneNo reRender={reRender} setReRender={setReRender} />
         <UpdateEmail reRender={reRender} setReRender={setReRender} />

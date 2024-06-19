@@ -1,7 +1,7 @@
 import { Typography, Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { formatCurrency } from '../../../../utils/price'
-import ReviewProduct from '../ReviewProduct/ReviewProduct'
+import ReviewProduct from '../FormOrder/ReviewProduct'
 
 function OrderItem({ orderItem, orderStatus, reRender, setReRender }) {
     const navigate = useNavigate()
@@ -18,7 +18,7 @@ function OrderItem({ orderItem, orderStatus, reRender, setReRender }) {
                         <Typography className='text-gray-600' sx={{ fontSize: 13 }}>x{orderItem?.quantity}</Typography>
                     </Box>
                     <Box className='flex flex-row items-center gap-2' >
-                        <Typography className='text-red-500' sx={{ fontSize: 13 }}>Tiền hàng: {formatCurrency(orderItem?.sub_total)}</Typography>
+                        <Typography className='text-red-700' sx={{ fontSize: 14}}>Tiền hàng: {formatCurrency(orderItem?.sub_total)}</Typography>
                         {orderStatus === 'RECEIVED' && !orderItem?.is_reviewed && <ReviewProduct orderItem={orderItem} reRender={reRender} setReRender={setReRender} />}
                     </Box>
                 </Box>

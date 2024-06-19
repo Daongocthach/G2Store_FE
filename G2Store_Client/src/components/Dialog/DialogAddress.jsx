@@ -1,4 +1,4 @@
-import { Box, MenuItem, Menu } from '@mui/material'
+import { Box, MenuItem, Dialog } from '@mui/material'
 
 function DialogAddress({ datas, isProvince, isDistrict, isWard, open, setOpen, handleClick }) {
     const handleClickData = (data) => {
@@ -6,28 +6,26 @@ function DialogAddress({ datas, isProvince, isDistrict, isWard, open, setOpen, h
         setOpen(false)
     }
     return (
-        <Menu
-            aria-labelledby="demo-positioned-button"
+        <Dialog
+            id="dialog-address-dialog"
             open={open}
-            anchorEl={null}
             onClose={() => setOpen(false)}
-            anchorOrigin={{
-                vertical: 'center',
-                horizontal: 'center'
-            }}
-            transformOrigin={{
-                vertical: 'center',
-                horizontal: 'center'
+            PaperProps={{
+                style: {
+                    maxHeight: '400px',
+                    width: '400px',
+                    overflow: 'auto'
+                }
             }}
         >
-            <Box className='overflow-auto w-[400px]'>
+            <Box>
                 {datas.map((data, index) => (
                     <MenuItem key={index} value={data} onClick={() => handleClickData(data)}>
                         {isProvince ? data?.ProvinceName : isDistrict ? data?.DistrictName : isWard ? data?.WardName : 'Chưa có dữ liệu'}
                     </MenuItem>
                 ))}
             </Box>
-        </Menu>
+        </Dialog>
 
     )
 }
