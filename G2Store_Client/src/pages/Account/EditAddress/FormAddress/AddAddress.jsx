@@ -35,7 +35,7 @@ function AddAddress({ rerender, setRerender }) {
             ghnApi.getDistricts(value?.ProvinceID)
                 .then(response => {
                     setDistricts(response.data.data)
-                    setDistrict({ DistrictName: response.data.data[0]?.DistrictName, DistrictID: response.data.data[0]?.DistrictID })
+                    // setDistrict({ DistrictName: response.data.data[0]?.DistrictName, DistrictID: response.data.data[0]?.DistrictID })
                 })
         }
     }
@@ -45,7 +45,7 @@ function AddAddress({ rerender, setRerender }) {
             ghnApi.getWards(value?.DistrictID)
                 .then(response => {
                     setWards(response.data.data)
-                    setWard({ WardName: response.data.data[0]?.WardName, WardCode: response.data.data[0]?.WardCode })
+                    // setWard({ WardName: response.data.data[0]?.WardName, WardCode: response.data.data[0]?.WardCode })
                 })
         }
     }

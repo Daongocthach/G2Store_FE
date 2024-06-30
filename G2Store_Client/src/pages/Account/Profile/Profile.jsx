@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Box, InputAdornment, ButtonGroup, IconButton, TextField } from '@mui/material'
+import { Box, InputAdornment, ButtonGroup, IconButton, TextField, Typography, Input } from '@mui/material'
 import { AddCircle, Edit } from '@mui/icons-material'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
@@ -45,7 +45,11 @@ function Profile() {
       full_name: user?.full_name ? user.full_name : '',
       dob: user?.dob ? user.dob : ''
     },
-    enableReinitialize: true
+    enableReinitialize: true,
+    onChange: (e) => {
+      const { name, value } = e.target
+      formik.setFieldValue(name, value)
+    }
   })
 
   const handleAvatarChange = async (e) => {
@@ -107,18 +111,20 @@ function Profile() {
         <input id="upload-image" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
       </Box>
       <Box className="mb-2 flex flex-col gap-2 w-full">
-        <TextField variant='standard' label='Họ và tên' readOnly fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={formik.values.full_name}
-          InputProps={{ endAdornment: (<InputAdornment position="end"><Edit sx={{ mr: 1, fontSize: 15 }} /></InputAdornment>) }}
-          onChange={formik.handleChange} />
-        <TextField variant='standard' label='Ngày sinh' readOnly fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={formik.values.dob} placeholder={'Ngày sinh'}
-          InputProps={{ endAdornment: (<InputAdornment position="end"><Edit sx={{ mr: 1, fontSize: 15 }} /></InputAdornment>) }}
-          onChange={formik.handleChange} />
+        <Box className='flex-col bg-sky-50'>
+          <Typography variant='caption' className='text-gray-400'>Họ và tên</Typography>
+          <Input id="full_name" name="full_name" fullWidth size='small' placeholder={'Nhập họ và tên'} value={formik.values.full_name}
+            className='min-w-[200px] md:min-w-[500px] text-sm  text-gray-600' onChange={formik.handleChange} />
+        </Box>
+        <Box className='flex-col bg-sky-50'>
+          <Typography variant='caption' className='text-gray-400'>Ngày sinh</Typography>
+          <Input id="dob" name="dob" fullWidth size='small' type='date' placeholder={'Ngày sinh'} value={formik.values.dob}
+            className='min-w-[200px] md:min-w-[500px] text-sm  text-gray-600' onChange={formik.handleChange} />
+        </Box>
         <TextField variant='standard' label='Email' disabled fullWidth size='small'
           className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.email ? user?.email : ''} />
         <TextField variant='standard' label='Điện thoại' disabled fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.phoneNo ? user?.phoneNo : ''} />
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.phone_no ? user?.phoneN_no : ''} />
         <TextField variant='standard' label='Tích điểm' disabled fullWidth size='small'
           className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.point || 0} />
       </Box>
