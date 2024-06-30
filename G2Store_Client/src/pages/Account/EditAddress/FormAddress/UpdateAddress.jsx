@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button, TextField, Dialog, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
+import { AddCircle } from '@mui/icons-material'
 import ghnApi from '../../../../apis/ghnApi'
 import addressApi from '../../../../apis/addressApi'
 import Loading from '../../../../components/Loading/Loading'
@@ -34,7 +35,8 @@ function UpdateAddress({ address, rerender, setRerender }) {
             ghnApi.getDistricts(value?.ProvinceID)
                 .then(response => {
                     setDistricts(response.data.data)
-                    setDistrict({ DistrictName: response.data.data[0]?.DistrictName, DistrictID: response.data.data[0]?.DistrictID })
+                    setDistrict({ DistrictName: '', DistrictID: null })
+                    setWard({ WardName: '', WardCode: '' })
                 })
         }
     }
@@ -44,7 +46,6 @@ function UpdateAddress({ address, rerender, setRerender }) {
             ghnApi.getWards(value?.DistrictID)
                 .then(response => {
                     setWards(response.data.data)
-                    setWard({ WardName: response.data.data[0]?.WardName, WardCode: response.data.data[0]?.WardCode })
                 })
         }
     }
@@ -52,21 +53,31 @@ function UpdateAddress({ address, rerender, setRerender }) {
         setWard({ WardName: value?.WardName, WardCode: value?.WardCode })
     }
     const handleClickOpen = async () => {
-        setReceiverName(address?.receiver_name)
-        setPhoneNo(address?.receiver_phone_no)
-        setOrderReceiverAddress(address?.order_receive_address)
-        setChecked(address?.is_default)
-        setProvince({ ProvinceName: address?.province_name, ProvinceID: address?.province_id })
-        setDistrict({ DisctrictName: address?.district_name, DistrictID: address?.district_id })
-        setWard({ WardName: address?.ward_name, WardCode: address?.ward_code })
         ghnApi.getProvices()
             .then(response => {
                 setProvinces(response.data.data)
             })
             .catch(err => { console.log(err) })
+        if (address?.address_id) {
+            setReceiverName(address?.receiver_name)
+            setPhoneNo(address?.receiver_phone_no)
+            setOrderReceiverAddress(address?.order_receive_address)
+            setChecked(address?.is_default)
+            setProvince({ ProvinceName: address?.province_name, ProvinceID: address?.province_id })
+            setDistrict({ DistrictName: address?.district_name, DistrictID: address?.district_id })
+            setWard({ WardName: address?.ward_name, WardCode: address?.ward_code })
+            ghnApi.getDistricts(address?.province_id)
+                .then(response => {
+                    setDistricts(response.data.data)
+                })
+            ghnApi.getWards(address?.district_id)
+                .then(response => {
+                    setWards(response.data.data)
+                })
+        }
         setOpen(true)
     }
-    const handleClickUpdate = async () => {
+    const handleFinish = async () => {
         if (ward?.WardCode == '') {
             toast.error('Vui lòng chọn địa chỉ !', { position: 'top-center', autoClose: 2000 })
         }
@@ -84,23 +95,40 @@ function UpdateAddress({ address, rerender, setRerender }) {
                 receiver_phone_no: phoneNo,
                 is_default: checked
             }
-            addressApi.updateAddress(address?.address_id, data)
-                .then(() => {
-                    toast.success('Cập nhật địa chỉ thành công', { position: 'top-center', autoClose: 2000 })
-                    setLoading(false)
-                    setRerender(!rerender)
-                })
-                .catch((error) => {
-                    toast.error('Cập nhật địa chỉ thất bại', { position: 'top-center', autoClose: 2000 })
-                    console.log(error)
-                })
-                .finally(() => setLoading(false))
+            if (address?.address_id) {
+                addressApi.updateAddress(address?.address_id, data)
+                    .then(() => {
+                        toast.success('Cập nhật địa chỉ thành công', { position: 'top-center', autoClose: 2000 })
+                        setLoading(false)
+                        setRerender(!rerender)
+                    })
+                    .catch((error) => {
+                        toast.error('Cập nhật địa chỉ thất bại', { position: 'top-center', autoClose: 2000 })
+                        console.log(error)
+                    })
+                    .finally(() => setLoading(false))
+            }
+            else {
+                addressApi.addAddress(data)
+                    .then(() => {
+                        toast.success('Thêm địa chỉ thành công', { position: 'top-center', autoClose: 2000 })
+                        setLoading(false)
+                        setRerender(!rerender)
+                    })
+                    .catch((error) => {
+                        toast.error('Thêm địa chỉ thất bại', { position: 'top-center', autoClose: 2000 })
+                        console.log(error)
+                    })
+                    .finally(() => setLoading(false))
+            }
         }
         handleClose()
     }
     return (
         <Box>
-            <Button color='error' sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }} onClick={handleClickOpen}>Sửa</Button>
+            {address?.address_id ?
+                <Button color='error' sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }} onClick={handleClickOpen}>Sửa</Button> :
+                <Button size='small' variant='contained' color='error' className='gap-1' onClick={handleClickOpen}><AddCircle />Thêm</Button>}
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle >Chỉnh sửa thông tin nhận hàng</DialogTitle>
                 <DialogContent >
@@ -111,7 +139,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
                             <TextField fullWidth size='small' label="Nhập số điện thoại" value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} />
                         </Box>
                         <Typography minWidth={'100px'} fontWeight={'bold'}>Địa chỉ nhận hàng</Typography>
-                        <TextField fullWidth size='small' label='Tỉnh/Thành phố' value={province?.ProvinceName} onClick={() => setOpenProvince(true)} />
+                        <TextField fullWidth size='small' label='Tỉnh/Thành phố' value={province?.ProvinceName || 'Chọn tỉnh'} onClick={() => setOpenProvince(true)} />
                         <DialogAddress open={openProvince} setOpen={setOpenProvince} datas={provinces} handleClick={handleClickProvince} isProvince={true} />
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <TextField fullWidth size='small' label='Quận/Huyện' value={district?.DistrictName || 'Chọn huyện'} onClick={() => setOpenDistrict(true)} />
@@ -126,7 +154,7 @@ function UpdateAddress({ address, rerender, setRerender }) {
                         </Box>
                     </Box>
                 </DialogContent>
-                <DialogAction setOpen={setOpen} handleClick={handleClickUpdate} />
+                <DialogAction setOpen={setOpen} handleClick={handleFinish} />
             </Dialog>
             {loading && <Loading />}
         </Box>

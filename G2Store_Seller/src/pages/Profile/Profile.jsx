@@ -29,10 +29,6 @@ function Profile() {
     fetchData()
   }, [reRender])
 
-  const handleUpdate = async () => {
-
-  }
-
   return (
     <Paper sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column', m: 2, p: 2, minHeight: '100vh' }} variant='outlined' >
       <Box sx={{ mb: 2 }}>

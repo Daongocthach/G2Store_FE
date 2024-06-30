@@ -8,7 +8,7 @@ function DialogAction({ setOpen, handleClick }) {
     }
     return (
         <DialogActions>
-            <Button size='small' color='inherit' onClick={() => setOpen(false)} sx={{ ':hover': { bgcolor: 'inherit' }, color:'#444444' }}> Hủy</Button>
+            <Button size='small' variant='text' color='inherit' onClick={() => setOpen(false)} sx={{ ':hover': { bgcolor: 'inherit' }, color:'#444444' }}> Hủy</Button>
             <Button size='small' variant='contained' onClick={handleAccept}>Chấp nhận</Button>
         </DialogActions>
     )

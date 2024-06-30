@@ -9,7 +9,6 @@ import UpdateImageShop from './UpdateShop/UpdateImageShop'
 function ShopProfile() {
     const navigate = useNavigate()
     const [reRender, setReRender] = useState(false)
-    const [shopReRender, setShopReRender] = useState(false)
     const [loading, setLoading] = useState(false)
     const [shop, setShop] = useState({})
     useEffect(() => {
@@ -68,7 +67,7 @@ function ShopProfile() {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, flexWrap: 'wrap' }}>
                     <UpdateShop rerender={reRender} setRerender={setReRender} shop={shop} />
                     {/*Image Shop */}
-                    <UpdateImageShop image={shop?.image} reRender={shopReRender} setReRender={setShopReRender} />
+                    <UpdateImageShop image={shop?.image} reRender={reRender} setReRender={setReRender} />
                 </Box>
             </Box>
             {loading && <Loading />}

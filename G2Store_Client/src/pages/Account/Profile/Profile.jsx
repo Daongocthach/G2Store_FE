@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Box, InputAdornment, ButtonGroup, IconButton, TextField, Typography, Input } from '@mui/material'
-import { AddCircle, Edit } from '@mui/icons-material'
+import { Box, ButtonGroup, IconButton, TextField, Typography, Input } from '@mui/material'
+import { AddCircle } from '@mui/icons-material'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
@@ -38,7 +38,7 @@ function Profile() {
         dispatch(updateAvatar(data))
       })
       .catch((error) => console.log(error))
-  }, [reRender])
+  }, [reRender, dispatch])
 
   const formik = useFormik({
     initialValues: {

@@ -30,7 +30,8 @@ function UpdateShop({ shop, rerender, setRerender }) {
             ghnApi.getDistricts(value?.ProvinceID)
                 .then(response => {
                     setDistricts(response.data.data)
-                    // setDistrict({ DistrictName: response.data.data[0]?.DistrictName, DistrictID: response.data.data[0]?.DistrictID })
+                    setDistrict({ DistrictName: '', DistrictID: null })
+                    setWard({ WardName: '', WardCode: '' })
                 })
         }
     }
@@ -40,7 +41,6 @@ function UpdateShop({ shop, rerender, setRerender }) {
             ghnApi.getWards(value?.DistrictID)
                 .then(response => {
                     setWards(response.data.data)
-                    // setWard({ WardName: response.data.data[0]?.WardName, WardCode: response.data.data[0]?.WardCode })
                 })
         }
     }
@@ -50,14 +50,24 @@ function UpdateShop({ shop, rerender, setRerender }) {
     const handleClickOpen = async () => {
         setName(shop?.name)
         setStreet(shop?.street)
-        setProvince({ ProvinceName: shop?.province_name, ProvinceID: shop?.province_id })
-        setDistrict({ DisctrictName: shop?.district_name, DistrictID: shop?.district_id })
-        setWard({ WardName: shop?.ward_name, WardCode: shop?.ward_code })
         ghnApi.getProvices()
             .then(response => {
                 setProvinces(response.data.data)
             })
             .catch(err => { console.log(err) })
+        if (shop?.province_id && shop?.district_id) {
+            setProvince({ ProvinceName: shop?.province_name, ProvinceID: shop?.province_id })
+            setDistrict({ DistrictName: shop?.district_name, DistrictID: shop?.district_id })
+            setWard({ WardName: shop?.ward_name, WardCode: shop?.ward_code })
+            ghnApi.getDistricts(shop?.province_id)
+                .then(response => {
+                    setDistricts(response.data.data)
+                })
+            ghnApi.getWards(shop?.district_id)
+                .then(response => {
+                    setWards(response.data.data)
+                })
+        }
         setOpen(true)
     }
     const handleClickUpdate = async () => {
