@@ -8,12 +8,12 @@ const reviewApi = {
         const url = `reviews/product/${product_id}?pageNum=${page}&pageSize=${size}`
         return axiosClient.get(url, { params: params })
     },
-    addReview(data, files) {
+    addReview(data) {
         const url = 'reviews/me'
         const headers = {
             'Content-Type': 'multipart/form-data'
         }
-        return axiosClient.post(url, data, files, headers)
+        return axiosClient.post(url, data, headers)
     }
 }
 export default reviewApi

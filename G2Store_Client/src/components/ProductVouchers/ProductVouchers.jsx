@@ -28,7 +28,7 @@ function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReR
     <Box >
       {product?.product_id ?
         <Box className='flex flex-row items-center cursor-pointer gap-2' onClick={handleClick}>
-          <Receipt />
+          <Receipt sx={{ color: '#444444' }}/>
           <Typography variant='subtitle1' >Xem các mã khuyến mãi</Typography>
           <KeyboardArrowDown sx={{ fontSize: 20 }} />
         </Box> :

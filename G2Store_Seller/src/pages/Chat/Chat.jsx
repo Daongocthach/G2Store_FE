@@ -1,55 +1,18 @@
 import { useState } from 'react'
-import { Avatar, TextField, Button, List, ListItem, ListItemAvatar, ListItemText, Paper, Box } from '@mui/material'
+import { Container, Paper } from '@mui/material'
+import Messages from './Messages/Messages'
+import Rooms from './Rooms/Rooms'
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
-const Chat = () => {
-  const [messages, setMessages] = useState([])
-  const [inputText, setInputText] = useState('')
-  const [prevSender, setPrevSender] = useState('')
-
-  const handleMessageSubmit = () => {
-    if (inputText.trim() !== '') {
-      setMessages([...messages, { text: inputText, sender: 'You' }])
-      setInputText('')
-    }
-  }
-
-  const handleInputChange = (e) => {
-    setInputText(e.target.value)
-  }
-
-  return (
-    <Box sx={{ minHeight: '100vh' }}>
-      <h1>Chat</h1>
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <List>
-          {messages.map((message, index) => (
-            <ListItem key={index} alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt={message.sender} src="/static/images/avatar/1.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={message.sender}
-                secondary={
-                  <Paper elevation={2} style={{ padding: '10px' }}>
-                    {message.text}
-                  </Paper>
-                }
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Paper>
-      <TextField
-        label="Type a message"
-        variant="outlined"
-        value={inputText}
-        onChange={handleInputChange}
-        fullWidth
-        style={{ marginBottom: '20px' }}
-      />
-      <Button variant="contained" onClick={handleMessageSubmit}>Send</Button>
-    </Box>
-  )
+export default function Chat() {
+    const [room, setRoom] = useState()
+    return (
+        <Container className='min-h-screen'>
+            <BreadCrumbs links={[{ name: 'Trò chuyện', href: '' }]} />
+            <Paper elevation={4} sx={{ display: 'flex', mt: 2, height: '80vh' }}>
+                <Rooms setRoom={setRoom} />
+                <Messages room={room} />
+            </Paper>
+        </Container >
+    )
 }
-
-export default Chat

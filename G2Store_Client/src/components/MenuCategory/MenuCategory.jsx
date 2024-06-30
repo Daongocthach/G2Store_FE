@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { ArrowForwardIos } from '@mui/icons-material'
 
 {/**Use For ShopPage get shopCategories and BoardBar get Categories */ }
@@ -19,11 +19,11 @@ export default function MenuCategory({ categories, isShopPage, setCategory }) {
   }
   return (
     <Box className='flex flex-row overflow-x-auto' >
-      <Box className='overflow-auto flex flex-col gap-1 p-2'>
+      <Box className='overflow-auto flex flex-col gap-2 p-2'>
         {Array.isArray(categories) && categories.map((category, index) => (
-          <Box className='flex flex-row gap-1 text-gray-600 cursor-pointer'
+          <Box className='flex flex-row gap-1 text-gray-600 cursor-pointer items-center'
             key={index} onClick={() => handleClick(category)}>
-            <Typography sx={{ fontSize: 15 }} className={`${selectCategory === category ? 'text-blue-500' : 'text-gray-600'} w-32 text-left`}>
+            <Typography sx={{ fontSize: 15 }} className={`${selectCategory === category ? 'text-blue-500' : 'text-gray-600'} w-60 text-left`}>
               {category?.name}
             </Typography>
             {Array.isArray(category?.child_categories) && category.child_categories.length > 0 &&

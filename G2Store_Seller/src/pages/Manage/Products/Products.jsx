@@ -1,11 +1,11 @@
 import {
   Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Checkbox,
-  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Breadcrumbs, Link, Tooltip, Switch
+  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Tooltip, Switch
 } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AddCircle, Create } from '@mui/icons-material'
+import { AddCircle, Create, GetApp, FileUpload } from '@mui/icons-material'
 import DeleteProduct from './FormProduct/DeleteProduct'
 import productApi from '../../../apis/productApi'
 import { formatCurrency } from '../../../utils/price'
@@ -13,9 +13,11 @@ import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
 import SearchById from '../../../components/Search/Search'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function Products() {
   const navigate = useNavigate()
+  const triggerAlert = useAlert()
   const [loading, setLoading] = useState(false)
   const [checkedProducts, setCheckedProducts] = useState([])
   const [checkedAll, setCheckedAll] = useState(false)
@@ -57,27 +59,62 @@ function Products() {
     }
     setCheckedAll(!checkedAll)
   }
-
-  const handleExport = async () => {
+  const handleImageChange = async (e) => {
+    const image = e.target.files[0]
+    if (image) {
+      handleUpdateImage(image)
+    }
+  }
+  const handleUpdateImage = async (file) => {
     setLoading(true)
-    productApi?.exportExcel(checkedProducts, checkedAll)
-      .then((response) => {
-        var link = document.createElement('a')
-        var fileUrl = URL.createObjectURL(response)
-        link.href = fileUrl
-        link.style = 'visibility:hidden'
-        link.download = 'products.xlsx'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      })
-      .catch((error) => { console.log(error) })
-      .finally(() => setLoading(false))
+    if (file) {
+      const formData = new FormData()
+      formData.append('file', file)
+      productApi.importExcel(formData)
+        .then(() => {
+          triggerAlert('Cập nhật thành công!', false, false)
+          setReRender(!reRender)
+        })
+        .catch((error) => {
+          console.log(error)
+          triggerAlert('Cập nhật thất bại!', true, false)
+
+        })
+        .finally(() => setLoading(false))
+    }
+  }
+  const handleExport = async () => {
+    if (Array.isArray(checkedProducts) && checkedProducts.length < 1) {
+      triggerAlert('Bạn chưa chọn sản phẩm!', false, true)
+    }
+    else {
+      setLoading(true)
+      productApi?.exportExcel(checkedProducts, checkedAll)
+        .then((response) => {
+          triggerAlert('Xuất file thành công', false, false)
+          var link = document.createElement('a')
+          var fileUrl = URL.createObjectURL(response)
+          link.href = fileUrl
+          link.style = 'visibility:hidden'
+          link.download = 'products.xlsx'
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+
+        })
+        .catch((error) => { console.log(error), triggerAlert('Xuất file thất bại', true, false) })
+        .finally(() => setLoading(false))
+    }
+  }
+  const handleChangeStatus = (status, product_id) => {
+    productApi.updateStatusProduct(product_id, status)
+      .then(() => { triggerAlert('Cập nhật thành công!', false, false), setReRender(!reRender) })
+      .catch(() => triggerAlert('Cập nhật thất bại!', true, false))
   }
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-      productApi.getShopProducts(shop_id, page, rowsPerPage, sort)
+      productApi.getShopProducts(page, rowsPerPage, sort)
         .then(response => {
           setProducts(response?.content)
           setTotalElements(response?.totalElements)
@@ -99,13 +136,18 @@ function Products() {
       <BreadCrumbs links={[{ name: 'Quản lý sản phẩm', href: '' }]} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} startIcon={<AddCircle />} variant="outlined"
-            onClick={() => { navigate('/seller/manage/add-product') }}>
-            Thêm sản phẩm mới
+          <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} size='medium'
+            startIcon={<AddCircle />} variant="outlined" onClick={() => { navigate('/seller/manage/add-product') }}>
+            Thêm
           </Button>
-          {checkedProducts.length > 0 && <Button sx={{ fontWeight: 'bold' }} startIcon={<AddCircle />} variant="contained"
+          <Button component="label" htmlFor="upload-image-shop" variant="contained" color="info" size='medium' sx={{ fontWeight: 'bold' }} >
+            <FileUpload />
+            Nhập file
+            <input id="upload-image-shop" type="file" accept=".xlsx, .xls" style={{ display: 'none' }} onChange={handleImageChange} />
+          </Button>
+          {checkedProducts.length > 0 && <Button sx={{ fontWeight: 'bold' }} startIcon={<GetApp />} variant="contained" size='medium'
             onClick={handleExport}>
-            Xuất file excel
+            Xuất file
           </Button>}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -126,7 +168,8 @@ function Products() {
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: '#2a99ff' }} >
-                <TableCell><Checkbox onChange={handleChangeAll} sx={{ color: 'white', '&.Mui-checked': { color: 'white', outline: '2px auto rgba(19,124,189,.6)' } }} /></TableCell>
+                <TableCell><Checkbox onChange={handleChangeAll}
+                  sx={{ color: 'white', '&.Mui-checked': { color: 'white', outline: '2px auto rgba(19,124,189,.6)' } }} /></TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 400 }} >Thông tin sản phẩm</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá (vnđ)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tồn kho (sản phẩm)</TableCell>
@@ -139,7 +182,8 @@ function Products() {
               {Array.isArray(products) && products?.map((product, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell ><Checkbox checked={checkedAll ? true : checkedProducts.includes(product?.product_id)} onChange={() => handleChecked(product?.product_id)} /></TableCell>
+                    <TableCell ><Checkbox checked={checkedAll ? true : checkedProducts.includes(product?.product_id)}
+                      onChange={() => handleChecked(product?.product_id)} /></TableCell>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         {<img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
@@ -152,10 +196,14 @@ function Products() {
                     <TableCell ><Typography>{formatCurrency(product?.price)}</Typography></TableCell>
                     <TableCell ><Typography>{product?.stock_quantity}</Typography> </TableCell>
                     <TableCell ><Typography>{product?.sold_quantity}</Typography> </TableCell>
-                    <TableCell ><Switch defaultChecked /> </TableCell>
+                    <TableCell >
+                      <Tooltip title='Cập nhật trạng thái'><Switch checked={product?.is_available}
+                        onChange={(e) => handleChangeStatus(e.target.checked, product?.product_id)} /></Tooltip>
+                    </TableCell>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => handleClickUpdate(product)} /></Tooltip>
+                        <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }}
+                          onClick={() => handleClickUpdate(product)} /></Tooltip>
                         <DeleteProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} />
                       </Box>
                     </TableCell>

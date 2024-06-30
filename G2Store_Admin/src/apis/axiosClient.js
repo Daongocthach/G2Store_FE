@@ -42,6 +42,10 @@ axiosClient.interceptors.request.use(async (config) => {
 axiosClient.interceptors.response.use(
   (res) => res.data,
   (error) => {
+    if (error?.response?.data?.message === 'Token is no longer valid, please replace new access token') {
+      localStorage.removeItem('atk')
+      localStorage.removeItem('rtk')
+    }
     toast.error(error?.response?.data?.message, { autoClose: 2000 })
     return Promise.reject(error)
   })

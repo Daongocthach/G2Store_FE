@@ -222,7 +222,7 @@ function AddProduct() {
             </Box>
             <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', bgcolor: 'white', p: 1, borderRadius: 3 }}>
                 <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Đặc tính sản phẩm</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box className='flex flex-row items-center gap-1 flex-wrap'>
                     <Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>

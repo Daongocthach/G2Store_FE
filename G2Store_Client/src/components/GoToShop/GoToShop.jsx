@@ -8,7 +8,7 @@ function GoToShop({ shop_id, shop_name, shop_image }) {
         <Box className='flex flex-row items-center gap-2 cursor-pointer'
             onClick={() => { navigate('/shop-page', { state: shop_id }) }}>
             {shop_image ?
-                <img src={shop_image} className='rounded-s-full w-10 h-10' />
+                <img src={shop_image} className='rounded-full w-10 h-10' />
                 :
                 <Storefront sx={{ fontSize: 25 }} className='text-gray-600'/>
             }

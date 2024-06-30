@@ -10,6 +10,7 @@ import Loading from '../../../components/Loading/Loading'
 import SearchById from '../../../components/Search/Search'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import BanProduct from './BanProduct/BanProduct'
 
 function Products() {
   const triggerAlert = useAlert()
@@ -23,9 +24,9 @@ function Products() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
-  const handleChangeStatus = (isBanned, product_id) => {
-    productApi.lockedProduct(product_id, isBanned === 'on' ? true : false)
-      .then(() => triggerAlert('Cập nhật thành công!', false, false))
+  const handleChangeStatus = (status, product_id) => {
+    productApi.updateStatusProduct(product_id, status)
+      .then(() => { triggerAlert('Cập nhật thành công!', false, false), setReRender(!reRender) })
       .catch(() => triggerAlert('Cập nhật thất bại!', true, false))
   }
   const handleChangeRowsPerPage = (event) => {
@@ -72,7 +73,8 @@ function Products() {
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá (vnđ)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tồn kho (sản phẩm)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đã bán (sản phẩm)</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell>
+                {/* <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell> */}
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -91,7 +93,9 @@ function Products() {
                     <TableCell ><Typography>{formatCurrency(product?.price)}</Typography></TableCell>
                     <TableCell ><Typography>{product?.stock_quantity}</Typography> </TableCell>
                     <TableCell ><Typography>{product?.sold_quantity}</Typography> </TableCell>
-                    <TableCell ><Tooltip title='Khóa/mở sản phẩm'><Switch checked={!product?.is_banned} onChange={(e) => handleChangeStatus(e.target.value, product?.product_id)} /></Tooltip></TableCell>
+                    <TableCell ><BanProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} /></TableCell>
+                    {/* <TableCell ><Tooltip title='Ẩn/Hiện sản phẩm'><Switch checked={product?.is_available}
+                      onChange={(e) => handleChangeStatus(e.target.checked, product?.product_id)} /></Tooltip></TableCell> */}
                   </TableRow>
                 )
               })}

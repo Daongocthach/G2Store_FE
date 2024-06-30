@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, TextField, Stack, Button, Box } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCookie } from '../../utils/cookie'
 import loginImage from '../../assets/img/loginImage.jpg'
 import authenApi from '../../apis/authenApi'
@@ -9,6 +9,7 @@ import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import Loading from '../../components/Loading/Loading'
 import { login } from '../../redux/actions/auth'
 function Login() {
+  const atk = useSelector(state => state.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)

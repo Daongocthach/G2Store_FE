@@ -60,7 +60,7 @@ function Vouchers() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} startIcon={<AddCircle />} variant="outlined"
           onClick={() => { navigate('/seller/manage/add-voucher') }}>
-          Thêm khuyến mãi
+          Thêm
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <SearchById setDatas={setVouchers} isVoucherName={true} setVoucherName={setVoucherName} reRender={reRender} setReRender={setReRender} />

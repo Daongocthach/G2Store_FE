@@ -72,19 +72,16 @@ function Products() {
             </Grid>
             <Grid mt={1} item xs={12} sm={12} md={10} lg={10} >
                 <Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right', mt: 1, gap: 2 }}>
-                        <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'} >Sắp xếp</Typography>
-                        <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-                            <Select value={sort} onChange={(e) => setSort(e.target.value)} >
-                                <MenuItem color='#444444' value={''}>--</MenuItem>
-                                <MenuItem color='#444444' value={'TOP_SELLER'}>Bán chạy</MenuItem>
-                                <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
-                                <MenuItem color='#444444' value={'NEWEST'}>Mới nhất</MenuItem>
-                                <MenuItem color='#444444' value={'PRICE_ASC'}>Giá tăng dần</MenuItem>
-                                <MenuItem color='#444444' value={'PRICE_DESC'}>Giá giảm dần</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
+                    <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
+                        <Select value={sort} onChange={(e) => setSort(e.target.value)} >
+                            <MenuItem color='#444444' value={''}>--</MenuItem>
+                            <MenuItem color='#444444' value={'TOP_SELLER'}>Bán chạy</MenuItem>
+                            <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
+                            <MenuItem color='#444444' value={'NEWEST'}>Mới nhất</MenuItem>
+                            <MenuItem color='#444444' value={'PRICE_ASC'}>Giá tăng dần</MenuItem>
+                            <MenuItem color='#444444' value={'PRICE_DESC'}>Giá giảm dần</MenuItem>
+                        </Select>
+                    </FormControl>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         {loading && <CircularProgress />}
                         {!loading && <Grid container spacing={1} maxWidth='lg' >

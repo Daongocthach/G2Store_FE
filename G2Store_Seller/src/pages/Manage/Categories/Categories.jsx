@@ -37,10 +37,10 @@ function Categories() {
 
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <BreadCrumbs links={[{ name: 'Quản lý danh mục', href: '' }]} />
+      <BreadCrumbs links={[{ name: 'Quản lý ngành hàng', href: '' }]} />
       <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
         <Box sx={{ bgcolor: '#2a99ff', display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Quản lý ngành hàng</Typography>
+          <Typography variant='h6' color={'white'} >Quản lý ngành hàng</Typography>
           <AddCategory isParent={true} reRender={reRender} setReRender={setReRender} />
         </Box>
         <MenuCategory categories={categories} reRender={reRender} setReRender={setReRender} isReset={isReset} setIsReset={setIsReset} />

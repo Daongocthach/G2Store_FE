@@ -2,16 +2,6 @@ import { Box } from '@mui/material'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
 function Promotion() {
-    // const [promotions, setPromotions] = useState([])
-    // useEffect(() => {
-    //     promotionApi.getAllPromotions()
-    //         .then(response => {
-    //             setPromotions(response.data)
-    //         })
-    //         .catch(err => [
-    //             console.log(err)
-    //         ])
-    // }, [])
     return (
         <Box sx={{ m: 10 }}>
             <BreadCrumbs links={[{ name: 'Khuyến mãi', href: '' }]} />

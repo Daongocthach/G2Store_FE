@@ -1,12 +1,9 @@
 import { Container, Grid } from '@mui/material'
-import { useEffect, useState } from 'react'
 import LineChart from './Statistical/LineChart'
 import CircleChart from './Statistical/CircleChart'
 import Data from './Statistical/Data'
 
 function Dashboard() {
-  useEffect(() => {
-  }, [])
   return (
     <Container sx={{ minHeight: '100vh' }}>
       <Data />

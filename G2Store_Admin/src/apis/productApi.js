@@ -64,6 +64,10 @@ const productApi = {
     lockedProduct(productId, isBanned) {
         const url = `products/${productId}/banned?isBanned=${isBanned}`
         return axiosClient.put(url)
+    },
+    updateStatusProduct(product_id, status) {
+        const url = `products/${product_id}/enable?isAvailable=${status}`
+        return axiosClient.put(url)
     }
 }
 

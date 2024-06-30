@@ -1,23 +1,37 @@
-import * as React from 'react'
+import { useState } from 'react'
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { ShoppingCart, Notifications, Login, AccountCircle, PersonAdd, Logout, Menu } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { logout } from '../../redux/actions/auth'
+import { persistor } from '../../redux/store'
 import G2Logo from '../../assets/img/G2Logo.png'
+import authenApi from '../../apis/authenApi'
+import { useAlert } from '../ShowAlert/ShowAlert'
 
 const links = [
     { to: '/cart', title: 'Giỏ hàng', icon: <ShoppingCart fontSize="small" /> },
-    { to: '/profile', title: 'Tài khoản', icon: <AccountCircle fontSize="small" /> },
-    { to: '/logout', title: 'Đăng xuất', icon: <Logout fontSize="small" /> }
+    { to: '/profile', title: 'Tài khoản', icon: <AccountCircle fontSize="small" /> }
 ]
 const links2 = [
     { to: '/notification', title: 'Thông báo', icon: <Notifications fontSize="small" /> },
     { to: '/login', title: 'Đăng nhập', icon: <Login fontSize="small" /> },
-    { to: '/register', title: 'Đăng ký', icon: <PersonAdd fontSize="small" /> },
+    { to: '/register', title: 'Đăng ký', icon: <PersonAdd fontSize="small" /> }
 ]
 export default function DrawerMenu({ atk }) {
-    const [open, setOpen] = React.useState(false)
+    const navigate = useNavigate()
+    const triggerAlert = useAlert()
+    const dispatch = useDispatch()
+    const [open, setOpen] = useState(false)
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen)
+    }
+    const handleLogout = () => {
+        authenApi.logout()
+        dispatch(logout())
+        persistor.purge()
+        triggerAlert('Đăng xuất thành công!', false, false)
+        navigate('/')
     }
     const DrawerList = (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -40,6 +54,12 @@ export default function DrawerMenu({ atk }) {
                         </Link>
                     </ListItem>
                 ))}
+                <ListItemButton onClick={handleLogout}>
+                    <ListItemIcon >
+                        <Logout fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary={'Đăng xuất'} />
+                </ListItemButton>
             </List>}
             <Divider variant='middle' />
             {!atk && <List>

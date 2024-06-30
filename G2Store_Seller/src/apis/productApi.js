@@ -1,18 +1,14 @@
 import axiosClient from './axiosClient'
 const productApi = {
-    getShopProducts(shopId, page, size, sort) {
+    getShopProducts(page, size, sort) {
         if (!page) {
             page = 0
         }
         if (!size) {
             size = 8
         }
-        const params = {}
-        if (sort) {
-          params.shopProductSortType = sort
-        }
-        const url = `products/shop/${shopId}?page=${page}&size=${size}&shopProductSortType=${sort}`
-        return axiosClient.get(url, { params: params })
+        const url = `products/shop/me?page=${page}&size=${size}&shopProductSortType=${sort}`
+        return axiosClient.get(url)
     },
     getProduct(product_id) {
         const url = `products/${product_id}`
@@ -57,6 +53,17 @@ const productApi = {
     exportExcel(product_ids, is_all_products) {
         const url = 'products/export/excel'
         return axiosClient.post(url, { product_ids: product_ids, is_all_products: is_all_products }, { responseType: 'blob' })
+    },
+    importExcel: (formData) => {
+        const url = 'products/update-batch'
+        const headers = {
+            'Content-Type': 'multipart/form-data'
+        }
+        return axiosClient.put(url, formData, headers)
+    },
+    updateStatusProduct(product_id, status) {
+        const url = `products/${product_id}/enable?isAvailable=${status}`
+        return axiosClient.put(url)
     }
 }
 

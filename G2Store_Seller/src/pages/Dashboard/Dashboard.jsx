@@ -5,13 +5,13 @@ import CircleChart from './Statistical/CircleChart'
 import Data from './Statistical/Data'
 import statisticApi from '../../apis/statisticApi'
 import authenApi from '../../apis/authenApi'
+import { mockData } from '../../apis/mockdata'
 
 function Dashboard() {
   const [data, setData] = useState([])
   const [balance, setBalance] = useState([])
   const [loading, setLoading] = useState([])
   const [year, setYear] = useState(new Date().getFullYear())
-  const years = [year - 5, year - 4, year - 3, year - 2, year - 1, year, year + 1, year + 2, year + 3]
   const handleChange = async (e) => {
     setLoading(true)
     setYear(e.target.value)
@@ -39,7 +39,7 @@ function Dashboard() {
         <FormControl sx={{ mt: 3 }} size='small'>
           <InputLabel>Năm</InputLabel>
           <Select value={year} label="Năm" onChange={(e) => handleChange(e)} >
-            {years.map((year, index) => (
+            {mockData?.years.map((year, index) => (
               <MenuItem key={index} value={year}>{year}</MenuItem>
             ))}
           </Select>
@@ -59,3 +59,4 @@ function Dashboard() {
 }
 
 export default Dashboard
+

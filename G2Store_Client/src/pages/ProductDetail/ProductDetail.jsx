@@ -30,7 +30,7 @@ function ProductDetail() {
     <Box sx={{ minHeight: '100%' }}>
       <Container fixed>
         <BreadCrumbs links={[{ name: 'Chi tiết sản phẩm', href: '' }]} />
-        <Typography variant='h5' fontWeight={'bold'} color={'#444444'} sx={{ mb: 1 }}>{product?.name}</Typography>
+        <Typography variant='h6' color={'#444444'} sx={{ mb: 1 }}>{product?.name}</Typography>
         <Divider />
         <Grid container spacing={1} mt={3}>
           {/* Product Infomation left */}

@@ -1,23 +1,22 @@
-import { lazy } from 'react'
-const Dashboard = lazy(() => import('../pages/Dashboard/Dashboard'))
-const Login = lazy(() => import('../pages/Auth/Login/Login'))
-const Register = lazy(() => import('../pages/Auth/Register/Register'))
-const ResetPassword = lazy(() => import('../pages/Auth/ResetPassword/ResetPassword'))
-const Profile = lazy(() => import('../pages/Profile/Profile'))
-const ShopProfile = lazy(() => import('../pages/Profile/ShopProfile'))
-const Chat = lazy(() => import('../pages/Chat/Chat'))
-const AutoChat = lazy(() => import('../pages/Chat/AutoChat/AutoChat'))
-const Sellers = lazy(() => import('../pages/Manage/Sellers/Sellers'))
-const Vouchers = lazy(() => import('../pages/Manage/Vouchers/Vouchers'))
-const AddVoucher = lazy(() => import('../pages/Manage/Vouchers/AddVoucher/AddVoucher'))
-const Orders = lazy(() => import('../pages/Manage/Orders/Orders'))
-const Products = lazy(() => import('../pages/Manage/Products/Products'))
-const AddProduct = lazy(() => import('../pages/Manage/Products/AddProduct/AddProduct'))
-const ManageReviews = lazy(() => import('../pages/Manage/Orders/MangeReviews/ManageReviews'))
-const AddSeller = lazy(() => import('../pages/Manage/Sellers/AddSeller/AddSeller'))
-const Categories = lazy(() => import('../pages/Manage/Categories/Categories'))
-const AccessDenied = lazy(() => import('../pages/AccessDenied/AccessDenied'))
-const CreateOrderGhn = lazy(() => import('../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'))
+import Dashboard from '../pages/Dashboard/Dashboard'
+import Login from '../pages/Auth/Login/Login'
+import Register from '../pages/Auth/Register/Register'
+import ResetPassword from '../pages/Auth/ResetPassword/ResetPassword'
+import Profile from '../pages/Profile/Profile'
+import ShopProfile from '../pages/Profile/ShopProfile'
+import Chat from '../pages/Chat/Chat'
+import AutoChat from '../pages/Chat/AutoChat/AutoChat'
+import Sellers from '../pages/Manage/Sellers/Sellers'
+import Vouchers from '../pages/Manage/Vouchers/Vouchers'
+import AddVoucher from '../pages/Manage/Vouchers/AddVoucher/AddVoucher'
+import Orders from '../pages/Manage/Orders/Orders'
+import Products from '../pages/Manage/Products/Products'
+import AddProduct from '../pages/Manage/Products/AddProduct/AddProduct'
+import ManageReviews from '../pages/Manage/Orders/MangeReviews/ManageReviews'
+import AddSeller from '../pages/Manage/Sellers/AddSeller/AddSeller'
+import Categories from '../pages/Manage/Categories/Categories'
+import AccessDenied from '../pages/AccessDenied/AccessDenied'
+import CreateOrderGhn from '../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'
 
 import AuthLayout from '../layouts/AuthLayout'
 import NotFound from '../pages/NotFound/NotFound'

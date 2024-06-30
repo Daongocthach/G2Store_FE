@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Tab, Tabs, Divider, Tooltip
+  TablePagination, Paper, TableContainer, Tab, Tabs, Tooltip
 } from '@mui/material'
 import { Chat, Print } from '@mui/icons-material'
-import { format, addDays } from 'date-fns'
+import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import ViewOrder from './FormOrder/ViewOrder'
 import UpdateOrder from './FormOrder/UpdateOrder'
 import OrderItem from './OrderItem/OrderItem'
-import ghnApi from '../../../apis/ghnApi'
 import SearchById from '../../../components/Search/Search'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import ghnApiV2 from '../../../apis/ghnApiV2'
+import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
 
 function Orders() {
   const triggerAlert = useAlert()
@@ -34,7 +34,6 @@ function Orders() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-
   const handleChange = (event, newTab) => {
     setTab(newTab)
     orderApi.getShopOrders(newTab, 0, 8)
@@ -65,22 +64,20 @@ function Orders() {
       })
   }, [reRender])
   return (
-    <Box sx={{ m: 5, minHeight: '100vh' }}>
+    <Box className='m-5 min-h-screen'>
       <BreadCrumbs links={[{ name: 'Quản lý đơn hàng', href: '' }]} />
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-        <Typography variant='h5' sx={{ fontWeight: 'bold', minWidth: '100px', m: 2 }}>Quản lý đơn hàng</Typography>
+      <Box className='flex flex-row items-center justify-between w-full mt-2' >
         <SearchById setDatas={setOrders} setTab={setTab} />
       </Box>
-      <Divider />
-      <Box sx={{ mb: 2 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+      <Box className='mb-2'>
+        <Box className='mb-3'>
           <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
             {tabs.map((tab, index) => (
               <Tab key={index} label={tab?.label} value={tab?.value} />
             ))}
           </Tabs>
         </Box>
-        <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px  ' }}>
+        <Box className='h-fit bg-white' sx={{ boxShadow: '0px 0px 10px  ' }}>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -88,8 +85,6 @@ function Orders() {
                   <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 300 }} >Sản phẩm</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Mã đơn hàng</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Ngày đặt</TableCell>
-                  {/* {tab === 'ORDERED' && <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Xác nhận trước</TableCell>} */}
-                  {/* {(tab === 'CONFIRMED' || tab === 'PACKED') && <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giao vận chuyển trước</TableCell>} */}
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tổng tiền</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Thanh toán</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
@@ -99,52 +94,33 @@ function Orders() {
                 {Array.isArray(orders) && orders?.map((order, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell> <Box>{order?.items.map((orderItem, index) => <OrderItem key={index} orderItem={orderItem} />)}</Box>
-                      </TableCell>
-                      <TableCell><Typography>{order?.order_id}</Typography></TableCell>
+                      <TableCell><Box>{order?.items.map((orderItem, index) => <OrderItem key={index} orderItem={orderItem} />)}</Box></TableCell>
+                      <TableCell><Typography>#{order?.order_id}</Typography></TableCell>
                       <TableCell><Typography>{format(new Date(order?.created_date), 'yyyy-MM-dd')}</Typography></TableCell>
-                      {/* {tab === 'ORDERED' && <TableCell><Typography>{format(addDays(new Date(order?.created_date), 1), 'yyyy-MM-dd HH:mm:ss')}</Typography></TableCell>} */}
-                      {/* {(tab === 'CONFIRMED' || tab === 'PACKED') && <TableCell><Typography>{format(addDays(new Date(order?.created_date), 2), 'yyyy-MM-dd HH:mm:ss')}</Typography></TableCell>} */}
                       <TableCell ><Typography variant='subtitle2'>{formatCurrency(order?.grand_total)}</Typography></TableCell>
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell >
-                        {tab === 'UN_PAID' ?
-                          <Tooltip title='Chat với khách'><Chat sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} /></Tooltip>
-                          :
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />
-                            <ViewOrder order={order} />
-                            {tab === 'PACKED' &&
-                              <Tooltip title='In hóa đơn'><Print sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }}
-                                onClick={() => handlePrint(order?.ghn_order_code)} /></Tooltip>}
-                          </Box>}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          <Tooltip title='Chat với khách' >
+                            <Chat className='text-gray-600 cursor-pointer' sx={{ display: tab === 'UN_PAID' ? 'inherit' : 'none' }}
+                              onClick={() => navigate('/seller/chat', { state: order?.customer_id })} />
+                          </Tooltip>
+                          {tab !== 'UN_PAID' && <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />}
+                          <ViewOrder order={order} />
+                          <Tooltip title='In hóa đơn'>
+                            <Print className='text-gray-600 cursor-pointer' sx={{ display: tab === 'PACKED' ? 'inherit' : 'none' }}
+                              onClick={() => handlePrint(order?.ghn_order_code)} />
+                          </Tooltip>
+                        </Box>
                       </TableCell>
-                    </TableRow>
-                  )
+                    </TableRow>)
                 })}
               </TableBody>
-              {Array.isArray(orders) && orders.length > 0 && <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    colSpan={12}
-                    labelRowsPerPage={'Số lượng mỗi trang'}
-                    rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
-                    count={totalElements}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </TableRow>
-              </TableFooter>}
+              <PaginationFooter isNotEmpty={(Array.isArray(orders) && orders.length > 0)} totalElements={totalElements}
+                rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} handleChangeRowsPerPage={handleChangeRowsPerPage} />
             </Table>
-            {Array.isArray(orders) && orders.length < 1 && <Box className='flex flex-col items-center justify-center'>
-              <img src={emptyOrder} />
-              <Typography variant='subtitle1' className='text-gray-600'>Bạn chưa có đơn hàng nào</Typography>
-            </Box>}
           </TableContainer>
         </Box>
-
       </Box>
     </Box>
   )

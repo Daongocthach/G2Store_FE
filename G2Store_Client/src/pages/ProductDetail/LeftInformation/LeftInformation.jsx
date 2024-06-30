@@ -17,7 +17,7 @@ function LeftInformation({ product }) {
                     transform: 'translateX(0)'
                 }}>
                     {bottomTab === 0 && currentFiles[index]?.file_type.includes('image/') &&
-                        <img src={currentFiles[index]?.file_url} alt='product' loading="lazy"
+                        <img src={currentFiles[index]?.file_url} alt='product'
                             style={{ width: '100%', height: '100%', objectFit: 'contain', transition: 'transform 0.5s' }} />}
                     {bottomTab === 1 && currentFiles[index]?.file_type.includes('video') &&
                         <video controls width="100%" height='100%'>

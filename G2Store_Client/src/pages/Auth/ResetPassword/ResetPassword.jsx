@@ -16,7 +16,6 @@ function ResetPassword() {
   const [loading, setLoading] = useState(false)
   const [showOTP, setShowOTP] = useState(false)
   const [countdown, setCountdown] = useState(0)
-
   useEffect(() => {
     let timer
     if (countdown > 0) {
@@ -28,18 +27,19 @@ function ResetPassword() {
   }, [countdown])
 
   const handleShowOTP = async () => {
-    setLoading(true)
     if (!validateEmail(email)) {
       triggerAlert('Email không đúng định dạng!', false, true)
-      setLoading(false)
+    }
+    else if (countdown > 0) {
+      triggerAlert('Vui lòng chờ hết đếm ngược!', false, true)
     }
     else {
+      setLoading(true)
       authenApi.forgotPassword(email)
         .then(() => {
           triggerAlert('Đã gửi email chưa OTP! Vui lòng kiểm tra hộp thư của bạn', false, false)
           setShowOTP(true)
           setCountdown(60)
-          setLoading(false)
         })
         .catch((error) => {
           console.log(error)
@@ -133,9 +133,7 @@ function ResetPassword() {
               <Button
                 variant="contained"
                 color="warning"
-                onClick={() => {
-                  countdown > 0 ? null : handleShowOTP()
-                }}
+                onClick={() => {handleShowOTP() }}
               >
                 {`Gửi lại OTP (${countdown}s)`}
               </Button>

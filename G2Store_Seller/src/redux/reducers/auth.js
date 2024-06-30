@@ -1,5 +1,6 @@
 const initialState = {
     keep_login: false,
+    shop_name: '',
     avatar: '',
     shop_id: ''
 }
@@ -15,6 +16,7 @@ const authReducer = (state = initialState, action) => {
         case 'UPDATE_PROFILE': {
             return {
                 ...state,
+                shop_name: action?.payload?.shop_name,
                 avatar: action?.payload?.avatar,
                 shop_id: action?.payload?.shop_id
             }
@@ -30,6 +32,7 @@ const authReducer = (state = initialState, action) => {
             localStorage.removeItem('rtk')
             return {
                 keep_login: false,
+                shop_name: '',
                 avatar: '',
                 shop_id: ''
             }

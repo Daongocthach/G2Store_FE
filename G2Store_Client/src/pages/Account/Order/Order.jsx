@@ -12,6 +12,7 @@ import Loading from '../../../components/Loading/Loading'
 import DeleteOrder from './FormOrder/DeleteOrder'
 import GoToShop from '../../../components/GoToShop/GoToShop'
 import ViewOrder from './FormOrder/ViewOrder'
+import OrderRefund from './FormOrder/OrderRefund'
 
 function Order() {
   const [reRender, setReRender] = useState(false)
@@ -46,17 +47,12 @@ function Order() {
   }, [reRender])
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant='h6' className='text-gray-600' sx={{ fontWeight: 'bold', minWidth: '100px' }}>Đơn hàng của tôi</Typography>
-      </Box>
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', flexGrow: 1, display: 'flex' }}>
-          <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
-            {tabs.map((tab, index) => (
-              <Tab key={index} label={tab?.label} value={tab?.value} />
-            ))}
-          </Tabs>
-        </Box>
+        <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
+          {tabs.map((tab, index) => (
+            <Tab key={index} label={tab?.label} value={tab?.value} />
+          ))}
+        </Tabs>
         <Box>
           {Array.isArray(orders) && orders.map((order, index) =>
             <Box key={index}>
@@ -92,6 +88,7 @@ function Order() {
                   {order?.order_status === 'UN_PAID' && <Button variant='contained' color='info' size='small' sx={{ borderRadius: 2 }}
                     onClick={() => handlePayment(order?.order_id)} >Thanh toán</Button>}
                   {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} rerender={reRender} />}
+                  {order?.order_status === 'DELIVERED' && <OrderRefund order={order} setReRender={setReRender} rerender={reRender} />}
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                   <Typography className='text-gray-600' sx={{ fontSize: 17 }} >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>

@@ -10,7 +10,7 @@ function DefaultLayout({ children }) {
       <AppBar />
       <BoardBar />
       <Box sx={{ minHeight: '100vh' }}>
-        {children}
+        {children || <div></div>}
       </Box>
       <SpeedDialTooltipOpen />
       <Footer />

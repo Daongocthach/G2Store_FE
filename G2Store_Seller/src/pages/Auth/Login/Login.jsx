@@ -28,6 +28,7 @@ function Login() {
           authenApi.me()
             .then((response) => {
               const data = {
+                shop_name: response?.shop?.name,
                 avatar: response?.avatar,
                 shop_id: response?.shop?.shop_id
               }

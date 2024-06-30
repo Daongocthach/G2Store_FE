@@ -33,7 +33,7 @@ function Account({ atk, avatar }) {
     return (
         <Box>
             <IconButton size="small" onClick={handleClick} className='p-0 text-white' >
-                {!atk && <Box className='flex flex-row gap-1'>
+                {!atk && <Box className='flex flex-row gap-3'>
                     <Link to={'/login'} ><Chip icon={<Person />} label='Đăng nhập' sx={{ bgcolor: '#DDDDDD' }} /></Link>
                     <Link to={'/register'} ><Chip icon={<PersonAdd />} label='Đăng Ký' sx={{ bgcolor: '#DDDDDD' }} /></Link>
                 </Box>}

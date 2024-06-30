@@ -1,23 +1,22 @@
-import { lazy } from 'react'
+import Dashboard from '../pages/Dashboard/Dashboard'
+import Login from '../pages/Auth/Login/Login'
+import Register from '../pages/Auth/Register/Register'
+import ResetPassword from '../pages/Auth/ResetPassword/ResetPassword'
+import Cart from '../pages/Cart/Cart'
+import Checkout from '../pages/Checkout/Checkout'
+import Promotion from '../pages/Promotion/Promotion'
+import GenreDetail from '../pages/GenreDetail/GenreDetail'
+import ProductDetail from '../pages/ProductDetail/ProductDetail'
+import Thanks from '../pages/Thanks/Thanks'
+import Account from '../pages/Account/Account'
+import ShopPage from '../pages/ShopPage/ShopPage'
+import OrderFail from '../pages/ErrorPage/OrderFail/OrderFail'
+import ProductNotExist from '../pages/ErrorPage/ProductNotExist/ProductNotExist'
+import OrderDetail from '../pages/OrderDetail/OrderDetail'
+import Notification from '../pages/Notification/Notification'
+import PaymentFail from '../pages/ErrorPage/PaymentFail/PaymentFail'
+import Chat from '../pages/Chat/Chat'
 
-const Dashboard = lazy(() => import('../pages/Dashboard/Dashboard'))
-const Login = lazy(() => import('../pages/Auth/Login/Login'))
-const Register = lazy(() => import('../pages/Auth/Register/Register'))
-const ResetPassword = lazy(() => import('../pages/Auth/ResetPassword/ResetPassword'))
-const Cart = lazy(() => import('../pages/Cart/Cart'))
-const Checkout = lazy(() => import('../pages/Checkout/Checkout'))
-const Promotion = lazy(() => import('../pages/Promotion/Promotion'))
-const GenreDetail = lazy(() => import('../pages/GenreDetail/GenreDetail'))
-const ProductDetail = lazy(() => import('../pages/ProductDetail/ProductDetail'))
-const Thanks = lazy(() => import('../pages/Thanks/Thanks'))
-const Account = lazy(() => import('../pages/Account/Account'))
-const ShopPage = lazy(() => import('../pages/ShopPage/ShopPage'))
-const OrderFail = lazy(() => import('../pages/ErrorPage/OrderFail/OrderFail'))
-const ProductNotExist = lazy(() => import('../pages/ErrorPage/ProductNotExist/ProductNotExist'))
-const OrderDetail = lazy(() => import('../pages/OrderDetail/OrderDetail'))
-const Notification = lazy(() => import('../pages/Notification/Notification'))
-const PaymentFail = lazy(() => import('../pages/ErrorPage/PaymentFail/PaymentFail'))
-const Chat = lazy(() => import('../pages/Chat/Chat'))
 
 import AuthLayout from '../layouts/AuthLayout'
 import NotFound from '../pages/ErrorPage/NotFound/NotFound'

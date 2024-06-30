@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Rating, Box, Typography, Button, ToggleButton } from '@mui/material'
+import { Rating, Box, Typography, Button, IconButton, ToggleButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavigateNext, AddShoppingCart, Remove, Add } from '@mui/icons-material'
@@ -46,7 +46,7 @@ function RightInformation({ product, reviews }) {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'end', gap: 2 }}>
-                {product?.special_price && <Typography variant='h5' fontWeight={'bold'} sx={{ color: '#cb1c22' }} >{formatCurrency(product?.special_price)}</Typography>}
+                {product?.special_price && <Typography variant='h5' sx={{ color: '#cb1c22' }} >{formatCurrency(product?.special_price)}</Typography>}
                 <Typography variant={product?.special_price ? 'h6' : 'h5'} fontWeight={product?.special_price ? 500 : 600}
                     sx={{ color: product?.special_price ? ' #444444' : '#cb1c22', textDecoration: product?.special_price ? 'line-through' : 'none' }}>
                     {formatCurrency(product?.price)}
@@ -57,34 +57,33 @@ function RightInformation({ product, reviews }) {
                 <Typography variant='subtitle2' color={'#016afa'}>{(reviews?.total_rate_count || 0) + ' Đánh giá'}</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'}>Gian hàng:</Typography>
+                <Typography variant='subtitle1' minWidth={80} color={'#444444'}>Gian hàng:</Typography>
                 <GoToShop shop_id={product?.shop?.shop_id} shop_name={product?.shop?.name} shop_image={product?.shop?.image} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant='subtitle1' minWidth={80} fontWeight={'bold'} color={'#444444'} >Danh mục:</Typography>
-                <Button sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
+                <Typography variant='subtitle1' minWidth={80} color={'#444444'} >Danh mục:</Typography>
+                <IconButton sx={{ gap: 2, bgcolor: 'inherit', ':hover': { bgcolor: 'inherit' } }}
                     onClick={() => { navigate('/genre-detail', { state: { category: product?.category } }) }}>
-                    <Typography variant='subtitle1' color={'#444444'}>{product?.category?.name}</Typography>
-                    <NavigateNext sx={{ fontSize: 25, color: '#444444' }} />
-                </Button>
+                    <Typography variant='subtitle2' color={'#444444'}>{product?.category?.name}</Typography>
+                </IconButton>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant='subtitle1' minWidth={90} fontWeight={'bold'} color={'#444444'}>Còn lại: </Typography>
+                <Typography variant='subtitle1' minWidth={90} color={'#444444'}>Còn lại: </Typography>
                 <Typography variant='subtitle1' color={'#444444'}>{product?.stock_quantity} sản phẩm</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant='subtitle1' minWidth={90} fontWeight={'bold'} color={'#444444'}>Đã bán: </Typography>
+                <Typography variant='subtitle1' minWidth={90} color={'#444444'}>Đã bán: </Typography>
                 <Typography variant='subtitle1' color={'#444444'}>{product?.sold_quantity} sản phẩm</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant='subtitle1' fontWeight={'bold'} color={'#444444'}>Số lượng:</Typography>
+                <Typography variant='subtitle1' color={'#444444'}>Số lượng:</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', pl: 2 }}>
-                    <ToggleButton value="left" key="left" sx={{ width: 50, height: 40 }} onClick={handleDecrease}>
+                    <ToggleButton value="left" key="left" sx={{ width: 40, height: 30 }} onClick={handleDecrease}>
                         <Remove sx={{ fontSize: 15 }} />
                     </ToggleButton>
                     <input value={quantity} type='number' min={0} max={1000} onFocus={(e) => e.target.select()} onChange={(e) => setQuantity(parseInt(e.target.value), 10)}
-                        style={{ border: '0.5px solid', borderColor: '#D3D3D3', borderRadius: 2, width: 60, height: 40, textAlign: 'center' }} />
-                    <ToggleButton value="right" key="right" sx={{ width: 50, height: 40 }} onClick={handleIncrease}>
+                        style={{ border: '0.5px solid', borderColor: '#D3D3D3', borderRadius: 2, width: 40, height: 30, textAlign: 'center' }} />
+                    <ToggleButton value="right" key="right" sx={{ width: 40, height: 30 }} onClick={handleIncrease}>
                         <Add sx={{ fontSize: 15 }} />
                     </ToggleButton>
                 </Box>

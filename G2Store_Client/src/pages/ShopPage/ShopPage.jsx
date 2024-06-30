@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import {
-    Typography, Grid, Box, Menu, Chip, Avatar, CircularProgress, Input,
-    Rating, Pagination, Tooltip, Tabs, Tab
+    Typography, Grid, Box, Menu, Chip, Avatar, CircularProgress, Input, Rating, Pagination,
+    FormControl, MenuItem, Select, Tooltip, Tabs, Tab
 } from '@mui/material'
 import { ChatBubbleOutline, AddBusiness, Dehaze, KeyboardArrowDown, RestartAlt } from '@mui/icons-material'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import imageShop from '../../assets/img/shopDesign.png'
 import MenuCategory from '../../components/MenuCategory/MenuCategory'
 import shopApi from '../../apis/shopApi'
@@ -12,14 +12,23 @@ import Loading from '../../components/Loading/Loading'
 import avatarNull from '../../assets/img/avatar.png'
 import CardProduct from '../../components/Product/CardProduct'
 import productApi from '../../apis/productApi'
-import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
+
+const sortList = [
+    { value: 'DEFAULT', lable: 'Mặc định' },
+    { value: 'TOP_SELLER', lable: 'Bán chạy nhất' },
+    { value: 'NEWEST', lable: 'Mới nhất' },
+    { value: 'PRICE_ASC', lable: 'Giá tăng dần' },
+    { value: 'PRICE_DESC', lable: 'Giá giảm dần' }
+]
 
 function ShopPage() {
+    const navigate = useNavigate()
     const location = useLocation()
     const shop_id = location.state
     const [page, setPage] = useState(1)
     const [shop, setShop] = useState()
     const [products, setProducts] = useState([])
+    const [sort, setSort] = useState('DEFAULT')
     const [top5products, setTop5Products] = useState([])
     const [categories, setCategories] = useState([])
     const [category, setCategory] = useState(null)
@@ -36,6 +45,13 @@ function ShopPage() {
     const handleChangePage = (event, value) => {
         setPage(value)
     }
+    const handelReset = () => {
+        setCategory(null)
+        setSort('DEFAULT')
+    }
+    const handleClickChat = () => {
+        navigate('/chat', {})
+    }
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -47,19 +63,7 @@ function ShopPage() {
             productApi?.getTop5ShopProducts(shop_id)
                 .then((response) => setTop5Products(response))
                 .catch((error) => console.log(error))
-            if (category?.shop_cate_id) {
-                setTab(1)
-                productApi.getProductsByShopCategoryId(category?.shop_cate_id, page - 1, 12)
-                    .then((response) => setProducts(response))
-                    .catch((error) => console.log(error))
-            }
-            else {
-                productApi.getShopProducts(shop_id, page - 1, 12)
-                    .then((response) => {
-                        setProducts(response)
-                    })
-                    .catch((error) => console.log(error))
-            }
+
             shopApi.getShopCategories(shop_id)
                 .then((response) => setCategories(response))
                 .catch((error) => console.log(error))
@@ -67,103 +71,148 @@ function ShopPage() {
         }
         if (shop_id)
             fetchData()
-    }, [page, shop_id, category])
+    }, [shop_id])
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            if (category?.shop_cate_id) {
+                setTab(1)
+                productApi.getProductsByShopCategoryId(category?.shop_cate_id, page - 1, 12)
+                    .then((response) => setProducts(response))
+                    .catch((error) => console.log(error))
+            }
+            else {
+                productApi.getShopProducts(shop_id, page - 1, 12, sort)
+                    .then((response) => {
+                        setProducts(response)
+                    })
+                    .catch((error) => console.log(error))
+            }
+            setLoading(false)
+        }
+        if (shop_id)
+            fetchData()
+    }, [page, category, sort, shop_id])
     return (
-        <Box sx={{ minHeight: '100vh', p: 2 }} >
-            <BreadCrumbs links={[{ name: 'Cửa hàng', href: '' }]} />
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', bgcolor: 'orange', height: 120, position: 'relative', }}>
-                <img src={imageShop} style={{ objectFit: 'cover', height: 120, width: '100%' }} />
-                <Box sx={{ position: 'absolute', display: 'flex', alignItems: 'center', bgcolor: 'white', height: 90, ml: 2, paddingX: 2, gap: 3, borderRadius: 2 }}>
-                    <Avatar sx={{ width: 50, height: 50 }}>
-                        <img src={shop?.image || avatarNull} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+        <Box className="min-h-screen p-2">
+            <Box className="flex items-center justify-start bg-orange-500 h-30 relative">
+                <img src={imageShop} className="object-cover h-40 w-full" />
+                <Box className="absolute flex items-center bg-white h-22 ml-2 px-2 gap-3 rounded-lg">
+                    <Avatar className="w-12 h-12">
+                        <img src={shop?.image || avatarNull} className="object-contain w-full h-full" />
                     </Avatar>
-                    <Box >
-                        <Typography variant="h6" noWrap color={'#555555'}>  {shop?.name}</Typography>
-                        <Typography variant="subtitle2" noWrap color={'#555555'}>Theo dõi: 10</Typography>
-                        <Typography variant="subtitle2" noWrap color={'#555555'}> Đánh giá tích cực: 90% </Typography>
+                    <Box className='w-52'>
+                        <Typography variant="h6" noWrap color="#555555">{shop?.name}</Typography>
+                        <Typography variant="body1" noWrap color="#555555">Theo dõi: 10</Typography>
+                        <Typography variant="body1" noWrap color="#555555">Đánh giá tích cực: 90%</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                        <ChatBubbleOutline sx={{ fontSize: 30, color: '#193744' }} />
-                        <Typography variant="subtitle2" noWrap color={'#555555'}>Chat</Typography>
+                    <Box className="flex flex-col items-center justify-center cursor-pointer">
+                        <ChatBubbleOutline className="text-[#193744]" onClick={handleClickChat} />
+                        <Typography variant="body2" noWrap color="#555555">Chat</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                        <AddBusiness sx={{ fontSize: 30, color: '#193744' }} />
-                        <Typography variant="subtitle2" noWrap color={'#555555'}> Theo dõi </Typography>
+                    <Box className="flex flex-col items-center justify-center cursor-pointer">
+                        <AddBusiness className="text-[#193744]" />
+                        <Typography variant="body2" noWrap color="#555555">Theo dõi</Typography>
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Chip icon={<Dehaze />} clickable sx={useStyles.chip} label="Danh mục ngành hàng" onClick={handleClick}
-                    onDelete={handleClick} deleteIcon={<KeyboardArrowDown />} />
+            <Box className="flex items-center">
+                <Chip icon={<Dehaze sx={{ fontSize: 20 }}/>} clickable label="Danh mục ngành hàng"
+                    sx={{
+                        color: '#444444', bgcolor: 'transparent', paddingX: '5px', borderRadius: 4, fontSize: 15,
+                        '& .MuiSvgIcon-root': { color: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#444444') },
+                        '&:hover': { bgcolor: 'primary.50' }
+                    }}
+                    onClick={handleClick} onDelete={handleClick} deleteIcon={<KeyboardArrowDown />}
+                />
                 <Tabs value={tab} onChange={(e, newValue) => setTab(newValue)}>
                     <Tab label="Hồ sơ" />
                     <Tab label="Sản phẩm" />
                 </Tabs>
             </Box>
-            {tab === 0 && <Box >
+            <Box display={tab === 0 ? 'inherit' : 'none'}>
                 Thông tin shop
-                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1, mt: 1, mb: 1 }}>
-                    <Typography variant='subtitle1' sx={useStyles.inputTitle}>Tên shop:</Typography>
-                    <Input placeholder='Tên shop' sx={useStyles.input} readOnly value={shop?.name} />
+                <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
+                    <Typography variant="subtitle1" sx={useStyles.inputTitle}>Tên shop:</Typography>
+                    <Input placeholder="Tên shop" sx={useStyles.input} readOnly value={shop?.name} />
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1, mt: 1, mb: 1 }}>
-                    <Typography variant='subtitle1' sx={useStyles.inputTitle}>Địa chỉ:</Typography>
-                    <Input readOnly placeholder='Địa chỉ' sx={useStyles.input} value={shop?.province ? (shop?.street + ', ' + shop?.ward + ', ' + shop?.district + ', ' + shop?.province) : ''} />
+                <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
+                    <Typography variant="subtitle1" sx={useStyles.inputTitle}>Địa chỉ:</Typography>
+                    <Input
+                        readOnly
+                        placeholder="Địa chỉ"
+                        sx={useStyles.input}
+                        value={shop?.province ? `${shop?.street}, ${shop?.ward}, ${shop?.district}, ${shop?.province}` : ''}
+                    />
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1, mt: 1, mb: 1 }}>
-                    <Typography variant='subtitle1' sx={useStyles.inputTitle}>Số lượt bán:</Typography>
-                    <Input placeholder='Tên shop' sx={useStyles.input} readOnly value={5 + ' Sản phẩm'} />
+                <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
+                    <Typography variant="subtitle2" className='min-w-[90px] text-[#4F4F4F]'>Số lượt bán:</Typography>
+                    <Input placeholder="Tên shop" sx={useStyles.input} readOnly value="5 Sản phẩm" />
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1, mt: 1, mb: 1 }}>
-                    <Typography variant='subtitle1' sx={useStyles.inputTitle}>Đánh giá (9):</Typography>
+                <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
+                    <Typography variant="subtitle2" sx={useStyles.inputTitle}>Đánh giá (9):</Typography>
                     <Rating value={5} />
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 1, mt: 2 }} >
-                    <Typography variant='body1' sx={{ width: 5, bgcolor: '#007fff', color: '#007fff' }}>|</Typography>
-                    <Typography variant='h6' color={'#444444'}>Sản phẩm nổi bật</Typography>
+                <Box className="flex items-center w-full gap-1 mt-2">
+                    <Typography variant="body1" className="w-1 bg-[#007fff] text-[#007fff]">|</Typography>
+                    <Typography variant="h6" color="#444444">Sản phẩm nổi bật</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box className="flex items-center">
                     {loading && <CircularProgress />}
-                    {!loading && <Grid container spacing={1} maxWidth='lg' >
-                        {Array.isArray(top5products) && top5products.map((product, index) => (
-                            <Grid key={index} item xs={6} sm={6} md={3} lg={2} >
-                                <CardProduct product={product} isShort={true} />
-                            </Grid>
-                        ))}
-                    </Grid>}
+                    {!loading && (
+                        <Grid container spacing={1} maxWidth="lg">
+                            {Array.isArray(top5products) && top5products.map((product, index) => (
+                                <Grid key={index} item xs={6} sm={6} md={3} lg={2}>
+                                    <CardProduct product={product} isShort />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
                 </Box>
-            </Box>}
-            {tab === 1 && <Box >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 1 }} >
-                        <Typography variant='body1' sx={{ width: 5, bgcolor: '#007fff', color: '#007fff' }}>|</Typography>
-                        <Typography variant='h6' color={'#444444'}>Tất cả sản phẩm</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} >
+            </Box>
+            <Box display={tab === 1 ? 'inherit' : 'none'}>
+                <Box className="flex justify-between">
+                    <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
+                        <Select value={sort} onChange={(e) => setSort(e.target.value)} >
+                            {sortList.map((sort, index) => (
+                                <MenuItem key={index} color='#444444' value={sort?.value}>{sort?.lable}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <Box className="flex items-center gap-1">
                         <Tooltip title="Đặt lại">
-                            <RestartAlt sx={{ fontSize: 30, color: '#193744', cursor: 'pointer' }} onClick={() => setCategory(null)} />
+                            <RestartAlt className="text-3xl text-[#193744] cursor-pointer" onClick={handelReset} />
                         </Tooltip>
                     </Box>
                 </Box>
-                <Box sx={{ bgcolor: '#E6E6FA', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Box className="bg-[#E6E6FA] flex flex-col items-center justify-center">
                     {loading && <CircularProgress />}
-                    {!loading && <Grid container spacing={1} p={1}>
-                        {Array.isArray(products?.content) && products?.content.map((product, index) => (
-                            <Grid key={index} item xs={3} sm={3} md={3} lg={2} >
-                                <CardProduct product={product} />
-                            </Grid>
-                        ))}
-                    </Grid>}
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 2, mb: 2 }}>
-                        <Pagination count={products?.totalPages} variant="outlined" color="primary" page={page} onChange={handleChangePage} />
+                    {!loading && (
+                        <Grid container spacing={1} p={1}>
+                            {Array.isArray(products?.content) && products?.content.map((product, index) => (
+                                <Grid key={index} item xs={3} sm={3} md={3} lg={2}>
+                                    <CardProduct product={product} />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
+                    <Box className="flex flex-row items-center justify-center mt-2 mb-2">
+                        <Pagination
+                            count={products?.totalPages}
+                            variant="outlined"
+                            color="primary"
+                            page={page}
+                            onChange={handleChangePage}
+                        />
                     </Box>
                 </Box>
-            </Box>}
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
-                <MenuCategory categories={categories} setCategory={setCategory} isShopPage={true} />
+            </Box>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
+                <MenuCategory categories={categories} setCategory={setCategory} isShopPage />
             </Menu>
             {loading && <Loading />}
         </Box>
+
     )
 }
 export default ShopPage

@@ -1,16 +1,15 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogContent, DialogTitle, Box, Typography, Rating } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, Button, Box, Typography, TextField } from '@mui/material'
 import { AddCircle, Clear } from '@mui/icons-material'
-import reviewApi from '../../../../apis/reviewApi'
 import Loading from '../../../../components/Loading/Loading'
-import DialogAction from '../../../../components/Dialog/DialogAction'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import DialogAction from '../../../../components/Dialog/DialogAction'
+import orderApi from '../../../../apis/orderApi'
 
-function ReviewProduct({ orderItem, reRender, setReRender }) {
+function OrderRefund({ order, reRender, setReRender }) {
     const triggerAlert = useAlert()
     const [open, setOpen] = useState(false)
     const [content, setContent] = useState('')
-    const [rate, setRate] = useState(5)
     const [files, setFiles] = useState([])
     const [images, setImages] = useState([])
     const [loading, setLoading] = useState(false)
@@ -51,40 +50,38 @@ function ReviewProduct({ orderItem, reRender, setReRender }) {
     }
     const handleClickAdd = () => {
         setLoading(true)
-        const formData = new FormData()
-        formData.append('content', content)
-        formData.append('rate', rate)
-        formData.append('orderItemId', orderItem?.item_id)
-        files.forEach((file) => {
-            formData.append('files', file)
-        })
-        reviewApi.addReview(formData)
-            .then(() => {
-                setReRender(!reRender)
-                triggerAlert('Đánh giá sản phẩm thành công!', false, false)
-            })
-            .catch(error => {
-                console.log(error)
-                triggerAlert('Đánh giá sản phẩm thất bại!', true, false)
-            })
-            .finally(() => setLoading(false))
+          const formData = new FormData()
+          files.forEach((file) => {
+              formData.append('files', file)
+          })
+          orderApi.orderRefund(order?.order_id, formData)
+              .then(() => {
+                  setReRender(!reRender)
+                  triggerAlert('Yêu cầu hoàn tiền thành công, chờ phê duyệt từ 3-5 ngày!', false, false)
+              })
+              .catch(error => {
+                  console.log(error)
+                  triggerAlert('Yêu cầu hoàn tiền thất bại!', true, false)
+              })
+              .finally(() => setLoading(false))
         handleClose()
     }
     return (
         <Box>
-            <Button variant="contained" color='success' size='small' sx={{ borderRadius: 10 }} onClick={handleClickOpen}>
-                Đánh giá
+            <Button variant="contained" color='error' size='small' sx={{ borderRadius: 2 }} onClick={handleClickOpen}>
+                Trả hàng / Hoàn tiền
             </Button>
             <Dialog open={open} onClose={handleClose} >
-                <DialogTitle sx={{ color: '#444444', textAlign: 'center' }}>Đánh giá sản phẩm</DialogTitle>
+                <DialogTitle sx={{ color: '#444444', textAlign: 'center' }}>Yêu cầu trả hàng / hoàn tiền</DialogTitle>
                 <DialogContent >
-                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}>
-                        <img src={orderItem?.image} alt='ProductImage' style={{ height: 50, width: 50, borderRadius: '10px' }} />
-                        <Typography sx={{ color: '#444444' }} variant='subtitle2' >{orderItem?.name}</Typography>
-                    </Box>
+                    {Array.isArray(order?.items) && order?.items?.length > 0 && order?.items.map((item, index) => (
+                        <Box key={index} sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}>
+                            <img src={item?.image} alt='ProductImage' style={{ height: 50, width: 50, borderRadius: '10px' }} />
+                            <Typography sx={{ color: '#444444' }} variant='subtitle2' >{item?.name}</Typography>
+                        </Box>
+                    ))}
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                        <TextField fullWidth size='medium' sx={{ mt: 2 }} rows={4} multiline label="Nhập nội dung" onChange={(e) => setContent(e.target.value)} />
-                        <Rating size='large' value={rate} onChange={(event, newValue) => { setRate(newValue) }} />
+                        <TextField fullWidth size='medium' sx={{ mt: 2 }} rows={4} multiline label="Nhập khiếu nại..." onChange={(e) => setContent(e.target.value)} />
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
                             <Button component="label" htmlFor="upload-image" variant="contained" color="primary" sx={{ borderRadius: '10px', height: 70, width: 70 }} >
                                 <AddCircle />
@@ -112,4 +109,4 @@ function ReviewProduct({ orderItem, reRender, setReRender }) {
         </Box>
     )
 }
-export default ReviewProduct
+export default OrderRefund
