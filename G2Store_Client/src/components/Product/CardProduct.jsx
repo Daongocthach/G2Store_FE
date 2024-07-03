@@ -73,7 +73,7 @@ function CardProduct({ product, isShort }) {
           <Typography variant='body2' className='text-gray-500 text-center'> {product?.sold_quantity} Đã bán</Typography>
         </Box>
         <Box className='flex flex-row items-center justify-between flex-wrap' >
-          <Typography sx={{ fontSize: 13 }} className='text-gray-500'> {product?.shop?.province}</Typography>
+          <Typography sx={{ fontSize: 13 }} className='text-gray-500'> {product?.shop?.province_name}</Typography>
           <Typography variant='body2' className='text-gray-500'>Kho: {product?.stock_quantity}</Typography>
         </Box>
       </CardContent>

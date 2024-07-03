@@ -34,28 +34,28 @@ function ViewOrder({ order }) {
             <Divider />
             <Box className='flex flex-col gap-1'>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
-                <Typography sx={{ fontSize: 17 }} className="min-w-[100px] text-gray-700">Tổng tiền:</Typography>
-                <Typography className="text-red-700 text-[15px]" fontWeight={'bold'}>{formatCurrency(order?.grand_total)}</Typography>
+                <Typography variant='subtitle2' className="min-w-[100px] text-gray-700">Tổng tiền:</Typography>
+                <Typography variant='subtitle2' className="text-red-600 text-[15px]">{formatCurrency(order?.grand_total)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
-                <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Tiền hàng:</Typography>
-                <Typography sx={{ fontSize: 15 }} >{formatCurrency(order?.shop_total)}</Typography>
+                <Typography variant='body2' className="min-w-[100px] text-gray-700">Tiền hàng:</Typography>
+                <Typography variant='body2' className="text-red-600">{formatCurrency(order?.shop_total)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
-                <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Phí vận chuyển:</Typography>
-                <Typography sx={{ fontSize: 15 }} className="text-green-800">{formatCurrency(order?.fee_ship)}</Typography>
+                <Typography variant='body2' className="min-w-[100px] text-gray-700">Phí vận chuyển:</Typography>
+                <Typography variant='body2' className="text-red-600">{formatCurrency(order?.fee_ship)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
-                <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Giảm giá shop:</Typography>
-                <Typography sx={{ fontSize: 15 }} className="text-red-700">-{formatCurrency(order?.shop_voucher_price_reduce)}</Typography>
+                <Typography variant='body2' className="min-w-[100px] text-gray-700">Giảm giá shop:</Typography>
+                <Typography variant='body2' className="text-green-700">-{formatCurrency(order?.shop_voucher_price_reduce)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
-                <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Giảm giá vận chuyển:</Typography>
-                <Typography sx={{ fontSize: 15 }} className="text-red-700">-{formatCurrency(order?.fee_ship_reduce)}</Typography>
+                <Typography variant='body2' className="min-w-[100px] text-gray-700">Giảm giá vận chuyển:</Typography>
+                <Typography variant='body2' className="text-green-700">-{formatCurrency(order?.fee_ship_reduce)}</Typography>
               </Box>
               <Box className="flex justify-between items-center gap-1 flex-wrap">
-                <Typography sx={{ fontSize: 15 }} className="min-w-[100px] text-gray-700">Giảm giá bằng điểm:</Typography>
-                <Typography sx={{ fontSize: 15 }} className="text-red-700">-{formatCurrency(order?.point_spent)}</Typography>
+                <Typography variant='body2' className="min-w-[100px] text-gray-700">Giảm giá bằng điểm:</Typography>
+                <Typography variant='body2' className="text-green-700">-{formatCurrency(order?.point_spent)}</Typography>
               </Box>
             </Box>
           </Box>

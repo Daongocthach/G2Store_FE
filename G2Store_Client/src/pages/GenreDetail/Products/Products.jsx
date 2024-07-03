@@ -1,4 +1,5 @@
-import { Grid, Typography, Box, FormControl, Select, MenuItem, Pagination, CircularProgress, Link } from '@mui/material'
+import { Grid, Typography, Box, FormControl, Select, MenuItem, Pagination, CircularProgress, Link, IconButton, Divider } from '@mui/material'
+import FilterListIcon from '@mui/icons-material/FilterList'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
@@ -15,15 +16,14 @@ function Products() {
     const [products, setProducts] = useState()
     const [page, setPage] = useState(1)
     const [sort, setSort] = useState('DEFAULT')
-    const [startPrice, setStartPrice] = useState('')
-    const [endPrice, setEndPrice] = useState('')
+    const [startPrice, setStartPrice] = useState('0')
+    const [endPrice, setEndPrice] = useState('1000000')
     const [isFilter, setIsFilter] = useState(false)
     const [districtId, setDistrictId] = useState('')
-
     const handleResetFilter = () => {
         setSort('DEFAULT')
-        setStartPrice('')
-        setEndPrice('')
+        setStartPrice('0')
+        setEndPrice('1000000')
         setDistrictId('')
     }
     const handleChangePage = (event, value) => {
@@ -54,34 +54,50 @@ function Products() {
     }, [data?.name, data?.category?.category_id])
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
-            <Grid item xs={12} sm={12} md={2} lg={2} >
-                {data?.category?.name && <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'} mt={2}>Loại sản phẩm</Typography>}
-                <Link underline="hover" color="inherit" href="/genre-detail" sx={{ fontSize: 13, color: 'orange' }}>{data?.category?.name}</Link>
-                {data?.category?.child_categories && data?.category?.child_categories.length > 0 &&
-                    <Typography variant='subtitle1' color={'#444444'} fontWeight={'bold'} mt={1}>Danh mục liên quan</Typography>}
-                {data?.category?.child_categories && data?.category?.child_categories.length > 0 &&
-                    data?.category?.child_categories.map((child, index) => (
-                        <Box key={index}>
-                            <Link underline="hover" color="inherit" onClick={() => navigate('/genre-detail', { state: { category: child } })}
-                                sx={{ fontSize: 13, color: '#444444', cursor: 'pointer' }}>{child?.name}</Link>
-                        </Box>
-                    ))}
-                <FilterByPrice isFilter={isFilter} setIsFilter={setIsFilter} startPrice={startPrice} setStartPrice={setStartPrice}
-                    endPrice={endPrice} setEndPrice={setEndPrice} />
-                <FilterByDistrict />
+            <Grid item xs={12} sm={12} md={3} lg={3} >
+                <Box className='flex flex-col gap-2'>
+                    <Box className='flex flex-row items-center gap-2 mb-2'>
+                        <FilterListIcon sx={{ color: '#333333' }} />
+                        <Typography variant='h6' color={'#333333'} fontWeight={'bold'} >Bộ lọc tìm kiếm</Typography>
+                    </Box>
+                    <Divider />
+                    <Box>
+                        <Link underline="none" color="inherit" href="/genre-detail" sx={{ fontSize: 16, color:'green' }}>
+                            <b >Danh mục / </b>{data?.category?.name}</Link>
+                        {data?.category?.child_categories && data?.category?.child_categories.length > 0 &&
+                            <Box >
+                                <Typography variant='subtitle1' fontWeight={'bold'} mt={1}>Danh mục liên quan</Typography>
+                                <Box className='flex flex-col gap-1'>
+                                    {data?.category?.child_categories.map((child, index) => (
+                                        <Link key={index} underline="hover" color="inherit" onClick={() => navigate('/genre-detail', { state: { category: child } })}
+                                            sx={{ fontSize: 15, color: '#444444', cursor: 'pointer' }}>{child?.name}</Link>
+                                    ))}
+                                </Box>
+
+                            </Box>}
+                    </Box>
+                    <FilterByPrice isFilter={isFilter} setIsFilter={setIsFilter} startPrice={startPrice} setStartPrice={setStartPrice}
+                        endPrice={endPrice} setEndPrice={setEndPrice} />
+                    <FilterByDistrict />
+                </Box>
             </Grid>
-            <Grid mt={1} item xs={12} sm={12} md={10} lg={10} >
+            <Grid mt={1} item xs={12} sm={12} md={9} lg={9} >
                 <Box>
-                    <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-                        <Select value={sort} onChange={(e) => setSort(e.target.value)} >
-                            <MenuItem color='#444444' value={''}>--</MenuItem>
-                            <MenuItem color='#444444' value={'TOP_SELLER'}>Bán chạy</MenuItem>
-                            <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
-                            <MenuItem color='#444444' value={'NEWEST'}>Mới nhất</MenuItem>
-                            <MenuItem color='#444444' value={'PRICE_ASC'}>Giá tăng dần</MenuItem>
-                            <MenuItem color='#444444' value={'PRICE_DESC'}>Giá giảm dần</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <Box className='flex flex-row items-center justify-between'>
+                        <Typography variant='body1'>Tìm thấy <b>{products?.numberOfElements}</b> sản phẩm</Typography>
+                        <Box className='flex flex-row items-center'>
+                            <Typography variant='body1' color={'#444444'}>Sắp xếp theo</Typography>
+                            <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
+                                <Select value={sort} onChange={(e) => setSort(e.target.value)} >
+                                    <MenuItem color='#444444' value={'TOP_SELLER'}>Bán chạy</MenuItem>
+                                    <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
+                                    <MenuItem color='#444444' value={'NEWEST'}>Mới nhất</MenuItem>
+                                    <MenuItem color='#444444' value={'PRICE_ASC'}>Giá tăng dần</MenuItem>
+                                    <MenuItem color='#444444' value={'PRICE_DESC'}>Giá giảm dần</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         {loading && <CircularProgress />}
                         {!loading && <Grid container spacing={1} maxWidth='lg' >

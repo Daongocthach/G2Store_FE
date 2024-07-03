@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, TextField, Box, Typography, FormControlLabel, RadioGroup, Radio, InputAdornment, OutlinedInput, FormHelperText } from '@mui/material'
+import { format, addDays } from 'date-fns'
 import voucherApi from '../../../../apis/voucherApi'
-import { formatDate } from '../../../../utils/date'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
 function AddVoucher() {
@@ -11,8 +11,8 @@ function AddVoucher() {
     const location = useLocation()
     const voucher = location.state
     const [name, setName] = useState('')
-    const [startDate, setStartDate] = useState(formatDate(new Date()))
-    const [endDate, setEndDate] = useState(formatDate(new Date()))
+    const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-dd'))
+    const [endDate, setEndDate] = useState(format(addDays(new Date(), 1), 'yyyy-MM-dd'))
     const [voucherType, setVoucherType] = useState('SHOP_VOUCHER')
     const [minSpend, setMinSpend] = useState(8000)
     const [percentReduce, setPercentReduce] = useState(1)
@@ -22,8 +22,8 @@ function AddVoucher() {
     useEffect(() => {
         if (voucher) {
             setName(voucher?.name)
-            setStartDate(formatDate(new Date(voucher?.start_date)))
-            setEndDate(formatDate(new Date(voucher?.start_date)))
+            setStartDate(format(new Date(voucher?.start_date), 'yyyy-MM-dd'))
+            setEndDate(format(new Date(voucher?.end_date), 'yyyy-MM-dd'))
             setVoucherType(voucher?.voucher_type)
             setMinSpend(voucher?.min_spend)
             setPercentReduce(voucher?.reduce_percent)

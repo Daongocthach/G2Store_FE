@@ -28,7 +28,7 @@ function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReR
     <Box >
       {product?.product_id ?
         <Box className='flex flex-row items-center cursor-pointer gap-2' onClick={handleClick}>
-          <Receipt sx={{ color: '#444444' }}/>
+          <Receipt sx={{ color: '#444444' }} />
           <Typography variant='subtitle1' >Xem các mã khuyến mãi</Typography>
           <KeyboardArrowDown sx={{ fontSize: 20 }} />
         </Box> :
@@ -52,14 +52,13 @@ function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReR
           :
           vouchers.map((shopVoucher, index) => (
             <Voucher voucher={shopVoucher?.voucher} isSelected={shopVoucher?.is_selected}
-              key={index} cart_item_id={cart_item_id} reRender={reRender} setReRender={setReRender} handleClose={handleClose}/>
+              key={index} cart_item_id={cart_item_id} reRender={reRender} setReRender={setReRender} handleClose={handleClose} />
           ))
         }
         {Array.isArray(vouchers) && vouchers?.length < 1 &&
           <Box className='flex flex-col items-center p-2 min-w-fit'>
             <img src={emptyOrder} className='object-cover h-52 w-52' style={{ objectFit: 'cover', height: '200px', width: '200px' }} />
             <Typography className='text-gray-600'>Chưa có mã khuyến mãi nào</Typography>
-            <Typography className='text-gray-600'>Nếu bạn có mã khuyến mãi của shop vui lòng nhập vào thanh tìm kiếm</Typography>
           </Box>
         }
         <Divider />

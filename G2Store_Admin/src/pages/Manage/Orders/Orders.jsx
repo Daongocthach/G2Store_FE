@@ -1,4 +1,4 @@
-import { Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, Breadcrumbs, Link } from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
@@ -7,11 +7,13 @@ import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 
 function Orders() {
   const [orders, setOrders] = useState([])
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(5)
   useEffect(() => {
-    // orderApi.getOrders()
-    //   .then((response) => {
-    //     setOrders(response)
-    //   })
+    orderApi.getOrdersRefund(page, size)
+      .then((response) => {
+        setOrders(response)
+      })
   }, [])
 
   return (

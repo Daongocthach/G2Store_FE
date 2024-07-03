@@ -112,7 +112,6 @@ function Register() {
       </Box>
       {loading && <Loading />}
     </Container >
-
   )
 }
 

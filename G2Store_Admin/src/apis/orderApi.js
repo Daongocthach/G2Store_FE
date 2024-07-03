@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient'
 const orderApi = {
-    getOrders() {
-        const url = 'admins/orders'
+    getOrdersRefund(page, size) {
+        const url = `orders/admin/refunding?page=${page}&size=${size}`
         return axiosClient.get(url)
     }
 }

@@ -9,7 +9,6 @@ import GoToShop from '../../../components/GoToShop/GoToShop'
 import Loading from '../../../components/Loading/Loading'
 import ProductVouchers from '../../../components/ProductVouchers/ProductVouchers'
 import ShopFeeShip from '../ShopFeeShip/ShopFeeShip'
-import AddAddress from '../../Account/EditAddress/FormAddress/AddAddress'
 import OrderItem from '../../../components/Product/OrderItem'
 
 function LeftInformation({ address, setAddress, cartItems, feeShips, reRender, setRerender }) {
@@ -44,7 +43,7 @@ function LeftInformation({ address, setAddress, cartItems, feeShips, reRender, s
             <Box className='flex items-center mt-2 gap-2'>
                 {address?.address_id && <ChangeAddress addresses={addresses} setAddress={setAddress} />}
                 <Divider orientation='vertical' variant="middle" flexItem />
-                <AddAddress rerender={changeAddress} setRerender={setChangeAddress} />
+                <UpdateAddress rerender={changeAddress} setRerender={setChangeAddress} />
                 <Divider orientation='vertical' variant="middle" flexItem />
                 {address?.address_id && <UpdateAddress address={address} rerender={changeAddress} setRerender={setChangeAddress} />}
             </Box>

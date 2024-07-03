@@ -23,13 +23,7 @@ function Profile() {
   useEffect(() => {
     authenApi.me()
       .then((response) => {
-        setUser({
-          email: response?.email,
-          phoneNo: response?.phone_no,
-          full_name: response?.full_name,
-          dob: response?.dob,
-          point: response?.point
-        })
+        setUser(response)
         const data = {
           avatar: response?.avatar,
           point: response?.point
@@ -38,25 +32,12 @@ function Profile() {
         dispatch(updateAvatar(data))
       })
       .catch((error) => console.log(error))
-  }, [reRender, dispatch])
-
-  const formik = useFormik({
-    initialValues: {
-      full_name: user?.full_name ? user.full_name : '',
-      dob: user?.dob ? user.dob : ''
-    },
-    enableReinitialize: true,
-    onChange: (e) => {
-      const { name, value } = e.target
-      formik.setFieldValue(name, value)
-    }
-  })
+  }, [reRender])
 
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0]
     if (file) {
       handleUpdateAvatar(file)
-
     }
   }
   const handleUpdateAvatar = async (file) => {
@@ -82,24 +63,7 @@ function Profile() {
         .finally(() => setLoading(false))
     }
   }
-  const handleUpdate = async () => {
-    const { full_name, dob } = formik.values
-    if (!dob || !full_name) {
-      triggerAlert('Ngày sinh hoặc tên đăng nhập không được để trống!', false, true)
-    }
-    else {
-      setLoading(true)
-      try {
-        authenApi.updateProfile({ dob, full_name })
-        setLoading(false)
-        triggerAlert('Cập nhật thông tin thành công!', false, false)
-      } catch (error) {
-        console.log(error)
-        triggerAlert('Cập nhật thông tin thất bại!', true, false)
-        setLoading(false)
-      }
-    }
-  }
+
   return (
     <Box className="flex flex-col items-center justify-center gap-2">
       <Box className='relative bg-black rounded-full w-28 h-28' >
@@ -111,28 +75,26 @@ function Profile() {
         <input id="upload-image" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
       </Box>
       <Box className="mb-2 flex flex-col gap-2 w-full">
-        <Box className='flex-col bg-sky-50'>
-          <Typography variant='caption' className='text-gray-400'>Họ và tên</Typography>
-          <Input id="full_name" name="full_name" fullWidth size='small' placeholder={'Nhập họ và tên'} value={formik.values.full_name}
-            className='min-w-[200px] md:min-w-[500px] text-sm  text-gray-600' onChange={formik.handleChange} />
-        </Box>
-        <Box className='flex-col bg-sky-50'>
-          <Typography variant='caption' className='text-gray-400'>Ngày sinh</Typography>
-          <Input id="dob" name="dob" fullWidth size='small' type='date' placeholder={'Ngày sinh'} value={formik.values.dob}
-            className='min-w-[200px] md:min-w-[500px] text-sm  text-gray-600' onChange={formik.handleChange} />
-        </Box>
-        <TextField variant='standard' label='Email' disabled fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.email ? user?.email : ''} />
-        <TextField variant='standard' label='Điện thoại' disabled fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.phone_no ? user?.phoneN_no : ''} />
-        <TextField variant='standard' label='Tích điểm' disabled fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.point || 0} />
+        <TextField variant='standard' label='Họ và tên' disabled={!user?.full_name} fullWidth size='small'
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600'
+          value={user?.full_name ? user?.full_name : 'Chưa cập nhật'} />
+        <TextField variant='standard' label='Ngày sinh' disabled={!user?.dob} fullWidth size='small'
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-500'
+          value={user?.dob ? user?.dob : 'Chưa cập nhật'} />
+        <TextField variant='standard' label='Email' disabled={!user?.email} fullWidth size='small'
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-500'
+          value={user?.email ? user?.email : ''} />
+        <TextField variant='standard' label='Điện thoại' disabled={!user?.phone_no} readOnly fullWidth size='small'
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 '
+          value={user?.phone_no ? user?.phone_no : 'Chưa cập nhật'} />
+        <TextField variant='standard' label='Tích điểm' fullWidth size='small'
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.point || 0 + ' điểm'} />
       </Box>
       <ButtonGroup variant="contained" color='info' aria-label="Basic button group" className='mt-1'>
-        <UpdateDobAndName handle={handleUpdate} />
+        <UpdateDobAndName fullNameRoot={user?.full_name} dobRoot={user?.dob} reRender={reRender} setReRender={setReRender} />
         <UpdatePassword reRender={reRender} setReRender={setReRender} />
         <UpdatePhoneNo reRender={reRender} setReRender={setReRender} />
-        <UpdateEmail reRender={reRender} setReRender={setReRender} />
+        <UpdateEmail />
       </ButtonGroup>
       {loading && <Loading />}
     </Box>

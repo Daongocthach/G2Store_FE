@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Container, TextField, Stack, Button, Box, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import validator from 'validator'
 import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import Loading from '../../../components/Loading/Loading'
@@ -9,7 +10,6 @@ import { login, updateAvatar } from '../../../redux/actions/auth'
 import { setCart } from '../../../redux/actions/cart'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
-import { validateEmail } from '../../../utils/email'
 
 function Login() {
   const triggerAlert = useAlert()
@@ -70,7 +70,7 @@ function Login() {
           <Stack component="form" className="mt-6 space-y-4">
             <TextField variant="filled" size="small" value={email}
               placeholder="Email" className="bg-white rounded-md" onChange={e => setEmail(e.target.value)}
-              error={!validateEmail(email)} helperText={validateEmail(email) ? '' : 'Email không đúng định dạng'}
+              error={!validator.isEmail(email)} helperText={validator.isEmail(email) ? '' : 'Email không đúng định dạng'}
             />
             <TextField
               placeholder='Mật khẩu'

@@ -7,8 +7,8 @@ import { Forum, AccountCircle, Reorder, EditLocationAlt } from '@mui/icons-mater
 
 const actions = [
     { icon: <Forum />, name: 'Chat', path: '/chat' },
-    { icon: <EditLocationAlt />, name: 'Địa chỉ', path: '/profile', state: 2 },
-    { icon: <Reorder />, name: 'Đơn hàng', path: '/profile', state: 0 },
+    { icon: <EditLocationAlt />, name: 'Địa chỉ', path: '/profile', state: 3 },
+    { icon: <Reorder />, name: 'Đơn hàng', path: '/profile', state: 2 },
     { icon: <AccountCircle />, name: 'Tài khoản', path: '/profile', state: 1 }
 ]
 

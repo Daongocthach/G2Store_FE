@@ -1,80 +1,80 @@
 import { useEffect, useState } from 'react'
-import { Container, TextField, Stack, Button, Box } from '@mui/material'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { setCookie } from '../../utils/cookie'
+import { Container, TextField, Stack, Button, Box, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import validator from 'validator'
 import loginImage from '../../assets/img/loginImage.jpg'
 import authenApi from '../../apis/authenApi'
-import ShowAlert from '../../components/ShowAlert/ShowAlert'
 import Loading from '../../components/Loading/Loading'
 import { login } from '../../redux/actions/auth'
+import { useAlert } from '../../components/ShowAlert/ShowAlert'
+
 function Login() {
-  const atk = useSelector(state => state.auth)
+  const triggerAlert = useAlert()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [showAlertFail, setShowAlertFail] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const onFinish = async () => {
-    setLoading(true)
-    try {
-      if (email !== '' && password !== '') {
-        const response = await authenApi.login({ email, password })
-        if (response) {
-          setShowAlert(true)
+    if (!email || !password) {
+      triggerAlert('Vui lòng nhập email và password!', false, true)
+    }
+    else {
+      setLoading(true)
+      authenApi.login({ email, password })
+        .then((response) => {
+          triggerAlert('Đăng nhập thành công!', false, false)
           localStorage.setItem('atk', response?.access_token)
           localStorage.setItem('rtk', response?.refresh_token)
           dispatch(login(response?.access_token))
           navigate('/admin/dashboard')
-          setLoading(false)
-        }
-        else {
-          console.log(response)
-          setShowAlertFail(true)
-        }
-      }
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-      setShowAlertFail(true)
-      console.log(error)
+        })
+        .catch(() => {
+          triggerAlert('Đăng nhập thất bại!', true, false)
+        })
+        .finally(() => setLoading(false))
     }
   }
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        onFinish()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [email, password])
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      <Box sx={{
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-        position: 'relative',
-        bgcolor: 'black'
-      }}>
-        <img src={loginImage} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
-        <Box sx={{
-          position: 'absolute', width: { xs: '90%', sm: '70%', md: '30%' }, height: 'auto', borderRadius: '5px', top: '30%',
-          left: '50%', bgcolor: 'black', opacity: 0.8, transform: 'translate(-50%, -30%)'
-        }}>
-          <h2 style={{ textAlign: 'center', color: 'white' }}>Đăng nhập</h2>
-          <Stack component="form" sx={{ m: 3 }} spacing={4}>
-            <TextField placeholder='Email' variant="filled" size="small" sx={{ bgcolor: 'white', borderRadius: 3 }} onChange={e => setEmail(e.target.value)} />
-            <TextField placeholder='Mật khẩu' variant="filled" size="small" sx={{ bgcolor: 'white', borderRadius: 3 }} type="password"
+    <Container disableGutters maxWidth={false} className="h-screen">
+      <Box className="w-full h-full overflow-hidden relative bg-black">
+        <img src={loginImage} className="w-full h-full object-cover opacity-50" />
+        <Box className="absolute w-[90%] sm:w-[70%] md:w-[30%] h-auto rounded-md top-1/3 left-1/2
+        bg-black opacity-80 transform -translate-x-1/2 -translate-y-1/3 p-8">
+          <Typography variant='h6' className="text-center text-white font-bold">Đăng nhập</Typography>
+          <Stack component="form" className="mt-6 space-y-4">
+            <TextField variant="filled" size="small" value={email}
+              placeholder="Email" className="bg-white rounded-md" onChange={e => setEmail(e.target.value)}
+              error={!validator.isEmail(email)} helperText={validator.isEmail(email) ? '' : 'Email không đúng định dạng'}
+            />
+            <TextField
+              placeholder='Mật khẩu'
+              variant="filled"
+              size="small"
+              className="bg-white rounded-md"
+              type="password"
+              value={password}
               onChange={e => setPassword(e.target.value)}
             />
-            <Button
-              sx={{ bgcolor: 'red', color: 'white', fontWeight: 'bold' }}
-              onClick={() => onFinish()}
-            >Đăng nhập</Button>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Link to={'/reset-password'} style={{ color: 'white' }}>Quên mật khẩu?</Link>
-            </Box>
+            <Button variant='contained' color='warning' onClick={() => onFinish()} >
+              Đăng nhập
+            </Button>
           </Stack>
         </Box>
       </Box>
-      <ShowAlert showAlert={showAlert} setShowAlert={setShowAlert} content={'Đăng nhập thành công'} />
-      <ShowAlert showAlert={showAlertFail} setShowAlert={setShowAlertFail} content={'Đăng nhập thất bại'} isFail={true} />
       {loading && <Loading />}
     </Container>
   )
