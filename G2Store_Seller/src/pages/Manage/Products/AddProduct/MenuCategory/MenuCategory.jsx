@@ -12,15 +12,17 @@ function MenuCategory({ categories, setCategoryId, setSelectedCategories }) {
         setSelectCategory(category)
     }
     return (
-        <Box sx={{ display: 'flex', height: 200 }}>
-            <Box sx={{ overflow: 'auto' }}>
+        <Box className='flex flex-row overflow-x-auto' >
+            <Box className='overflow-auto flex flex-col gap-2 p-2'>
                 {Array.isArray(categories) && categories.map((category, index) => (
-                    <Button sx={{ display: 'flex', gap: 2, color: '#555555', ':hover': { bgcolor: 'inherit' } }}
+                    <Box className='flex flex-row gap-1 text-gray-600 cursor-pointer items-center'
                         key={index} onClick={() => handleClick(category)}>
-                        <Typography variant='body1' sx={{ width: 200, textAlign: 'left' }} >{category?.name}</Typography>
+                        <Typography sx={{ fontSize: 15 }} className={`${selectCategory === category ? 'text-blue-500' : 'text-gray-600'} w-60 text-left`}>
+                            {category?.name}
+                        </Typography>
                         {Array.isArray(category?.child_categories) && category.child_categories.length > 0 &&
-                        <ArrowForwardIos sx={{ color: '#666666', fontSize: 10 }} />}
-                    </Button>
+                            <ArrowForwardIos sx={{ color: '#666666', fontSize: 10 }} />}
+                    </Box>
                 ))}
             </Box>
             {Array.isArray(selectCategory?.child_categories) && selectCategory.child_categories.length > 0 && <Box>

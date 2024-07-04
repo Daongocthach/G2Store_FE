@@ -1,4 +1,4 @@
-import { Grid, Typography, Box, FormControl, Select, MenuItem, Pagination, CircularProgress, Link, IconButton, Divider } from '@mui/material'
+import { Grid, Typography, Box, FormControl, Select, MenuItem, Pagination, CircularProgress, Link, Divider } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -17,18 +17,20 @@ function Products() {
     const [page, setPage] = useState(1)
     const [sort, setSort] = useState('DEFAULT')
     const [startPrice, setStartPrice] = useState('0')
-    const [endPrice, setEndPrice] = useState('1000000')
+    const [endPrice, setEndPrice] = useState('100000000')
     const [isFilter, setIsFilter] = useState(false)
     const [districtId, setDistrictId] = useState('')
     const handleResetFilter = () => {
         setSort('DEFAULT')
         setStartPrice('0')
-        setEndPrice('1000000')
+        setEndPrice('100000000')
         setDistrictId('')
+        setIsFilter(false)
     }
     const handleChangePage = (event, value) => {
         setPage(value)
     }
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -37,21 +39,22 @@ function Products() {
                 apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
             } else if (data?.name) {
                 apiCall = productApi.searchProducts(data?.name, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
+            } else {
+                apiCall = productApi.getProducts(page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
             }
-            else {
-                apiCall = productApi.getProducts(page - 1, 12)
-            }
-            apiCall.then((response) => {
-                setProducts(response)
-            })
+            apiCall
+                .then((response) => {
+                    setProducts(response)
+                })
                 .catch((error) => console.log(error))
                 .finally(() => setLoading(false))
         }
         fetchData()
     }, [page, data, sort, isFilter, districtId])
+
     useEffect(() => {
         handleResetFilter()
-    }, [data?.name, data?.category?.category_id])
+    }, [data?.name, data?.category?.category_id]);
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
             <Grid item xs={12} sm={12} md={3} lg={3} >
@@ -62,7 +65,7 @@ function Products() {
                     </Box>
                     <Divider />
                     <Box>
-                        <Link underline="none" color="inherit" href="/genre-detail" sx={{ fontSize: 16, color:'green' }}>
+                        <Link underline="none" color="inherit" href="/genre-detail" sx={{ fontSize: 16, color: 'green' }}>
                             <b >Danh mục / </b>{data?.category?.name}</Link>
                         {data?.category?.child_categories && data?.category?.child_categories.length > 0 &&
                             <Box >
@@ -73,7 +76,6 @@ function Products() {
                                             sx={{ fontSize: 15, color: '#444444', cursor: 'pointer' }}>{child?.name}</Link>
                                     ))}
                                 </Box>
-
                             </Box>}
                     </Box>
                     <FilterByPrice isFilter={isFilter} setIsFilter={setIsFilter} startPrice={startPrice} setStartPrice={setStartPrice}

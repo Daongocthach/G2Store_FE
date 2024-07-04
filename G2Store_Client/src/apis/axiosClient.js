@@ -6,10 +6,6 @@ const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_PUBLIC_API_URL,
   withCredentials: true
 })
-const jwtAxios = axios.create({
-  baseURL: import.meta.env.VITE_PUBLIC_API_URL,
-  withCredentials: true
-})
 
 axiosClient.interceptors.request.use(async (config) => {
   const atk = localStorage.getItem('atk')
@@ -19,9 +15,9 @@ axiosClient.interceptors.request.use(async (config) => {
     const decodedToken = jwtDecode(atk)
     if (decodedToken.exp < date.getTime() / 1000) {
       try {
-        const res = await jwtAxios.post('customers/refresh-token', { refresh_token: rtk })
-        const newatk = res.data.access_token
-        const newrtk = res.data.refresh_token
+        const res = await axiosClient.post('customers/refresh-token', { refresh_token: rtk })
+        const newatk = res?.data?.access_token
+        const newrtk = res?.data?.refresh_token
         if (newatk) {
           localStorage.setItem('atk', newatk)
           localStorage.setItem('rtk', newrtk)

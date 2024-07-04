@@ -99,8 +99,8 @@ function Register() {
               </Box>
             }
             <Box className="flex flex-row items-center justify-between mt-2">
-              <Link to="/" className="text-white">Về trang chủ ?</Link>
-              <Link to="/login" className="text-white">Đăng nhập?</Link>
+              <Link to={'/reset-password'} className='text-white'>Quên mật khẩu?</Link>
+              <Link to="/" className="text-white">Đăng nhập?</Link>
             </Box>
           </Stack>
         </Box>

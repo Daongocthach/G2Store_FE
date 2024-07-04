@@ -41,7 +41,7 @@ function CardProduct({ product, isShort }) {
       .catch((error) => console.log(error))
   }, [])
   return (
-    <Card className='w-auto cursor-pointer' >
+    <Card className='w-auto cursor-pointer' variant="outlined">
       <Box className='flex flex-row justify-center items-center relative'>
         <CardMedia
           onClick={() => { navigate('/product-detail', { state: product?.product_id }) }}
@@ -55,27 +55,19 @@ function CardProduct({ product, isShort }) {
         </Box>
       </Box>
       <CardContent className='h-36' onClick={() => { navigate('/product-detail', { state: product?.product_id }) }}>
-        <Typography variant='subtitle1' color={'#444444'} fontWeight={500}
-          sx={{ textOverflow: { display: '-webkit-box', WebkitLineClamp: isShort ? 1 : 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } }}> {product?.name}
+        <Typography variant='subtitle2' color={'#444444'} className='line-clamp-2'>{product?.name}</Typography>
+        <Typography variant='subtitle2' fontWeight={'bold'} className='text-red-600'>
+          {formatCurrency(product?.price)}
         </Typography>
-        <Box className='flex flex-row items-center gap-2 flex-wrap'>
-          {product?.special_price && <Typography variant='subtitle1' fontWeight={'bold'} sx={{ color: '#cb1c22' }} >{formatCurrency(product?.special_price)}</Typography>}
-          <Typography variant={product?.special_price ? 'subtitle2' : 'subtitle1'} fontWeight={product?.special_price ? 500 : 600}
-            sx={{ color: product?.special_price ? ' #444444' : '#cb1c22', textDecoration: product?.special_price ? 'line-through' : 'none' }}>
-            {product?.special_price ? formatCurrency(product?.price) : formatCurrency(product?.price)}
-          </Typography>
-        </Box>
-        <Box className='flex flex-row items-center justify-between flex-wrap'>
-          <Box className='flex flex-row items-center gap-1'>
-            <Rating size='small' value={reviews?.avg_rate || 0} precision={0.1} readOnly />
-            <Typography variant='body2' className='text-gray-500 text-center'>({reviews?.total_rate_count || 0})</Typography>
-          </Box>
-          <Typography variant='body2' className='text-gray-500 text-center'> {product?.sold_quantity} Đã bán</Typography>
+        <Box className='flex flex-row  gap-1'>
+          <Rating size='small' value={reviews?.avg_rate || 0} precision={0.1} readOnly />
+          <Typography variant='caption' className='text-gray-500 text-center'>({reviews?.total_rate_count || 0})</Typography>
         </Box>
         <Box className='flex flex-row items-center justify-between flex-wrap' >
-          <Typography sx={{ fontSize: 13 }} className='text-gray-500'> {product?.shop?.province_name}</Typography>
-          <Typography variant='body2' className='text-gray-500'>Kho: {product?.stock_quantity}</Typography>
+          <Typography variant='caption' className='text-gray-500 text-center'>{product?.sold_quantity || 0} đã bán</Typography>
+          <Typography variant='caption' className='text-gray-500'>{product?.stock_quantity || 0} còn lại</Typography>
         </Box>
+        <Typography variant='caption' className='text-gray-500'> {product?.shop?.province_name}</Typography>
       </CardContent>
       <CardActions className='flex flex-row items-center justify-between'>
         <Tooltip title="Xem chi tiết">
@@ -84,12 +76,10 @@ function CardProduct({ product, isShort }) {
           </Button>
         </Tooltip>
         <Tooltip title="Thêm vào giỏ">
-          <Box>
-            <Button disabled={product?.stock_quantity < 1} size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}
-              onClick={handleClickAddToCart}>
-              <ShoppingCart sx={{ fontSize: 22 }} />
-            </Button>
-          </Box>
+          <Button disabled={product?.stock_quantity < 1} size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}
+            onClick={handleClickAddToCart}>
+            <ShoppingCart sx={{ fontSize: 22 }} />
+          </Button>
         </Tooltip>
         {!isShort && <Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}>
           <Help sx={{ fontSize: 20 }} /></Button>

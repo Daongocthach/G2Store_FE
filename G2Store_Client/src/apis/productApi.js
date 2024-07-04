@@ -1,13 +1,26 @@
 import axiosClient from './axiosClient'
 const productApi = {
-    getProducts(page, size) {
+    getProducts(page, size, sort, startPrice, endPrice, districtId) {
         var seed = sessionStorage.getItem('seed')
         if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
             seed = sessionStorage.getItem('seed')
         }
+        const params = {}
+        if (districtId) {
+            params.districtId = districtId
+        }
+        if (sort) {
+            params.sort = sort
+        }
+        if (startPrice == 0 || startPrice) {
+            params.startPrice = parseInt(startPrice)
+        }
+        if (endPrice == 0 || endPrice) {
+            params.endPrice = endPrice
+        }
         const url = `products?page=${page}&size=${size}&seed=${seed}`
-        return axiosClient.get(url)
+        return axiosClient.get(url, { params: params })
     },
     getProductsByCategoryId(categoryId, page, size, sort, startPrice, endPrice, districtId) {
         var seed = sessionStorage.getItem('seed')
@@ -22,10 +35,10 @@ const productApi = {
         if (sort) {
             params.sort = sort
         }
-        if (startPrice) {
-            params.startPrice = startPrice
+        if (startPrice == 0 || startPrice) {
+            params.startPrice = parseInt(startPrice)
         }
-        if (startPrice) {
+        if (endPrice == 0 || endPrice) {
             params.endPrice = endPrice
         }
         const url = `products/category/${categoryId}?page=${page}&size=${size}&seed=${seed}`
@@ -44,35 +57,13 @@ const productApi = {
         if (sort) {
             params.sort = sort
         }
-        if (startPrice) {
+        if (startPrice == 0 || startPrice) {
             params.startPrice = startPrice
         }
-        if (startPrice) {
+        if (endPrice == 0 || endPrice) {
             params.endPrice = endPrice
         }
         const url = `products/search?page=${page}&size=${size}&seed=${seed}&name=${name}`
-        return axiosClient.get(url, { params: params })
-    },
-    getProductsFilter(page, size, sort, startPrice, endPrice, districtId) {
-        var seed = sessionStorage.getItem('seed')
-        if (!seed) {
-            sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
-            seed = sessionStorage.getItem('seed')
-        }
-        const params = {}
-        if (districtId) {
-            params.districtId = districtId
-        }
-        if (sort) {
-            params.sort = sort
-        }
-        if (startPrice) {
-            params.startPrice = startPrice
-        }
-        if (startPrice) {
-            params.endPrice = endPrice
-        }
-        const url = `products?page=${page}&size=${size}&seed=${seed}`
         return axiosClient.get(url, { params: params })
     },
     getShopProducts(shop_id, page, size, sort) {
