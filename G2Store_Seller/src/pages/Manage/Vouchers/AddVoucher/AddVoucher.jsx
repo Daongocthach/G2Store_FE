@@ -79,14 +79,16 @@ function AddVoucher() {
                         <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
                         <Typography variant='body1'>Tên mã giảm giá: </Typography>
                     </Box>
-                    <TextField onFocus={(e) => e.target.select()} fullWidth size='small' placeholder='Ex: Mã cho người mới' value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField onFocus={(e) => e.target.select()} fullWidth size='small' placeholder='Ex: Mã cho người mới' value={name}
+                        onChange={(e) => setName(e.target.value)} />
                 </Box>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>
                         <Typography variant='body1'>Ngày bắt đầu: </Typography>
                     </Box>
-                    <TextField fullWidth size='small' type='datetime-local' placeholder={'ss'} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                    <TextField fullWidth size='small' type='datetime-local' value={startDate}
+                        onChange={(e) => console.log(e.target.value)} />
                 </Box>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

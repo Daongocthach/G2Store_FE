@@ -34,7 +34,13 @@ function BoardBar() {
                 <Link to={'/genre-detail'}><Chip icon={<Widgets />} label={'Sản phẩm'} clickable sx={useStyles.chip} ></Chip></Link>
             </Box>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
-                <MenuCategory categories={categories} />
+                {(Array.isArray(categories) && categories.length > 0) ?
+                    <MenuCategory categories={categories} />
+                    :
+                    <Box className='p-3'>
+                        Không có dữ liệu
+                    </Box>
+                }
             </Menu>
         </Box>
     )

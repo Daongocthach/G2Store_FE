@@ -3,7 +3,7 @@ import { Box, Typography, BottomNavigation, BottomNavigationAction, IconButton }
 import { ArrowBackIos, ArrowForwardIos, YouTube, Image } from '@mui/icons-material'
 
 function LeftInformation({ product }) {
-  const [index, setIndex] = useState(0)
+    const [index, setIndex] = useState(0)
     const [bottomTab, setBottomTab] = useState(0)
     const imageFiles = product?.images?.filter(file => file.file_type.includes('image/')) || []
     const videoFiles = product?.images?.filter(file => file.file_type.includes('video/')) || []
@@ -18,11 +18,13 @@ function LeftInformation({ product }) {
                 }}>
                     {bottomTab === 0 && currentFiles[index]?.file_type.includes('image/') &&
                         <img src={currentFiles[index]?.file_url} alt='product'
-                            style={{ width: '100%', height: '100%', objectFit: 'contain', transition: 'transform 0.5s' }} />}
+                            className="top-0 left-0 w-full h-full object-contain transition-transform duration-500" />}
                     {bottomTab === 1 && currentFiles[index]?.file_type.includes('video') &&
-                        <video controls width="100%" height='100%'>
-                            <source src={currentFiles[index]?.file_url} type="video/mp4" />
-                        </video>}
+                        <div className="relative w-full h-0 pb-[56.25%] overflow-hidden">
+                            <video controls className="absolute top-0 left-0 w-full h-full object-contain">
+                                <source src={currentFiles[index]?.file_url} type="video/mp4" />
+                            </video>
+                        </div>}
                 </Box>
                 {index > 0 && <IconButton color="secondary"
                     sx={{ position: 'absolute', transform: 'translate(-50%, -50%)', top: '50%', left: '10%', bgcolor: '#FFFFFF' }} onClick={() => { setIndex(index - 1) }}>

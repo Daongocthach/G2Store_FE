@@ -26,7 +26,7 @@ function ShopPage() {
     const location = useLocation()
     const shop_id = location.state
     const [page, setPage] = useState(1)
-    const [shop, setShop] = useState()
+    const [shop, setShop] = useState({})
     const [products, setProducts] = useState([])
     const [sort, setSort] = useState('DEFAULT')
     const [top5products, setTop5Products] = useState([])
@@ -97,27 +97,26 @@ function ShopPage() {
         <Box className="min-h-screen p-2">
             <Box className="flex items-center justify-start bg-orange-500 h-30 relative">
                 <img src={imageShop} className="object-cover h-40 w-full" />
-                <Box className="absolute flex items-center bg-white h-22 ml-2 px-2 gap-3 rounded-lg">
+                <Box className="absolute flex items-center bg-white h-22 ml-2 p-5 gap-3 rounded-lg flex-wrap">
                     <Avatar className="w-12 h-12">
                         <img src={shop?.image || avatarNull} className="object-contain w-full h-full" />
                     </Avatar>
-                    <Box className='w-52'>
-                        <Typography variant="h6" noWrap color="#555555">{shop?.name}</Typography>
-                        <Typography variant="body1" noWrap color="#555555">Theo dõi: 10</Typography>
-                        <Typography variant="body1" noWrap color="#555555">Đánh giá tích cực: 90%</Typography>
+                    <Box className='w-40'>
+                        <Typography variant="h6" className='text-gray-600'>{shop?.name}</Typography>
+                        <Typography variant="subtitle2" className='text-gray-600'>Vi phạm: {shop?.violation_point}</Typography>
                     </Box>
                     <Box className="flex flex-col items-center justify-center cursor-pointer">
                         <ChatBubbleOutline className="text-[#193744]" onClick={handleClickChat} />
-                        <Typography variant="body2" noWrap color="#555555">Chat</Typography>
+                        <Typography variant="subtitle2" className='text-gray-600'>Chat</Typography>
                     </Box>
                     <Box className="flex flex-col items-center justify-center cursor-pointer">
                         <AddBusiness className="text-[#193744]" />
-                        <Typography variant="body2" noWrap color="#555555">Theo dõi</Typography>
+                        <Typography variant="subtitle2" className='text-gray-600'>Theo dõi</Typography>
                     </Box>
                 </Box>
             </Box>
             <Box className="flex items-center">
-                <Chip icon={<Dehaze sx={{ fontSize: 20 }}/>} clickable label="Danh mục ngành hàng"
+                <Chip icon={<Dehaze sx={{ fontSize: 20 }} />} clickable label="Danh mục ngành hàng"
                     sx={{
                         color: '#444444', bgcolor: 'transparent', paddingX: '5px', borderRadius: 4, fontSize: 15,
                         '& .MuiSvgIcon-root': { color: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#444444') },
@@ -130,28 +129,23 @@ function ShopPage() {
                     <Tab label="Sản phẩm" />
                 </Tabs>
             </Box>
-            <Box display={tab === 0 ? 'inherit' : 'none'}>
-                Thông tin shop
+            <Box display={tab === 0 ? 'inherit' : 'none'} className='ml-3'>
                 <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
-                    <Typography variant="subtitle1" sx={useStyles.inputTitle}>Tên shop:</Typography>
-                    <Input placeholder="Tên shop" sx={useStyles.input} readOnly value={shop?.name} />
+                    <Typography variant="subtitle2" className='min-w-[90px] text-[#4F4F4F]'>Tên shop:</Typography>
+                    <Input placeholder="Tên shop" className='min-w-[200px] md:min-w-[500px] text-base bg-[#e8f0fe]' readOnly value={shop?.name} />
                 </Box>
                 <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
-                    <Typography variant="subtitle1" sx={useStyles.inputTitle}>Địa chỉ:</Typography>
+                    <Typography variant="subtitle2" className='min-w-[90px] text-[#4F4F4F]'>Địa chỉ:</Typography>
                     <Input
                         readOnly
                         placeholder="Địa chỉ"
-                        sx={useStyles.input}
-                        value={shop?.province ? `${shop?.street}, ${shop?.ward}, ${shop?.district}, ${shop?.province}` : ''}
+                        className='min-w-[200px] md:min-w-[500px] text-base bg-[#e8f0fe]'
+                        value={shop?.province_name ? `${shop?.street}, ${shop?.ward_name}, ${shop?.district_name}, ${shop?.province_name}` : ''}
                     />
                 </Box>
                 <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
                     <Typography variant="subtitle2" className='min-w-[90px] text-[#4F4F4F]'>Số lượt bán:</Typography>
-                    <Input placeholder="Tên shop" sx={useStyles.input} readOnly value="5 Sản phẩm" />
-                </Box>
-                <Box className="flex flex-col md:flex-row gap-1 mt-1 mb-1">
-                    <Typography variant="subtitle2" sx={useStyles.inputTitle}>Đánh giá (9):</Typography>
-                    <Rating value={5} />
+                    <Input placeholder="Tên shop" className='min-w-[200px] md:min-w-[500px] text-base bg-[#e8f0fe]' readOnly value="5 Sản phẩm" />
                 </Box>
                 <Box className="flex items-center w-full gap-1 mt-2">
                     <Typography variant="body1" className="w-1 bg-[#007fff] text-[#007fff]">|</Typography>
@@ -171,14 +165,17 @@ function ShopPage() {
                 </Box>
             </Box>
             <Box display={tab === 1 ? 'inherit' : 'none'}>
-                <Box className="flex justify-between">
-                    <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-                        <Select value={sort} onChange={(e) => setSort(e.target.value)} >
-                            {sortList.map((sort, index) => (
-                                <MenuItem key={index} color='#444444' value={sort?.value}>{sort?.lable}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                <Box className="flex ml-3">
+                    <Box className='flex flex-row items-center'>
+                        <Typography variant='body1' color={'#444444'}>Sắp xếp theo</Typography>
+                        <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
+                            <Select value={sort} onChange={(e) => setSort(e.target.value)} >
+                                {sortList.map((sort, index) => (
+                                    <MenuItem key={index} color='#444444' value={sort?.value}>{sort?.lable}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
                     <Box className="flex items-center gap-1">
                         <Tooltip title="Đặt lại">
                             <RestartAlt className="text-3xl text-[#193744] cursor-pointer" onClick={handelReset} />
@@ -208,7 +205,13 @@ function ShopPage() {
                 </Box>
             </Box>
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
-                <MenuCategory categories={categories} setCategory={setCategory} isShopPage />
+                {(Array.isArray(categories) && categories.length > 0) ?
+                    <MenuCategory categories={categories} setCategory={setCategory} isShopPage />
+                    :
+                    <Box className='p-3'>
+                        Không có dữ liệu
+                    </Box>
+                }
             </Menu>
             {loading && <Loading />}
         </Box>
@@ -216,28 +219,3 @@ function ShopPage() {
     )
 }
 export default ShopPage
-
-const useStyles = {
-    chip: {
-        color: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#444444'),
-        bgcolor: 'transparent',
-        border: '1 ',
-        paddingX: '5px',
-        borderRadius: '4px',
-        fontSize: 16,
-        '& .MuiSvgIcon-root': {
-            color: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#444444')
-        },
-        '&:hover': {
-            bgcolor: 'primary.50'
-        }
-    },
-    inputTitle: {
-        fontWeight: 'bold', minWidth: '90px', color: '#4F4F4F'
-    },
-    input: {
-        minWidth: { xs: 200, md: 500 },
-        fontSize: 15,
-        bgcolor: '#e8f0fe'
-    }
-}

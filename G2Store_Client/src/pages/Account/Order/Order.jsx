@@ -56,48 +56,50 @@ function Order() {
         <Box>
           {Array.isArray(orders) && orders.map((order, index) =>
             <Box key={index}>
-              <Box className='flex flex-row items-center gap-2 mt-1 mb-1 justify-between flex-wrap'>
-                <Box className='flex flex-row items-center gap-2 mt-1 mb-1 justify-between flex-wrap'>
+              <Box className='flex flex-row items-center mt-1 mb-1 justify-between flex-wrap'>
+                <Box className='flex flex-row items-center justify-between flex-wrap gap-1'>
                   <FiberManualRecord sx={{
                     fontSize: 15, color: order?.order_status == 'SUCCESS' ? 'green' :
                       order?.order_status == 'ON_DELIVERY' ? 'orange' :
                         order?.order_status == 'CONFIRMED' ? 'gold' : order?.order_status == 'PENDING' ? 'blue' : '#cd3333'
                   }} />
-                  <Typography className='text-gray-600' variant='subtitle1' sx={{ fontWeight: 'bold' }}>Đơn hàng</Typography>
-                  <Typography variant='subtitle2' className='text-gray-600'>{format(order?.created_date, 'dd/MM/yyyy HH:mm:ss')}</Typography>
-                  <Typography variant='subtitle2' className='text-gray-600'>#{order?.order_id}</Typography>
+                  <Typography className='text-gray-600' variant='subtitle2'>Đơn hàng #{order?.order_id}</Typography>
+                  <Typography variant='subtitle2' className='text-gray-600'>
+                    ({format(new Date(order?.created_date), 'dd/MM/yyyy HH:mm:ss')})
+                  </Typography>
                 </Box>
-                <LocalShipping className='text-gray-600' />
+                <Box className='flex flex-row items-center justify-between flex-wrap gap-1'>
+                  <LocalShipping className='text-gray-600' />
+                  <Typography variant='subtitle2' className='text-gray-600'>
+                    Ngày giao dự kiến: {format(new Date(order?.expected_delivery_date), 'dd/MM/yyyy')}
+                  </Typography>
+                </Box>
               </Box>
               <GoToShop shop_id={order?.shop_id} shop_name={order?.shop_name} shop_image={order?.shop?.image} />
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-                <Box>
-                  {order?.items.map((orderItem, index) =>
-                    <OrderItem key={index} orderItem={orderItem} orderStatus={order?.order_status}
-                      reRender={reRender} setReRender={setReRender} />)}
-                </Box>
-              </Box>
               <Box>
-                <Typography variant='subtitle2' color={'#2e7d32'} >Phí vận chuyển: {formatCurrency(order?.fee_ship)}</Typography>
-                <Typography variant='subtitle2' className='text-gray-600'>Thanh toán: {order?.payment_type}</Typography>
+                {order?.items.map((orderItem, index) =>
+                  <OrderItem key={index} orderItem={orderItem} orderStatus={order?.order_status}
+                    reRender={reRender} setReRender={setReRender} />)}
+                <Typography variant='subtitle2' className='text-gray-600' >Phí vận chuyển: {formatCurrency(order?.fee_ship)}</Typography>
+                <Typography variant='subtitle2' className='text-gray-600'>Phương thức thanh toán: {order?.payment_type}</Typography>
               </Box>
               <Box className='flex flex-row items-center gap-2 mt-1 mb-1 justify-between flex-wrap'>
-                <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
+                <Box className='flex flex-row items-center justify-between flex-wrap gap-1'>
                   <ViewOrder order={order} />
                   {(order?.order_status === 'ORDERED') && <DeleteOrder orderId={order?.order_id} reRender={reRender} setReRender={setReRender} />}
-                  {order?.order_status === 'UN_PAID' && <Button variant='contained' color='info' size='small' sx={{ borderRadius: 2 }}
+                  {order?.order_status === 'UN_PAID' && <Button variant='contained' color='success' size='small'
                     onClick={() => handlePayment(order?.order_id)} >Thanh toán</Button>}
                   {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} rerender={reRender} />}
                   {order?.order_status === 'DELIVERED' && <OrderRefund order={order} setReRender={setReRender} rerender={reRender} />}
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
-                  <Typography className='text-gray-600' sx={{ fontSize: 17 }} >Tổng cộng ({order?.items.length}) sản phẩm:</Typography>
-                  <Typography color={'#cd3333'} sx={{ fontSize: 17, fontWeight: 'bold' }}>{formatCurrency(order?.grand_total)}</Typography>
-                </Box>
+                <Typography className='text-gray-600' variant='subtitle1'>
+                  Tổng cộng ({order?.items.length}) sản phẩm:
+                  <span className='text-red-600 font-bold'>{formatCurrency(order?.grand_total)}</span>
+                </Typography>
               </Box>
-              <Divider sx={{ mb: 2 }} />
+              <Divider className='mb-2' />
             </Box>)}
-          {orders.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+          {orders.length < 1 && <Box className='flex flex-col items-center gap-1'>
             <img src={emptyOrder} />
             <Typography className='text-gray-600' variant='subtitle2' >Bạn chưa có đơn hàng nào</Typography>
             <Typography className='text-gray-600' variant='subtitle1' >Cùng khám phá hàng ngàn sản phẩm tại G2Store nhé!</Typography>

@@ -33,6 +33,7 @@ const authenApi = {
     },
     updateProfile(data) {
         const url = 'customers/me'
+        console.log(data)
         return axiosClient.put(url, data)
     },
     updateEmail(data) {

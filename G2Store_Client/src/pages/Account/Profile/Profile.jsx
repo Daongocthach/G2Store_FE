@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Box, ButtonGroup, IconButton, TextField, Typography, Input } from '@mui/material'
+import { Box, ButtonGroup, IconButton, TextField } from '@mui/material'
 import { AddCircle } from '@mui/icons-material'
-import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
 import { updateAvatar } from '../../../redux/actions/auth'

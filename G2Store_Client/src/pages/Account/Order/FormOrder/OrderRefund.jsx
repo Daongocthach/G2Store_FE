@@ -68,7 +68,7 @@ function OrderRefund({ order, reRender, setReRender }) {
     }
     return (
         <Box>
-            <Button variant="contained" color='error' size='small' sx={{ borderRadius: 2 }} onClick={handleClickOpen}>
+            <Button variant="contained" color='error' size='small' onClick={handleClickOpen}>
                 Trả hàng / Hoàn tiền
             </Button>
             <Dialog open={open} onClose={handleClose} >
@@ -80,16 +80,16 @@ function OrderRefund({ order, reRender, setReRender }) {
                             <Typography sx={{ color: '#444444' }} variant='subtitle2' >{item?.name}</Typography>
                         </Box>
                     ))}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    <Box className='flex flex-col gap-1'>
                         <TextField fullWidth size='medium' sx={{ mt: 2 }} rows={4} multiline label="Nhập khiếu nại..." onChange={(e) => setContent(e.target.value)} />
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
+                        <Box className='flex flex-row items-center gap-1 mt-2'>
                             <Button component="label" htmlFor="upload-image" variant="contained" color="primary" sx={{ borderRadius: '10px', height: 70, width: 70 }} >
                                 <AddCircle />
                                 <input id="upload-image" type="file" accept="image/*,video/mp4" style={{ display: 'none' }} onChange={handleImageChange} />
                             </Button>
                             {Array.isArray(images) &&
                                 images.map((image, index) => (
-                                    <Box key={index} sx={{ position: 'relative', height: 70, width: 70, bgcolor: 'black', borderRadius: '10px' }}>
+                                    <Box key={index} className='h-20 w-20 rounded-xl relative'>
                                         {image?.file?.type.startsWith('video/') ?
                                             <video style={{ height: '100%', width: '100%', borderRadius: '10px' }}>
                                                 <source src={image?.fileUrl} type={image?.file?.type} />

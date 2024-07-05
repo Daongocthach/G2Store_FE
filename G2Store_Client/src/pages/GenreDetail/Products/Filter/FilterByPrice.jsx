@@ -54,6 +54,7 @@ const FilterByPrice = ({ isFilter, setIsFilter, startPrice, setStartPrice, endPr
                     className='border border-gray-300 rounded w-3/6 h-8 text-center'
                 />
             </Box>
+            {/* <Slider step={1000} value={value} onChange={handleSlider} min={1000} max={10000000} /> */}
             <Button startIcon={<PlayCircle />} onClick={() => setIsFilter(!isFilter)}
                 fullWidth variant='contained' size='small' sx={{ mt: 1 }}>Tìm kiếm</Button>
         </Box>

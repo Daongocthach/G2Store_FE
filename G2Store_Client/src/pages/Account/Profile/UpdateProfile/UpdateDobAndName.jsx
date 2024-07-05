@@ -22,20 +22,19 @@ function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
             toast.error('Ngày sinh hoặc tên đăng nhập không được để trống', { position: 'top-center', autoClose: 2000 })
         }
         else {
-            const formattedDob = dob.format('YYYY-MM-DD')
-            console.log(formattedDob)
-            // authenApi.updateProfile({ formattedDob, full_name })
-            //     .then(() => {
-            //         toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
-            //         setReRender(!reRender)
-            //     })
-            //     .catch((error) => {
-            //         console.log(error)
-            //         toast.error('Cập nhật thất bại', { position: 'top-center', autoClose: 2000 })
-            //     })
-            //     .finally(() => {
-            //         setOpen(false)
-            //     })
+            const formattedDob = dob.format('YYYY-MM-DDTHH:mm')
+            authenApi.updateProfile({ dob: formattedDob, full_name })
+                .then(() => {
+                    toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
+                    setReRender(!reRender)
+                })
+                .catch((error) => {
+                    console.log(error)
+                    toast.error('Cập nhật thất bại', { position: 'top-center', autoClose: 2000 })
+                })
+                .finally(() => {
+                    setOpen(false)
+                })
         }
     }
     return (
