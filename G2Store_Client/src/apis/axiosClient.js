@@ -44,6 +44,7 @@ axiosClient.interceptors.response.use(
       localStorage.removeItem('rtk')
       localStorage.removeItem('persist:root')
     }
+    console.error(error)
     toast.error(error?.response?.data?.message, { autoClose: 2000 })
     return Promise.reject(error)
   })

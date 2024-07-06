@@ -9,7 +9,6 @@ import Loading from '../../../components/Loading/Loading'
 import UpdateDobAndName from './UpdateProfile/UpdateDobAndName'
 import UpdatePassword from './UpdateProfile/UpdatePassword'
 import UpdatePhoneNo from './UpdateProfile/UpdatePhoneNo'
-import UpdateEmail from './UpdateProfile/UpdateEmail'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 
 function Profile() {
@@ -40,8 +39,8 @@ function Profile() {
     }
   }
   const handleUpdateAvatar = async (file) => {
-    setLoading(true)
     if (file) {
+      setLoading(true)
       const formData = new FormData()
       formData.append('file', file)
       authenApi.updateAvatar(formData)
@@ -57,9 +56,12 @@ function Profile() {
         .catch((error) => {
           console.log(error)
           triggerAlert('Cập nhật ảnh đại diện thất bại!', true, false)
-
+          setAvatar(null)
         })
         .finally(() => setLoading(false))
+    }
+    else {
+      triggerAlert('Lỗi chọn file!', false, true)
     }
   }
 
@@ -93,7 +95,7 @@ function Profile() {
         <UpdateDobAndName fullNameRoot={user?.full_name} dobRoot={user?.dob} reRender={reRender} setReRender={setReRender} />
         <UpdatePassword reRender={reRender} setReRender={setReRender} />
         <UpdatePhoneNo reRender={reRender} setReRender={setReRender} />
-        <UpdateEmail />
+        {/* <UpdateEmail /> */}
       </ButtonGroup>
       {loading && <Loading />}
     </Box>

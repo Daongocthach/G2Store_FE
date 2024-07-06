@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
+import { TextField, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
 import Feedback from '@mui/icons-material/Feedback'
 import reviewApi from '../../../../../apis/reviewApi'
 import Loading from '../../../../../components/Loading/Loading'

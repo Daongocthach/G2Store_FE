@@ -7,8 +7,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import DialogAction from '../../../../components/Dialog/DialogAction'
 import authenApi from '../../../../apis/authenApi'
+import Loading from '../../../../components/Loading/Loading'
 
 function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [full_name, setFullName] = useState('')
     const [dob, setDob] = useState(null)
@@ -22,6 +24,7 @@ function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
             toast.error('Ngày sinh hoặc tên đăng nhập không được để trống', { position: 'top-center', autoClose: 2000 })
         }
         else {
+            setLoading(true)
             const formattedDob = dob.format('YYYY-MM-DDTHH:mm')
             authenApi.updateProfile({ dob: formattedDob, full_name })
                 .then(() => {
@@ -29,10 +32,11 @@ function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
                     setReRender(!reRender)
                 })
                 .catch((error) => {
-                    console.log(error)
                     toast.error('Cập nhật thất bại', { position: 'top-center', autoClose: 2000 })
+                    console.log(error)
                 })
                 .finally(() => {
+                    setLoading(false)
                     setOpen(false)
                 })
         }
@@ -66,12 +70,11 @@ function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
                                 referenceDate={dayjs('2002-05-07T15:30')}
                             />
                         </LocalizationProvider>
-                        {/* <TextField fullWidth size='small' type='datetime-local'
-                            onChange={(e) => console.log(e.target.value)} /> */}
                     </Box>
                 </DialogContent>
                 <DialogAction setOpen={setOpen} handleClick={handleUpdate} />
             </Dialog>
+            {loading && <Loading />}
         </Box>
     )
 }

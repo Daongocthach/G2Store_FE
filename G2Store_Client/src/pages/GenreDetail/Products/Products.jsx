@@ -54,7 +54,7 @@ function Products() {
 
     useEffect(() => {
         handleResetFilter()
-    }, [data?.name, data?.category?.category_id]);
+    }, [data?.name, data?.category?.category_id])
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
             <Grid item xs={12} sm={12} md={3} lg={3} >
@@ -83,7 +83,7 @@ function Products() {
                     <FilterByDistrict />
                 </Box>
             </Grid>
-            <Grid mt={1} item xs={12} sm={12} md={9} lg={9} >
+            <Grid item xs={12} sm={12} md={9} lg={9} >
                 <Box>
                     <Box className='flex flex-row items-center justify-between'>
                         <Typography variant='body1'>Tìm thấy <b>{products?.numberOfElements}</b> sản phẩm</Typography>

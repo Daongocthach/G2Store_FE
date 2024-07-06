@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Tab, Tabs, Tooltip
+  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow,
+  Paper, TableContainer, Tab, Tabs, Tooltip
 } from '@mui/material'
 import { Chat, Print } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
-import emptyOrder from '../../../assets/img/empty-order.png'
 import orderApi from '../../../apis/orderApi'
 import ViewOrder from './FormOrder/ViewOrder'
 import UpdateOrder from './FormOrder/UpdateOrder'

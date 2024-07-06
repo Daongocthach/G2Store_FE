@@ -1,11 +1,12 @@
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Divider, Tab, Tabs, Breadcrumbs, Link
+  TablePagination, Paper, TableContainer, Divider, Tab, Tabs
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import reviewApi from '../../../../apis/reviewApi'
 import emptyImage from '../../../../assets/img/empty-order.png'
 import FeedBack from './FeedBack/FeedBack'
+import BreadCrumbs from '../../../../components/BreadCrumbs/BreadCrumbs'
 
 function ManageReviews() {
   const [tab, setTab] = useState('')
@@ -34,16 +35,7 @@ function ManageReviews() {
   }, [page, reRender, rowsPerPage])
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/dashboard">
-          Trang chủ
-        </Link>
-        <Link underline="hover" color="inherit" href="/manage/orders">
-          Quản lý đánh giá
-        </Link>
-      </Breadcrumbs>
-      <Typography variant='h5' sx={{ fontWeight: 'bold', minWidth: '100px', m: 2 }}>Quản lý đơn hàng</Typography>
-      <Divider />
+      <BreadCrumbs links={[{ name: 'Quản lý đánh giá', href: '' }]} />
       <Box sx={{ mb: 2 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
           <Tabs value={tab} onChange={handleChange} textColor="primary" variant="scrollable" >
@@ -104,7 +96,7 @@ function ManageReviews() {
         </TableContainer>
         {Array.isArray(reviews) && reviews.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1, mt: 2 }}>
           <img src={emptyImage} />
-          <Typography variant='h6' >Bạn chưa có sản phẩm nào được đánh giá!</Typography>
+          <Typography variant='subtitle1' className='text-gray-600' >Bạn chưa có đánh giá sản phẩm nào!</Typography>
         </Box>}
       </Box>
     </Box>

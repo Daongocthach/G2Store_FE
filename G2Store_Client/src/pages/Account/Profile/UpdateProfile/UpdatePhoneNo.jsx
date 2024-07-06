@@ -3,14 +3,17 @@ import { TextField, Box, Dialog, DialogTitle, Button, DialogContent } from '@mui
 import { toast } from 'react-toastify'
 import authenApi from '../../../../apis/authenApi'
 import DialogAction from '../../../../components/Dialog/DialogAction'
+import Loading from '../../../../components/Loading/Loading'
 
 function UpdatePhoneNo({ reRender, setReRender }) {
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [new_phone_no, setPhoneNo] = useState('')
     const [touched, setTouched] = useState(false)
 
     const handleUpdatePhoneNo = async () => {
         if (new_phone_no) {
+            setLoading(true)
             authenApi.updatePhone({ new_phone_no })
                 .then(() => {
                     toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
@@ -20,7 +23,10 @@ function UpdatePhoneNo({ reRender, setReRender }) {
                     console.log(err)
                     toast.error('Cập nhật thất bại', { position: 'top-center', autoClose: 2000 })
                 })
-                .finally(() => setOpen(false))
+                .finally(() => {
+                    setLoading(false)
+                    setOpen(false)
+                })
         }
         else {
             toast.error('Số điện thoại không được để trống', { position: 'top-center', autoClose: 2000 })
@@ -41,6 +47,7 @@ function UpdatePhoneNo({ reRender, setReRender }) {
                 </DialogContent>
                 <DialogAction setOpen={setOpen} handleClick={handleUpdatePhoneNo} />
             </Dialog>
+            {loading && <Loading />}
         </Box>
     )
 }

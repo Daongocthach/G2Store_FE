@@ -6,7 +6,6 @@ import { deleteAllCart } from '../../../redux/actions/cart'
 import { formatCurrency } from '../../../utils/price'
 import imgVNPAY from '../../../assets/img/imgVNPAY.png'
 import imgVNPAY2 from '../../../assets/img/vnpay.png'
-import imgZaloPay from '../../../assets/img/zalopay.png'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import orderApi from '../../../apis/orderApi'
 import Loading from '../../../components/Loading/Loading'
@@ -115,11 +114,11 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
                     <Typography className='text-gray-600' fontSize={14}>Thanh toán qua VNPAY</Typography>
                     <img src={imgVNPAY} alt='thanh toan Vnpay' style={{ height: 50, width: 50 }} />
                 </Box>
-                <Box className='flex items-center justify-start gap-1'>
+                {/* <Box className='flex items-center justify-start gap-1'>
                     <Radio className='h-[30px] w-[30px]' checked={paymentType == 'ZALOPAY'} onChange={() => setPaymentType('ZALOPAY')} />
                     <Typography className='text-gray-600' fontSize={14}> Thanh toán qua ZaloPay</Typography>
                     <img src={imgZaloPay} alt='thanh toan ZaloPay' style={{ height: 50, width: 50 }} />
-                </Box>
+                </Box> */}
             </Box>
             <Divider sx={{ mb: 2 }} />
             <Button size='large' fullWidth color='error' variant='contained' sx={{ fontWeight: 'bold' }} onClick={handleClickOrder}> Đặt hàng </Button>

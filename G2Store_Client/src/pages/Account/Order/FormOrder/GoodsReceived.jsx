@@ -32,7 +32,7 @@ function GoodsReceived({ orderId, reRender, setReRender }) {
     }
     return (
         <Box>
-            <Button variant="contained" color='success' size='small' sx={{ borderRadius: 2 }} onClick={handleClickOpen}>
+            <Button variant="contained" color='success' size='small' onClick={handleClickOpen}>
                 Đã nhận hàng
             </Button>
             <Dialog open={open} onClose={() => setOpen(false)} >

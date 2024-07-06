@@ -21,7 +21,7 @@ const authenApi = {
             code, new_pass
         }
         const url = 'customers/reset-password'
-        return axiosClient.get(url, data)
+        return axiosClient.put(url, data)
     },
     logout() {
         const url = 'logout'

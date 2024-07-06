@@ -83,7 +83,7 @@ function Sellers() {
               {Array.isArray(sellers) && sellers?.map((seller, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell ><Typography maxWidth={150} overflow={'clip'}>{seller?.email || null}</Typography></TableCell>
+                    <TableCell ><Typography maxWidth={150} className='line-clamp-1'>{seller?.email || null}</Typography></TableCell>
                     <TableCell ><Typography maxWidth={150} overflow={'clip'}>{seller?.fullName || '(Chưa cập nhật)'}</Typography></TableCell>
                     <TableCell ><Typography maxWidth={150} overflow={'clip'}>{seller?.phone_no || '(Chưa cập nhật)'}</Typography></TableCell>
                     <TableCell>
