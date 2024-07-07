@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
 import {
-    Typography, Grid, Box, Menu, Chip, Avatar, CircularProgress, Input, Rating, Pagination,
+    Typography, Grid, Box, Menu, Chip, Avatar, CircularProgress, Input, Pagination,
     FormControl, MenuItem, Select, Tooltip, Tabs, Tab
 } from '@mui/material'
 import { ChatBubbleOutline, AddBusiness, Dehaze, KeyboardArrowDown, RestartAlt } from '@mui/icons-material'
 import { useLocation, useNavigate } from 'react-router-dom'
-import imageShop from '../../assets/img/shopDesign.png'
 import MenuCategory from '../../components/MenuCategory/MenuCategory'
 import shopApi from '../../apis/shopApi'
 import Loading from '../../components/Loading/Loading'
-import avatarNull from '../../assets/img/avatar.png'
 import CardProduct from '../../components/Product/CardProduct'
 import productApi from '../../apis/productApi'
+import EmptyData from '../../components/EmptyData/EmptyData'
+import { mockData } from '../../apis/mockdata'
 
 const sortList = [
     { value: 'DEFAULT', lable: 'Mặc định' },
@@ -96,10 +96,10 @@ function ShopPage() {
     return (
         <Box className="min-h-screen p-2">
             <Box className="flex items-center justify-start bg-orange-500 h-30 relative">
-                <img src={imageShop} className="object-cover h-40 w-full" />
+                <img src={mockData.images.shopDesign} className="object-cover h-40 w-full" />
                 <Box className="absolute flex items-center bg-white h-22 ml-2 p-5 gap-3 rounded-lg flex-wrap">
                     <Avatar className="w-12 h-12">
-                        <img src={shop?.image || avatarNull} className="object-contain w-full h-full" />
+                        <img src={shop?.image} className="object-contain w-full h-full" />
                     </Avatar>
                     <Box className='w-40'>
                         <Typography variant="h6" className='text-gray-600'>{shop?.name}</Typography>
@@ -155,12 +155,17 @@ function ShopPage() {
                     {loading && <CircularProgress />}
                     {!loading && (
                         <Grid container spacing={1} maxWidth="lg">
-                            {Array.isArray(top5products) && top5products.map((product, index) => (
-                                <Grid key={index} item xs={6} sm={6} md={3} lg={2}>
-                                    <CardProduct product={product} isShort />
-                                </Grid>
-                            ))}
+                            {Array.isArray(top5products) && top5products.length > 0 ? (
+                                top5products.map((product, index) => (
+                                    <Grid key={index} item xs={6} sm={6} md={3} lg={2}>
+                                        <CardProduct product={product} isShort />
+                                    </Grid>
+                                ))
+                            ) : (
+                                <EmptyData content="Không có sản phẩm nào được tìm thấy!" />
+                            )}
                         </Grid>
+
                     )}
                 </Box>
             </Box>
@@ -186,11 +191,15 @@ function ShopPage() {
                     {loading && <CircularProgress />}
                     {!loading && (
                         <Grid container spacing={1} p={1}>
-                            {Array.isArray(products?.content) && products?.content.map((product, index) => (
-                                <Grid key={index} item xs={3} sm={3} md={3} lg={2}>
-                                    <CardProduct product={product} />
-                                </Grid>
-                            ))}
+                            {Array.isArray(products?.content) && products.content.length > 0 ? (
+                                products.content.map((product, index) => (
+                                    <Grid key={index} item xs={3} sm={3} md={3} lg={2}>
+                                        <CardProduct product={product} />
+                                    </Grid>
+                                ))
+                            ) : (
+                                <EmptyData content="Không có sản phẩm nào được tìm thấy!" />
+                            )}
                         </Grid>
                     )}
                     <Box className="flex flex-row items-center justify-center mt-2 mb-2">

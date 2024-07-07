@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { formatCurrency } from '../../../utils/price'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
-import imgSale from '../../../assets/img/sale.jpg'
-import imgPayment from '../../../assets/img/payment.png'
+import { mockData } from '../../../apis/mockdata'
 
 function RightInformation({ cartItems, isSoldOut }) {
     const navigate = useNavigate()
@@ -26,7 +25,7 @@ function RightInformation({ cartItems, isSoldOut }) {
     }
     return (
         <Box className='flex flex-col gap-2'>
-            <img src={imgPayment} alt='payment' className='h-30 w-full rounded-lg' />
+            <img src={mockData.images.payment} alt='payment' className='h-30 w-full rounded-lg' />
             <Typography fontSize={20} fontWeight={'bold'} className="text-gray-700">Thông tin đơn hàng</Typography>
             <Box className="flex items-center justify-between gap-2 mt-4">
                 <Typography fontSize={15} className="text-gray-700">Tiền hàng ({cartQuantity && cartQuantity.length}):</Typography>
@@ -38,7 +37,7 @@ function RightInformation({ cartItems, isSoldOut }) {
             </Box>
             <Typography fontSize={13} className="text-gray-700 text-end">Đã bao gồm vat (nếu có)</Typography>
             <Button fullWidth onClick={handleClickCheckout} variant='contained' color='warning'>Thanh toán</Button>
-            <img src={imgSale} alt='sale' className='h-30 w-full rounded-lg' />
+            <img src={mockData.images.sale} alt='sale' className='h-30 w-full rounded-lg' />
         </Box>
     )
 }

@@ -3,13 +3,13 @@ import { Container, TextField, Stack, Button, Box, Typography } from '@mui/mater
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import validator from 'validator'
-import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import Loading from '../../../components/Loading/Loading'
 import { login, updateAvatar } from '../../../redux/actions/auth'
 import { setCart } from '../../../redux/actions/cart'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
+import { mockData } from '../../../apis/mockdata'
 
 function Login() {
   const triggerAlert = useAlert()
@@ -63,7 +63,7 @@ function Login() {
   return (
     <Container disableGutters maxWidth={false} className="h-screen">
       <Box className="w-full h-full overflow-hidden relative bg-black">
-        <img src={loginImage} className="w-full h-full object-cover opacity-50" />
+        <img src={mockData.images.loginImage} className="w-full h-full object-cover opacity-50" />
         <Box className="absolute w-[90%] sm:w-[70%] md:w-[30%] h-auto rounded-md top-1/3 left-1/2
         bg-black opacity-80 transform -translate-x-1/2 -translate-y-1/3 p-8">
           <Typography variant='h6' className="text-center text-white font-bold">Đăng nhập</Typography>

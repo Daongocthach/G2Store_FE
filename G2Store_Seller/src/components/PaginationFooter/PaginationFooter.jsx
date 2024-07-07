@@ -1,7 +1,6 @@
-import { Box, Typography, TableRow, TableFooter, TablePagination, TableCell } from '@mui/material'
-import emptyOrder from '../../assets/img/empty-order.png'
-
-function PaginationFooter({ isNotEmpty, totalElements, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage }) {
+import { TableRow, TableFooter, TablePagination, TableCell } from '@mui/material'
+import EmptyData from '../EmptyData/EmptyData'
+function PaginationFooter({ isNotEmpty, content, totalElements, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage }) {
   return (
     <TableFooter>
       {isNotEmpty ?
@@ -19,11 +18,8 @@ function PaginationFooter({ isNotEmpty, totalElements, page, rowsPerPage, handle
         </TableRow>
         :
         <TableRow >
-          <TableCell colSpan={6}>
-            <Box className='flex flex-col items-center justify-center'>
-              <img src={emptyOrder} />
-              <Typography variant='subtitle1' className='text-gray-600'>Bạn chưa có đơn hàng nào</Typography>
-            </Box>
+          <TableCell colSpan={12}>
+            <EmptyData content={content} />
           </TableCell>
         </TableRow>
       }

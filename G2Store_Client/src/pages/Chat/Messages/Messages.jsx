@@ -3,7 +3,6 @@ import { Send, AddPhotoAlternate, DeleteForever } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
-import EmojiChoose from '../../../components/EmojiChoose/EmojiChoose'
 var stompClient = null
 
 function Messages({ room }) {
@@ -80,7 +79,6 @@ function Messages({ room }) {
                 </Box>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <EmojiChoose />
                 <Tooltip title='Thêm hình ảnh'><AddPhotoAlternate sx={{ fontSize: 30, cursor: 'pointer', color: '#1976d2' }} /></Tooltip>
                 <Tooltip title='Xóa cuộc trò chuyện'><DeleteForever sx={{ fontSize: 30, cursor: 'pointer', color: 'gray' }} /></Tooltip>
                 <TextField label="Nhập tin nhắn" variant="outlined" sx={{ bgcolor: '#e8f0fe' }} color='primary' size='small' fullWidth value={inputText} onChange={handleInputChange}

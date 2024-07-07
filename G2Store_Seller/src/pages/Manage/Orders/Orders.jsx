@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow,
-  Paper, TableContainer, Tab, Tabs, Tooltip
-} from '@mui/material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, Tab, Tabs, Tooltip } from '@mui/material'
 import { Chat, Print } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
@@ -115,8 +112,9 @@ function Orders() {
                     </TableRow>)
                 })}
               </TableBody>
-              <PaginationFooter isNotEmpty={(Array.isArray(orders) && orders.length > 0)} totalElements={totalElements}
-                rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} handleChangeRowsPerPage={handleChangeRowsPerPage} />
+              <PaginationFooter isNotEmpty={(Array.isArray(orders) && orders.length > 0)} content={'Bạn chưa có đơn hàng nào!'}
+                totalElements={totalElements} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage}
+                handleChangeRowsPerPage={handleChangeRowsPerPage} />
             </Table>
           </TableContainer>
         </Box>

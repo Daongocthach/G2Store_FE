@@ -7,15 +7,6 @@ function Data({ data, balance }) {
             <Grid item xs={12} sm={12} md={4} lg={3} >
                 <Chip icon={<Money />} label={'Doanh thu: ' + formatCurrency(balance || 0)} />
             </Grid>
-            {/* <Grid item xs={12} sm={12} md={4} lg={3} >
-                <Chip icon={<Today />} label={'Thu nhập ngày: ' + formatCurrency(0)} />
-            </Grid> */}
-            {/* <Grid item xs={12} sm={12} md={4} lg={3} >
-                <Chip icon={<ViewWeek />} label={'Thu nhập tuần: ' + formatCurrency(0)} />
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={3} >
-                <Chip icon={<CalendarMonth />} label={'Thu nhập tháng: ' + formatCurrency(0)} />
-            </Grid> */}
             <Grid item xs={12} sm={12} md={4} lg={3} >
                 <Chip icon={<Category />} label={'Sản phẩm: ' + data?.onSaleProductCount + ' sản phẩm'} />
             </Grid>

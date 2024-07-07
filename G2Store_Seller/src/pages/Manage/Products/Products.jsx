@@ -1,6 +1,6 @@
 import {
-  Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter, Checkbox,
-  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Tooltip, Switch
+  Button, Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Checkbox,
+  Paper, TableContainer, FormControl, Select, MenuItem, Tooltip, Switch
 } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
@@ -9,11 +9,12 @@ import { AddCircle, Create, GetApp, FileUpload } from '@mui/icons-material'
 import DeleteProduct from './FormProduct/DeleteProduct'
 import productApi from '../../../apis/productApi'
 import { formatCurrency } from '../../../utils/price'
-import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
 import SearchById from '../../../components/Search/Search'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
+import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
+import EmptyData from '../../../components/EmptyData/EmptyData'
 
 function Products() {
   const navigate = useNavigate()
@@ -211,26 +212,11 @@ function Products() {
                 )
               })}
             </TableBody>
-            {Array.isArray(products) && products.length > 0 && <TableFooter>
-              <TableRow>
-                <TablePagination
-                  colSpan={12}
-                  labelRowsPerPage={'Số lượng mỗi trang'}
-                  rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
-                  count={totalElements}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>}
+            <PaginationFooter isNotEmpty={(Array.isArray(products) && products.length > 0)} content={'Bạn chưa có sản phẩm nào!'}
+              totalElements={totalElements} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage} />
           </Table>
         </TableContainer>
-        {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-          <img src={emptyImage} />
-          <Typography variant='subtitle1' color={'#444444'} >Bạn chưa có sản phẩm nào</Typography>
-        </Box>}
       </Box>
       {loading && <Loading />}
     </Box>

@@ -27,7 +27,7 @@ function MenuCategory({ categories, reRender, setReRender, isReset, setIsReset }
                         '&:hover .action-buttons': { visibility: 'visible', bgcolor: 'inherit', cursor: 'pointer' }
                     }}
                         key={index}>
-                        <Typography variant='subtitle1' onClick={() => handleClick(category)}
+                        <Typography variant='body1' onClick={() => handleClick(category)}
                             sx={{ color: selectCategory === category ? '#2a99ff' : '#444444', width: 130, textAlign: 'left', cursor:'pointer' }} >
                             {category?.name}
                         </Typography>

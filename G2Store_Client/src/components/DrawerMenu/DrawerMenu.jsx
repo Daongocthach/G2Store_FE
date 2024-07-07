@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../redux/actions/auth'
 import { persistor } from '../../redux/store'
-import G2Logo from '../../assets/img/G2Logo.png'
 import authenApi from '../../apis/authenApi'
 import { useAlert } from '../ShowAlert/ShowAlert'
+import { mockData } from '../../apis/mockdata'
 
 const links = [
     { to: '/cart', title: 'Giỏ hàng', icon: <ShoppingCart fontSize="small" /> },
@@ -36,7 +36,7 @@ export default function DrawerMenu({ atk }) {
     const DrawerList = (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
             <Box className="flex items-center gap-1 bg-gray-800">
-                <img src={G2Logo} className="h-16 w-16" />
+                <img src={mockData.images.G2Logo} className="h-16 w-16" />
                 <Link to="/" className="no-underline">
                     <Typography variant="h5" fontWeight={'bold'} className="text-white cursor-pointer">G2Store</Typography>
                 </Link>

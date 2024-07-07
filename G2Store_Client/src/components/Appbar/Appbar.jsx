@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Account from './Account/Account'
 import Search from './Search/Search'
-import G2Logo from '../../assets/img/G2Logo.png'
 import DrawerMenu from '../DrawerMenu/DrawerMenu'
+import { mockData } from '../../apis/mockdata'
 
 function AppBar() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ function AppBar() {
     <Box className="static w-full flex items-center justify-between overflow-auto bg-gray-800 h-16 sm:px-2 md:px-10">
       <Box className="flex items-center gap-3 flex-1 px-1">
         <Box className="flex items-center gap-1">
-          <img src={G2Logo} className="h-16 w-16 hidden lg:flex" />
+          <img src={mockData.images.G2Logo} className="h-16 w-16 hidden lg:flex" />
           <Link to="/" className="no-underline">
             <Typography variant="h5" fontWeight={'bold'} className="hidden sm:flex text-white hover:text-orange-300">G2Store</Typography>
           </Link>

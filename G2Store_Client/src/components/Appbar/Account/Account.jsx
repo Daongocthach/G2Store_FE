@@ -6,8 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../../redux/actions/auth'
 import { persistor } from '../../../redux/store'
 import authenApi from '../../../apis/authenApi'
-import avatarNull from '../../../assets/img/avatar.png'
 import { useAlert } from '../../ShowAlert/ShowAlert'
+import { mockData } from '../../../apis/mockdata'
 
 function Account({ atk, avatar }) {
     const triggerAlert = useAlert()
@@ -38,7 +38,7 @@ function Account({ atk, avatar }) {
                     <Link to={'/register'} ><Chip icon={<PersonAdd />} label='Đăng Ký' sx={{ bgcolor: '#DDDDDD' }} /></Link>
                 </Box>}
                 {atk && <Avatar className='w-10 h-10' >
-                    <img src={avatar || avatarNull} className='w-full h-full object-contain' />
+                    <img src={avatar || mockData.images.avatarNull} className='w-full h-full object-contain' />
                 </Avatar>}
             </IconButton>
             <Menu open={open} anchorEl={anchorEl} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} onClose={handleClose}>

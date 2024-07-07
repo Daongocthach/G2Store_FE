@@ -4,12 +4,12 @@ import { AddCircle } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
 import { updateAvatar } from '../../../redux/actions/auth'
-import avatarNull from '../../../assets/img/avatar.png'
 import Loading from '../../../components/Loading/Loading'
 import UpdateDobAndName from './UpdateProfile/UpdateDobAndName'
 import UpdatePassword from './UpdateProfile/UpdatePassword'
 import UpdatePhoneNo from './UpdateProfile/UpdatePhoneNo'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
+import { mockData } from '../../../apis/mockdata'
 
 function Profile() {
   const triggerAlert = useAlert()
@@ -68,7 +68,7 @@ function Profile() {
   return (
     <Box className="flex flex-col items-center justify-center gap-2">
       <Box className='relative bg-black rounded-full w-28 h-28' >
-        <img src={avatar || avatarNull} className='w-full h-full rounded-full opacity-70' />
+        <img src={avatar || mockData.images.avatarNull} className='w-full h-full rounded-full opacity-70' />
         <IconButton component="label" htmlFor="upload-image"
           className='absolute' sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} >
           <AddCircle className='text-gray-300' />

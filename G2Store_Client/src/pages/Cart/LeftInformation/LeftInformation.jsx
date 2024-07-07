@@ -1,7 +1,6 @@
 import { Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, ToggleButton, Typography } from '@mui/material'
 import { Remove, Add } from '@mui/icons-material'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import DeleteItem from './../DeleteItem/DeleteItem'
 import GoToShop from '../../../components/GoToShop/GoToShop'
 import cartItemV2Api from '../../../apis/cartItemApiV2'
@@ -9,7 +8,6 @@ import { formatCurrency } from '../../../utils/price'
 import OrderItem from '../../../components/Product/OrderItem'
 
 function LeftInformation({ cartItems, reRender, setReRender }) {
-    const navigate = useNavigate()
     const cartQuantity = useSelector(state => state.cart.cartItems)
     const handleIncrease = (shop_item_id, quantity) => {
         updateQuantity(shop_item_id, quantity + 1)

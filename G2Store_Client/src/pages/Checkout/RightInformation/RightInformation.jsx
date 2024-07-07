@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteAllCart } from '../../../redux/actions/cart'
 import { formatCurrency } from '../../../utils/price'
-import imgVNPAY from '../../../assets/img/imgVNPAY.png'
-import imgVNPAY2 from '../../../assets/img/vnpay.png'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import orderApi from '../../../apis/orderApi'
 import Loading from '../../../components/Loading/Loading'
 import { IOSSwitch } from '../../../components/Switch/Switch'
+import { mockData } from '../../../apis/mockdata'
 
 function RightInformation({ cartItems, address, feeShips, paymentType, setPaymentType }) {
     const triggerAlert = useAlert()
@@ -112,17 +111,12 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
                 <Box className='flex items-center justify-start gap-1 mt-2'>
                     <Radio className='h-[30px] w-[30px]' checked={paymentType == 'VNPAY'} onChange={() => setPaymentType('VNPAY')} />
                     <Typography className='text-gray-600' fontSize={14}>Thanh toán qua VNPAY</Typography>
-                    <img src={imgVNPAY} alt='thanh toan Vnpay' style={{ height: 50, width: 50 }} />
+                    <img src={mockData.images.imgVNPAY} alt='thanh toan Vnpay' style={{ height: 50, width: 50 }} />
                 </Box>
-                {/* <Box className='flex items-center justify-start gap-1'>
-                    <Radio className='h-[30px] w-[30px]' checked={paymentType == 'ZALOPAY'} onChange={() => setPaymentType('ZALOPAY')} />
-                    <Typography className='text-gray-600' fontSize={14}> Thanh toán qua ZaloPay</Typography>
-                    <img src={imgZaloPay} alt='thanh toan ZaloPay' style={{ height: 50, width: 50 }} />
-                </Box> */}
             </Box>
             <Divider sx={{ mb: 2 }} />
             <Button size='large' fullWidth color='error' variant='contained' sx={{ fontWeight: 'bold' }} onClick={handleClickOrder}> Đặt hàng </Button>
-            <img src={imgVNPAY2} alt='sale' className='h-auto w-full rounded-lg' />
+            <img src={mockData.images.vnpay} alt='sale' className='h-auto w-full rounded-lg' />
             {loading && <Loading />}
         </Box>
     )

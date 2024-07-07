@@ -1,12 +1,10 @@
-import {
-  Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, Divider, Tab, Tabs
-} from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, Tab, Tabs } from '@mui/material'
 import { useEffect, useState } from 'react'
 import reviewApi from '../../../../apis/reviewApi'
 import emptyImage from '../../../../assets/img/empty-order.png'
 import FeedBack from './FeedBack/FeedBack'
 import BreadCrumbs from '../../../../components/BreadCrumbs/BreadCrumbs'
+import PaginationFooter from '../../../../components/PaginationFooter/PaginationFooter'
 
 function ManageReviews() {
   const [tab, setTab] = useState('')
@@ -78,26 +76,11 @@ function ManageReviews() {
                   )
                 })}
             </TableBody>
-            {Array.isArray(reviews) && reviews.length > 0 && <TableFooter>
-              <TableRow>
-                <TablePagination
-                  colSpan={12}
-                  labelRowsPerPage={'Số lượng mỗi trang'}
-                  rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
-                  count={totalElements}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>}
+            <PaginationFooter isNotEmpty={(Array.isArray(reviews) && reviews.length > 0)} content={'Bạn chưa có đánh giá sản phẩm nào!'}
+              totalElements={totalElements} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage} />
           </Table>
         </TableContainer>
-        {Array.isArray(reviews) && reviews.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1, mt: 2 }}>
-          <img src={emptyImage} />
-          <Typography variant='subtitle1' className='text-gray-600' >Bạn chưa có đánh giá sản phẩm nào!</Typography>
-        </Box>}
       </Box>
     </Box>
   )

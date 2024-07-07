@@ -4,7 +4,7 @@ import { Visibility, Delete } from '@mui/icons-material'
 import Loading from '../../../../components/Loading/Loading'
 import productApi from '../../../../apis/productApi'
 import { formatCurrency } from '../../../../utils/price'
-import emptyImage from '../../../../assets/img/empty-order.png'
+import EmptyData from '../../../../components/EmptyData/EmptyData'
 
 function ViewShopCateProduct({ shop_cate_id }) {
     const [loading, setLoading] = useState(false)
@@ -14,11 +14,6 @@ function ViewShopCateProduct({ shop_cate_id }) {
     const handleClose = () => {
         setOpen(false)
     }
-    const fetchData = async () => {
-
-    }
-    if (shop_cate_id)
-        fetchData()
     const handleOpen = () => {
         setLoading(true)
         productApi.getShopCateProducts(shop_cate_id, 0, 16)
@@ -39,22 +34,27 @@ function ViewShopCateProduct({ shop_cate_id }) {
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Danh sách sản phẩm</DialogTitle>
                 <DialogContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
-                        {Array.isArray(products) && products.map((product, index) => (
-                            <Box key={index} sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                                    <img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '70px', height: '70px', cursor: 'pointer', borderRadius: 3 }} />
-                                    <Box>
-                                        <Typography variant='body1' color={'#444444'}>{product?.name}</Typography>
-                                        <Typography variant='caption' fontWeight={'bold'} color={'#cd3333'}>{formatCurrency(product?.price)}</Typography>
+                        {Array.isArray(products) && products.length > 0 ? (
+                            products.map((product, index) => (
+                                <Box key={index} className='flex flex-row gap-1 items-center justify-between w-full' >
+                                    <Box className='flex gap-1 items-center' >
+                                        <img src={product?.images[0]?.file_url} alt={product?.name}
+                                            className='w-20 h-20 cursor-pointer rounded-md' />
+                                        <Box>
+                                            <Typography variant='body1' color={'#444444'}>{product?.name}</Typography>
+                                            <Typography variant='caption' fontWeight={'bold'} color={'#cd3333'}>
+                                                {formatCurrency(product?.price)}
+                                            </Typography>
+                                        </Box>
                                     </Box>
+                                    <Tooltip title='Xóa sản phẩm'>
+                                        <Delete sx={{ ':hover': { bgcolor: 'inherit' }, color: '#444444', cursor: 'pointer' }} />
+                                    </Tooltip>
                                 </Box>
-                                <Tooltip title='Xóa sản phẩm'><Delete sx={{ ':hover': { bgcolor: 'inherit' }, color: '#444444', cursor: 'pointer' }} /></Tooltip>
-                            </Box>
-                        ))}
-                        {Array.isArray(products) && products.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
-                            <img src={emptyImage} />
-                            <Typography variant='h6' >Chưa có sản phẩm thuộc danh mục này!</Typography>
-                        </Box>}
+                            ))
+                        ) : (
+                            <EmptyData content={'Không tìm thấy sản phẩm nào!'} />
+                        )}
                     </Box>
                 </DialogContent>
                 <DialogActions>

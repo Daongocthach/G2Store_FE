@@ -6,8 +6,8 @@ import categoryApi from '../../../apis/categoryApi'
 import MenuCategory from './MenuCategory/MenuCategory'
 import Loading from '../../../components/Loading/Loading'
 import AddCategory from './FormCategory/AddCategory'
-import emptyImage from '../../../assets/img/empty-order.png'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import EmptyData from '../../../components/EmptyData/EmptyData'
 
 function Categories() {
   const navigate = useNavigate()
@@ -40,14 +40,20 @@ function Categories() {
       <BreadCrumbs links={[{ name: 'Quản lý ngành hàng', href: '' }]} />
       <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
         <Box sx={{ bgcolor: '#2a99ff', display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant='h6' color={'white'} >Quản lý ngành hàng</Typography>
+          <Typography variant='subtitle1' fontWeight={'bold'} color={'white'} >Quản lý ngành hàng</Typography>
           <AddCategory isParent={true} reRender={reRender} setReRender={setReRender} />
         </Box>
-        <MenuCategory categories={categories} reRender={reRender} setReRender={setReRender} isReset={isReset} setIsReset={setIsReset} />
-        {Array.isArray(categories) && categories.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-          <img src={emptyImage} />
-          <Typography variant='h6' >Bạn chưa có danh mục nào</Typography>
-        </Box>}
+        {Array.isArray(categories) && categories.length > 0 ? (
+          <MenuCategory
+            categories={categories}
+            reRender={reRender}
+            setReRender={setReRender}
+            isReset={isReset}
+            setIsReset={setIsReset}
+          />
+        ) : (
+          <EmptyData content="Không có danh mục nào được tìm thấy!" />
+        )}
       </Box>
       {loading && <Loading />}
     </Box>

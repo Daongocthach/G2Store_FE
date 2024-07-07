@@ -7,6 +7,7 @@ import productApi from '../../../apis/productApi'
 import CardProduct from '../../../components/Product/CardProduct'
 import FilterByPrice from './Filter/FilterByPrice'
 import FilterByDistrict from './Filter/FilterByDistrict'
+import EmptyData from '../../../components/EmptyData/EmptyData'
 
 function Products() {
     const navigate = useNavigate()
@@ -100,18 +101,23 @@ function Products() {
                             </FormControl>
                         </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box className='flex flex-col items-center justify-center'>
                         {loading && <CircularProgress />}
-                        {!loading && <Grid container spacing={1} maxWidth='lg' >
-                            {Array.isArray(products?.content) && products?.content.map((product, index) => (
-                                <Grid key={index} item xs={12} sm={6} md={4} lg={3} >
-                                    <CardProduct product={product} />
-                                </Grid>
-                            ))}
-                        </Grid>}
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 2, mb: 2 }}>
-                        <Pagination count={products?.totalPages} variant="outlined" color="primary" page={page} onChange={handleChangePage} />
+                        {!loading && (
+                            <Grid container spacing={1} maxWidth="lg">
+                                {Array.isArray(products?.content) && products.content.length > 0 ? (
+                                    products.content.map((product, index) => (
+                                        <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+                                            <CardProduct product={product} />
+                                        </Grid>
+                                    ))
+                                ) : (
+                                    <EmptyData content="Không có sản phẩm nào được tìm thấy!" />
+                                )}
+                            </Grid>
+                        )}
+                        <Pagination count={products?.totalPages} variant="outlined" color="primary" page={page} className='mt-2'
+                        onChange={handleChangePage} />
                     </Box>
                 </Box>
             </Grid>

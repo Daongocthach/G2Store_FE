@@ -1,6 +1,6 @@
 import {
-  Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow, TableFooter,
-  TablePagination, TableContainer, FormControl, Select, MenuItem, Button, Tooltip
+  Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow,
+  TableContainer, FormControl, Select, MenuItem, Button, Tooltip
 } from '@mui/material'
 import { AddCircle, Create } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
@@ -9,11 +9,12 @@ import { format } from 'date-fns'
 import DeleteVoucher from './FormVoucher/DeleteVoucher'
 import { formatCurrency } from '../../../utils/price'
 import voucherApi from '../../../apis/voucherApi'
-import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
 import SearchById from '../../../components/Search/Search'
 import AddVoucherToProducts from './FormVoucher/AddVoucherToProducts'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
+import EmptyData from '../../../components/EmptyData/EmptyData'
 
 function Vouchers() {
   const navigate = useNavigate()
@@ -122,26 +123,11 @@ function Vouchers() {
                 )
               })}
             </TableBody>
-            {Array.isArray(vouchers) && vouchers.length > 0 && <TableFooter>
-              <TableRow>
-                <TablePagination
-                  colSpan={12}
-                  labelRowsPerPage={'Số lượng mỗi trang'}
-                  rowsPerPageOptions={[5, { value: totalElements, label: 'Tất cả' }]}
-                  count={totalElements}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>}
+            <PaginationFooter isNotEmpty={(Array.isArray(vouchers) && vouchers.length > 0)} content={'Bạn chưa có mã giảm giá nào!'}
+              totalElements={totalElements} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage} />
           </Table>
         </TableContainer>
-        {Array.isArray(vouchers) && vouchers.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-          <img src={emptyImage} />
-          <Typography variant='subtitle1' color={'#444444'} >Chưa có mã giảm giá nào</Typography>
-        </Box>}
       </Box>
       {loading && <Loading />}
     </Box>

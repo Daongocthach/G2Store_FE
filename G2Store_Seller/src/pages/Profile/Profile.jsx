@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Typography, Box, Input, Paper } from '@mui/material'
 import authenApi from '../../apis/authenApi'
 import Loading from '../../components/Loading/Loading'
-// import DialogUpdate from '../../components/Dialog/DialogUpdate'
 import UpdateAvatar from './UpdateSeller/UpdateAvatar'
 
 function Profile() {

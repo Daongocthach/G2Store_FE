@@ -4,6 +4,7 @@ import { KeyboardArrowDown, Close, Receipt } from '@mui/icons-material'
 import voucherApi from '../../apis/voucherApi'
 import emptyOrder from '../../assets/img/empty-order.png'
 import Voucher from './Voucher/Voucher'
+import EmptyData from '../EmptyData/EmptyData'
 
 {/**Component Use for ProductDetail, Checkout */ }
 function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReRender }) {
@@ -56,10 +57,7 @@ function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReR
           ))
         }
         {Array.isArray(vouchers) && vouchers?.length < 1 &&
-          <Box className='flex flex-col items-center p-2 min-w-fit'>
-            <img src={emptyOrder} className='object-cover h-52 w-52' style={{ objectFit: 'cover', height: '200px', width: '200px' }} />
-            <Typography className='text-gray-600'>Chưa có mã khuyến mãi nào</Typography>
-          </Box>
+          <EmptyData content={'Sản phẩm này chưa có khuyến mãi nào!'} />
         }
         <Divider />
       </Popover>

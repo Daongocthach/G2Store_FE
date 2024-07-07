@@ -27,6 +27,7 @@ axiosClient.interceptors.request.use(async (config) => {
         if (error?.response?.status === 401) {
           localStorage.removeItem('atk')
           localStorage.removeItem('rtk')
+          localStorage.removeItem('persist:root')
         }
       }
     }
