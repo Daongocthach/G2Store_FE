@@ -1,20 +1,14 @@
 import { PlayCircle } from '@mui/icons-material'
-import { Box, Typography, FormGroup, FormControlLabel, Radio, Button, Slider } from '@mui/material'
+import { Box, Typography, FormGroup, FormControlLabel, Radio, Button } from '@mui/material'
 import { NumericFormat } from 'react-number-format'
 import { useState } from 'react'
 
 const FilterByPrice = ({ isFilter, setIsFilter, startPrice, setStartPrice, endPrice, setEndPrice }) => {
     const [checkPrice, setCheckPrice] = useState()
-    const [value, setValue] = useState([0, 100000000])
     const handlePriceChange = (min, max, check) => {
         setStartPrice(min)
         setEndPrice(max)
         setCheckPrice(check)
-    }
-    const handleSlider = (e, newValue) => {
-        setValue(newValue)
-        setStartPrice(newValue[0])
-        setEndPrice(newValue[1])
     }
     return (
         <Box >
@@ -54,7 +48,6 @@ const FilterByPrice = ({ isFilter, setIsFilter, startPrice, setStartPrice, endPr
                     className='border border-gray-300 rounded w-3/6 h-8 text-center'
                 />
             </Box>
-            {/* <Slider step={1000} value={value} onChange={handleSlider} min={1000} max={10000000} /> */}
             <Button startIcon={<PlayCircle />} onClick={() => setIsFilter(!isFilter)}
                 fullWidth variant='contained' size='small' sx={{ mt: 1 }}>Tìm kiếm</Button>
         </Box>

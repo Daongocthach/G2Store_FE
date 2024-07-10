@@ -3,10 +3,9 @@ import { Box, Button } from '@mui/material'
 import { AddCircle } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
-import { updateAvatar } from '../../../redux/actions/auth'
-import avatarNull from '../../../assets/img/avatar.png'
 import Loading from '../../../components/Loading/Loading'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
+import { mockData } from '../../../apis/mockdata'
 
 function UpdateAvatar({ reRender, setReRender }) {
     const triggerAlert = useAlert()
@@ -28,7 +27,6 @@ function UpdateAvatar({ reRender, setReRender }) {
             authenApi.updateAvatar(formData)
                 .then((response) => {
                     triggerAlert('Cập nhật thành công!', false, false)
-                    dispatch(updateAvatar(response?.avatar))
                     setReRender(!reRender)
                 })
                 .catch((error) => {
@@ -45,7 +43,7 @@ function UpdateAvatar({ reRender, setReRender }) {
                 Ảnh đại diện
                 <input id="upload-image" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
             </Button>
-            <img src={user?.avatar || avatarNull} width={'50px'} height={'50px'} style={{ borderRadius: 10 }} />
+            <img src={user?.avatar || mockData.images.avatarNull} width={'50px'} height={'50px'} style={{ borderRadius: 10 }} />
             {loading && <Loading />}
         </Box>
     )

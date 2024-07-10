@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button, TextField, Dialog, DialogContent, DialogTitle, Box, Typography } from '@mui/material'
+import { useDispatch } from 'react-redux'
 import ghnApi from '../../../apis/ghnApi'
 import Loading from '../../../components/Loading/Loading'
 import shopApi from '../../../apis/shopApi'
 import DialogAction from '../../../components/Dialog/DialogAction'
 import DialogAddress from '../../../components/Dialog/DialogAddress'
+import { updateShopName } from '../../../redux/actions/auth'
 
 function UpdateShop({ shop, rerender, setRerender }) {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [openProvince, setOpenProvince] = useState(false)
     const [openDistrict, setOpenDistrict] = useState(false)
@@ -89,6 +92,7 @@ function UpdateShop({ shop, rerender, setRerender }) {
             shopApi.updateShop(data)
                 .then(() => {
                     toast.success('Cập nhật thông tin shop thành công', { position: 'top-center', autoClose: 2000 })
+                    dispatch(updateShopName(name))
                     setLoading(false)
                     setRerender(!rerender)
                 })

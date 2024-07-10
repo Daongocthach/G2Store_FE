@@ -13,6 +13,7 @@ import DeleteOrder from './FormOrder/DeleteOrder'
 import GoToShop from '../../../components/GoToShop/GoToShop'
 import ViewOrder from './FormOrder/ViewOrder'
 import OrderRefund from './FormOrder/OrderRefund'
+import TrackingOrder from './FormOrder/TrackingOrder'
 
 function Order() {
   const [reRender, setReRender] = useState(false)
@@ -32,8 +33,7 @@ function Order() {
     setLoading(true)
     orderApi.payUnPaidOrder(order_id)
       .then((response) => {
-        if (response?.payment_url) { location.assign(response?.payment_url) }
-        else { navigate('/payment-fail') }
+        location.assign(response)
       })
       .catch((error) => {
         console.log(error)
@@ -86,15 +86,17 @@ function Order() {
               <Box className='flex flex-row items-center gap-2 mt-1 mb-1 justify-between flex-wrap'>
                 <Box className='flex flex-row items-center justify-between flex-wrap gap-1'>
                   <ViewOrder order={order} />
-                  {(order?.order_status === 'ORDERED') && <DeleteOrder orderId={order?.order_id} reRender={reRender} setReRender={setReRender} />}
-                  {order?.order_status === 'UN_PAID' && <Button variant='contained' color='success' size='small'
+                  {order?.order_status === 'UN_PAID' && <Button variant='contained' size='small'
                     onClick={() => handlePayment(order?.order_id)} >Thanh toán</Button>}
+                  {(order?.order_status === 'ORDERED' || order?.order_status === 'UN_PAID') &&
+                    <DeleteOrder orderId={order?.order_id} reRender={reRender} setReRender={setReRender} />}
                   {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} rerender={reRender} />}
                   {order?.order_status === 'DELIVERED' && <OrderRefund order={order} setReRender={setReRender} rerender={reRender} />}
+                  {(order?.order_status === 'PACKED' || order?.order_status === 'DELIVERING') && <TrackingOrder order={order} />}
                 </Box>
                 <Typography className='text-gray-600' variant='subtitle1'>
                   Tổng cộng ({order?.items.length}) sản phẩm:
-                  <span className='text-red-600 font-bold'>{formatCurrency(order?.grand_total)}</span>
+                  <span className='text-red-600 font-bold ml-1'>{formatCurrency(order?.grand_total)}</span>
                 </Typography>
               </Box>
               <Divider className='mb-2' />

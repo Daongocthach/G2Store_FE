@@ -1,4 +1,4 @@
-import { Box, Menu, Chip } from '@mui/material'
+import { Box, Menu, Chip, Container } from '@mui/material'
 import { KeyboardArrowDown, Widgets, MoneyOff, Category } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -26,22 +26,26 @@ function BoardBar() {
             })
     }, [])
     return (
-        <Box className='h-10 bg-gray-200 flex flex-row items-center border-t border-gray-300 sm:px-0 md:px-10'>
-            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-                <Chip icon={<Category />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
-                    onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
-                <Link to={'/promotion'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
-                <Link to={'/genre-detail'}><Chip icon={<Widgets />} label={'Sản phẩm'} clickable sx={useStyles.chip} ></Chip></Link>
-            </Box>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
-                {(Array.isArray(categories) && categories.length > 0) ?
-                    <MenuCategory categories={categories} />
-                    :
-                    <Box className='p-3'>
-                        Không có dữ liệu
+        <Box className="bg-gray-200">
+            <Container>
+                <Box className='h-10 bg-gray-200 flex flex-row items-center border-t border-gray-300'>
+                    <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                        <Chip icon={<Category />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
+                            onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
+                        <Link to={'/promotion'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
+                        <Link to={'/genre-detail'}><Chip icon={<Widgets />} label={'Sản phẩm'} clickable sx={useStyles.chip} ></Chip></Link>
                     </Box>
-                }
-            </Menu>
+                    <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
+                        {(Array.isArray(categories) && categories.length > 0) ?
+                            <MenuCategory categories={categories} />
+                            :
+                            <Box className='p-3'>
+                                Không có dữ liệu
+                            </Box>
+                        }
+                    </Menu>
+                </Box>
+            </Container>
         </Box>
     )
 }

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Tooltip } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 import { Create } from '@mui/icons-material'
 import orderApi from '../../../../apis/orderApi'
 import Loading from '../../../../components/Loading/Loading'
@@ -9,7 +8,6 @@ import DialogAction from '../../../../components/Dialog/DialogAction'
 
 function UpdateOrder({ order, setReRender, reRender }) {
   const triggerAlert = useAlert()
-  const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
@@ -33,7 +31,6 @@ function UpdateOrder({ order, setReRender, reRender }) {
         triggerAlert('Cập nhật thất bại!', true, false)
       })
       .finally(setLoading(false))
-
     handleClose()
   }
   const handleNext = () => {

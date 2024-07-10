@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Box, Button, Stack, TextField, Container, Typography } from '@mui/material'
 import ReCAPTCHA from 'react-google-recaptcha'
-import loginImage from '../../../assets/img/loginImage.jpg'
 import { validateEmail } from '../../../utils/email'
 import authenApi from '../../../apis/authenApi'
 import Loading from '../../../components/Loading/Loading'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
+import { mockData } from '../../../apis/mockdata'
 
 function Register() {
   const triggerAlert = useAlert()
@@ -67,7 +67,7 @@ function Register() {
   return (
     <Container disableGutters maxWidth={false} className="h-screen">
       <Box className="w-full h-full overflow-hidden relative bg-black">
-        <img src={loginImage} className="w-full h-full object-cover opacity-50 blur-sm" />
+        <img src={mockData.images.loginImage} className="w-full h-full object-cover opacity-50 blur-sm" />
         <Box className="absolute w-[90%] sm:w-[70%] md:w-[30%] h-auto rounded-md top-[30%] left-1/2 bg-black opacity-80 transform -translate-x-1/2 -translate-y-1/3 p-8">
           <Typography variant='h6' className="text-center text-white font-bold">Đăng ký</Typography>
           <Stack className="mt-6">

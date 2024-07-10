@@ -1,19 +1,20 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Menu, Box, Divider, MenuItem, Alert, Snackbar, IconButton, Tooltip, Avatar } from '@mui/material'
+import { Menu, Box, Divider, MenuItem, IconButton, Tooltip, Avatar } from '@mui/material'
 import { Settings, AccountCircle } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteCookie } from '../../../utils/cookie'
 import { persistor } from '../../../redux/store'
 import authenApi from '../../../apis/authenApi'
 import { logout } from '../../../redux/actions/auth'
-import avatarNull from '../../../assets/img/avatar.png'
+import { mockData } from '../../../apis/mockdata'
+import { useAlert } from '../../ShowAlert/ShowAlert'
 
 function Account({ user }) {
+    const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState(null)
-    const [showAlert, setShowAlert] = useState(false)
     const open = Boolean(anchorEl)
 
     const handleClick = (event) => {
@@ -22,22 +23,16 @@ function Account({ user }) {
     const handleClose = () => {
         setAnchorEl(null)
     }
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        triggerAlert('Đăng xuất thành công')
         authenApi.logout()
         deleteCookie()
         dispatch(logout())
         persistor.purge()
-        setShowAlert(true)
         navigate('/')
     }
     return (
         <Box>
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={showAlert} autoHideDuration={6000} onClose={() => setShowAlert(false)}>
-                <Alert severity="success" variant='filled' onClose={() => setShowAlert(false)}>
-                    Đăng xuất thành công!
-                </Alert>
-            </Snackbar>
             <Tooltip title="Cài đặt" className='cursor-pointer'>
                 <IconButton
                     onClick={handleClick}
@@ -48,7 +43,7 @@ function Account({ user }) {
                     aria-expanded={open ? 'true' : undefined}
                 >
                     <Avatar className='w-11 h-11'>
-                        <img src={user?.avatar || avatarNull} className='object-contain w-full h-full' />
+                        <img src={user?.shop_image || mockData.images.avatarNull} className='object-contain w-full h-full' />
                     </Avatar>
                 </IconButton>
             </Tooltip>
@@ -66,7 +61,6 @@ function Account({ user }) {
                         <AccountCircle fontSize="small" />
                         Tài khoản
                     </Link>
-
                 </MenuItem>}
                 <Divider />
                 {user && <MenuItem onClick={handleLogout}>

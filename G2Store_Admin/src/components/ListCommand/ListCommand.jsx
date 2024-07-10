@@ -30,16 +30,14 @@ const listButton = [
     {
         name: 'Người dùng',
         commands: [
-            // { path: '/admin/manage/sellers', name: 'Quản lý người bán' },
             { path: '/admin/manage/shops', name: 'Quản lý cửa hàng' },
             { path: '/admin/manage/customers', name: 'Quản lý người dùng' }
         ]
     },
     {
-        name: 'Trò chuyện',
+        name: 'Thông báo',
         commands: [
-            { path: '/admin/manage/chat', name: 'Chat' },
-            { path: '/admin/manage/auto-chat', name: 'Trả lời tự động' }
+            { path: '/admin/manage/notifications', name: 'Quản lý thông báo' }
         ]
     },
     {

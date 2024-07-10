@@ -51,6 +51,7 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
             const order = convertDataToOrderFormat(cartItems)
             orderApi.addOrder(order)
                 .then((response) => {
+                    console.log(response)
                     triggerAlert('Đặt hàng thành công!', false, false)
                     dispatch(deleteAllCart())
                     if (paymentType === 'COD')

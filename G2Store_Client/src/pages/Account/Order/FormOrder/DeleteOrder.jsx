@@ -31,7 +31,7 @@ function DeleteOrder({ orderId, reRender, setReRender }) {
     }
     return (
         <Box>
-            <Button variant='contained' color='warning' size='small'
+            <Button variant='contained' color='error' size='small'
                 onClick={() => handleClickOpen()} >Hủy đơn</Button>
             <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickCancel} title={'Hủy đơn hàng'} content={'Bạn muốn hủy đơn hàng này? Không thể hoàn tác!'} />
             {loading && <Loading />}

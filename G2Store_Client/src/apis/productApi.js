@@ -66,14 +66,28 @@ const productApi = {
         const url = `products/search?page=${page}&size=${size}&seed=${seed}&name=${name}`
         return axiosClient.get(url, { params: params })
     },
-    getShopProducts(shop_id, page, size, sort) {
+    getShopProducts(shop_id, page, size, sort, name, shop_cate_id, startPrice, endPrice) {
         var seed = sessionStorage.getItem('seed')
         if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
             seed = sessionStorage.getItem('seed')
         }
+        const params = {}
+        if (startPrice == 0 || startPrice) {
+            params.startPrice = startPrice
+        }
+        if (endPrice == 0 || endPrice) {
+            params.endPrice = endPrice
+        }
+        if (name) {
+            params.name = name
+        }
+        if (shop_cate_id) {
+            params.shopCateId = shop_cate_id
+        }
         const url = `products/shop/${shop_id}?page=${page}&size=${size}&seed=${seed}&sort=${sort}`
-        return axiosClient.get(url)
+        console.log(params)
+        return axiosClient.get(url, { params: params })
     },
     getTop5ShopProducts(shop_id) {
         const url = `products/top-five/shop/${shop_id}`

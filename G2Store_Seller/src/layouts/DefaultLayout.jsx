@@ -6,7 +6,7 @@ import { Menu, ChevronLeft, ChevronRight } from '@mui/icons-material'
 import AppBar from '../components/Appbar/Appbar'
 import Footer from '../components/Footer/Footer'
 import ListCommand from '../components/ListCommand/ListCommand'
-import G2Logo from '../assets/img/G2Logo.png'
+import { mockData } from '../apis/mockdata'
 
 const drawerWidth = 240
 
@@ -15,7 +15,7 @@ const openedMixin = (theme) => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen
-  }),
+  })
 })
 
 const closedMixin = (theme) => ({
@@ -109,7 +109,7 @@ export default function DefaultLayout({ children }) {
           <DrawerHeader>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Link to={'/dashboard'} >
-                {<img src={G2Logo} style={{ height: '70px', width: '70px', objectFit: 'contain' }} />}
+                {<img src={mockData.images.G2Logo} style={{ height: '70px', width: '70px', objectFit: 'contain' }} />}
               </Link>
               <Link to={'/dashboard'} style={{ textDecoration: 'none' }}>
                 <Typography variant="h5" fontWeight="bold" color={'white'}>G2Store</Typography>

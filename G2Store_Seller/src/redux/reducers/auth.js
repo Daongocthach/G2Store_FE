@@ -1,12 +1,11 @@
 const initialState = {
     keep_login: false,
     shop_name: '',
-    avatar: '',
+    shop_image: '',
     shop_id: ''
 }
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-
         case 'LOGIN': {
             return {
                 ...state,
@@ -16,15 +15,19 @@ const authReducer = (state = initialState, action) => {
         case 'UPDATE_PROFILE': {
             return {
                 ...state,
-                shop_name: action?.payload?.shop_name,
-                avatar: action?.payload?.avatar,
-                shop_id: action?.payload?.shop_id
+                shop_id: action?.payload
             }
         }
-        case 'UPDATE_AVATAR': {
+        case 'UPDATE_SHOP_NAME': {
             return {
                 ...state,
-                avatar: action?.payload
+                shop_name: action?.payload
+            }
+        }
+        case 'UPDATE_SHOP_IMAGE': {
+            return {
+                ...state,
+                shop_image: action?.payload
             }
         }
         case 'LOGOUT': {
@@ -33,7 +36,7 @@ const authReducer = (state = initialState, action) => {
             return {
                 keep_login: false,
                 shop_name: '',
-                avatar: '',
+                shop_image: '',
                 shop_id: ''
             }
         }

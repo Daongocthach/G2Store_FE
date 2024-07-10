@@ -4,8 +4,8 @@ import categoryApi from '../../../apis/categoryApi'
 import MenuCategory from './MenuCategory/MenuCategory'
 import Loading from '../../../components/Loading/Loading'
 import AddCategory from './FormCategory/AddCategory'
-import emptyImage from '../../../assets/img/empty-order.png'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import EmptyData from '../../../components/EmptyData/EmptyData'
 
 function Categories() {
   const [reRender, setReRender] = useState(false)
@@ -31,16 +31,13 @@ function Categories() {
   return (
     <Box sx={{ m: 5, minHeight: '100vh' }}>
       <BreadCrumbs links={[{ name: 'Quản lý danh mục', href: '/admin/manage/categories' }]} />
-      <Box sx={{ bgcolor: 'white', boxShadow: '0px 0px 10px', mt: 2 }}>
-        <Box sx={{ display: 'flex', p: 1, justifyContent: 'space-between', alignItems: 'center', bgcolor: '#2a99ff' }}>
-          <Typography variant='h6' color={'white'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
+      <Box className='bg-white shadow-lg mt-2 w-11/12 overflow-x-scroll' >
+        <Box className='flex flex-row items-center justify-between p-1 bg-sky-500'>
+          <Typography variant='subtitle1' color={'white'} sx={{ fontWeight: 'bold' }} >Danh mục sản phẩm</Typography>
           <AddCategory isParent={true} reRender={reRender} setReRender={setReRender} />
         </Box>
-        <MenuCategory categories={categories} reRender={reRender} setReRender={setReRender} isReset={isReset} setIsReset={setIsReset}/>
-        {Array.isArray(categories) && categories.length < 1 && <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-          <img src={emptyImage} />
-          <Typography variant='h7' >Bạn chưa có danh mục nào</Typography>
-        </Box>}
+        <MenuCategory categories={categories} reRender={reRender} setReRender={setReRender} isReset={isReset} setIsReset={setIsReset} />
+        {Array.isArray(categories) && categories.length < 1 && <EmptyData content={'Bạn chưa có danh mục nào'} />}
       </Box>
       {loading && <Loading />}
     </Box>

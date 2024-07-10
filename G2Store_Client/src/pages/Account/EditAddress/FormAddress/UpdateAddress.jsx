@@ -81,6 +81,9 @@ function UpdateAddress({ address, rerender, setRerender }) {
         if (ward?.WardCode == '') {
             toast.error('Vui lòng chọn địa chỉ !', { position: 'top-center', autoClose: 2000 })
         }
+        else if (phoneNo.length < 10) {
+            toast.error('Số điện thoại phải lớn hơn 10 kí tự !', { position: 'top-center', autoClose: 2000 })
+        }
         else {
             setLoading(true)
             const data = {
@@ -135,8 +138,10 @@ function UpdateAddress({ address, rerender, setRerender }) {
                     <Box className='flex flex-col gap-2 w-[550px]'>
                         <Typography className=' min-w-fit text-gray-800'>Thông tin người nhận</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <TextField fullWidth size='small' label="Nhập họ và tên" value={receiverName} onChange={(e) => setReceiverName(e.target.value)} />
-                            <TextField fullWidth size='small' label="Nhập số điện thoại" value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} />
+                            <TextField fullWidth size='small' label="Nhập họ và tên" value={receiverName}
+                                onChange={(e) => setReceiverName(e.target.value)} />
+                            <TextField fullWidth size='small' label="Nhập số điện thoại" error={phoneNo.length < 10}
+                                value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} />
                         </Box>
                         <Typography minWidth={'100px'} fontWeight={'bold'}>Địa chỉ nhận hàng</Typography>
                         <TextField fullWidth size='small' label='Tỉnh/Thành phố' value={province?.ProvinceName || 'Chọn tỉnh'} onClick={() => setOpenProvince(true)} />

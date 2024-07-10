@@ -14,7 +14,7 @@ function ViewOrder({ order }) {
   }
   return (
     <Box>
-      <Button variant='contained' color='info' size='small' onClick={handleClickOpen}>Xem chi tiết</Button>
+      <Button variant='contained' size='small' onClick={handleClickOpen}>Xem chi tiết</Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle fontSize={17} className=" text-gray-700 ">
           Đơn hàng #{order?.order_id} ({format(new Date(order?.created_date), 'dd/MM/yyyy HH:mm:ss')})

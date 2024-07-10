@@ -4,9 +4,9 @@ export const login = (data) => {
         payload: data
     }
 }
-export const updateAvatar = (data) => {
+export const updateShopImage = (data) => {
     return {
-        type: 'UPDATE_AVATAR',
+        type: 'UPDATE_SHOP_IMAGE',
         payload: data
     }
 }
@@ -17,7 +17,12 @@ export const updateProfile = (data) => {
         payload: data
     }
 }
-
+export const updateShopName = (data) => {
+    return {
+        type: 'UPDATE_SHOP_NAME',
+        payload: data
+    }
+}
 export const logout = () => {
     return {
         type: 'LOGOUT'

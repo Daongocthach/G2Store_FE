@@ -1,9 +1,8 @@
 import { Button, Typography, Box, Rating, Tooltip, CardActions, CardMedia, CardContent, Card } from '@mui/material'
 import { Help, Visibility, ShoppingCart, Check } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import cartItemV2Api from '../../apis/cartItemApiV2'
 import { formatCurrency } from '../../utils/price'
 import { addToCart } from '../../redux/actions/cart'
@@ -16,7 +15,6 @@ function CardProduct({ product, isShort }) {
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth)
   const [reviews, setReviews] = useState([])
-
   const handleClickAddToCart = () => {
     if (!user?.keep_login) {
       triggerAlert('Bạn cần đăng nhập để thực hiện chức năng này!', false, true)
@@ -46,7 +44,7 @@ function CardProduct({ product, isShort }) {
         <CardMedia
           onClick={() => { navigate('/product-detail', { state: product?.product_id }) }}
           className='w-72 aspect-square object-contain m-0.5'
-          image={product?.images[0]?.file_url || null}
+          image={product?.thumbnail || (product?.images ? product?.images[0]?.file_url : null)}
           title={product?.name}
         />
         <Box className='flex flex-row items-center h-5 w-16 bg-red-500 absolute top-1 left-0'>
@@ -71,7 +69,8 @@ function CardProduct({ product, isShort }) {
       </CardContent>
       <CardActions className='flex flex-row items-center justify-between'>
         <Tooltip title="Xem chi tiết">
-          <Button size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }} onClick={() => { navigate('/product-detail', { state: product }) }}>
+          <Button size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }}
+            onClick={() => { navigate('/product-detail', { state: product }) }}>
             <Visibility sx={{ fontSize: 20 }} />
           </Button>
         </Tooltip>

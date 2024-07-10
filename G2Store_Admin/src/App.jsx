@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
-// import { Suspense } from 'react'
-import { CircularProgress } from '@mui/material'
 import DefaultLayout from './layouts/DefaultLayout'
 import { publicRoutes, privateRoutes } from './routers/routes'
 import ProtectedRoute from './components/ProtectRoute/ProtectRoute'
@@ -24,14 +22,6 @@ function App() {
                 key={index}
                 path={route.path}
                 element={
-                  // <Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  //   <CircularProgress />
-                  //   Đang tải các tài nguyên vui lòng đợi...
-                  // </div>}>
-                  //   <Layout>
-                  //     <Page />
-                  //   </Layout>
-                  // </Suspense>
                   <Layout>
                     <Page />
                   </Layout>

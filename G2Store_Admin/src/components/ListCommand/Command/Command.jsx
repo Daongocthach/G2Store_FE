@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ExpandLess, ExpandMore, Category, Filter9Plus, People, Reorder, ThumbsUpDown, Equalizer, AddHomeWork, Money } from '@mui/icons-material'
+import { ExpandLess, ExpandMore, Category, Filter9Plus, People, Reorder, Notifications, Equalizer, Money } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, ListItemButton, List, Collapse } from '@mui/material'
 
@@ -12,7 +12,7 @@ function Command({ open, button }) {
         'Sản phẩm': <Filter9Plus sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Đơn hàng': <Reorder sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Người dùng': <People sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
-        'Trò chuyện': <ThumbsUpDown sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
+        'Thông báo': <Notifications sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Thống kê': <Equalizer sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Danh mục': <Category sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Tài chính': <Money sx={{ color: (open1) ? '#00BFFF' : 'white' }} />

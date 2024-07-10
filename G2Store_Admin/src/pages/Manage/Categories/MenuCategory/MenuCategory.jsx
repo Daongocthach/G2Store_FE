@@ -18,7 +18,7 @@ function MenuCategory({ categories, reRender, setReRender, isReset, setIsReset }
     }
     return (
         <Box className="flex">
-            <Box className="overflow-auto pt-1 pl-1 flex flex-col gap-1">
+            <Box className="pt-1 pl-1 flex flex-col gap-1">
                 {Array.isArray(categories) && categories.map((category, index) => (
                     <Box className="flex gap-1 items-center text-gray-700 hover:bg-inherit" key={index} 
                     sx={{

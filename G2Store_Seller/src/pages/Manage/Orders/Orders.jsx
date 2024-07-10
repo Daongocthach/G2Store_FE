@@ -13,6 +13,7 @@ import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import ghnApiV2 from '../../../apis/ghnApiV2'
 import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
+import TrackingOrder from './FormOrder/TrackingOrder'
 
 function Orders() {
   const triggerAlert = useAlert()
@@ -35,6 +36,7 @@ function Orders() {
     orderApi.getShopOrders(newTab, 0, 8)
       .then((response) => {
         setOrders(response?.content)
+        setTotalElements(response?.totalElements)
       })
   }
   const handlePrint = (orderCode) => {
@@ -92,7 +94,7 @@ function Orders() {
                     <TableRow key={index}>
                       <TableCell><Box>{order?.items.map((orderItem, index) => <OrderItem key={index} orderItem={orderItem} />)}</Box></TableCell>
                       <TableCell><Typography>#{order?.order_id}</Typography></TableCell>
-                      <TableCell><Typography>{format(new Date(order?.created_date), 'yyyy-MM-dd')}</Typography></TableCell>
+                      <TableCell><Typography variant='body2'>{format(new Date(order?.created_date), 'dd/MM/yyyy HH:mm:ss')}</Typography></TableCell>
                       <TableCell ><Typography variant='subtitle2'>{formatCurrency(order?.grand_total)}</Typography></TableCell>
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell >
@@ -103,10 +105,11 @@ function Orders() {
                           </Tooltip>
                           {tab !== 'UN_PAID' && <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />}
                           <ViewOrder order={order} />
-                          <Tooltip title='In hóa đơn'>
+                          <Tooltip title='In đơn giao hàng nhanh'>
                             <Print className='text-gray-600 cursor-pointer' sx={{ display: tab === 'PACKED' ? 'inherit' : 'none' }}
                               onClick={() => handlePrint(order?.ghn_order_code)} />
                           </Tooltip>
+                          {(tab === 'PACKED' || tab === 'DELIVERING') && <TrackingOrder order={order} />}
                         </Box>
                       </TableCell>
                     </TableRow>)

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Box, Typography, Popover, Divider, Chip } from '@mui/material'
 import { KeyboardArrowDown, Close, Receipt } from '@mui/icons-material'
 import voucherApi from '../../apis/voucherApi'
-import emptyOrder from '../../assets/img/empty-order.png'
 import Voucher from './Voucher/Voucher'
 import EmptyData from '../EmptyData/EmptyData'
 
@@ -59,7 +58,6 @@ function ProductVouchers({ product, shopVouchers, cart_item_id, reRender, setReR
         {Array.isArray(vouchers) && vouchers?.length < 1 &&
           <EmptyData content={'Sản phẩm này chưa có khuyến mãi nào!'} />
         }
-        <Divider />
       </Popover>
     </Box>
   )

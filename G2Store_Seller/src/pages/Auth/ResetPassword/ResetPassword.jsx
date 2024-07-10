@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Container, TextField, Stack, Button, Box } from '@mui/material'
 import { useNavigate, Link } from 'react-router-dom'
-import loginImage from '../../../assets/img/loginImage.jpg'
 import authenApi from '../../../apis/authenApi'
 import { validateEmail } from '../../../utils/email'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import Loading from '../../../components/Loading/Loading'
+import { mockData } from '../../../apis/mockdata'
 
 function ResetPassword() {
   const triggerAlert = useAlert()
@@ -66,7 +66,7 @@ function ResetPassword() {
   return (
     <Container disableGutters maxWidth={false} className="h-screen">
       <Box className="w-full h-full overflow-hidden relative bg-black">
-        <img src={loginImage} className="w-full h-full object-cover opacity-50" />
+        <img src={mockData.images.loginImage} className="w-full h-full object-cover opacity-50" />
         <Box className="absolute w-11/12 sm:w-3/4 md:w-1/3 h-auto rounded-md top-1/3 left-1/2 bg-black opacity-80 transform -translate-x-1/2 -translate-y-1/3 p-8">
           <h2 className="text-center text-white">Đặt lại mật khẩu</h2>
           <Stack component="form" className="m-3 space-y-4">

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const token = 'da8bac8e-9519-11ee-8bfa-8a2dda8ec551'
+const token = import.meta.env.VITE_GHN_TOKEN
 const ghnApi = {
     getProvices() {
         const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province'
@@ -39,7 +39,7 @@ const ghnApi = {
             }
         })
     },
-    calculateFeeShip( service_id, shopDistrictId, userDistrictId, height, length, weight, width ) {
+    calculateFeeShip(service_id, shopDistrictId, userDistrictId, height, length, weight, width) {
         const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee'
         const requestData = {
             service_id: service_id,
@@ -52,6 +52,22 @@ const ghnApi = {
         }
         return axios.get(url, {
             params: requestData,
+            headers: {
+                'token': token
+            }
+        })
+    },
+    genCode() {
+        const url = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/order-tracking/gen-token'
+        return axios.get(url, {
+            headers: {
+                'token': token
+            }
+        })
+    },
+    trackingOrder(token, code) {
+        const url = `https://dev-online-gateway.ghn.vn/order-tracking/public-api/client/tracking-logs?order_code=${code}`
+        return axios.get(url, {
             headers: {
                 'token': token
             }
