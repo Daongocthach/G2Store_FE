@@ -53,6 +53,7 @@ function OrderRefund({ order, reRender, setReRender }) {
           const formData = new FormData()
           files.forEach((file) => {
               formData.append('files', file)
+              formData.append('refundReason', content)
           })
           orderApi.orderRefund(order?.order_id, formData)
               .then(() => {

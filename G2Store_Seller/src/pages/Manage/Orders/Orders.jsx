@@ -99,11 +99,8 @@ function Orders() {
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell >
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                          <Tooltip title='Chat với khách' >
-                            <Chat className='text-gray-600 cursor-pointer' sx={{ display: tab === 'UN_PAID' ? 'inherit' : 'none' }}
-                              onClick={() => navigate('/seller/chat', { state: order?.customer_id })} />
-                          </Tooltip>
-                          {tab !== 'UN_PAID' && <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />}
+                          {(tab !== 'UN_PAID' && tab !== 'CANCELED' && tab !== 'REFUNDING' && tab !== 'REFUNDED') &&
+                            <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />}
                           <ViewOrder order={order} />
                           <Tooltip title='In đơn giao hàng nhanh'>
                             <Print className='text-gray-600 cursor-pointer' sx={{ display: tab === 'PACKED' ? 'inherit' : 'none' }}

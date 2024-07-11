@@ -28,7 +28,7 @@ function AppBar() {
             <Search />
           </Box>
           <Box className="items-center gap-5 hidden lg:flex">
-            <MenuNotifications />
+            <MenuNotifications user={user}/>
             <Tooltip title="Giỏ hàng">
               <Badge color="warning" badgeContent={cartItems.length} className="cursor-pointer">
                 <ShoppingCart className="text-white" onClick={() => navigate('/cart')} />

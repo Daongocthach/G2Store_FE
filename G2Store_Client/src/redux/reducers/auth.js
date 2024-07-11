@@ -1,4 +1,5 @@
 const initialState = {
+    customer_id: null,
     keep_login: false,
     avatar: '',
     point: 0
@@ -16,7 +17,8 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 avatar: action?.payload?.avatar,
-                point: action?.payload?.point
+                point: action?.payload?.point,
+                customer_id: action?.payload?.customer_id
             }
         }
         case 'LOGOUT': {

@@ -21,10 +21,10 @@ const orderApi = {
     const url = `orders/${order_id}/me?orderStatus=CANCELED`
     return axiosClient.put(url)
   },
-  orderRefund(order_id, data) {
+  orderRefund(order_id, data, refundReason) {
     const url = `orders/${order_id}/customer-refund`
     const headers = {
-        'Content-Type': 'multipart/form-data'
+      'Content-Type': 'multipart/form-data'
     }
     return axiosClient.put(url, data, headers)
   }

@@ -35,7 +35,8 @@ function Login() {
             .then((response) => {
               const data = {
                 avatar: response?.avatar,
-                point: response?.point
+                point: response?.point,
+                customer_id: response?.customer_id
               }
               dispatch(updateAvatar(data))
             })

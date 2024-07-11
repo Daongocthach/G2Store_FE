@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import { Button, Dialog, DialogContent, DialogTitle, Stepper, Step, StepLabel, Box, Tooltip } from '@mui/material'
 import { Create } from '@mui/icons-material'
+import { over } from 'stompjs'
+import SockJS from 'sockjs-client'
 import orderApi from '../../../../apis/orderApi'
 import Loading from '../../../../components/Loading/Loading'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 import DialogAction from '../../../../components/Dialog/DialogAction'
+
+var stompClient = null
+var isConnected = false
 
 function UpdateOrder({ order, setReRender, reRender }) {
   const triggerAlert = useAlert()
@@ -13,17 +18,40 @@ function UpdateOrder({ order, setReRender, reRender }) {
   const [open, setOpen] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
+    connect()
     const orderStatusIndex = steps.findIndex(step => step?.value === order?.order_status)
     setActiveStep(orderStatusIndex)
   }
   const handleClose = () => {
     setOpen(false)
   }
+  const connect = () => {
+    let Sock = new SockJS('http://localhost:8080/ws')
+    stompClient = over(Sock)
+    stompClient.connect({}, function () {
+      stompClient.subscribe('/user/' + order?.customer_id + '/specific/customer', function (result) {
+        console.log(JSON.parse(result.body))
+      })
+      isConnected = true
+    }, function (error) {
+      console.error('STOMP connection error:', error)
+    })
+  }
   const handleUpdate = async () => {
     setLoading(true)
     orderApi.updateOrder(order?.order_id, steps[activeStep]?.value)
       .then(() => {
         triggerAlert('Cập nhật thành công!', false, false)
+        if (!isConnected) {
+          const notificationReq = {
+            content: 'Đơn hàng #' + order?.order_id + ' của bạn đã được cập nhật!',
+            customer_id: order?.customer_id
+          }
+          stompClient.send('/app/private/customer', {}, JSON.stringify(notificationReq))
+          triggerAlert('Thông báo đã được gửi', false, false)
+        } else {
+          triggerAlert('Chưa kết nối!', false, true)
+        }
         setReRender(!reRender)
       })
       .catch(error => {

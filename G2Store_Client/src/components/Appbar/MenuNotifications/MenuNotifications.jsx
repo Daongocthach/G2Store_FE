@@ -7,18 +7,23 @@ import notificationApi from '../../../apis/notificationApi'
 import Notification from '../../Notification/Notification'
 import EmptyData from '../../EmptyData/EmptyData'
 
-var stompClient = null
-
-function MenuNotifications() {
+function MenuNotifications({ user }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [notifications, setNotifications] = useState([])
     const [newNotification, setNewNotification] = useState({})
     const [snackbarOpen, setSnackbarOpen] = useState(false)
-    const [page, setPage] = useState(0)
-    const [size, setSize] = useState(20)
+    const [badgeCount, setBadgeCount] = useState(1)
+    const page = 0
+    const size = 20
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
+        notificationApi.getNotifications(page, size)
+            .then((response) => {
+                setNotifications(response?.content)
+                setBadgeCount(response?.content.filter(notification => notification?.isPublic === false).length || 0)
+            })
+            .catch((error) => { console.log(error) })
     }
     const handleClose = () => {
         setAnchorEl(null)
@@ -26,34 +31,40 @@ function MenuNotifications() {
     const handleSnackbarClose = () => {
         setSnackbarOpen(false)
     }
-    const connect = () => {
-        if (stompClient && stompClient?.connected) {
-            return
-        }
-        let Sock = new SockJS('http://localhost:8080/ws')
-        stompClient = over(Sock)
-        stompClient.connect({}, function () {
-            stompClient.subscribe('/all/notifications', function (result) {
-                setNewNotification(JSON.parse(result.body))
-                setNotifications([JSON.parse(result.body), ...notifications])
-                setSnackbarOpen(true)
-            })
-        }, function (error) {
-            console.error('STOMP connection error:', error)
-        })
-    }
     useEffect(() => {
-        connect()
-        notificationApi.getNotifications(page, size)
-            .then((response) => {
-                setNotifications(response?.content)
+        var stompClient = null
+        var count = 0
+        const connect = () => {
+            if (stompClient && stompClient?.connected) {
+                return
+            }
+            let Sock = new SockJS('http://localhost:8080/ws')
+            stompClient = over(Sock)
+            stompClient.connect({}, function () {
+                stompClient.subscribe('/all/notifications', function (result) {
+                    setNewNotification(JSON.parse(result.body))
+                    setNotifications((prevNotifications) => [JSON.parse(result.body), ...prevNotifications])
+                    count += 1
+                    setBadgeCount(count)
+                    console.log(count)
+                    setSnackbarOpen(true)
+                })
+                stompClient.subscribe('/user/' + user?.customer_id + '/specific/customer', function (result) {
+                    setNewNotification(JSON.parse(result.body))
+                    setNotifications((prevNotifications) => [JSON.parse(result.body), ...prevNotifications])
+                    setBadgeCount(badgeCount + 1)
+                    setSnackbarOpen(true)
+                })
+            }, function (error) {
+                console.error('STOMP connection error:', error)
             })
-            .catch((error) => { console.log(error) })
+        }
+        connect()
     }, [])
     return (
         <Box >
             <Tooltip title="Thông báo">
-                <Badge color="warning" badgeContent={(Array.isArray(notifications) && notifications.length > 0) ? notifications.length : 0}
+                <Badge color="warning" badgeContent={badgeCount}
                     className="cursor-pointer">
                     <Notifications className="text-white" onClick={handleClick} />
                 </Badge>
