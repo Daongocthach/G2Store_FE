@@ -24,12 +24,19 @@ function Products() {
     const [isFilter, setIsFilter] = useState(false)
     const [districtId, setDistrictId] = useState('')
     const handleReset = () => {
+        setLoading(true)
         setSort('DEFAULT')
         setStartPrice('')
         setEndPrice('')
         setDistrictId('')
         setCheckPrice('all')
         setIsFilter(false)
+        productApi.getProducts(page - 1, 12, sort)
+            .then((response) => {
+                setProducts(response)
+            })
+            .catch((error) => console.log(error))
+            .finally(() => setLoading(false))
     }
     const handleChangePage = (event, value) => {
         setPage(value)
@@ -91,7 +98,7 @@ function Products() {
                 <Box>
                     <Box className='flex flex-row items-center justify-between'>
                         <Typography variant='body1'>Tìm thấy <b>{products?.numberOfElements}</b> sản phẩm</Typography>
-                        <Sort sort={sort} setSort={setSort} handleReset={handleReset}/>
+                        <Sort sort={sort} setSort={setSort} handleReset={handleReset} />
                     </Box>
                     <Box className='flex flex-col items-center justify-center'>
                         {loading && <CircularProgress />}
