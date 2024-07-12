@@ -1,7 +1,7 @@
 import { Typography, Box, FormControl, MenuItem, Select, Tooltip } from '@mui/material'
 import { RestartAlt } from '@mui/icons-material'
 
-function Sort({ sort, setSort, handelReset }) {
+function Sort({ sort, setSort, handleReset }) {
     return (
         <Box className="flex">
             <Box className='flex flex-row items-center'>
@@ -16,7 +16,7 @@ function Sort({ sort, setSort, handelReset }) {
             </Box>
             <Box className="flex items-center gap-1">
                 <Tooltip title="Đặt lại">
-                    <RestartAlt className="text-3xl text-[#193744] cursor-pointer" onClick={handelReset} />
+                    <RestartAlt className="text-3xl text-[#193744] cursor-pointer" onClick={handleReset} />
                 </Tooltip>
             </Box>
         </Box>
@@ -27,6 +27,7 @@ export default Sort
 
 const sortList = [
     { value: 'DEFAULT', lable: 'Mặc định' },
+    { value: 'MOST_RELEVANT', lable: 'Liên quan' },
     { value: 'TOP_SELLER', lable: 'Bán chạy nhất' },
     { value: 'NEWEST', lable: 'Mới nhất' },
     { value: 'PRICE_ASC', lable: 'Giá tăng dần' },

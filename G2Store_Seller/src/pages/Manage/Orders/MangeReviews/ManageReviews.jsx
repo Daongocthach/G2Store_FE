@@ -23,7 +23,10 @@ function ManageReviews() {
   const handleChange = (event, newTab) => {
     setTab(newTab)
     reviewApi.getShopReviews(0, rowsPerPage, newTab)
-      .then((response) => { setReviews(response?.content) })
+      .then((response) => {
+        setReviews(response?.content)
+        setTotalElements(response?.totalElements)
+      })
       .catch((error) => { console.log(error) })
   }
   useEffect(() => {

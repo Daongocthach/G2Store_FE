@@ -15,7 +15,6 @@ function Command({ open, button }) {
         'Thông báo': <Notifications sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Thống kê': <Equalizer sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Danh mục': <Category sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
-        'Tài chính': <Money sx={{ color: (open1) ? '#00BFFF' : 'white' }} />
     }
     const handleClick = () => {
         if (open) {

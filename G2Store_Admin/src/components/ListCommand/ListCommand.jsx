@@ -51,12 +51,5 @@ const listButton = [
         commands: [
             { path: '/admin/manage/categories', name: 'Quản lý danh mục' }
         ]
-    },
-    {
-        name: 'Tài chính',
-        commands: [
-            { path: '/admin/dashboard', name: 'Thu nhập' },
-            { path: '/admin/dashboard', name: 'Số dư tài khoản' }
-        ]
     }
 ]

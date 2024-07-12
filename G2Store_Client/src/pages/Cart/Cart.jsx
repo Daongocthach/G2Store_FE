@@ -43,7 +43,7 @@ function Cart() {
                 </Link>
               </Box>
             ) : (
-              <LeftInformation cartItems={cartItems} reRender={reRender} setReRender={setReRender} />
+              <LeftInformation cartItems={cartItems} reRender={reRender} setReRender={setReRender} setIsSoldOut={setIsSoldOut} />
             )}
           </Box>
           {/* Phần tổng cộng và đặt hàng */}

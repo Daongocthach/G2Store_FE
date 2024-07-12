@@ -76,7 +76,6 @@ function Sellers() {
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Vai trò</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Là tài khoản chính</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -102,7 +101,7 @@ function Sellers() {
                     </TableCell>
                     <TableCell ><Switch checked={seller?.is_enabled} /></TableCell>
                     <TableCell >{seller?.is_main_acc && <Alert severity='success' />}</TableCell>
-                    <TableCell >{!seller?.is_main_acc && <DeleteSeller />}</TableCell>
+                    {/* <TableCell >{!seller?.is_main_acc && <DeleteSeller />}</TableCell> */}
                   </TableRow>
                 )
               })}

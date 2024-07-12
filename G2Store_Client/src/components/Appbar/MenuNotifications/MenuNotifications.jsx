@@ -7,6 +7,8 @@ import notificationApi from '../../../apis/notificationApi'
 import Notification from '../../Notification/Notification'
 import EmptyData from '../../EmptyData/EmptyData'
 
+const baseURL = import.meta.env.VITE_PUBLIC_API_URL
+
 function MenuNotifications({ user }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [notifications, setNotifications] = useState([])
@@ -38,7 +40,7 @@ function MenuNotifications({ user }) {
             if (stompClient && stompClient?.connected) {
                 return
             }
-            let Sock = new SockJS('http://localhost:8080/ws')
+            let Sock = new SockJS(baseURL + '/ws')
             stompClient = over(Sock)
             stompClient.connect({}, function () {
                 stompClient.subscribe('/all/notifications', function (result) {

@@ -40,7 +40,7 @@ function AddSeller() {
     return (
         <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', p: 1, bgcolor: '#E8E8E8', minHeight: '100vh' }}>
             <Box sx={{ flexDirection: 'column', gap: 2, display: 'flex', bgcolor: 'white', p: 1, borderRadius: 3 }}>
-                <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Thêm người dùng</Typography>
+                <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Thêm người bán</Typography>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Typography variant='body1' sx={{ color: 'red' }}>*</Typography>

@@ -24,7 +24,6 @@ const listButton = [
         name: 'Đơn hàng',
         commands: [
             { path: '/seller/manage/orders', name: 'Quản lý đơn hàng' },
-            // { path: '/seller/manage/orders', name: 'Quản lý hoàn trả' },
             { path: '/seller/manage/reviews', name: 'Quản lý đánh giá' }
         ]
     },
@@ -44,14 +43,14 @@ const listButton = [
             { path: '/seller/manage/vouchers', name: 'Quản lý khuyến mãi' }
         ]
     },
-    {
-        name: 'Trò chuyện',
-        icon: 'ThumbsUpDown',
-        commands: [
-            { path: '/seller/chat', name: 'Chat' },
-            { path: '/seller/auto-chat', name: 'Trả lời tự động' }
-        ]
-    },
+    // {
+    //     name: 'Trò chuyện',
+    //     icon: 'ThumbsUpDown',
+    //     commands: [
+    //         { path: '/seller/chat', name: 'Chat' },
+    //         { path: '/seller/auto-chat', name: 'Trả lời tự động' }
+    //     ]
+    // },
     {
         name: 'Thống kê',
         icon: 'Equalizer',
@@ -60,18 +59,18 @@ const listButton = [
         ]
     },
     {
-        name: 'Gian hàng',
+        name: 'Ngành hàng',
         icon: 'AddHomeWork',
         commands: [
             { path: '/seller/manage/categories', name: 'Thiết lập ngành hàng' }
         ]
     },
-    {
-        name: 'Tài chính',
-        icon: 'Money',
-        commands: [
-            { path: '/seller/dashboard', name: 'Thu nhập' },
-            { path: '/seller/dashboard', name: 'Số dư tài khoản' }
-        ]
-    }
+    // {
+    //     name: 'Tài chính',
+    //     icon: 'Money',
+    //     commands: [
+    //         { path: '/seller/dashboard', name: 'Thu nhập' },
+    //         { path: '/seller/dashboard', name: 'Số dư tài khoản' }
+    //     ]
+    // }
 ]

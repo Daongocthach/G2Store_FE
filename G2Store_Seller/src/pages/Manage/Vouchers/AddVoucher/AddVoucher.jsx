@@ -88,7 +88,7 @@ function AddVoucher() {
                         <Typography variant='body1'>Ngày bắt đầu: </Typography>
                     </Box>
                     <TextField fullWidth size='small' type='datetime-local' value={startDate}
-                        onChange={(e) => console.log(e.target.value)} />
+                        onChange={(e) => setStartDate(e.target.value)} />
                 </Box>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

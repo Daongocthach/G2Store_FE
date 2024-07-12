@@ -83,7 +83,7 @@ function Products() {
                   <TableRow key={index}>
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {<img src={product?.images[0]?.file_url} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
+                        {<img src={product?.thumbnail} alt={product?.name} style={{ width: '50px', height: '50px', borderRadius: 10 }} />}
                         <Box>
                           <Typography variant='subtitle2' color={'#444444'}>{product?.name}</Typography>
                           <Typography> Mã sản phẩm: #{product?.product_id}</Typography>

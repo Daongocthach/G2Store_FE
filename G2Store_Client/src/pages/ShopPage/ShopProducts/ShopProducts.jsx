@@ -3,9 +3,9 @@ import { Grid, Box, Pagination, CircularProgress } from '@mui/material'
 import EmptyData from '../../../components/EmptyData/EmptyData'
 import CardProduct from '../../../components/Product/CardProduct'
 import productApi from '../../../apis/productApi'
-import Sort from '../Sort/Sort'
 import Filter from './Filter/Filter'
 import ShopCategories from './ShopCategories/ShopCategories'
+import Sort from '../../../components/Sort/Sort'
 
 function ShopProducts({ shop_id }) {
     const [isFilter, setIsFilter] = useState(false)

@@ -1,11 +1,12 @@
 import { Box, Menu, Chip, Container } from '@mui/material'
 import { KeyboardArrowDown, Widgets, MoneyOff, Category } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import MenuCategory from '../MenuCategory/MenuCategory'
 import categoryApi from '../../apis/categoryApi'
 
 function BoardBar() {
+    const navigate = useNavigate()
     const [categories, setCategories] = useState([])
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
@@ -33,7 +34,8 @@ function BoardBar() {
                         <Chip icon={<Category />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
                             onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
                         <Link to={'/promotion'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
-                        <Link to={'/genre-detail'}><Chip icon={<Widgets />} label={'Sản phẩm'} clickable sx={useStyles.chip} ></Chip></Link>
+                        <Chip icon={<Widgets />} label={'Sản phẩm'} clickable sx={useStyles.chip}
+                            onClick={() => navigate('/genre-detail')} />
                     </Box>
                     <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
                         {(Array.isArray(categories) && categories.length > 0) ?

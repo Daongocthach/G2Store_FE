@@ -8,6 +8,7 @@ import CardProduct from '../../../components/Product/CardProduct'
 import FilterByPrice from './Filter/FilterByPrice'
 import FilterByDistrict from './Filter/FilterByDistrict'
 import EmptyData from '../../../components/EmptyData/EmptyData'
+import Sort from '../../../components/Sort/Sort'
 
 function Products() {
     const navigate = useNavigate()
@@ -17,15 +18,17 @@ function Products() {
     const [products, setProducts] = useState()
     const [page, setPage] = useState(1)
     const [sort, setSort] = useState('DEFAULT')
-    const [startPrice, setStartPrice] = useState('0')
-    const [endPrice, setEndPrice] = useState('100000000')
+    const [startPrice, setStartPrice] = useState('')
+    const [endPrice, setEndPrice] = useState('')
+    const [checkPrice, setCheckPrice] = useState('all')
     const [isFilter, setIsFilter] = useState(false)
     const [districtId, setDistrictId] = useState('')
-    const handleResetFilter = () => {
+    const handleReset = () => {
         setSort('DEFAULT')
-        setStartPrice('0')
-        setEndPrice('100000000')
+        setStartPrice('')
+        setEndPrice('')
         setDistrictId('')
+        setCheckPrice('all')
         setIsFilter(false)
     }
     const handleChangePage = (event, value) => {
@@ -54,7 +57,7 @@ function Products() {
     }, [page, data, sort, isFilter, districtId])
 
     useEffect(() => {
-        handleResetFilter()
+        handleReset()
     }, [data?.name, data?.category?.category_id])
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
@@ -80,7 +83,7 @@ function Products() {
                             </Box>}
                     </Box>
                     <FilterByPrice isFilter={isFilter} setIsFilter={setIsFilter} startPrice={startPrice} setStartPrice={setStartPrice}
-                        endPrice={endPrice} setEndPrice={setEndPrice} />
+                        endPrice={endPrice} setEndPrice={setEndPrice} checkPrice={checkPrice} setCheckPrice={setCheckPrice} />
                     <FilterByDistrict />
                 </Box>
             </Grid>
@@ -88,18 +91,7 @@ function Products() {
                 <Box>
                     <Box className='flex flex-row items-center justify-between'>
                         <Typography variant='body1'>Tìm thấy <b>{products?.numberOfElements}</b> sản phẩm</Typography>
-                        <Box className='flex flex-row items-center'>
-                            <Typography variant='body1' color={'#444444'}>Sắp xếp theo</Typography>
-                            <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-                                <Select value={sort} onChange={(e) => setSort(e.target.value)} >
-                                    <MenuItem color='#444444' value={'TOP_SELLER'}>Bán chạy</MenuItem>
-                                    <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
-                                    <MenuItem color='#444444' value={'NEWEST'}>Mới nhất</MenuItem>
-                                    <MenuItem color='#444444' value={'PRICE_ASC'}>Giá tăng dần</MenuItem>
-                                    <MenuItem color='#444444' value={'PRICE_DESC'}>Giá giảm dần</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
+                        <Sort sort={sort} setSort={setSort} handleReset={handleReset}/>
                     </Box>
                     <Box className='flex flex-col items-center justify-center'>
                         {loading && <CircularProgress />}
@@ -117,7 +109,7 @@ function Products() {
                             </Grid>
                         )}
                         <Pagination count={products?.totalPages} variant="outlined" color="primary" page={page} className='mt-2'
-                        onChange={handleChangePage} />
+                            onChange={handleChangePage} />
                     </Box>
                 </Box>
             </Grid>

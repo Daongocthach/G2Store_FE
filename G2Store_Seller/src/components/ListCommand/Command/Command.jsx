@@ -13,10 +13,8 @@ function Command({ open, button }) {
         'Đơn hàng': <Reorder sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Tài khoản': <People sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Khuyến mãi': <Receipt sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
-        'Trò chuyện': <ThumbsUpDown sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
         'Thống kê': <Equalizer sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
-        'Gian hàng': <AddHomeWork sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
-        'Tài chính': <Money sx={{ color: (open1) ? '#00BFFF' : 'white' }} />
+        'Ngành hàng': <AddHomeWork sx={{ color: (open1) ? '#00BFFF' : 'white' }} />,
     }
     const handleClick = () => {
         if (open) {

@@ -13,7 +13,7 @@ function Notifications() {
     const [notifications, setNotifications] = useState([])
     const [page, setPage] = useState(0)
     const [totalElements, setTotalElements] = useState(0)
-    const [rowsPerPage, setRowsPerPage] = useState(7)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
     }

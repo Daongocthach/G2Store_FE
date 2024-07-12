@@ -7,7 +7,7 @@ import cartItemV2Api from '../../../apis/cartItemApiV2'
 import { formatCurrency } from '../../../utils/price'
 import OrderItem from '../../../components/Product/OrderItem'
 
-function LeftInformation({ cartItems, reRender, setReRender }) {
+function LeftInformation({ cartItems, reRender, setReRender, setIsSoldOut }) {
     const cartQuantity = useSelector(state => state.cart.cartItems)
     const handleIncrease = (shop_item_id, quantity) => {
         updateQuantity(shop_item_id, quantity + 1)
@@ -58,7 +58,7 @@ function LeftInformation({ cartItems, reRender, setReRender }) {
                                     cartItem?.shop_items.map((shop_item, index) => (
                                         <TableRow key={index}>
                                             <TableCell className='w-72'>
-                                                <OrderItem shop_item={shop_item} />
+                                                <OrderItem shop_item={shop_item} setIsSoldOut={setIsSoldOut} isCart={true}/>
                                             </TableCell>
                                             <TableCell className='w-36'>
                                                 <ToggleButton value="left" key="left" size='small'
