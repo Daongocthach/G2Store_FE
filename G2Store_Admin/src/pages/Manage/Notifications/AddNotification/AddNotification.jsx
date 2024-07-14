@@ -7,6 +7,7 @@ import SockJS from 'sockjs-client'
 import DialogAction from '../../../../components/Dialog/DialogAction'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 
+const baseURL = import.meta.env.VITE_PUBLIC_WEBSOCKET_URL
 var stompClient = null
 
 function AddNotification({ notifications, setNotifications }) {
@@ -19,7 +20,7 @@ function AddNotification({ notifications, setNotifications }) {
         connect()
     }
     const connect = () => {
-        let Sock = new SockJS('http://localhost:8080/ws')
+        let Sock = new SockJS(baseURL + 'ws')
         stompClient = over(Sock)
         stompClient.connect({}, function () {
             stompClient.subscribe('/all/notifications', function (result) {

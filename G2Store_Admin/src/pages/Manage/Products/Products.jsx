@@ -1,6 +1,6 @@
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableFooter,
-  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem, Switch, Tooltip
+  TablePagination, Paper, TableContainer, FormControl, Select, MenuItem
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import productApi from '../../../apis/productApi'
@@ -8,12 +8,10 @@ import { formatCurrency } from '../../../utils/price'
 import emptyImage from '../../../assets/img/empty-order.png'
 import Loading from '../../../components/Loading/Loading'
 import SearchById from '../../../components/Search/Search'
-import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import BanProduct from './BanProduct/BanProduct'
 
 function Products() {
-  const triggerAlert = useAlert()
   const [loading, setLoading] = useState(false)
   const [reRender, setReRender] = useState(false)
   const [products, setProducts] = useState([])
@@ -24,16 +22,10 @@ function Products() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
-  const handleChangeStatus = (status, product_id) => {
-    productApi.updateStatusProduct(product_id, status)
-      .then(() => { triggerAlert('Cập nhật thành công!', false, false), setReRender(!reRender) })
-      .catch(() => triggerAlert('Cập nhật thất bại!', true, false))
-  }
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
@@ -73,7 +65,6 @@ function Products() {
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá (vnđ)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tồn kho (sản phẩm)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đã bán (sản phẩm)</TableCell>
-                {/* <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell> */}
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
@@ -94,8 +85,6 @@ function Products() {
                     <TableCell ><Typography>{product?.stock_quantity}</Typography> </TableCell>
                     <TableCell ><Typography>{product?.sold_quantity}</Typography> </TableCell>
                     <TableCell ><BanProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} /></TableCell>
-                    {/* <TableCell ><Tooltip title='Ẩn/Hiện sản phẩm'><Switch checked={product?.is_available}
-                      onChange={(e) => handleChangeStatus(e.target.checked, product?.product_id)} /></Tooltip></TableCell> */}
                   </TableRow>
                 )
               })}

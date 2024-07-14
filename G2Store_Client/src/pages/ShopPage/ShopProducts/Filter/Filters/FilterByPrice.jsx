@@ -3,7 +3,7 @@ import { NumericFormat } from 'react-number-format'
 import { useState } from 'react'
 
 const FilterByPrice = ({ startPrice, setStartPrice, endPrice, setEndPrice }) => {
-    const [checkPrice, setCheckPrice] = useState()
+    const [checkPrice, setCheckPrice] = useState('all')
     const handlePriceChange = (min, max, check) => {
         setStartPrice(min)
         setEndPrice(max)

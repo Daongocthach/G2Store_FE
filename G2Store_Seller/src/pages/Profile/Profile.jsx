@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
-import { Typography, Box, Input, Paper } from '@mui/material'
+import { Typography, Box, Input, Paper, ButtonGroup } from '@mui/material'
 import authenApi from '../../apis/authenApi'
 import Loading from '../../components/Loading/Loading'
 import UpdateAvatar from './UpdateSeller/UpdateAvatar'
+import UpdateName from './UpdateSeller/UpdateName'
+import UpdatePassword from './UpdateSeller/UpdatePassword'
+import UpdatePhoneNo from './UpdateSeller/UpdatePhoneNo'
 
 function Profile() {
   const [reRender, setReRender] = useState(false)
   const [loading, setLoading] = useState(false)
   const [seller, setSeller] = useState({})
-  const [fullName, setFullName] = useState(seller?.full_name)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +19,7 @@ function Profile() {
         .then(async (response) => {
           setSeller({
             email: response?.email,
-            phoneNo: response?.phone_no,
+            phone_no: response?.phone_no,
             full_name: response?.full_name,
             avatar: response?.avatar
           })
@@ -42,18 +44,19 @@ function Profile() {
         </Box>
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1, mt: 1, mb: 1 }}>
           <Typography variant='subtitle1' sx={useStyles.inputTitle}>Họ và Tên:</Typography>
-          <Input placeholder='Nhập họ và tên' sx={{ ...useStyles.input, color: 'gray' }} value={fullName} onChange={e => setFullName(e.target.value)} />
+          <Input placeholder='Họ và tên' sx={{ ...useStyles.input, color: 'gray' }} value={seller?.full_name ? seller?.full_name : ''} readOnly />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
           {/* <DialogUpdate handle={handleUpdate} /> */}
           {/*Avatar */}
           <UpdateAvatar reRender={reRender} setReRender={setReRender} />
         </Box>
-        {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
-          <DialogUpdatePassword />
-          <DialogUpdatePhoneNo />
-          <DialogUpdateEmail />
-        </Box> */}
+        <ButtonGroup variant="contained" color='info' aria-label="Basic button group" className='mt-1'>
+          <UpdateName fullNameRoot={seller?.full_name} reRender={reRender} setReRender={setReRender} />
+          <UpdatePassword reRender={reRender} setReRender={setReRender} />
+          <UpdatePhoneNo reRender={reRender} setReRender={setReRender} />
+          {/* <UpdateEmail /> */}
+        </ButtonGroup>
       </Box>
       {loading && <Loading />}
     </Paper>

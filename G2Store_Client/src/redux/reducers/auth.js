@@ -1,5 +1,5 @@
 const initialState = {
-    customer_id: null,
+    customer_id: '',
     keep_login: false,
     avatar: '',
     point: 0
@@ -25,6 +25,7 @@ const authReducer = (state = initialState, action) => {
             localStorage.removeItem('atk')
             localStorage.removeItem('rtk')
             return {
+                customer_id: '',
                 keep_login: false,
                 avatar: '',
                 point: 0

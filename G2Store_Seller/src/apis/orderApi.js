@@ -13,11 +13,12 @@ const orderApi = {
   getOrder(order_id) {
     const url = `orders/${order_id}`
     return axiosClient.get(url)
-},
+  },
   updateOrder(order_id, orderStatus) {
     const url = `orders/${order_id}/shop?orderStatus=${orderStatus}`
     return axiosClient.put(url)
   }
+
 }
 
 export default orderApi

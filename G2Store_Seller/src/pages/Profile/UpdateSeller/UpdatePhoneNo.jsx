@@ -11,7 +11,7 @@ function UpdatePhoneNo({ reRender, setReRender }) {
 
     const handleUpdatePhoneNo = async () => {
         if (new_phone_no) {
-            authenApi.updatePhone({ new_phone_no })
+            authenApi.updatePhoneNo({ new_phone_no })
                 .then(() => {
                     toast.success('Cập nhật thành công', { position: 'top-center', autoClose: 2000 })
                     setReRender(!reRender)
@@ -25,7 +25,6 @@ function UpdatePhoneNo({ reRender, setReRender }) {
         else {
             toast.error('Số điện thoại không được để trống', { position: 'top-center', autoClose: 2000 })
         }
-
     }
     return (
         <Box>

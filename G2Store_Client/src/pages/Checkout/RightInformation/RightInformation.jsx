@@ -24,8 +24,8 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
         return acc
     }, { totalProducts: 0, totalFeeShipReduce: 0, totalShopVoucher: 0 })
     var totalFeeShip = feeShips.reduce((totalFeeShip, feeShip) => totalFeeShip + feeShip?.fee, 0)
-    var total = totals?.totalProducts + totalFeeShip - (totals?.totalFeeShipReduce || 0) - (totals?.totalShopVoucher || 0) -
-        (is_point_spent ? point : 0)
+    var totalTemp = totals?.totalProducts + totalFeeShip - (totals?.totalFeeShipReduce || 0) - (totals?.totalShopVoucher || 0)
+    var total = totalTemp - (is_point_spent ? totalTemp : 0)
     const convertDataToOrderFormat = (data) => {
         const address_id = address?.address_id
         const payment_type = paymentType
@@ -91,12 +91,12 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
                 <Typography className='text-gray-600' fontSize={14}>Giảm giá của shop: </Typography>
                 <Typography className='text-red-700' fontSize={14}>-{formatCurrency(totals?.totalShopVoucher)}</Typography>
             </Box>
-            <Box className='flex items-center justify-between border-b border-gray-500 pb-1' >
-                <Box className='flex flex-row items-center gap-2' >
-                    <Typography className='text-gray-600' fontSize={14}>Sử dụng điểm tích lũy (-{formatCurrency(point || 0)})</Typography>
+            <Box className='flex items-center justify-between border-b border-gray-500 pb-1 gap-2' >
+                <Box className='flex flex-row items-center' >
+                    <Typography className='text-gray-600' fontSize={14}>Dùng điểm tích lũy (-{formatCurrency(totalTemp || 0)})</Typography>
                     <IOSSwitch checked={is_point_spent} onChange={() => setIsPointSpent(!is_point_spent)} color="error" />
                 </Box>
-                <Typography className='text-red-700' fontSize={13}>-{formatCurrency(is_point_spent ? (point || 0) : 0)}</Typography>
+                <Typography className='text-red-700' fontSize={13}>-{formatCurrency(is_point_spent ? (totalTemp || 0) : 0)}</Typography>
             </Box>
             <Box className="flex items-center justify-between gap-2 mt-2">
                 <Typography fontSize={17} className="text-gray-700">Tổng cộng:</Typography>

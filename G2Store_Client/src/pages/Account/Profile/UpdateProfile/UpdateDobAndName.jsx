@@ -43,13 +43,13 @@ function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
     }
     return (
         <Box>
-            <Button sx={{ fontWeight: 'bold', height: 40 }} size='medium' fullWidth
+            <Button sx={{ fontWeight: 'bold', height: 40 }} size='medium' fullWidth={true}
                 variant="contained" color="success" onClick={handleOpen}>Cập nhật tên và ngày sinh</Button>
             <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Cập nhật email</DialogTitle>
                 <DialogContent>
                     <Box className='flex-col bg-sky-50'>
-                        <TextField id="full_name" variant='filled' name="full_name" fullWidth size='small' label='Nhập họ và tên'
+                        <TextField id="full_name" variant='filled' fullWidth={true} name="full_name" size='small' label='Nhập họ và tên'
                             value={full_name} onChange={(e) => setFullName(e.target.value)} focused color='info'
                             className='text-sm  text-gray-600' />
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -59,9 +59,7 @@ function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
                                     openPickerButton: { color: 'inherit' },
                                     textField: {
                                         variant: 'filled',
-                                        focused: true,
                                         color: 'primary',
-                                        fullWidth: true
                                     }
                                 }}
                                 value={dob}

@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient'
 const productApi = {
-    getProducts(page, size, sort, startPrice, endPrice, districtId) {
+    getProducts(page, size, sort, startPrice, endPrice, districtId, star) {
         var seed = sessionStorage.getItem('seed')
         if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
@@ -18,11 +18,14 @@ const productApi = {
         }
         if (endPrice == 0 || endPrice) {
             params.endPrice = endPrice
+        }
+        if (star) {
+            params.star = star
         }
         const url = `products?page=${page}&size=${size}&seed=${seed}`
         return axiosClient.get(url, { params: params })
     },
-    getProductsByCategoryId(categoryId, page, size, sort, startPrice, endPrice, districtId) {
+    getProductsByCategoryId(categoryId, page, size, sort, startPrice, endPrice, districtId, star) {
         var seed = sessionStorage.getItem('seed')
         if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
@@ -41,10 +44,13 @@ const productApi = {
         if (endPrice == 0 || endPrice) {
             params.endPrice = endPrice
         }
+        if (star) {
+            params.star = star
+        }
         const url = `products/category/${categoryId}?page=${page}&size=${size}&seed=${seed}`
         return axiosClient.get(url, { params: params })
     },
-    searchProducts(name, page, size, sort, startPrice, endPrice, districtId) {
+    searchProducts(name, page, size, sort, startPrice, endPrice, districtId, star) {
         var seed = sessionStorage.getItem('seed')
         if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
@@ -62,6 +68,9 @@ const productApi = {
         }
         if (endPrice == 0 || endPrice) {
             params.endPrice = endPrice
+        }
+        if (star) {
+            params.star = star
         }
         const url = `products/search?page=${page}&size=${size}&seed=${seed}&name=${name}`
         return axiosClient.get(url, { params: params })
@@ -86,7 +95,6 @@ const productApi = {
             params.shopCateId = shop_cate_id
         }
         const url = `products/shop/${shop_id}?page=${page}&size=${size}&seed=${seed}&sort=${sort}`
-        console.log(params)
         return axiosClient.get(url, { params: params })
     },
     getTop5ShopProducts(shop_id) {

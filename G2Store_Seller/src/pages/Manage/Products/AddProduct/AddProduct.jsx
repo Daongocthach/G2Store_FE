@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, TextField, Box, Typography, Paper } from '@mui/material'
-import { AddCircle, NavigateNext, Clear } from '@mui/icons-material'
+import { Button, TextField, Box, Typography } from '@mui/material'
+import { AddCircle, Clear } from '@mui/icons-material'
 import { NumericFormat } from 'react-number-format'
 import productApi from '../../../../apis/productApi'
-import MenuCategory from './MenuCategory/MenuCategory'
-import categoryApi from '../../../../apis/categoryApi'
 import Loading from '../../../../components/Loading/Loading'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import SelectCategory from './SelectCategory/SelectCategory'
 
 function AddProduct() {
     const triggerAlert = useAlert()
     const location = useLocation()
     const product = location.state
     const navigate = useNavigate()
-    const [categories, setCategories] = useState([])
-    const [selectedCategories, setSelectedCategories] = useState()
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [description, setDescription] = useState('')
@@ -42,18 +39,12 @@ function AddProduct() {
             setWidth(product?.width)
             setLength(product?.length)
             setImages(product?.images)
-            const deepestCategory = getDeepestCategory(product?.category)
-            setCategoryId(deepestCategory?.category_id)
-            setSelectedCategories(deepestCategory?.name)
         }
-        categoryApi.getCategories()
-            .then((response) => { setCategories(response) })
-            .catch(err => console.log(err))
-
     }, [])
     const handleImageChange = (e) => {
         const file = e.target.files[0]
         if (file) {
+            console.log(file)
             setFiles(prevFiles => [...prevFiles, file])
             const reader = new FileReader()
             reader.onload = () => {
@@ -78,8 +69,10 @@ function AddProduct() {
         setImages(newImages)
         const newFiles = files.filter(file => file !== imageData?.file)
         setFiles(newFiles)
-        if (imageData?.id)
-            productApi.deleteImageProduct(imageData?.id)
+        if (product?.product_id && imageData?.id)
+            productApi.deleteImageProduct(parseInt(product?.product_id), Number(imageData?.id))
+            .then(() => triggerAlert('Xóa ảnh thành công!', false, false))
+            .catch(() => triggerAlert('Xóa ảnh thất bại!', true, false))
     }
     const handleClickAdd = async () => {
         setLoading(true)
@@ -142,48 +135,23 @@ function AddProduct() {
                     </Box>
                     <TextField fullWidth size='small' placeholder='Ex: Bánh gạo' value={name} onChange={(e) => setName(e.target.value)} />
                 </Box>
-                <Box >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>
-                        <Typography variant='subtitle2'>Danh mục sản phẩm: </Typography>
-                    </Box>
-                    <Box sx={{ mt: 2 }}>
-                        <Paper sx={{ width: '100%', p: 2 }} elevation={4}>
-                            <Paper sx={{ borderWidth: 0.5, borderColor: '#CCCCCC' }} variant='outlined'>
-                                <MenuCategory categories={categories} setCategoryId={setCategoryId} setSelectedCategories={setSelectedCategories} />
-                            </Paper>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
-                                <Typography variant='subtitle1'>Đang chọn: </Typography>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    <Typography variant='subtitle2' color={'#555555'}>{selectedCategories}</Typography>
-                                    <NavigateNext sx={{ color: '#444444', fontSize: 14 }} />
-                                </Box>
-                            </Box>
-                        </Paper>
-                    </Box>
-                </Box >
+                <SelectCategory product={product} setCategoryId={setCategoryId} />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>
                             <Typography variant='subtitle2'>Giá (vnđ): </Typography>
                         </Box>
-                        <NumericFormat
-                            customInput={TextField}
-                            size='small'
-                            type='text'
-                            thousandSeparator={true}
-                            value={price}
-                            onValueChange={(values) => setPrice(values.value)}
-                            inputProps={{ min: 0 }}
-                        />
+                        <NumericFormat customInput={TextField} size='small' type='text' thousandSeparator={true}
+                            value={price} onValueChange={(values) => setPrice(values.value)} inputProps={{ min: 0 }} />
                     </Box>
                     <Box sx={{ alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>
                             <Typography variant='subtitle2'>Số lượng sản phẩm: </Typography>
                         </Box>
-                        <TextField fullWidth size='small' type='number' inputProps={{ min: 0 }} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                        <TextField fullWidth size='small' type='number' inputProps={{ min: 0 }} value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)} />
                     </Box>
                 </Box>
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
@@ -191,7 +159,8 @@ function AddProduct() {
                         <Typography variant='subtitle2' sx={{ color: 'red' }}>*</Typography>
                         <Typography variant='subtitle2'>Mô tả: </Typography>
                     </Box>
-                    <TextField fullWidth size='medium' multiline rows={6} value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <TextField fullWidth size='medium' multiline rows={6} value={description}
+                        onChange={(e) => setDescription(e.target.value)} />
                 </Box>
                 {/**Hình ảnh */}
                 <Box sx={{ alignItems: 'center', gap: 1 }}>
@@ -262,11 +231,3 @@ function AddProduct() {
 }
 export default AddProduct
 
-function getDeepestCategory(category) {
-    let deepestCategory = category
-    while (!(deepestCategory?.child_categories && deepestCategory.child_categories.length === 0)) {
-        deepestCategory = deepestCategory.child_categories[0]
-    }
-
-    return deepestCategory
-}

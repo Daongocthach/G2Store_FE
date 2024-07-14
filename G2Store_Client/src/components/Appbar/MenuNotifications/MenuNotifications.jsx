@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react'
 import { Box, Typography, Popover, Divider, Badge, Tooltip, Snackbar } from '@mui/material'
 import { Notifications, Close, Adb, AddBusiness } from '@mui/icons-material'
 import { over } from 'stompjs'
+import { useSelector } from 'react-redux'
 import SockJS from 'sockjs-client'
 import notificationApi from '../../../apis/notificationApi'
 import Notification from '../../Notification/Notification'
 import EmptyData from '../../EmptyData/EmptyData'
 
-const baseURL = import.meta.env.VITE_PUBLIC_API_URL
+const baseURL = import.meta.env.VITE_PUBLIC_WEBSOCKET_URL
 
-function MenuNotifications({ user }) {
+function MenuNotifications() {
+    const user = useSelector(state => state.auth)
     const [anchorEl, setAnchorEl] = useState(null)
     const [notifications, setNotifications] = useState([])
     const [newNotification, setNewNotification] = useState({})
@@ -40,7 +42,7 @@ function MenuNotifications({ user }) {
             if (stompClient && stompClient?.connected) {
                 return
             }
-            let Sock = new SockJS(baseURL + '/ws')
+            let Sock = new SockJS(baseURL + 'ws')
             stompClient = over(Sock)
             stompClient.connect({}, function () {
                 stompClient.subscribe('/all/notifications', function (result) {

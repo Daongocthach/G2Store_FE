@@ -54,7 +54,7 @@ function ResetPassword() {
       .then(() => {
         triggerAlert('Đổi mật khẩu thành công', false, false)
         setTimeout(() => {
-          navigate('/login')
+          navigate('/')
         }, 1000)
         setLoading(false)
       })

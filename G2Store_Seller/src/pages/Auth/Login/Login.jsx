@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Container, TextField, Stack, Button, Box, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -22,32 +22,42 @@ function Login() {
     try {
       if (email !== '' && password !== '') {
         const response = await authenApi.login({ email, password })
-        if (response) {
-          triggerAlert('Đăng nhập thành công!', false, false)
-          localStorage.setItem('atk', response?.access_token)
-          localStorage.setItem('rtk', response?.refresh_token)
-          dispatch(login())
-          authenApi.me()
-            .then((response) => {
-              dispatch(updateProfile(response?.shop?.shop_id))
-              dispatch(updateShopImage(response?.shop?.image))
-              dispatch(updateShopName(response?.shop?.name))
-            })
-          navigate('/seller/dashboard')
-          setLoading(false)
-        }
-        else {
-          console.log(response)
-          triggerAlert('Đăng nhập thất bại!', true, false)
-        }
+        triggerAlert('Đăng nhập thành công!', false, false)
+        localStorage.setItem('atk', response?.access_token)
+        localStorage.setItem('rtk', response?.refresh_token)
+        dispatch(login())
+        authenApi.me()
+          .then((response) => {
+            dispatch(updateProfile(response?.shop?.shop_id))
+            dispatch(updateShopImage(response?.shop?.image))
+            dispatch(updateShopName(response?.shop?.name))
+          })
+        navigate('/seller/dashboard')
+        setLoading(false)
       }
       setLoading(false)
     } catch (error) {
       setLoading(false)
-      triggerAlert('Đăng nhập thất bại!', true, false)
-      console.log(error)
+      if (error?.response?.data?.code == 1) {
+        triggerAlert('Tạo tài khoản thành công vui lòng xác nhận OTP đã gửi qua email!', false, false)
+        navigate('/input-otp')
+      }
+      else {
+        triggerAlert('Đăng nhập thất bại!', true, false)
+      }
     }
   }
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        onFinish()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [email, password])
   return (
     <Container disableGutters maxWidth={false} className="h-screen">
       <Box className="w-full h-full overflow-hidden relative bg-black">

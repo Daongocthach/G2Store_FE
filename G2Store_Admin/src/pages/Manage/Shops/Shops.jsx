@@ -44,10 +44,11 @@ function Shops() {
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: '#2a99ff' }} >
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Id</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Mã shop</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Tên shop</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Địa chỉ</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Doanh thu</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Điểm vi phạm</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
@@ -55,20 +56,17 @@ function Shops() {
               {Array.isArray(shops) && shops?.map((shop, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell >
-                        <Typography>#{shop?.shop_id}</Typography>
+                    <TableCell><Typography variant='body2'>#{shop?.shop_id}</Typography></TableCell>
+                    <TableCell className='w-40'> <Typography variant='body2' >{shop?.name}</Typography></TableCell>
+                    <TableCell className='w-72'>
+                      <Typography>
+                        {shop?.province_name ? (shop?.street + ', ' + shop?.ward_name + ', ' + shop?.district_name + ', ' + shop?.province_name) : 'Chưa cập nhật'}
+                      </Typography>
                     </TableCell>
+                    <TableCell variant='body'><Typography >{formatCurrency(shop?.balance)}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2'>{shop?.violation_point}</Typography></TableCell>
                     <TableCell >
-                      <Typography >{shop?.name}</Typography>
-                    </TableCell>
-                    <TableCell >
-                      <Typography>{shop?.province ? (shop?.street + ', ' + shop?.ward + ', ' + shop?.district + ', ' + shop?.province) : 'Chưa cập nhật'}</Typography>
-                    </TableCell>
-                    <TableCell ><Typography>{formatCurrency(shop?.balance)}</Typography></TableCell>
-                    <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <DeleteShop id={shop?.shop_id} />
-                      </Box>
                     </TableCell>
                   </TableRow>
                 )

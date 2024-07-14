@@ -32,11 +32,14 @@ function CardProduct({ product, isShort }) {
     }
   }
   useEffect(() => {
-    reviewApi.getReviewByProductId(product?.product_id, 0, 8)
-      .then((response) => {
-        setReviews(response)
-      })
-      .catch((error) => console.log(error))
+    const fetchData = async () => {
+      reviewApi.getReviewByProductId(product?.product_id, 0, 8)
+        .then((response) => {
+          setReviews(response)
+        })
+        .catch((error) => console.log(error))
+    }
+    fetchData()
   }, [])
   return (
     <Card className='w-auto cursor-pointer' variant="outlined">
@@ -75,10 +78,12 @@ function CardProduct({ product, isShort }) {
           </Button>
         </Tooltip>
         <Tooltip title="Thêm vào giỏ">
-          <Button disabled={product?.stock_quantity < 1} size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}
-            onClick={handleClickAddToCart}>
-            <ShoppingCart sx={{ fontSize: 22 }} />
-          </Button>
+          <span>
+            <Button disabled={product?.stock_quantity < 1} size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}
+              onClick={handleClickAddToCart}>
+              <ShoppingCart sx={{ fontSize: 22 }} />
+            </Button>
+          </span>
         </Tooltip>
         {!isShort && <Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}>
           <Help sx={{ fontSize: 20 }} /></Button>

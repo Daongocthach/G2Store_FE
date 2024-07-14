@@ -39,7 +39,7 @@ function UpdatePhoneNo({ reRender, setReRender }) {
             <Dialog open={open} keepMounted onClose={() => { setOpen(false), setTouched(false) }} >
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Cập nhật số điện thoại</DialogTitle>
                 <DialogContent>
-                    <TextField variant='filled' fullWidth label='Số điện thoại' size='small' type='text' value={new_phone_no}
+                    <TextField variant='filled' fullWidth={true} label='Số điện thoại' size='small' type='text' value={new_phone_no}
                         error={touched && !new_phone_no}
                         helperText={touched && !new_phone_no ? 'Không được để trống' : ''}
                         onChange={(e) => setPhoneNo(e.target.value)}

@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Link } from '@mui/material'
+import { Container, Typography, Box, Link, CircularProgress } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import emptyOrder from '../../assets/img/empty-order.png'
@@ -11,18 +11,21 @@ import Banner from './Banner/Banner'
 function Cart() {
   const dispatch = useDispatch()
   const keep_login = useSelector(state => state.auth.keep_login)
+  const [loading, setLoading] = useState(false)
   const [reRender, setReRender] = useState(false)
   const [cartItems, setCartItems] = useState([])
   const [isSoldOut, setIsSoldOut] = useState(false)
 
   useEffect(() => {
     if (keep_login) {
+      setLoading(true)
       cartItemV2Api.getCartItems()
         .then(response => {
           setCartItems(response)
           dispatch(setCart(response))
           setIsSoldOut(false)
         })
+        .finally(() => setLoading(false))
     }
   }, [reRender, keep_login])
   return (
@@ -32,7 +35,7 @@ function Cart() {
         <Box className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Phần sản phẩm */}
           <Box className="col-span-2">
-            {Array.isArray(cartItems) && cartItems.length <= 0 ? (
+            {Array.isArray(cartItems) && cartItems.length < 1 && !loading &&
               <Box className="flex flex-col items-center">
                 <img src={emptyOrder} className="object-cover h-52 w-52" />
                 <Typography>Bạn chưa có sản phẩm nào trong giỏ</Typography>
@@ -42,9 +45,11 @@ function Cart() {
                   </Typography>
                 </Link>
               </Box>
-            ) : (
+            }
+            {loading ?
+              <CircularProgress /> :
               <LeftInformation cartItems={cartItems} reRender={reRender} setReRender={setReRender} setIsSoldOut={setIsSoldOut} />
-            )}
+            }
           </Box>
           {/* Phần tổng cộng và đặt hàng */}
           <RightInformation cartItems={cartItems} isSoldOut={isSoldOut} />

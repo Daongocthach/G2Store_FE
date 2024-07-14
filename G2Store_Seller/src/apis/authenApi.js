@@ -17,7 +17,7 @@ const authenApi = {
             code, new_pass
         }
         const url = 'sellers/reset-password'
-        return axiosClient.get(url, data)
+        return axiosClient.put(url, data)
     },
     activeAccount(otp) {
         const url = `sellers/activate-account?verification-code=${otp}`
@@ -31,9 +31,9 @@ const authenApi = {
         const url = 'sellers/me'
         return axiosClient.get(url)
     },
-    updateProfile(data) {
-        const url = 'sellers/me'
-        return axiosClient.put(url, data)
+    updateName(name) {
+        const url = `sellers/me?name=${name}`
+        return axiosClient.put(url)
     },
     updateAvatar: (formData) => {
         const url = 'sellers/upload-avatar'
@@ -41,6 +41,14 @@ const authenApi = {
             'Content-Type': 'multipart/form-data'
         }
         return axiosClient.put(url, formData, headers)
+    },
+    updatePhoneNo(data) {
+        const url = 'sellers/me/phone-no'
+        return axiosClient.put(url, data)
+    },
+    updatePassword(data) {
+        const url = 'sellers/me/password'
+        return axiosClient.put(url, data)
     }
 }
 

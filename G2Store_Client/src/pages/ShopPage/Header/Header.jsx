@@ -15,7 +15,7 @@ function Header({ shop }) {
                 <Avatar className="w-12 h-12">
                     <img src={shop?.image} className="object-contain w-full h-full" />
                 </Avatar>
-                <Box className='w-40'>
+                <Box className='w-fit'>
                     <Typography variant="h6" className='text-gray-600'>{shop?.name}</Typography>
                     <Typography variant="subtitle2" className='text-gray-600'>Vi phạm: {shop?.violation_point}</Typography>
                 </Box>

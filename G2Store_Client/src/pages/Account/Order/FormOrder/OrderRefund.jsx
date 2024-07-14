@@ -90,7 +90,7 @@ function OrderRefund({ order, reRender, setReRender }) {
                             </Button>
                             {Array.isArray(images) &&
                                 images.map((image, index) => (
-                                    <Box key={index} className='h-20 w-20 rounded-xl relative'>
+                                    <Box key={index} className='h-16 w-16 rounded-xl relative bg-black'>
                                         {image?.file?.type.startsWith('video/') ?
                                             <video style={{ height: '100%', width: '100%', borderRadius: '10px' }}>
                                                 <source src={image?.fileUrl} type={image?.file?.type} />

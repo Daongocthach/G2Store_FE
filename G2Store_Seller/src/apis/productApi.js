@@ -7,8 +7,12 @@ const productApi = {
         if (!size) {
             size = 8
         }
-        const url = `products/shop/me?page=${page}&size=${size}&shopProductSortType=${sort}`
-        return axiosClient.get(url)
+        const params = {}
+        if (sort) {
+            params.shopProductSortType = sort
+        }
+        const url = `products/shop/me?page=${page}&size=${size}`
+        return axiosClient.get(url, { params: params })
     },
     getProduct(product_id) {
         const url = `products/${product_id}`
@@ -46,9 +50,9 @@ const productApi = {
         const url = `products/${productId}`
         return axiosClient.delete(url)
     },
-    deleteImageProduct(imageId) {
-        const url = `gcp-storage/product/object/${imageId}`
-        return axiosClient.delete(url)
+    deleteImageProduct(productId, imageId) {
+        const url = `products/${productId}/del-image?fileId=${imageId}`
+        return axiosClient.put(url)
     },
     exportExcel(product_ids, is_all_products) {
         const url = 'products/export/excel'

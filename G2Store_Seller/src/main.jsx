@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { CssBaseline } from '@mui/material'
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
@@ -13,12 +13,12 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}></PersistGate>
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
       <CssVarsProvider theme={theme}>
         <CssBaseline>
           <App />
         </CssBaseline>
       </CssVarsProvider>
-    </React.StrictMode>
+    {/* </React.StrictMode> */}
   </Provider>
 )

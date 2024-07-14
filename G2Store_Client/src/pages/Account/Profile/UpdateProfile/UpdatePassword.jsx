@@ -39,20 +39,20 @@ function UpdatePassword({ reRender, setReRender }) {
             <Button sx={{ color: 'white', fontWeight: 'bold', height: '40px' }} onClick={() => setOpen(true)}>Đổi mật khẩu</Button>
             <Dialog open={open} keepMounted onClose={() => { setOpen(false), setTouched(false) }} >
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Cập nhật mật khẩu</DialogTitle>
-                <DialogContent fullWidth>
+                <DialogContent fullWidth={true}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <TextField variant='filled' fullWidth label='Nhập mật khẩu cũ' size='small' type='password' value={old_password}
+                        <TextField variant='filled' fullWidth={true} label='Nhập mật khẩu cũ' size='small' type='password' value={old_password}
                             error={touched && !old_password}
                             helperText={touched && !old_password ? 'Không được để trống' : ''}
                             onChange={(e) => setOld_password(e.target.value)}
                             onBlur={() => setTouched(true)} />
-                        <TextField variant='filled' fullWidth label='Nhập mật khẩu mới' size='small'
+                        <TextField variant='filled' fullWidth={true} label='Nhập mật khẩu mới' size='small'
                             type='password' value={new_password}
                             error={touched && old_password == new_password}
                             helperText={touched && old_password == new_password ? 'Trùng mật khẩu cũ' : ''}
                             onChange={e => setNew_password(e.target.value)}
                             onBlur={() => setTouched(true)} />
-                        <TextField variant='filled' fullWidth label='Xác nhận mật khẩu' size='small'
+                        <TextField variant='filled' fullWidth={true} label='Xác nhận mật khẩu' size='small'
                             type='password' value={re_password}
                             error={new_password !== re_password}
                             helperText={new_password !== re_password ? 'Mật khẩu không khớp!' : ''}

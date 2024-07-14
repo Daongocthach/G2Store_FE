@@ -1,19 +1,17 @@
 import { useState } from 'react'
 import { ArrowForwardIos } from '@mui/icons-material'
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 function MenuCategory({ categories, setCategoryId, setSelectedCategories }) {
     const [selectCategory, setSelectCategory] = useState()
     const handleClick = (category) => {
-        if (category?.child_categories && category.child_categories.length === 0) {
-            setCategoryId(category?.category_id)
-            setSelectedCategories(category?.name)
-        }
+        setCategoryId(category?.category_id)
+        setSelectedCategories(category?.name)
         setSelectCategory(category)
     }
     return (
         <Box className='flex flex-row overflow-x-auto' >
-            <Box className='overflow-auto flex flex-col gap-2 p-2'>
+            <Box className='overflow-x-auto flex flex-col gap-2 p-2'>
                 {Array.isArray(categories) && categories.map((category, index) => (
                     <Box className='flex flex-row gap-1 text-gray-600 cursor-pointer items-center'
                         key={index} onClick={() => handleClick(category)}>

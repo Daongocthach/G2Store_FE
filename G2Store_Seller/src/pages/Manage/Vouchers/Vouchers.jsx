@@ -1,20 +1,19 @@
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, Paper, TableRow,
-  TableContainer, FormControl, Select, MenuItem, Button, Tooltip
+  TableContainer, FormControl, Select, MenuItem, Button
 } from '@mui/material'
-import { AddCircle, Create } from '@mui/icons-material'
+import { AddCircle } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
-import DeleteVoucher from './FormVoucher/DeleteVoucher'
 import { formatCurrency } from '../../../utils/price'
 import voucherApi from '../../../apis/voucherApi'
 import Loading from '../../../components/Loading/Loading'
-import SearchById from '../../../components/Search/Search'
+import Search from '../../../components/Search/Search'
 import AddVoucherToProducts from './FormVoucher/AddVoucherToProducts'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
-import EmptyData from '../../../components/EmptyData/EmptyData'
+import PauseVoucher from './FormVoucher/PauseVoucher'
 
 function Vouchers() {
   const navigate = useNavigate()
@@ -22,6 +21,7 @@ function Vouchers() {
   const [reRender, setReRender] = useState(false)
   const [vouchers, setVouchers] = useState([])
   const [voucherName, setVoucherName] = useState('')
+  const [voucherId, setVoucherId] = useState('')
   const [page, setPage] = useState(0)
   const [totalElements, setTotalElements] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -34,27 +34,24 @@ function Vouchers() {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const handleClickUpdate = (voucher) => {
-    navigate('/seller/manage/add-voucher', { state: voucher })
+  const fetchData = async () => {
+    setLoading(true)
+    voucherApi.getShopVouchers(page, rowsPerPage, status, voucherName, voucherId)
+      .then(response => {
+        setVouchers(response?.content)
+        setTotalElements(response?.totalElements)
+      })
+      .catch((error) => {
+        if (error?.response?.data?.message == 'Access Denied') {
+          navigate('/seller/access-denied')
+        }
+        console.log(error)
+      })
+      .finally(() => setLoading(false))
   }
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      voucherApi.getShopVouchers(page, rowsPerPage, status, voucherName)
-        .then(response => {
-          setVouchers(response?.content)
-          setTotalElements(response?.totalElements)
-        })
-        .catch((error) => {
-          if (error?.response?.data?.message == 'Access Denied') {
-            navigate('/seller/access-denied')
-          }
-          console.log(error)
-        })
-        .finally(() => setLoading(false))
-    }
     fetchData()
-  }, [page, status, reRender, rowsPerPage, voucherName])
+  }, [page, status, reRender, rowsPerPage])
   return (
     <Box sx={{ m: 5, height: '100vh' }}>
       <BreadCrumbs links={[{ name: 'Quản lý mã giảm giá', href: '' }]} />
@@ -64,8 +61,8 @@ function Vouchers() {
           Thêm
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <SearchById setDatas={setVouchers} isVoucherName={true} setVoucherName={setVoucherName} reRender={reRender} setReRender={setReRender} />
-          <SearchById setDatas={setVouchers} isVoucherId={true} reRender={reRender} setReRender={setReRender} />
+          <Search fetchData={fetchData} isVoucherName={true} setVoucherName={setVoucherName} reRender={reRender} setReRender={setReRender} />
+          <Search fetchData={fetchData} isVoucherId={true} setVoucherId={setVoucherId} reRender={reRender} setReRender={setReRender} />
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={status} onChange={(e) => setStatus(e.target.value)} >
               <MenuItem color='#444444' value={'ALL'}>Tất cả</MenuItem>
@@ -82,14 +79,15 @@ function Vouchers() {
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: '#2a99ff' }} >
-                <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 150 }} >Mã</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Mã</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 150 }} >Tên</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 200 }} >Thời gian</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white', width: 150 }} >Thời gian</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Loại mã</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Kiểu</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Số lượng</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đã dùng / Số lượng</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Đơn tối thiểu (vnđ)</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Giá trị (vnđ/%)</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Trạng thái</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', color: 'white' }} >Hành động</TableCell>
               </TableRow>
             </TableHead>
@@ -97,27 +95,26 @@ function Vouchers() {
               {Array.isArray(vouchers) && vouchers?.map((voucher, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell ><Typography>{voucher?.id}</Typography></TableCell>
-                    <TableCell ><Typography>{voucher?.name}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2'>{voucher?.id}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2'>{voucher?.name}</Typography></TableCell>
                     <TableCell > <Box>
-                      <Typography variant='body2' maxWidth={150}><i>Từ:</i> {format(new Date(voucher?.start_date), 'yyyy-MM-dd')}</Typography>
-                      <Typography variant='body2' maxWidth={150}><i>Đến:</i> {format(new Date(voucher?.end_date), 'yyyy-MM-dd')}</Typography>
+                      <Typography variant='body2' ><i>Từ:</i> {format(new Date(voucher?.start_date), 'yyyy-MM-dd')}</Typography>
+                      <Typography variant='body2' ><i>Đến:</i> {format(new Date(voucher?.end_date), 'yyyy-MM-dd')}</Typography>
                     </Box></TableCell>
-                    <TableCell ><Typography>{voucher?.voucher_type}</Typography></TableCell>
-                    <TableCell ><Typography>{voucher?.discount_type}</Typography></TableCell>
-                    <TableCell ><Typography>{voucher?.quantity}</Typography> </TableCell>
-                    <TableCell ><Typography>{formatCurrency(voucher?.min_spend)}</Typography> </TableCell>
+                    <TableCell ><Typography variant='body2'>{voucher?.voucher_type}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2'>{voucher?.discount_type}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2'>{voucher?.use_count}/{voucher?.quantity}</Typography> </TableCell>
+                    <TableCell ><Typography variant='body2'>{formatCurrency(voucher?.min_spend)}</Typography> </TableCell>
                     <TableCell >
-                      <Typography>
+                      <Typography variant='body2'>
                         {voucher?.discount_type === 'PRICE' ? formatCurrency(voucher?.reduce_price) : (voucher?.reduce_percent + '%')}
                       </Typography>
                     </TableCell>
                     <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => handleClickUpdate(voucher)} /></Tooltip>
-                        <DeleteVoucher voucherId={voucher?.voucher_id} reRender={reRender} setReRender={setReRender} />
-                        <AddVoucherToProducts voucher_id={voucher?.id} />
-                      </Box>
+                      <PauseVoucher voucher={voucher} reRender={reRender} setReRender={setReRender} />
+                    </TableCell>
+                    <TableCell >
+                      <AddVoucherToProducts voucher_id={voucher?.id} />
                     </TableCell>
                   </TableRow>
                 )

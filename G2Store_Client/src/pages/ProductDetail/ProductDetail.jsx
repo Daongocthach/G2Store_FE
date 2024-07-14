@@ -21,18 +21,18 @@ function ProductDetail() {
     reviewApi.getReviewByProductId(product_id, page - 1, 8, sortType)
       .then((response) => { setReviews(response) })
   }, [product_id, page, sortType])
+
   useEffect(() => {
     productApi.getProduct(product_id)
       .then((response) => { setProduct(response) })
       .catch(() => { navigate('/product-not-exist') })
   }, [product_id])
   return (
-    <Box sx={{ minHeight: '100%' }}>
-      <Container fixed>
+    <Box sx={{ minHeight: '100vh' }}>
+      <Container fixed sx={{ mt: 2 }}>
         <BreadCrumbs links={[{ name: 'Chi tiết sản phẩm', href: '' }]} />
-        <Typography variant='h6' color={'#444444'} sx={{ mb: 1 }}>{product?.name}</Typography>
-        <Divider />
-        <Grid container spacing={1} mt={3}>
+        <Typography variant='h6' color={'#444444'} fontWeight={'bold'} sx={{ mt: 2 }}>{product?.name}</Typography>
+        <Grid container spacing={1} mt={1}>
           {/* Product Infomation left */}
           <Grid item xs={12} sm={12} md={7} lg={7} >
             <LeftInformation product={product} />

@@ -1,26 +1,23 @@
 import {
   Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Button,
-  Paper, FormControl, Select, MenuItem, Switch, Alert
+  Paper, FormControl, Select, MenuItem, Alert
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { AddCircle } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import sellerApi from '../../../apis/sellerApi'
-import DeleteSeller from './FormSeller/DeleteSeller'
 import Loading from '../../../components/Loading/Loading'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
+import UpdateSellerStatus from './UpdateSellerStatus/UpdateSellerStatus'
 
 function Sellers() {
   const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [reRender, setReRender] = useState(false)
   const [sellers, setSellers] = useState([])
   const [role, setRole] = useState(0)
-  const [select, setSelect] = useState(1)
-  const handleChange = (event) => {
-    setSelect(event.target.value)
-  }
   const handleChangeRole = async (event, sellerId) => {
     setLoading(true)
     const newRole = event.target.value
@@ -44,26 +41,20 @@ function Sellers() {
       })
       .catch(error => {
         console.log(error)
+        if (error?.response?.data?.message == 'Access Denied') {
+          navigate('/seller/access-denied')
+        }
       })
-  }, [role])
+  }, [role, reRender])
 
   return (
-    <Box sx={{ m: 5, minHeight: '100vh' }}>
+    <Box className='min-h-screen flex flex-col gap-2 m-3'>
       <BreadCrumbs links={[{ name: 'Quản lý người bán', href: '' }]} />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}>
-          <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }} startIcon={<AddCircle />} variant="outlined"
-            onClick={() => { navigate('/seller/manage/add-seller') }}>
-            Thêm người bán
-          </Button>
-          <Typography variant='body1' fontWeight={'bold'} >Sắp xếp</Typography>
-          <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
-            <Select value={select} onChange={handleChange} defaultValue={1} >
-              <MenuItem value={1}>Mới nhất</MenuItem>
-              <MenuItem value={2}>Cũ nhất</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+      <Box>
+        <Button sx={{ fontWeight: 'bold', ':hover': { bgcolor: 'inherit' } }} startIcon={<AddCircle />} variant="outlined"
+          onClick={() => { navigate('/seller/manage/add-seller') }}>
+          Thêm người bán
+        </Button>
       </Box>
       <Box sx={{ height: 'fit-content', bgcolor: 'white', boxShadow: '0px 0px 10px' }}>
         <TableContainer component={Paper}>
@@ -82,9 +73,9 @@ function Sellers() {
               {Array.isArray(sellers) && sellers?.map((seller, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell ><Typography maxWidth={150} className='line-clamp-1'>{seller?.email || null}</Typography></TableCell>
-                    <TableCell ><Typography maxWidth={150} overflow={'clip'}>{seller?.fullName || '(Chưa cập nhật)'}</Typography></TableCell>
-                    <TableCell ><Typography maxWidth={150} overflow={'clip'}>{seller?.phone_no || '(Chưa cập nhật)'}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2' >{seller?.email}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2'>{seller?.fullName || '(Chưa cập nhật)'}</Typography></TableCell>
+                    <TableCell ><Typography variant='body2'>{seller?.phone_no || '(Chưa cập nhật)'}</Typography></TableCell>
                     <TableCell>
                       <FormControl fullWidth>
                         <Select size='small' variant={seller?.is_main_acc ? 'standard' : 'outlined'} color='primary' value={seller?.role_id}
@@ -99,9 +90,8 @@ function Sellers() {
                         </Select>
                       </FormControl>
                     </TableCell>
-                    <TableCell ><Switch checked={seller?.is_enabled} /></TableCell>
+                    <TableCell ><UpdateSellerStatus seller={seller} reRender={reRender} setReRender={setReRender} /></TableCell>
                     <TableCell >{seller?.is_main_acc && <Alert severity='success' />}</TableCell>
-                    {/* <TableCell >{!seller?.is_main_acc && <DeleteSeller />}</TableCell> */}
                   </TableRow>
                 )
               })}

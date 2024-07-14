@@ -2,7 +2,7 @@ import { PlayCircle } from '@mui/icons-material'
 import { Box, Typography, FormGroup, FormControlLabel, Radio, Button } from '@mui/material'
 import { NumericFormat } from 'react-number-format'
 
-const FilterByPrice = ({ isFilter, setIsFilter, startPrice, setStartPrice, endPrice, setEndPrice, checkPrice, setCheckPrice}) => {
+const FilterByPrice = ({ isFilter, setIsFilter, startPrice, setStartPrice, endPrice, setEndPrice, checkPrice, setCheckPrice }) => {
     const handlePriceChange = (min, max, check) => {
         setStartPrice(min)
         setEndPrice(max)

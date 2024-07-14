@@ -16,26 +16,27 @@ function Voucher({ voucher, isSelected, cart_item_id, reRender, setReRender, han
     }
     return (
         <Box className={`flex flex-row items-center p-2 gap-6 ${isSelected && 'bg-green-100'}`}>
-            <Box className='w-14 flex flex-col items-center gap-1'>
+            <Box className='flex flex-col items-center gap-1'>
                 {voucher?.voucher_type === 'SHOP_VOUCHER' ?
                     <Storefront className='text-blue-600' sx={{ fontSize: 30 }} />
                     :
                     <LocalShipping className='text-green-600' sx={{ fontSize: 30 }} />}
-                <Typography fontSize={13} fontWeight={'bold'}
-                    className={voucher?.voucher_type === 'SHOP_VOUCHER' ? 'text-blue-600' : 'text-green-600'} >{voucher?.name}</Typography>
+
             </Box>
             <Divider orientation='vertical' variant="middle" flexItem />
             <Box className='flex flex-col gap-4' >
-                <Box>
-                    <Box className='flex flex-row items-center gap-2'>
-                        <Typography className='text-gray-95000' fontSize={17}>
-                            Giảm {voucher?.discount_type == 'PERCENTAGE' ? voucher?.reduce_percent +
-                                '%' : formatCurrency(voucher?.reduce_price)}
-                        </Typography>
-                    </Box>
-                    <Typography fontSize={14} className='text-gray-600'>Cho đơn hàng từ {formatCurrency(voucher?.min_spend)}</Typography>
+                <Box className='flex flex-col gap-1'>
+                    <Typography variant='subtitle2'
+                        className={voucher?.voucher_type === 'SHOP_VOUCHER' ? 'text-gray-700' : 'text-green-600'} >
+                        {voucher?.name}
+                    </Typography>
+                    <Typography className='text-gray-600' variant='body2'>
+                        Giảm {voucher?.discount_type == 'PERCENTAGE' ? voucher?.reduce_percent +
+                            '%' : formatCurrency(voucher?.reduce_price)}
+                    </Typography>
+                    <Typography variant='body2' className='text-gray-600'>Cho đơn hàng từ {formatCurrency(voucher?.min_spend)}</Typography>
                 </Box>
-                <Typography className='text-gray-600' fontSize={14}>
+                <Typography className='text-gray-600' variant='caption'>
                     HSD: {format(new Date(voucher?.end_date), 'yyyy/MM/dd')}
                 </Typography>
             </Box>

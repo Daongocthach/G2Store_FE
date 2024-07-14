@@ -14,7 +14,6 @@ import SearchById from '../../../components/Search/Search'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
-import EmptyData from '../../../components/EmptyData/EmptyData'
 
 function Products() {
   const navigate = useNavigate()

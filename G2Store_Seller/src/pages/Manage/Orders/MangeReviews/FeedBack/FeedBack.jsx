@@ -30,13 +30,13 @@ function FeedBack({ review, reRender, setReRender }) {
     }
     return (
         <Box >
-            <Tooltip title='Phản hồi'><Feedback sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={() => setOpen(true)} /></Tooltip>
+            <Tooltip title='Phản hồi'><Feedback className="bg-inherit text-gray-700 cursor-pointer" onClick={() => setOpen(true)} /></Tooltip>
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle sx={{ textAlign: 'center' }}>Phản hồi</DialogTitle>
                 <DialogContent >
                     <TextField fullWidth size='small' multiline rows={3} sx={{ mt: 1 }} label="Phản hồi" onChange={(e) => setContent(e.target.value)} />
                 </DialogContent>
-                <DialogAction setOpen={setOpen} handleClick={handleClickAdd}/>
+                <DialogAction setOpen={setOpen} handleClick={handleClickAdd} />
             </Dialog>
             {loading && <Loading />}
         </Box>

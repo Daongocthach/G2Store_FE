@@ -65,11 +65,11 @@ const ghnApi = {
             }
         })
     },
-    trackingOrder(token, code) {
+    trackingOrder(token1, code) {
         const url = `https://dev-online-gateway.ghn.vn/order-tracking/public-api/client/tracking-logs?order_code=${code}`
         return axios.get(url, {
             headers: {
-                'token': token
+                'token': token1
             }
         })
     }

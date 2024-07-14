@@ -14,7 +14,7 @@ function TrackingOrder({ order }) {
     if (order?.ghn_order_code) {
       ghnApi.genCode()
         .then(response => {
-          ghnApi.trackingOrder(response?.data?.token, order?.ghn_order_code)
+          ghnApi.trackingOrder(response?.data?.data?.token, order?.ghn_order_code)
             .then((response) => {
               setOderInfo(response?.data?.data?.order_info)
               setTrackingLogs(response?.data?.data?.tracking_logs)

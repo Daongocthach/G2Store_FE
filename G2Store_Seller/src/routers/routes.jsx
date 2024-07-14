@@ -2,6 +2,7 @@ import Dashboard from '../pages/Dashboard/Dashboard'
 import Login from '../pages/Auth/Login/Login'
 import Register from '../pages/Auth/Register/Register'
 import ResetPassword from '../pages/Auth/ResetPassword/ResetPassword'
+import InputOtp from '../pages/Auth/InputOtp/InputOtp'
 import Profile from '../pages/Profile/Profile'
 import ShopProfile from '../pages/Profile/ShopProfile'
 import Chat from '../pages/Chat/Chat'
@@ -16,13 +17,13 @@ import ManageReviews from '../pages/Manage/Orders/MangeReviews/ManageReviews'
 import AddSeller from '../pages/Manage/Sellers/AddSeller/AddSeller'
 import Categories from '../pages/Manage/Categories/Categories'
 import AccessDenied from '../pages/AccessDenied/AccessDenied'
-import CreateOrderGhn from '../pages/Manage/Orders/CreateOrderGhn/CreateOrderGhn'
 
 import AuthLayout from '../layouts/AuthLayout'
 import NotFound from '../pages/NotFound/NotFound'
 
 const publicRoutes = [
     { path:'/', component: Login, layout: AuthLayout },
+    { path:'/input-otp', component: InputOtp, layout: AuthLayout },
     { path:'/register', component: Register, layout: AuthLayout },
     { path:'/reset-password', component: ResetPassword, layout: AuthLayout },
     { path:'*', component: NotFound, layout: AuthLayout }
@@ -43,11 +44,7 @@ const privateRoutes = [
     { path:'manage/orders', component: Orders },
     { path:'manage/reviews', component: ManageReviews },
     { path:'manage/categories', component: Categories },
-    { path:'access-denied', component: AccessDenied },
-    { path:'manage/create-order-ghn', component: CreateOrderGhn },
-
-
-
+    { path:'access-denied', component: AccessDenied }
 ]
 
 

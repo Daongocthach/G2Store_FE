@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogTitle, Box, Tooltip, Typography } from '@mui/material'
-import { Create, ErrorOutline } from '@mui/icons-material'
+import { Paid, ErrorOutline } from '@mui/icons-material'
 import { over } from 'stompjs'
 import SockJS from 'sockjs-client'
 import orderApi from '../../../../apis/orderApi'
@@ -8,27 +8,25 @@ import Loading from '../../../../components/Loading/Loading'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 import DialogAction from '../../../../components/Dialog/DialogAction'
 
+const baseURL = import.meta.env.VITE_PUBLIC_WEBSOCKET_URL
 var stompClient = null
 
 function UpdateOrder({ order, setReRender, reRender }) {
   const triggerAlert = useAlert()
-  const [activeStep, setActiveStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
-    // connect()
-    const orderStatusIndex = steps.findIndex(step => step?.value === order?.order_status)
-    setActiveStep(orderStatusIndex)
+    connect()
   }
   const handleClose = () => {
     setOpen(false)
   }
   const connect = () => {
-    let Sock = new SockJS('http://localhost:8080/ws')
+    let Sock = new SockJS(baseURL + 'ws')
     stompClient = over(Sock)
     stompClient.connect({}, function () {
-      stompClient.subscribe(`/user/${123}/specific`, function (result) {
+      stompClient.subscribe(`/user/${order?.customer_id}/specific`, function (result) {
       })
     }, function (error) {
       console.error('STOMP connection error:', error)
@@ -51,7 +49,7 @@ function UpdateOrder({ order, setReRender, reRender }) {
 
   return (
     <Box>
-      <Tooltip title='Hoàn tiền'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>
+      <Tooltip title='Hoàn tiền'><Paid sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>
       <Dialog open={open} onClose={handleClose} fullWidth >
         <DialogTitle sx={{ fontWeight: 'bold', color: '#444444', textAlign: 'center' }}>Hoàn tiền đơn hàng</DialogTitle>
         <DialogContent>

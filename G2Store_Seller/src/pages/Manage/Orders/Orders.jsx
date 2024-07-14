@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, Tab, Tabs, Tooltip } from '@mui/material'
-import { Chat, Print } from '@mui/icons-material'
+import { Print } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import orderApi from '../../../apis/orderApi'
 import ViewOrder from './FormOrder/ViewOrder'
-import UpdateOrder from './FormOrder/UpdateOrder'
 import OrderItem from './OrderItem/OrderItem'
-import SearchById from '../../../components/Search/Search'
+import Search from '../../../components/Search/Search'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import ghnApiV2 from '../../../apis/ghnApiV2'
 import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
 import TrackingOrder from './FormOrder/TrackingOrder'
+import ViewRefundImages from './FormOrder/ViewRefundImages'
+import CancelOrder from './FormOrder/CancelOrder'
+import NextOrder from './FormOrder/NextOrder'
 
 function Orders() {
   const triggerAlert = useAlert()
@@ -51,7 +53,7 @@ function Orders() {
 
       })
   }
-  useEffect(() => {
+  const fetchData = () => {
     orderApi.getShopOrders(tab, 0, 16)
       .then((response) => { setOrders(response?.content) })
       .catch((error) => {
@@ -60,12 +62,15 @@ function Orders() {
         }
         console.log(error)
       })
+  }
+  useEffect(() => {
+    fetchData()
   }, [reRender])
   return (
     <Box className='m-5 min-h-screen'>
       <BreadCrumbs links={[{ name: 'Quản lý đơn hàng', href: '' }]} />
       <Box className='flex flex-row items-center justify-between w-full mt-2' >
-        <SearchById setDatas={setOrders} setTab={setTab} />
+        <Search setDatas={setOrders} setTab={setTab} isOrder={true} />
       </Box>
       <Box className='mb-2'>
         <Box className='mb-3'>
@@ -93,20 +98,24 @@ function Orders() {
                   return (
                     <TableRow key={index}>
                       <TableCell><Box>{order?.items.map((orderItem, index) => <OrderItem key={index} orderItem={orderItem} />)}</Box></TableCell>
-                      <TableCell><Typography>#{order?.order_id}</Typography></TableCell>
+                      <TableCell><Typography variant='body2'>#{order?.order_id}</Typography></TableCell>
                       <TableCell><Typography variant='body2'>{format(new Date(order?.created_date), 'dd/MM/yyyy HH:mm:ss')}</Typography></TableCell>
-                      <TableCell ><Typography variant='subtitle2'>{formatCurrency(order?.grand_total)}</Typography></TableCell>
+                      <TableCell ><Typography variant='body2'>{formatCurrency(order?.grand_total)}</Typography></TableCell>
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell >
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                          {(tab !== 'UN_PAID' && tab !== 'CANCELED' && tab !== 'REFUNDING' && tab !== 'REFUNDED') &&
-                            <UpdateOrder order={order} reRender={reRender} setReRender={setRerender} />}
+                        <Box className='flex flex-row items-center gap-2'>
                           <ViewOrder order={order} />
                           <Tooltip title='In đơn giao hàng nhanh'>
-                            <Print className='text-gray-600 cursor-pointer' sx={{ display: tab === 'PACKED' ? 'inherit' : 'none' }}
+                            <Print className='text-gray-700 cursor-pointer' sx={{ display: tab === 'PACKED' ? 'inherit' : 'none' }}
                               onClick={() => handlePrint(order?.ghn_order_code)} />
                           </Tooltip>
                           {(tab === 'PACKED' || tab === 'DELIVERING') && <TrackingOrder order={order} />}
+                          {(tab === 'REFUNDING' || tab === 'REFUNDED') && <ViewRefundImages images={order?.refund_images} content={order?.refund_reason}/>}
+                          {(tab === 'CONFIRMED' || tab === 'ORDERED' || tab === 'PACKED' || tab === 'DELIVERING') &&
+                            <Box className='flex flex-row items-center gap-2'>
+                              <NextOrder order={order} reRender={reRender} setReRender={setRerender} />
+                              <CancelOrder orderId={order?.order_id} reRender={reRender} setReRender={setRerender} />
+                            </Box>}
                         </Box>
                       </TableCell>
                     </TableRow>)

@@ -8,34 +8,38 @@ import ShopCategories from './ShopCategories/ShopCategories'
 import Sort from '../../../components/Sort/Sort'
 
 function ShopProducts({ shop_id }) {
+    const [isReset, setIsReset] = useState(false)
     const [isFilter, setIsFilter] = useState(false)
-    const [startPrice, setStartPrice] = useState('0')
-    const [endPrice, setEndPrice] = useState('100000000')
+    const [startPrice, setStartPrice] = useState('')
+    const [endPrice, setEndPrice] = useState('')
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)
     const [category, setCategory] = useState(null)
     const [sort, setSort] = useState('DEFAULT')
     const [page, setPage] = useState(1)
     const [products, setProducts] = useState([])
-    const handelReset = () => {
+    const handleReset = () => {
         setCategory(null)
         setSort('DEFAULT')
+        setStartPrice('')
+        setEndPrice('')
+        setIsReset(!isReset)
     }
     const handleChangePage = (event, value) => {
         setPage(value)
     }
+    const fetchData = async () => {
+        setLoading(true)
+        productApi.getShopProducts(shop_id, page - 1, 12, sort, name, category?.shop_cate_id, parseInt(startPrice), parseInt(endPrice))
+            .then((response) => {
+                setProducts(response)
+            })
+            .catch((error) => console.log(error))
+            .finally(() => setLoading(false))
+    }
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            productApi.getShopProducts(shop_id, page - 1, 12, sort, name, category?.shop_cate_id, parseInt(startPrice), parseInt(endPrice))
-                .then((response) => {
-                    setProducts(response)
-                })
-                .catch((error) => console.log(error))
-                .finally(() => setLoading(false))
-        }
         fetchData()
-    }, [page, category, sort, shop_id, isFilter])
+    }, [page, category, sort, isFilter, isReset])
     return (
         <Box>
             <Box className='flex flex-row items-center justify-between flex-wrap'>
@@ -44,7 +48,7 @@ function ShopProducts({ shop_id }) {
                     <Filter name={name} setName={setName} isFilter={isFilter} setIsFilter={setIsFilter}
                         startPrice={startPrice} setStartPrice={setStartPrice} endPrice={endPrice} setEndPrice={setEndPrice} />
                 </Box>
-                <Sort sort={sort} setSort={setSort} handelReset={handelReset} />
+                <Sort sort={sort} setSort={setSort} handleReset={handleReset} />
             </Box>
             <Box className="bg-[#E6E6FA] flex flex-col items-center justify-center">
                 {loading && <CircularProgress />}

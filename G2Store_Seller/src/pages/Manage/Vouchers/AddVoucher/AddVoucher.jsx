@@ -4,12 +4,14 @@ import { Button, TextField, Box, Typography, FormControlLabel, RadioGroup, Radio
 import { format, addDays } from 'date-fns'
 import voucherApi from '../../../../apis/voucherApi'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
+import Loading from '../../../../components/Loading/Loading'
 
 function AddVoucher() {
     const triggerAlert = useAlert()
     const navigate = useNavigate()
     const location = useLocation()
     const voucher = location.state
+    const [loading, setLoading] = useState(false)
     const [name, setName] = useState('')
     const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-dd'))
     const [endDate, setEndDate] = useState(format(addDays(new Date(), 1), 'yyyy-MM-dd'))
@@ -46,6 +48,7 @@ function AddVoucher() {
             triggerAlert('Thông tin không đúng! vui lòng đặt lại các giá trị!', false, true)
         }
         else {
+            setLoading(true)
             const voucherData = {
                 name: name,
                 quantity: quantity,
@@ -68,6 +71,7 @@ function AddVoucher() {
                     console.log(error)
                     triggerAlert('Thêm thất bại!', true, false)
                 })
+                .finally(() => setLoading(false))
         }
     }
     return (
@@ -185,6 +189,7 @@ function AddVoucher() {
                 <Button onClick={() => { handleClickAdd() }}
                     sx={{ bgcolor: '#1a71ff', color: 'white', fontWeight: '500', ':hover': { bgcolor: '#00B2EE' } }}>Gửi</Button>
             </Box>
+            {loading && <Loading />}
         </Box>
     )
 }

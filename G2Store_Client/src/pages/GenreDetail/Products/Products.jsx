@@ -9,11 +9,14 @@ import FilterByPrice from './Filter/FilterByPrice'
 import FilterByDistrict from './Filter/FilterByDistrict'
 import EmptyData from '../../../components/EmptyData/EmptyData'
 import Sort from '../../../components/Sort/Sort'
+import FilterByStar from './Filter/FilterByStar'
 
 function Products() {
     const navigate = useNavigate()
     const location = useLocation()
     const data = location.state
+    const [prevCategoryId, setPrevCategoryId] = useState(-1)
+    const [prevSearchName, setPrevSearchName] = useState(-1)
     const [loading, setLoading] = useState(false)
     const [products, setProducts] = useState()
     const [page, setPage] = useState(1)
@@ -23,35 +26,40 @@ function Products() {
     const [checkPrice, setCheckPrice] = useState('all')
     const [isFilter, setIsFilter] = useState(false)
     const [districtId, setDistrictId] = useState('')
+    const [star, setStar] = useState('')
     const handleReset = () => {
-        setLoading(true)
         setSort('DEFAULT')
         setStartPrice('')
         setEndPrice('')
         setDistrictId('')
+        setStar('')
         setCheckPrice('all')
         setIsFilter(false)
-        productApi.getProducts(page - 1, 12, sort)
-            .then((response) => {
-                setProducts(response)
-            })
-            .catch((error) => console.log(error))
-            .finally(() => setLoading(false))
     }
     const handleChangePage = (event, value) => {
         setPage(value)
     }
-
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
             let apiCall
             if (data?.category?.category_id) {
-                apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
+                if (prevCategoryId !== data?.category?.category_id) {
+                    handleReset()
+                    setPrevCategoryId(data?.category?.category_id)
+                }
+                apiCall = productApi.getProductsByCategoryId(data?.category?.category_id, page - 1, 12, sort,
+                    parseInt(startPrice), parseInt(endPrice), parseInt(districtId), parseInt(star))
             } else if (data?.name) {
-                apiCall = productApi.searchProducts(data?.name, page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
+                if (prevSearchName !== data?.name) {
+                    handleReset()
+                    setPrevSearchName(data?.name)
+                }
+                apiCall = productApi.searchProducts(data?.name, page - 1, 12, sort, parseInt(startPrice),
+                    parseInt(endPrice), parseInt(districtId), parseInt(star))
             } else {
-                apiCall = productApi.getProducts(page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice), districtId)
+                apiCall = productApi.getProducts(page - 1, 12, sort, parseInt(startPrice), parseInt(endPrice),
+                    parseInt(districtId), parseInt(star))
             }
             apiCall
                 .then((response) => {
@@ -61,11 +69,8 @@ function Products() {
                 .finally(() => setLoading(false))
         }
         fetchData()
-    }, [page, data, sort, isFilter, districtId])
+    }, [page, data, sort, isFilter, districtId, star])
 
-    useEffect(() => {
-        handleReset()
-    }, [data?.name, data?.category?.category_id])
     return (
         <Grid container mt={1} maxWidth='lg' spacing={1}>
             <Grid item xs={12} sm={12} md={3} lg={3} >
@@ -91,7 +96,8 @@ function Products() {
                     </Box>
                     <FilterByPrice isFilter={isFilter} setIsFilter={setIsFilter} startPrice={startPrice} setStartPrice={setStartPrice}
                         endPrice={endPrice} setEndPrice={setEndPrice} checkPrice={checkPrice} setCheckPrice={setCheckPrice} />
-                    <FilterByDistrict />
+                    <FilterByDistrict setDistrictId={setDistrictId}/>
+                    <FilterByStar setStar={setStar} />
                 </Box>
             </Grid>
             <Grid item xs={12} sm={12} md={9} lg={9} >
