@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Box, Typography, Popover, Divider, Badge, Tooltip, Snackbar } from '@mui/material'
 import { Notifications, Close, Adb, AddBusiness } from '@mui/icons-material'
 import { over } from 'stompjs'
-import { useSelector } from 'react-redux'
 import SockJS from 'sockjs-client'
 import notificationApi from '../../../apis/notificationApi'
 import Notification from '../../Notification/Notification'
@@ -11,21 +10,21 @@ import EmptyData from '../../EmptyData/EmptyData'
 const baseURL = import.meta.env.VITE_PUBLIC_WEBSOCKET_URL
 
 function MenuNotifications() {
-    const user = useSelector(state => state.auth)
+    const customer_id = localStorage.getItem('customer_id')
     const [anchorEl, setAnchorEl] = useState(null)
     const [notifications, setNotifications] = useState([])
     const [newNotification, setNewNotification] = useState({})
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [badgeCount, setBadgeCount] = useState(1)
     const page = 0
-    const size = 20
+    const size = 200
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
         notificationApi.getNotifications(page, size)
             .then((response) => {
                 setNotifications(response?.content)
-                setBadgeCount(response?.content.filter(notification => notification?.isPublic === false).length || 0)
+                setBadgeCount(response?.content.filter(notification => notification?.isRead === false).length || 0)
             })
             .catch((error) => { console.log(error) })
     }
@@ -39,7 +38,7 @@ function MenuNotifications() {
         var stompClient = null
         var count = 0
         const connect = () => {
-            if (stompClient && stompClient?.connected) {
+            if (stompClient) {
                 return
             }
             let Sock = new SockJS(baseURL + 'ws')
@@ -50,10 +49,9 @@ function MenuNotifications() {
                     setNotifications((prevNotifications) => [JSON.parse(result.body), ...prevNotifications])
                     count += 1
                     setBadgeCount(count)
-                    console.log(count)
                     setSnackbarOpen(true)
                 })
-                stompClient.subscribe('/user/' + user?.customer_id + '/specific/customer', function (result) {
+                stompClient.subscribe('/user/' + customer_id + '/specific/customer', function (result) {
                     setNewNotification(JSON.parse(result.body))
                     setNotifications((prevNotifications) => [JSON.parse(result.body), ...prevNotifications])
                     setBadgeCount(badgeCount + 1)

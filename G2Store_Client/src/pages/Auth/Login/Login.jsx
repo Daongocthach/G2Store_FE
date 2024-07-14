@@ -39,6 +39,7 @@ function Login() {
                 customer_id: response?.customer_id
               }
               dispatch(updateAvatar(data))
+              localStorage.setItem('customer_id', response?.customer_id)
             })
           cartItemV2Api.getCartItems()
             .then((response) => dispatch(setCart(response)))

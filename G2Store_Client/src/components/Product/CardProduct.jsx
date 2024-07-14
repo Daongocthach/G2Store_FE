@@ -14,6 +14,7 @@ function CardProduct({ product, isShort }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth)
+  const cartItems = useSelector(state => state.cart.cartItems)
   const [reviews, setReviews] = useState([])
   const handleClickAddToCart = () => {
     if (!user?.keep_login) {
@@ -22,7 +23,9 @@ function CardProduct({ product, isShort }) {
     else {
       cartItemV2Api.addToCart({ quantity: 1, product_id: product?.product_id })
         .then(() => {
-          dispatch(addToCart(product?.product_id))
+          if (Array.isArray(cartItems) && !cartItems.some(item => item === product?.product_id)) {
+            dispatch(addToCart(product?.product_id))
+          }
           triggerAlert('Thêm vào giỏ thành công!', false, false)
         })
         .catch((error) => {

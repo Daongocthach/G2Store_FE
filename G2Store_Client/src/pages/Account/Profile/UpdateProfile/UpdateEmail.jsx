@@ -44,7 +44,7 @@ function UpdateEmail() {
             <Dialog open={open} keepMounted onClose={() => { setOpen(false) }} >
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Cập nhật email</DialogTitle>
                 <DialogContent>
-                    <TextField variant='filled' fullWidth={true} label='Email' size='small' type='text' value={new_email}
+                    <TextField variant='filled' className='w-full' label='Email' size='small' type='text' value={new_email}
                         error={touched && !new_email}
                         helperText={touched && !new_email ? 'Không được để trống' : ''}
                         onChange={(e) => setNewEmail(e.target.value)}

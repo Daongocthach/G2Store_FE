@@ -33,9 +33,9 @@ function NextOrder({ order, setReRender, reRender }) {
     let Sock = new SockJS('http://localhost:8080/ws')
     let client = over(Sock)
     client.connect({}, function () {
-      client.subscribe('/user/' + order?.customer_id + '/specific/customer', function (result) {
+      stompClient.subscribe('/all/notifications', function (result) {
         console.log(JSON.parse(result.body))
-      })
+    })
       setIsConnected(true)
     }, function (error) {
       console.error('STOMP connection error:', error)

@@ -49,9 +49,9 @@ function UpdateDobAndName({ fullNameRoot, dobRoot, reRender, setReRender }) {
                 <DialogTitle sx={{ textAlign: 'center', color: '#444444' }}>Cập nhật email</DialogTitle>
                 <DialogContent>
                     <Box className='flex-col bg-sky-50'>
-                        <TextField id="full_name" variant='filled' fullWidth={true} name="full_name" size='small' label='Nhập họ và tên'
+                        <TextField id="full_name" variant='filled' name="full_name" size='small' label='Nhập họ và tên'
                             value={full_name} onChange={(e) => setFullName(e.target.value)} focused color='info'
-                            className='text-sm  text-gray-600' />
+                            className='text-sm  text-gray-600 w-full' />
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 slotProps={{
