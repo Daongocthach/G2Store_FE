@@ -90,7 +90,7 @@ function Order() {
                     onClick={() => handlePayment(order?.order_id)} >Thanh toán</Button>}
                   {(order?.order_status === 'ORDERED' || order?.order_status === 'UN_PAID') &&
                     <DeleteOrder orderId={order?.order_id} reRender={reRender} setReRender={setReRender} />}
-                  {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} rerender={reRender} />}
+                  {order?.order_status === 'DELIVERED' && <GoodsReceived orderId={order?.order_id} setReRender={setReRender} reRender={reRender} />}
                   {order?.order_status === 'DELIVERED' && <OrderRefund order={order} setReRender={setReRender} rerender={reRender} />}
                   {(order?.order_status === 'PACKED' || order?.order_status === 'DELIVERING') && <TrackingOrder order={order} />}
                 </Box>

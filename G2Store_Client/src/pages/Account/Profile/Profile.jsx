@@ -89,7 +89,8 @@ function Profile() {
           className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 '
           value={user?.phone_no ? user?.phone_no : 'Chưa cập nhật'} />
         <TextField variant='standard' label='Tích điểm' fullWidth size='small'
-          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600' value={user?.point || 0 + ' điểm'} />
+          className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600'
+          value={parseFloat(user?.point).toFixed(2) || 0 + ' điểm'} />
       </Box>
       <ButtonGroup variant="contained" color='info' aria-label="Basic button group" className='mt-1'>
         <UpdateDobAndName fullNameRoot={user?.full_name} dobRoot={user?.dob} reRender={reRender} setReRender={setReRender} />
