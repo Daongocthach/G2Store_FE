@@ -6,7 +6,7 @@ import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { Forum, AccountCircle, Reorder, EditLocationAlt } from '@mui/icons-material'
 
 const actions = [
-    { icon: <Forum />, name: 'Chat', path: '/chat' },
+    // { icon: <Forum />, name: 'Chat', path: '/chat' },
     { icon: <EditLocationAlt />, name: 'Địa chỉ', path: '/profile', state: 3 },
     { icon: <Reorder />, name: 'Đơn hàng', path: '/profile', state: 2 },
     { icon: <AccountCircle />, name: 'Tài khoản', path: '/profile', state: 1 }
