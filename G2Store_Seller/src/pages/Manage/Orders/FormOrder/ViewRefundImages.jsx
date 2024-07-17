@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, Box, Tooltip, Typography, TextField } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, Box, Typography, TextField, MenuItem } from '@mui/material'
 import { Image } from '@mui/icons-material'
 
 function ViewRefundImages({ images, content }) {
@@ -12,19 +12,20 @@ function ViewRefundImages({ images, content }) {
   }
   return (
     <Box>
-      <Tooltip title="Xem khiểu nại">
-        <Image className="bg-inherit text-gray-700 cursor-pointer" onClick={handleClickOpen} />
-      </Tooltip>
+      <MenuItem onClick={handleClickOpen} className='text-gray-600 gap-1'>
+        <Image className='text-gray-600' />
+        Xem chi tiết khiếu nại
+      </MenuItem>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogContent >
-        <TextField
-          fullWidth
-          label="Khiếu nại"
-          multiline
-          rows={4}
-          value={content}
-        />
-          <Typography variant='body2' className='text-gray-600'>{}</Typography>
+          <TextField
+            fullWidth
+            label="Khiếu nại"
+            multiline
+            rows={4}
+            value={content}
+          />
+          <Typography variant='body2' className='text-gray-600'>{ }</Typography>
           {Array.isArray(images) && images.map((file, index) => (
             <Box key={index} className='rounded-xl relative bg-black mt-1'>
               {file?.file_type.startsWith('video/') ?

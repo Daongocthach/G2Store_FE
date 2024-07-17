@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, Typography } from '@mui/material'
+import { Box, Dialog, DialogTitle, DialogContent, MenuItem, Typography } from '@mui/material'
 import { NextPlan, ErrorOutline } from '@mui/icons-material'
 import SockJS from 'sockjs-client'
 import { over } from 'stompjs'
@@ -30,17 +30,17 @@ function NextOrder({ order, setReRender, reRender }) {
     setOpen(false)
   }
   const connect = () => {
-    let Sock = new SockJS('http://localhost:8080/ws')
-    let client = over(Sock)
-    client.connect({}, function () {
-      stompClient.subscribe('/all/notifications', function (result) {
-        console.log(JSON.parse(result.body))
-    })
-      setIsConnected(true)
-    }, function (error) {
-      console.error('STOMP connection error:', error)
-    })
-    setStompClient(client)
+    // let Sock = new SockJS('http://localhost:8080/ws')
+    // let client = over(Sock)
+    // client.connect({}, function () {
+    //   stompClient.subscribe('/all/notifications', function (result) {
+    //     console.log(JSON.parse(result.body))
+    //   })
+    //   setIsConnected(true)
+    // }, function (error) {
+    //   console.error('STOMP connection error:', error)
+    // })
+    // setStompClient(client)
   }
 
   const handleUpdate = async () => {
@@ -75,9 +75,10 @@ function NextOrder({ order, setReRender, reRender }) {
 
   return (
     <Box>
-      <Tooltip title='Cập nhật đơn'>
-        <NextPlan className="bg-inherit text-gray-700 cursor-pointer" onClick={handleClickOpen} />
-      </Tooltip>
+      <MenuItem onClick={handleClickOpen} className='text-gray-600 gap-1'>
+        <NextPlan className='text-gray-600' />
+        Cập nhật đơn
+      </MenuItem>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle sx={{ fontWeight: 'bold', color: '#444444', textAlign: 'center' }}>
           Cập nhật trạng thái đơn hàng

@@ -14,6 +14,7 @@ import SearchById from '../../../components/Search/Search'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
+import StatisticalProduct from './FormProduct/StatisticalProduct/StatisticalProduct'
 
 function Products() {
   const navigate = useNavigate()
@@ -100,7 +101,6 @@ function Products() {
           document.body.appendChild(link)
           link.click()
           document.body.removeChild(link)
-
         })
         .catch((error) => { console.log(error), triggerAlert('Xuất file thất bại', true, false) })
         .finally(() => setLoading(false))
@@ -151,7 +151,7 @@ function Products() {
           </Button>}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <SearchById setDatas={setProducts} isProductId={true} />
+          <SearchById setDatas={setProducts} isProductId={true} reRender={reRender} setReRender={setReRender} />
           <FormControl size={'small'} sx={{ m: 1, minWidth: 120 }}>
             <Select value={sort} onChange={(e) => setSort(e.target.value)} >
               <MenuItem color='#444444' value={'DEFAULT'}>Mặc định</MenuItem>
@@ -204,6 +204,7 @@ function Products() {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }}
                           onClick={() => handleClickUpdate(product)} /></Tooltip>
+                        <StatisticalProduct product={product}/>
                         <DeleteProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} />
                       </Box>
                     </TableCell>

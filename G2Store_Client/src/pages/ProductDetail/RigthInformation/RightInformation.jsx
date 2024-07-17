@@ -118,10 +118,10 @@ function RightInformation({ product, reviews }) {
             <ProductVouchers product={product} />
             {/* Quantity */}
             <Box className="flex items-center gap-1">
-                <Button variant="contained" fullWidth color="error" disabled={product?.stock_quantity < 1}
+                {/* <Button variant="contained" fullWidth color="error" disabled={product?.stock_quantity < 1}
                     onClick={handleClickAddToCart}>
                     Mua Ngay
-                </Button>
+                </Button> */}
                 <Button variant="contained" color="info" fullWidth disabled={product?.stock_quantity < 1} startIcon={<AddShoppingCart />}
                     onClick={handleClickAddToCart} >
                     Thêm vào giỏ

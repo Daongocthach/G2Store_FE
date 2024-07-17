@@ -9,7 +9,11 @@ const statisticApi = {
     }
     const url = 'statistical'
     return axiosClient.get(url, { params: params })
-  }
+  },
+  getProductStatistic(product_id) {
+    const url = `products/${product_id}/statistical`
+    return axiosClient.get(url)
+  },
 }
 
 export default statisticApi

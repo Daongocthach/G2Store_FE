@@ -15,10 +15,6 @@ function Dashboard() {
   const handleChange = async (e) => {
     setLoading(true)
     setYear(e.target.value)
-    statisticApi.getShopStatistic(parseInt(e.target.value))
-      .then((response) => { setData(response) })
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false))
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +27,8 @@ function Dashboard() {
         .finally(() => setLoading(false))
     }
     fetchData()
-  }, [])
+  }, [year])
+
   return (
     <Container sx={{ minHeight: '100vh' }}>
       {!loading && <Box>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Box, Tooltip, Grid } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Box, Grid, MenuItem } from '@mui/material'
 import { LocalShipping } from '@mui/icons-material'
 import { format } from 'date-fns'
 import ghnApi from '../../../../apis/ghnApi'
@@ -31,9 +31,10 @@ function TrackingOrder({ order }) {
   }
   return (
     <Box>
-      <Tooltip title="Tra cứu đơn hàng">
-        <LocalShipping className="bg-inherit text-gray-700 cursor-pointer" onClick={handleClickOpen} />
-      </Tooltip>
+      <MenuItem onClick={handleClickOpen} className='text-gray-600 gap-1'>
+        <LocalShipping className='text-gray-600' />
+        Tra cứu vị trí đơn hàng
+      </MenuItem>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle fontSize={17} className=" text-gray-800">
           <Box className='flex flex-row items-center justify-between'>

@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Tooltip, Box } from '@mui/material'
-import { CancelScheduleSend } from '@mui/icons-material'
+import { Box, MenuItem } from '@mui/material'
+import { Cancel } from '@mui/icons-material'
 import orderApi from '../../../../apis/orderApi'
 import Loading from '../../../../components/Loading/Loading'
 import { useAlert } from '../../../../components/ShowAlert/ShowAlert'
 import DialogTextOnly from '../../../../components/Dialog/DialogTextOnly'
-function CancelScheduleSendOrder({ orderId, reRender, setReRender }) {
+
+function CancelOrder({ orderId, reRender, setReRender }) {
     const triggerAlert = useAlert()
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -32,12 +33,13 @@ function CancelScheduleSendOrder({ orderId, reRender, setReRender }) {
     }
     return (
         <Box>
-            <Tooltip title="Hủy đơn hàng">
-                <CancelScheduleSend className="bg-inherit text-gray-700 cursor-pointer" onClick={handleClickOpen} />
-            </Tooltip>
+            <MenuItem onClick={handleClickOpen} className='text-gray-600 gap-1'>
+                <Cancel className='text-gray-600' />
+                Hủy đơn hàng
+            </MenuItem>
             <DialogTextOnly open={open} setOpen={setOpen} handleClick={handleClickCancelScheduleSend} title={'Hủy đơn hàng'} content={'Bạn muốn hủy đơn hàng này? Không thể hoàn tác!'} />
             {loading && <Loading />}
         </Box>
     )
 }
-export default CancelScheduleSendOrder
+export default CancelOrder

@@ -1,7 +1,7 @@
 import { BarChart } from '@mui/x-charts/BarChart'
 import { Box, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-export default function BasicBarChart({ monthStatisticalRes }) {
+export default function LineChart({ monthStatisticalRes, isProduct }) {
   const [monthlyData, setMonthlyData] = useState(new Array(12).fill(0))
   useEffect(() => {
     if (monthStatisticalRes) {
@@ -29,7 +29,9 @@ export default function BasicBarChart({ monthStatisticalRes }) {
         width={700}
         height={500}
       />
-      <Typography variant='h6' fontWeight={'bold'} color={(theme) => theme.palette.mode === 'dark' ? 'orange' : 'green'}>Biểu đồ doanh thu trong tháng</Typography>
+      <Typography variant='h6' fontWeight={'bold'} color={(theme) => theme.palette.mode === 'dark' ? 'orange' : 'green'}>
+        { isProduct ? 'Biểu đồ doanh thu sản phẩm theo tháng' : 'Biểu đồ doanh thu shop theo tháng trong năm'}
+      </Typography>
     </Box>
   )
 }

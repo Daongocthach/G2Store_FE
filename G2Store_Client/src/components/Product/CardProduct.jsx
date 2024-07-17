@@ -74,21 +74,15 @@ function CardProduct({ product, isShort }) {
         <Typography variant='caption' className='text-gray-500'> {product?.shop?.province_name}</Typography>
       </CardContent>
       <CardActions className='flex flex-row items-center justify-between'>
-        <Tooltip title="Xem chi tiết">
-          <Button size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }}
-            onClick={() => { navigate('/product-detail', { state: product }) }}>
-            <Visibility sx={{ fontSize: 20 }} />
-          </Button>
-        </Tooltip>
         <Tooltip title="Thêm vào giỏ">
           <span>
-            <Button disabled={product?.stock_quantity < 1} size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}
+            <Button disabled={product?.stock_quantity < 1} size="small" sx={{ color: '#d32f2f', ':hover': { bgcolor: 'inherit' } }}
               onClick={handleClickAddToCart}>
               <ShoppingCart sx={{ fontSize: 22 }} />
             </Button>
           </span>
         </Tooltip>
-        {!isShort && <Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}>
+        {<Tooltip title="Giúp đỡ"><Button size="small" sx={{ color: '#333333', ':hover': { bgcolor: 'inherit' } }}>
           <Help sx={{ fontSize: 20 }} /></Button>
         </Tooltip>}
       </CardActions>

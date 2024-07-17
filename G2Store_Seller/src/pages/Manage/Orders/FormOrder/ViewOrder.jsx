@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Box, Tooltip, TextField } from '@mui/material'
-import { Visibility } from '@mui/icons-material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Divider, Box, MenuItem, TextField } from '@mui/material'
+import { Wysiwyg } from '@mui/icons-material'
 import { format } from 'date-fns'
 import OrderItem from '../OrderItem/OrderItem'
 import { formatCurrency } from '../../../../utils/price'
@@ -15,9 +15,10 @@ function ViewOrder({ order }) {
   }
   return (
     <Box>
-      <Tooltip title="Xem chi tiết">
-        <Visibility className="bg-inherit text-gray-700 cursor-pointer" onClick={handleClickOpen} />
-      </Tooltip>
+      <MenuItem onClick={handleClickOpen} className='text-gray-600 gap-1'>
+        <Wysiwyg className='text-gray-600'/>
+        Xem chi tiết
+      </MenuItem>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle fontSize={17} className=" text-gray-700">
           Đơn hàng #{order?.order_id} ({format(new Date(order?.created_date), 'dd/MM/yyyy HH:mm:ss')})
