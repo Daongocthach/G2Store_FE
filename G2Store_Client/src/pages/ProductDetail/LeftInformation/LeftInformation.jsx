@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Typography, BottomNavigation, BottomNavigationAction, IconButton } from '@mui/material'
+import { Box, Typography, BottomNavigation, BottomNavigationAction, IconButton, Button } from '@mui/material'
 import { ArrowBackIos, ArrowForwardIos, YouTube, Image } from '@mui/icons-material'
 
 function LeftInformation({ product }) {
@@ -8,7 +8,12 @@ function LeftInformation({ product }) {
     const imageFiles = product?.images?.filter(file => file.file_type.includes('image/')) || []
     const videoFiles = product?.images?.filter(file => file.file_type.includes('video/')) || []
     const currentFiles = bottomTab === 0 ? imageFiles : videoFiles
+    const [showFullText, setShowFullText] = useState(false)
 
+    const handleToggleText = () => {
+        setShowFullText(!showFullText)
+    }
+    const textToDisplay = showFullText ? product?.description : `${product?.description?.substring(0, 200)}...`
     return (
         <Box>
             <Box sx={{ width: '90%', height: '350px', position: 'relative', bgcolor: '#E6E6FA', borderRadius: 2, p: 1 }}>
@@ -41,7 +46,14 @@ function LeftInformation({ product }) {
                 </BottomNavigation>
             </Box>
             <Typography variant='h5' mt={2} fontWeight={'bold'} color={'#444444'}>Thông tin sản phẩm</Typography>
-            <Typography variant='subtitle1' color={'#444444'}> {product?.description}</Typography>
+            <Typography variant='subtitle1' color='#444444' letterSpacing={0.5} align='justify' sx={{ whiteSpace: 'pre-wrap' }}>
+                {textToDisplay}
+            </Typography>
+            <Box className='flex flex-row items-center justify-center w-full'>
+                <Button onClick={handleToggleText} color='primary'>
+                    {showFullText ? 'Thu gọn' : 'Xem thêm'}
+                </Button>
+            </Box>
         </Box>
     )
 }

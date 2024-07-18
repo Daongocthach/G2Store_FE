@@ -1,5 +1,5 @@
 import { Button, Typography, Box, Rating, Tooltip, CardActions, CardMedia, CardContent, Card } from '@mui/material'
-import { Help, Visibility, ShoppingCart, Check } from '@mui/icons-material'
+import { Help, ShoppingCart, Check } from '@mui/icons-material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -9,7 +9,7 @@ import { addToCart } from '../../redux/actions/cart'
 import reviewApi from '../../apis/reviewApi'
 import { useAlert } from '../ShowAlert/ShowAlert'
 
-function CardProduct({ product, isShort }) {
+function CardProduct({ product }) {
   const triggerAlert = useAlert()
   const navigate = useNavigate()
   const dispatch = useDispatch()

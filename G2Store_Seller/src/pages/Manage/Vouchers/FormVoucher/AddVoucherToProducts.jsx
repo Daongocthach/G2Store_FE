@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 import Attachment from '@mui/icons-material/Attachment'
 import Loading from '../../../../components/Loading/Loading'
 import productApi from '../../../../apis/productApi'
-import emptyImage from '../../../../assets/img/empty-order.png'
 import { formatCurrency } from '../../../../utils/price'
 import voucherApi from '../../../../apis/voucherApi'
 import DialogAction from '../../../../components/Dialog/DialogAction'
@@ -59,7 +58,7 @@ function AddVoucherToProducts({ voucher_id }) {
         }
         setCheckedAll(!checkedAll)
     }
-    const handleClickOpen = () => {
+    const handleClickOpen = async () => {
         setOpen(true)
         setLoading(true)
         productApi.getShopProducts(0, 100)

@@ -26,11 +26,11 @@ export default function LineChartBasic({ monthStatisticalRes, isCustomer }) {
       <LineChart
         xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }]}
         series={[{ data: monthlyData, area: true, color: isCustomer ? '#EE7942' : '#1E90FF' }]}
-        width={700}
+        width={600}
         height={500}
       />
       <Typography variant='h6' fontWeight={'bold'} color={(theme) => theme.palette.mode === 'dark' ? 'orange' : 'green'}>
-        {isCustomer ? 'Biểu đồ số lượt người mua hàng đăng ký trong tháng' : 'Biểu đồ số lượt người bán hàng đăng ký trong tháng'}
+        {isCustomer ? 'Biểu đồ lượt đăng ký của người mua trong năm' : 'Biểu đồ lượt đăng ký của người bán trong năm'}
       </Typography>
     </Box>
   )

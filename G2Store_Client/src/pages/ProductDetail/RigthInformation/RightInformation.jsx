@@ -15,6 +15,7 @@ function RightInformation({ product, reviews }) {
     const triggerAlert = useAlert()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const cartItems = useSelector(state => state.cart.cartItems)
     const [loading, setLoading] = useState(false)
     const [quantity, setQuantity] = useState(1)
     const user = useSelector(state => state.auth)
@@ -43,9 +44,9 @@ function RightInformation({ product, reviews }) {
         else {
             setLoading(true)
             cartItemV2Api.addToCart({ quantity: quantity || 1, product_id: product?.product_id })
-                .then((response) => {
-                    if (response?.quantity == 1) {
-                        dispatch(addToCart(response))
+                .then(() => {
+                    if (Array.isArray(cartItems) && !cartItems.some(item => item === product?.product_id)) {
+                        dispatch(addToCart(product?.product_id))
                     }
                     triggerAlert('Thêm sản phẩm vào giỏ thành công!', false, false)
                 })

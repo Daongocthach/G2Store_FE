@@ -6,6 +6,7 @@ import { formatCurrency } from '../../../utils/price'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
 import DeleteShop from './FormShop/DeleteShop'
 import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
+import ViewBank from './FormShop/ViewBank'
 
 function Shops() {
   const [loading, setLoading] = useState(false)
@@ -65,8 +66,9 @@ function Shops() {
                     </TableCell>
                     <TableCell variant='body'><Typography >{formatCurrency(shop?.balance)}</Typography></TableCell>
                     <TableCell ><Typography variant='body2'>{shop?.violation_point}</Typography></TableCell>
-                    <TableCell >
-                        <DeleteShop id={shop?.shop_id} />
+                    <TableCell sx={{ display: 'flex', gap: 2 }}>
+                      <DeleteShop id={shop?.shop_id} />
+                      <ViewBank shop={shop} />
                     </TableCell>
                   </TableRow>
                 )

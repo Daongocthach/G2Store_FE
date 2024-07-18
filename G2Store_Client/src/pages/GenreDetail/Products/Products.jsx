@@ -103,7 +103,7 @@ function Products() {
             <Grid item xs={12} sm={12} md={9} lg={9} >
                 <Box>
                     <Box className='flex flex-row items-center justify-between'>
-                        <Typography variant='body1'>Tìm thấy <b>{products?.numberOfElements}</b> sản phẩm</Typography>
+                        <Typography variant='body1'>Trang {page} <b>{products?.numberOfElements}</b> sản phẩm</Typography>
                         <Sort sort={sort} setSort={setSort} handleReset={handleReset} />
                     </Box>
                     <Box className='flex flex-col items-center justify-center'>

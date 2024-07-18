@@ -34,9 +34,6 @@ function NextOrder({ order, setReRender, reRender }) {
     let Sock = new SockJS(baseURL + 'ws')
     stompClient = over(Sock)
     stompClient.connect({}, function () {
-      stompClient.subscribe('/all/notifications', function (result) {
-        console.log(JSON.parse(result.body))
-      })
     }, function (error) {
       console.error('STOMP connection error:', error)
     })
@@ -52,7 +49,7 @@ function NextOrder({ order, setReRender, reRender }) {
       orderApi.updateOrder(order?.order_id, nextStatus)
         .then(() => {
           triggerAlert('Cập nhật thành công!', false, false)
-          if (stompClient) {
+          if (stompClient?.connected) {
             const notificationReq = {
               content: `Đơn hàng #${order?.order_id} của bạn đã được cập nhật!`,
               customer_id: order?.customer_id
@@ -67,9 +64,9 @@ function NextOrder({ order, setReRender, reRender }) {
         })
         .finally(() => {
           setLoading(false)
-          handleClose()
         })
     }
+    handleClose()
   }
 
   return (
