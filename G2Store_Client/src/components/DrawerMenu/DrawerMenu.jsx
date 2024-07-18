@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { ShoppingCart, Notifications, Login, AccountCircle, PersonAdd, Logout, Menu } from '@mui/icons-material'
+import { ShoppingCart, Login, AccountCircle, PersonAdd, Logout, Menu } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../redux/actions/auth'
@@ -14,7 +14,6 @@ const links = [
     { to: '/profile', title: 'Tài khoản', icon: <AccountCircle fontSize="small" /> }
 ]
 const links2 = [
-    { to: '/notification', title: 'Thông báo', icon: <Notifications fontSize="small" /> },
     { to: '/login', title: 'Đăng nhập', icon: <Login fontSize="small" /> },
     { to: '/register', title: 'Đăng ký', icon: <PersonAdd fontSize="small" /> }
 ]

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TextField, Dialog, DialogContent, DialogTitle, Box, Typography, Tooltip } from '@mui/material'
+import { TextField, Dialog, DialogContent, DialogTitle, Box, Tooltip } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import categoryApi from '../../../../apis/categoryApi'
 import Loading from '../../../../components/Loading/Loading'
@@ -19,18 +19,23 @@ function UpdateCategory({ category, reRender, setReRender }) {
     setOpen(false)
   }
   const handleUpdate = async () => {
-    setLoading(true)
-    categoryApi.updateCategory(category?.category_id, name)
-      .then(() => {
-        triggerAlert('Cập nhật danh mục thành công!', false, false)
-        setReRender(!reRender)
-      })
-      .catch((error) => {
-        console.log(error)
-        triggerAlert('Cập nhật danh mục thất bại!', true, false)
-
-      })
-      .finally(() => setLoading(false))
+    if (category?.category_id) {
+      setLoading(true)
+      const parentCategory = getParentCategory(category?.path)
+      categoryApi.updateCategory(category?.category_id, parentCategory, name)
+        .then(() => {
+          triggerAlert('Cập nhật danh mục thành công!', false, false)
+          setReRender(!reRender)
+        })
+        .catch((error) => {
+          console.log(error)
+          triggerAlert('Cập nhật danh mục thất bại!', true, false)
+        })
+        .finally(() => setLoading(false))
+    }
+    else {
+      triggerAlert('Không tìm thấy danh mục!', true, false)
+    }
     handleClose()
   }
   return (
@@ -49,3 +54,12 @@ function UpdateCategory({ category, reRender, setReRender }) {
   )
 }
 export default UpdateCategory
+
+function getParentCategory(path) {
+  if (!path.includes('/')) {
+    return null
+  }
+  const pathArray = path.split('/')
+  const parentCategory = pathArray[pathArray.length - 2]
+  return parentCategory
+}

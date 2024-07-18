@@ -24,6 +24,10 @@ function UpdateShop({ shop, rerender, setRerender }) {
     const [ward, setWard] = useState({ WardName: '', WardCode: '' })
     const [name, setName] = useState(shop?.name)
     const [street, setStreet] = useState(shop?.street)
+    const [bank_acc_holder_name, setBank_acc_holder_name] = useState(shop?.bank_acc_holder_name)
+    const [bank_acc_series_num, setBank_acc_series_num] = useState(shop?.bank_acc_series_num)
+    const [bank_name, setBank_name] = useState(shop?.bank_name)
+
     const handleClose = () => {
         setOpen(false)
     }
@@ -53,6 +57,9 @@ function UpdateShop({ shop, rerender, setRerender }) {
     const handleClickOpen = async () => {
         setName(shop?.name)
         setStreet(shop?.street)
+        setBank_acc_holder_name(shop?.bank_acc_holder_name)
+        setBank_acc_series_num(shop?.bank_acc_series_num)
+        setBank_name(shop?.bank_name)
         ghnApi.getProvices()
             .then(response => {
                 setProvinces(response.data.data)
@@ -77,6 +84,9 @@ function UpdateShop({ shop, rerender, setRerender }) {
         if (ward == '') {
             toast.error('Vui lòng chọn địa chỉ !', { position: 'top-center', autoClose: 2000 })
         }
+        else if (!name) {
+            toast.error('Tên shop không được để trống !', { position: 'top-center', autoClose: 2000 })
+        }
         else {
             setLoading(true)
             const data = {
@@ -87,7 +97,10 @@ function UpdateShop({ shop, rerender, setRerender }) {
                 district_id: district?.DistrictID,
                 district_name: district?.DistrictName,
                 ward_code: ward?.WardCode,
-                ward_name: ward?.WardName
+                ward_name: ward?.WardName,
+                bank_acc_holder_name: bank_acc_holder_name,
+                bank_acc_series_num: bank_acc_series_num,
+                bank_name: bank_name
             }
             shopApi.updateShop(data)
                 .then(() => {
@@ -126,6 +139,14 @@ function UpdateShop({ shop, rerender, setRerender }) {
                             <DialogAddress open={openWard} setOpen={setOpenWard} datas={wards} handleClick={handleClickWard} isWard={true} />
                         </Box>
                         <TextField fullWidth inputMode='text' size='small' label="Đường/Tòa nhà" value={street} onChange={(e) => setStreet(e.target.value)} />
+
+                        <Typography minWidth={'100px'} fontWeight={'bold'} mt={2}>Thông tin ngân hàng</Typography>
+                        <TextField fullWidth inputMode='text' size='small' label="Tên ngân hàng" value={bank_name}
+                            onChange={(e) => setBank_name(e.target.value)} />
+                        <TextField fullWidth inputMode='text' size='small' label="Tên chủ thẻ" value={bank_acc_holder_name}
+                            onChange={(e) => setBank_acc_holder_name(e.target.value)} />
+                        <TextField fullWidth inputMode='text' size='small' label="Số tài khoản" value={bank_acc_series_num}
+                            onChange={(e) => setBank_acc_series_num(e.target.value)} />
                     </Box>
                 </DialogContent>
                 <DialogAction setOpen={setOpen} handleClick={handleClickUpdate} />

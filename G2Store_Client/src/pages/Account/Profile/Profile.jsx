@@ -10,6 +10,7 @@ import UpdatePassword from './UpdateProfile/UpdatePassword'
 import UpdatePhoneNo from './UpdateProfile/UpdatePhoneNo'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
 import { mockData } from '../../../apis/mockdata'
+import { formatCurrency } from '../../../utils/price'
 
 function Profile() {
   const triggerAlert = useAlert()
@@ -90,7 +91,7 @@ function Profile() {
           value={user?.phone_no ? user?.phone_no : 'Chưa cập nhật'} />
         <TextField variant='standard' label='Tích điểm' fullWidth size='small'
           className='min-w-[200px] md:min-w-[500px] text-sm bg-sky-50 text-gray-600'
-          value={parseFloat(user?.point).toFixed(2) || 0 + ' điểm'} />
+          value={(parseFloat(user?.point).toFixed(0) || 0) + ' điểm ~ ' + formatCurrency(parseInt(user?.point))} />
       </Box>
       <ButtonGroup variant="contained" color='info' aria-label="Basic button group" className='mt-1'>
         <UpdateDobAndName fullNameRoot={user?.full_name} dobRoot={user?.dob} reRender={reRender} setReRender={setReRender} />

@@ -1,12 +1,8 @@
 import { Grid, Chip } from '@mui/material'
-import { Reorder, Money, LocalShipping, Category, RemoveCircleOutline, HighlightOff, Reviews, Grading } from '@mui/icons-material'
-import { formatCurrency } from '../../../utils/price'
-function Data({ data, balance }) {
+import { Reorder, LocalShipping, Category, RemoveCircleOutline, HighlightOff, Reviews, Grading } from '@mui/icons-material'
+function Data({ data }) {
     return (
         <Grid container spacing={1} mt={2} >
-            <Grid item xs={12} sm={12} md={4} lg={3} >
-                <Chip icon={<Money />} label={'Doanh thu: ' + formatCurrency(balance || 0)} />
-            </Grid>
             <Grid item xs={12} sm={12} md={4} lg={3} >
                 <Chip icon={<Category />} label={'Sản phẩm: ' + data?.onSaleProductCount + ' sản phẩm'} />
             </Grid>

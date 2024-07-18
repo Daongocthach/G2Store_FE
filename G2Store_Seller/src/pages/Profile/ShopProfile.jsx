@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Typography, Box, Input, Paper } from '@mui/material'
+import { Typography, Box, Input, Paper, Card, CardMedia, CardActionArea, CardContent } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import authenApi from '../../apis/authenApi'
 import Loading from '../../components/Loading/Loading'
 import UpdateShop from './UpdateShop/UpdateShop'
 import UpdateImageShop from './UpdateShop/UpdateImageShop'
+import { mockData } from '../../apis/mockdata'
 
 function ShopProfile() {
     const navigate = useNavigate()
@@ -27,7 +28,10 @@ function ShopProfile() {
                         ward_name: response?.shop?.ward_name,
                         street: response?.shop?.street,
                         violation_point: response?.shop?.violation_point,
-                        is_allowed_to_sell: response?.shop?.is_allowed_to_sell
+                        is_allowed_to_sell: response?.shop?.is_allowed_to_sell,
+                        bank_acc_holder_name: response?.shop?.bank_acc_holder_name,
+                        bank_acc_series_num: response?.shop?.bank_acc_series_num,
+                        bank_name: response?.shop?.bank_name
                     })
                 })
                 .catch((error) => {
@@ -64,6 +68,24 @@ function ShopProfile() {
                     <Input readOnly placeholder='Địa chỉ' sx={{ ...useStyles.input, color: 'gray' }}
                         value={shop?.province_name ? `${shop?.street}, ${shop?.ward_name}, ${shop?.district_name}, ${shop?.province_name}` : ''} />
                 </Box>
+                <Card sx={{ maxWidth: 345 }}>
+                    <CardActionArea>
+                        <CardMedia component="img" height="140" alt="bank card image"
+                            image={mockData.images.bankCard}
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h6" component="div" className='text-gray-600'>
+                                {shop?.bank_name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {shop?.bank_acc_holder_name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {shop?.bank_acc_series_num}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, mb: 1, flexWrap: 'wrap' }}>
                     <UpdateShop rerender={reRender} setRerender={setReRender} shop={shop} />
                     {/*Image Shop */}

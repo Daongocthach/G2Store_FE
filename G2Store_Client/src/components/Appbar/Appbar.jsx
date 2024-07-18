@@ -27,13 +27,15 @@ function AppBar() {
             </Box>
             <Search />
           </Box>
-          <Box className="items-center gap-5 hidden lg:flex">
-            <MenuNotifications />
-            <Tooltip title="Giỏ hàng">
-              <Badge color="warning" badgeContent={cartItems.length} className="cursor-pointer">
-                <ShoppingCart className="text-white" onClick={() => navigate('/cart')} />
-              </Badge>
-            </Tooltip>
+          <Box className="flex flex-row items-center gap-4">
+            <Box className="flex flex-row items-center gap-5">
+              <MenuNotifications />
+              <Tooltip title="Giỏ hàng">
+                <Badge color="warning" badgeContent={cartItems.length} className="cursor-pointer">
+                  <ShoppingCart className="text-white" onClick={() => navigate('/cart')} />
+                </Badge>
+              </Tooltip>
+            </Box>
             <Account atk={atk} avatar={user?.avatar} />
           </Box>
         </Box>

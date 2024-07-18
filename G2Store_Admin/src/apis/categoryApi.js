@@ -9,9 +9,9 @@ const categoryApi = {
         const url = 'categories'
         return axiosClient.post(url, data)
     },
-    updateCategory(category_id, name) {
+    updateCategory(category_id, parent_id, name) {
         const url = `categories/${category_id}`
-        return axiosClient.put(url, { name, parent_id: '' })
+        return axiosClient.put(url, { name, parent_id })
     },
     deleteCategory(category_id) {
         const url = `categories/${category_id}`

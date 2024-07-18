@@ -84,7 +84,7 @@ function Products() {
                     <TableCell ><Typography>{formatCurrency(product?.price)}</Typography></TableCell>
                     <TableCell ><Typography>{product?.stock_quantity}</Typography> </TableCell>
                     <TableCell ><Typography>{product?.sold_quantity}</Typography> </TableCell>
-                    <TableCell ><BanProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} /></TableCell>
+                    <TableCell ><BanProduct product={product} reRender={reRender} setReRender={setReRender} /></TableCell>
                   </TableRow>
                 )
               })}

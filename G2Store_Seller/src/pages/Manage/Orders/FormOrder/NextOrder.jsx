@@ -15,13 +15,14 @@ const status = [
   { index: 3, value: 'DELIVERING', label: 'Đang giao hàng' },
   { index: 4, value: 'DELIVERED', label: 'Đã giao hàng' }
 ]
+const baseURL = import.meta.env.VITE_PUBLIC_WEBSOCKET_URL
+
+var stompClient = null
 
 function NextOrder({ order, setReRender, reRender }) {
   const triggerAlert = useAlert()
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
-  const [stompClient, setStompClient] = useState(null)
-  const [isConnected, setIsConnected] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
     connect()
@@ -30,17 +31,15 @@ function NextOrder({ order, setReRender, reRender }) {
     setOpen(false)
   }
   const connect = () => {
-    // let Sock = new SockJS('http://localhost:8080/ws')
-    // let client = over(Sock)
-    // client.connect({}, function () {
-    //   stompClient.subscribe('/all/notifications', function (result) {
-    //     console.log(JSON.parse(result.body))
-    //   })
-    //   setIsConnected(true)
-    // }, function (error) {
-    //   console.error('STOMP connection error:', error)
-    // })
-    // setStompClient(client)
+    let Sock = new SockJS(baseURL + 'ws')
+    stompClient = over(Sock)
+    stompClient.connect({}, function () {
+      stompClient.subscribe('/all/notifications', function (result) {
+        console.log(JSON.parse(result.body))
+      })
+    }, function (error) {
+      console.error('STOMP connection error:', error)
+    })
   }
 
   const handleUpdate = async () => {
@@ -53,7 +52,7 @@ function NextOrder({ order, setReRender, reRender }) {
       orderApi.updateOrder(order?.order_id, nextStatus)
         .then(() => {
           triggerAlert('Cập nhật thành công!', false, false)
-          if (isConnected) {
+          if (stompClient) {
             const notificationReq = {
               content: `Đơn hàng #${order?.order_id} của bạn đã được cập nhật!`,
               customer_id: order?.customer_id

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box, Button } from '@mui/material'
 import { AddCircle } from '@mui/icons-material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import authenApi from '../../../apis/authenApi'
 import Loading from '../../../components/Loading/Loading'
 import { useAlert } from '../../../components/ShowAlert/ShowAlert'
@@ -9,7 +9,6 @@ import { mockData } from '../../../apis/mockdata'
 
 function UpdateAvatar({ reRender, setReRender }) {
     const triggerAlert = useAlert()
-    const dispatch = useDispatch()
     const user = useSelector(state => state.auth)
     const [loading, setLoading] = useState(false)
 
@@ -25,7 +24,7 @@ function UpdateAvatar({ reRender, setReRender }) {
             const formData = new FormData()
             formData.append('file', file)
             authenApi.updateAvatar(formData)
-                .then((response) => {
+                .then(() => {
                     triggerAlert('Cập nhật thành công!', false, false)
                     setReRender(!reRender)
                 })

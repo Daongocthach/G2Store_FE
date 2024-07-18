@@ -47,7 +47,6 @@ function Profile() {
           <Input placeholder='Họ và tên' sx={{ ...useStyles.input, color: 'gray' }} value={seller?.full_name ? seller?.full_name : ''} readOnly />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
-          {/* <DialogUpdate handle={handleUpdate} /> */}
           {/*Avatar */}
           <UpdateAvatar reRender={reRender} setReRender={setReRender} />
         </Box>

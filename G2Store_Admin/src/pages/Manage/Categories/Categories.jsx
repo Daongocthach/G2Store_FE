@@ -15,21 +15,19 @@ function Categories() {
   useEffect(() => {
     setIsReset(false)
     const fetchData = async () => {
-      try {
-        setLoading(true)
-        const response = await categoryApi.getCategories()
-        setLoading(false)
-        setCategories(response)
-      } catch (error) {
-        setLoading(false)
-        console.log(error)
-      }
+      categoryApi.getCategories()
+        .then((response) => {
+          setCategories(response)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
     }
     fetchData()
   }, [reRender])
 
   return (
-    <Box sx={{ m: 5, minHeight: '100vh' }}>
+    <Box sx={{ m: 5, minHeight: '100vh', maxHeight: '100vh' }}>
       <BreadCrumbs links={[{ name: 'Quản lý danh mục', href: '/admin/manage/categories' }]} />
       <Box className='bg-white shadow-lg mt-2 w-11/12 overflow-x-scroll' >
         <Box className='flex flex-row items-center justify-between p-1 bg-sky-500'>

@@ -25,11 +25,10 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
     }, { totalProducts: 0, totalFeeShipReduce: 0, totalShopVoucher: 0 })
     var totalFeeShip = feeShips.reduce((totalFeeShip, feeShip) => totalFeeShip + feeShip?.fee, 0)
     var totalTemp = totals?.totalProducts + totalFeeShip - (totals?.totalFeeShipReduce || 0) - (totals?.totalShopVoucher || 0)
-    var total = totalTemp - (is_point_spent ? totalTemp : 0)
+    var total = totalTemp - (is_point_spent ? (point > totalTemp ? totalTemp : point) : 0)
     const convertDataToOrderFormat = (data) => {
         const address_id = address?.address_id
         const payment_type = paymentType
-        const is_point_spent = false
         const orders = data.map(order => {
             return {
                 items: order?.shop_items.map(item => {
@@ -73,6 +72,15 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
             triggerAlert('Vui lòng chọn địa chỉ giao hàng!', false, true)
         }
     }
+    const handleChangePayment = (value) => {
+        if (value == 'VNPAY' && total < 10000) {
+            triggerAlert('Giao dịch online tối thiểu là 10.000 vnđ !', false, true)
+            setPaymentType('COD')
+        }
+        else {
+            setPaymentType(value)
+        }
+    }
     return (
         <Box className='flex flex-col gap-3'>
             <Box className='flex items-center justify-between'>
@@ -93,10 +101,14 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
             </Box>
             <Box className='flex items-center justify-between border-b border-gray-500 pb-1 gap-2' >
                 <Box className='flex flex-row items-center' >
-                    <Typography className='text-gray-600' fontSize={14}>Dùng điểm tích lũy (-{formatCurrency(totalTemp || 0)})</Typography>
+                    <Typography className='text-gray-600' fontSize={14}>
+                        Dùng điểm tích lũy (-{formatCurrency(point > totalTemp ? totalTemp : point || 0)})
+                    </Typography>
                     <IOSSwitch checked={is_point_spent} onChange={() => setIsPointSpent(!is_point_spent)} color="error" />
                 </Box>
-                <Typography className='text-red-700' fontSize={13}>-{formatCurrency(is_point_spent ? (totalTemp || 0) : 0)}</Typography>
+                <Typography className='text-red-700' fontSize={13}>
+                    -{formatCurrency(is_point_spent ? ((point > totalTemp ? totalTemp : point) || 0) : 0)}
+                </Typography>
             </Box>
             <Box className="flex items-center justify-between gap-2 mt-2">
                 <Typography fontSize={17} className="text-gray-700">Tổng cộng:</Typography>
@@ -106,11 +118,11 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
             <Divider sx={{ mb: 2 }} />
             <Box className='flex flex-col'>
                 <Box className='flex items-center justify-start gap-1'>
-                    <Radio className='h-[30px] w-[30px]' checked={paymentType == 'COD'} onChange={() => setPaymentType('COD')} />
+                    <Radio className='h-[30px] w-[30px]' checked={paymentType == 'COD'} onChange={() => handleChangePayment('COD')} />
                     <Typography className='text-gray-600' fontSize={14}>Thanh toán khi nhận hàng</Typography>
                 </Box>
                 <Box className='flex items-center justify-start gap-1 mt-2'>
-                    <Radio className='h-[30px] w-[30px]' checked={paymentType == 'VNPAY'} onChange={() => setPaymentType('VNPAY')} />
+                    <Radio className='h-[30px] w-[30px]' checked={paymentType == 'VNPAY'} onChange={() => handleChangePayment('VNPAY')} />
                     <Typography className='text-gray-600' fontSize={14}>Thanh toán qua VNPAY</Typography>
                     <img src={mockData.images.imgVNPAY} alt='thanh toan Vnpay' style={{ height: 50, width: 50 }} />
                 </Box>
