@@ -6,9 +6,9 @@
 •	Admin manage products, orders, customers/sellers, notifications and view statistic.
 - Link to BE github: https://github.com/Trandinhdongkhanh/G2WebStoreV2.git
 - Technologies used (Front End):
-•	React JS
-•	React Hook
-•	Material UI
+•	React JS  
+•	React Hook  
+•	Material UI  
 •	Tailwind CSS
 •	Axios (call API)
 •	Redux
