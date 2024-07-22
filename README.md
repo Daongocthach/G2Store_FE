@@ -1,4 +1,5 @@
-- Description: Actors: Customer, Sellers, Admin
+- Description:
+- Actors: Customers, Sellers, Admin
 - Functions:
   •	Register as a customer/seller account  
   •	Sellers sell and manage their products  
