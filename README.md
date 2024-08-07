@@ -1,25 +1,25 @@
-Các tính năng chính: 
-• Người dùng (người mua hàng): 
-  − Đăng nhập, đăng ký tài khoản, quên mật khẩu. 
-  − Quản lý thông tin cá nhân 
-  − Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm. 
-  − Quản lý giỏ hàng: Thêm, xóa, cập nhật sản phẩm trong giỏ. 
-  − Sử dụng voucher, điểm tích lũy để giảm giá đơn hàng. 
-  − Đặt hàng, thanh toán online qua VNPAY. 
-  − Quản lý đơn hàng cá nhân 
-  − Bình luận, đánh giá sản phẩm đã mua. 
-  − Xem thông báo trên hệ thống. 
-• Người bán hàng: 
-− Quản lý thông tin cá nhân 
-− Quản lý thông tin shop 
-− Quản lý người bán phụ 
-− Quản lý sản phẩm: Thêm, xóa, sửa sản phẩm của shop. 
-− Quản lý danh mục ngành hàng 
-− Quản lý khuyến mãi 
-− Quản lý đơn hàng 
-− Quản lý đánh giá 
-− Xem báo cáo thống kê. 
-− Thông báo với người dùng. 
+Các tính năng chính:  
+• Người dùng (người mua hàng):  
+  − Đăng nhập, đăng ký tài khoản, quên mật khẩu.  
+  − Quản lý thông tin cá nhân  
+  − Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm.  
+  − Quản lý giỏ hàng: Thêm, xóa, cập nhật sản phẩm trong giỏ.  
+  − Sử dụng voucher, điểm tích lũy để giảm giá đơn hàng.  
+  − Đặt hàng, thanh toán online qua VNPAY.  
+  − Quản lý đơn hàng cá nhân  
+  − Bình luận, đánh giá sản phẩm đã mua.  
+  − Xem thông báo trên hệ thống.  
+• Người bán hàng:  
+− Quản lý thông tin cá nhân  
+− Quản lý thông tin shop  
+− Quản lý người bán phụ  
+− Quản lý sản phẩm: Thêm, xóa, sửa sản phẩm của shop.  
+− Quản lý danh mục ngành hàng  
+− Quản lý khuyến mãi  
+− Quản lý đơn hàng  
+− Quản lý đánh giá  
+− Xem báo cáo thống kê.  
+− Thông báo với người dùng.  
 • Người quản lý 
 − Đăng nhập tài khoản được cung cấp sẵn. 
 − Quản lý người bán và người dùng. 
