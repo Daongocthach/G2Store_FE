@@ -1,12 +1,39 @@
-- Description:
-- Actors: Customers, Sellers, Admin
-- Functions:
-  •	Register as a customer/seller account  
-  •	Sellers sell and manage their shop  
-  •	Users to manage their orders, view and purchase products, and calculate shipping fees using third-party APIs such as GHN. After a successful purchase, the user will receive an email confirmation about their order. In summary, it has all the basic functions of an e-commerce website  
-  •	Admin manage products, orders, customers/sellers, notifications and view statistic.  
-- Link to BE github: https://github.com/Trandinhdongkhanh/G2WebStoreV2.git  
-- Technologies used (Front End):
+Người dùng (người mua hàng):
+− Đăng nhập, đăng ký tài khoản, quên mật khẩu.
+− Quản lý thông tin cá nhân: tên, email, số điện thoại, mật khẩu, avatar, địa
+chỉ, ngày sinh.
+− Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm.
+− Quản lý giỏ hàng: Thêm, xóa, cập nhật sản phẩm trong giỏ.
+− Sử dụng voucher, điểm tích lũy để giảm giá đơn hàng.
+− Đặt hàng: Tính phí vận chuyển và tạo đơn GHN, chọn phương thức thanh
+toán COD hoặc thanh toán online qua VNPAY.
+− Quản lý đơn hàng cá nhân: Xem chi tiết đơn hàng, trạng thái đơn hàng, hủy
+đơn hàng ở trạng thái đã đặt, xác nhận đã nhận hàng, yêu cầu trả hàng hoàn
+tiền.
+− Bình luận, đánh giá sản phẩm đã mua.
+− Xem thông báo trên hệ thống.
+• Người bán hàng:
+− Đăng nhập, đăng ký tài khoản, quên mật khẩu.
+− Quản lý thông tin cá nhân: tên, email, số điện thoại, mật khẩu, ảnh đại diện.
+− Quản lý thông tin shop: Địa chỉ, ảnh đại diện.
+− Quản lý người bán phụ: Thêm, cấp quyền cho người bán phụ.
+− Quản lý sản phẩm: Thêm, xóa, sửa sản phẩm của shop.
+− Quản lý danh mục ngành hàng: Thêm, xóa, sửa danh mục riêng của shop.
+− Quản lý khuyến mãi: Thêm, xóa, sửa khuyến mãi của shop.
+− Quản lý đơn hàng: Xem chi tiết đơn hàng, cập nhật trạng thái đơn hàng.
+− Quản lý đánh giá: Phản hồi bình luận, đánh giá sản phẩm của khách hàng.
+− Xem báo cáo thống kê.
+− Thông báo với người dùng.
+• Người quản lý
+− Đăng nhập tài khoản được cung cấp sẵn.
+− Quản lý người bán và người dùng.
+− Quản lý sản phẩm trên toàn hệ thống.
+− Quản lý đơn hàng của toàn hệ thống.
+− Thêm, sửa, xóa danh mục sản phẩm trên toàn hệ thống.
+− Xem báo cáo và thống kê.v
+− Thông báo toàn hệ thống.
+- Link BE github: https://github.com/Trandinhdongkhanh/G2WebStoreV2.git  
+- Công nghệ sử dụng (Front End):
   •	React JS    
   •	React Hook  
   •	Material UI  
@@ -16,7 +43,7 @@
   •	Vite  
   •	Firebase Hosting (Deploy)  
   •	Stomp Js (Websocket)  
-Front End Website
+
 ![image](https://github.com/user-attachments/assets/96189b54-3ba8-4fd3-9ad6-5444b5a63c58)
 ![image](https://github.com/user-attachments/assets/1fcde21c-e02c-4357-a93e-23131ccb235c)
 ![image](https://github.com/user-attachments/assets/f7be40d6-0747-466f-9c2c-764ac11c12f5)
