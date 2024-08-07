@@ -1,45 +1,70 @@
-Các tính năng chính:  
-• Người dùng (người mua hàng):  
-      − Đăng nhập, đăng ký tài khoản, quên mật khẩu.  
-      − Quản lý thông tin cá nhân  
-      − Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm.  
-      − Quản lý giỏ hàng: Thêm, xóa, cập nhật sản phẩm trong giỏ.  
-      − Sử dụng voucher, điểm tích lũy để giảm giá đơn hàng.  
-      − Đặt hàng, thanh toán online qua VNPAY.  
-      − Quản lý đơn hàng cá nhân  
-      − Bình luận, đánh giá sản phẩm đã mua.  
-      − Xem thông báo trên hệ thống.  
-• Người bán hàng:  
-      − Quản lý thông tin cá nhân  
-      − Quản lý thông tin shop  
-      − Quản lý người bán phụ  
-      − Quản lý sản phẩm: Thêm, xóa, sửa sản phẩm của shop.  
-      − Quản lý danh mục ngành hàng  
-      − Quản lý khuyến mãi  
-      − Quản lý đơn hàng  
-      − Quản lý đánh giá  
-      − Xem báo cáo thống kê.  
-      − Thông báo với người dùng.  
-• Người quản lý 
-      − Đăng nhập tài khoản được cung cấp sẵn. 
-      − Quản lý người bán và người dùng. 
-      − Quản lý sản phẩm trên toàn hệ thống. 
-      − Quản lý đơn hàng của toàn hệ thống. 
-      − Thêm, sửa, xóa danh mục sản phẩm trên toàn hệ thống. 
-      − Xem báo cáo và thống kê. 
-      − Thông báo toàn hệ thống. 
-      
-Link BE github: https://github.com/Trandinhdongkhanh/G2WebStoreV2.git  
-Công nghệ sử dụng (Front End): 
-    •	React JS    
-    •	React Hook  
-    •	Material UI  
-    •	Tailwind CSS  
-    •	Axios (call API)  
-    •	Redux  
-    •	Vite  
-    •	Firebase Hosting (Deploy)  
-    •	Stomp Js (Websocket)  
+# Sàn thương mại điện tử G2Store
+
+## Mô tả
+Giúp người dùng có thể mua hàng và tạo shop bán các sản phẩm của mình trên sàn.
+
+## Các tính năng chính
+
+### Người dùng (người mua hàng)
+- Đăng nhập, đăng ký tài khoản, quên mật khẩu
+- Quản lý thông tin cá nhân
+- Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm
+- Quản lý giỏ hàng: Thêm, xóa, cập nhật sản phẩm trong giỏ
+- Sử dụng voucher, điểm tích lũy để giảm giá đơn hàng
+- Đặt hàng, thanh toán online qua VNPAY
+- Quản lý đơn hàng cá nhân
+- Bình luận, đánh giá sản phẩm đã mua
+- Xem thông báo trên hệ thống
+
+### Người bán hàng
+- Quản lý thông tin cá nhân
+- Quản lý thông tin shop
+- Quản lý người bán phụ
+- Quản lý sản phẩm: Thêm, xóa, sửa sản phẩm của shop
+- Quản lý danh mục ngành hàng
+- Quản lý khuyến mãi
+- Quản lý đơn hàng
+- Quản lý đánh giá
+- Xem báo cáo thống kê
+- Thông báo với người dùng
+
+### Người quản lý
+- Đăng nhập tài khoản được cung cấp sẵn
+- Quản lý người bán và người dùng
+- Quản lý sản phẩm trên toàn hệ thống
+- Quản lý đơn hàng của toàn hệ thống
+- Thêm, sửa, xóa danh mục sản phẩm trên toàn hệ thống
+- Xem báo cáo và thống kê
+- Thông báo toàn hệ thống
+
+## Công nghệ sử dụng (Front End)
+- React JS
+- React Hook
+- Material UI
+- Tailwind CSS
+- Axios (call API)
+- Redux
+- Vite
+- Firebase Hosting (Deploy)
+- Stomp Js (Websocket)
+
+## Liên kết dự án
+[Link BE Github](https://github.com/Trandinhdongkhanh/G2WebStoreV2.git)
+
+## Cài đặt và sử dụng
+```bash
+# Clone repository
+git clone https://github.com/yourusername/yourproject.git
+
+# Navigate to the project directory
+cd yourproject
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
+
 
 ![image](https://github.com/user-attachments/assets/96189b54-3ba8-4fd3-9ad6-5444b5a63c58)
 ![image](https://github.com/user-attachments/assets/1fcde21c-e02c-4357-a93e-23131ccb235c)
