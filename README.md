@@ -65,7 +65,7 @@ npm install
 # Start the development server
 npm start
 
-## Một số giao diện trang web
+## **Một số giao diện trang web**
 
 ![image](https://github.com/user-attachments/assets/96189b54-3ba8-4fd3-9ad6-5444b5a63c58)
 ![image](https://github.com/user-attachments/assets/1fcde21c-e02c-4357-a93e-23131ccb235c)
