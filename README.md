@@ -1,5 +1,5 @@
-**Các tính năng chính:  **
-**• Người dùng (người mua hàng):  **
+Các tính năng chính:  
+• Người dùng (người mua hàng):  
       − Đăng nhập, đăng ký tài khoản, quên mật khẩu.  
       − Quản lý thông tin cá nhân  
       − Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm.  
@@ -9,7 +9,7 @@
       − Quản lý đơn hàng cá nhân  
       − Bình luận, đánh giá sản phẩm đã mua.  
       − Xem thông báo trên hệ thống.  
-**• Người bán hàng:  **
+• Người bán hàng:  
       − Quản lý thông tin cá nhân  
       − Quản lý thông tin shop  
       − Quản lý người bán phụ  
@@ -20,7 +20,7 @@
       − Quản lý đánh giá  
       − Xem báo cáo thống kê.  
       − Thông báo với người dùng.  
-**• Người quản lý **
+• Người quản lý 
       − Đăng nhập tài khoản được cung cấp sẵn. 
       − Quản lý người bán và người dùng. 
       − Quản lý sản phẩm trên toàn hệ thống. 
@@ -29,8 +29,8 @@
       − Xem báo cáo và thống kê. 
       − Thông báo toàn hệ thống. 
       
-**Link BE github:** https://github.com/Trandinhdongkhanh/G2WebStoreV2.git  
-**Công nghệ sử dụng (Front End): **
+Link BE github: https://github.com/Trandinhdongkhanh/G2WebStoreV2.git  
+Công nghệ sử dụng (Front End): 
     •	React JS    
     •	React Hook  
     •	Material UI  
