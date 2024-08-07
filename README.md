@@ -1,39 +1,35 @@
-Người dùng (người mua hàng):
-− Đăng nhập, đăng ký tài khoản, quên mật khẩu.
-− Quản lý thông tin cá nhân: tên, email, số điện thoại, mật khẩu, avatar, địa
-chỉ, ngày sinh.
-− Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm.
-− Quản lý giỏ hàng: Thêm, xóa, cập nhật sản phẩm trong giỏ.
-− Sử dụng voucher, điểm tích lũy để giảm giá đơn hàng.
-− Đặt hàng: Tính phí vận chuyển và tạo đơn GHN, chọn phương thức thanh
-toán COD hoặc thanh toán online qua VNPAY.
-− Quản lý đơn hàng cá nhân: Xem chi tiết đơn hàng, trạng thái đơn hàng, hủy
-đơn hàng ở trạng thái đã đặt, xác nhận đã nhận hàng, yêu cầu trả hàng hoàn
-tiền.
-− Bình luận, đánh giá sản phẩm đã mua.
-− Xem thông báo trên hệ thống.
-• Người bán hàng:
-− Đăng nhập, đăng ký tài khoản, quên mật khẩu.
-− Quản lý thông tin cá nhân: tên, email, số điện thoại, mật khẩu, ảnh đại diện.
-− Quản lý thông tin shop: Địa chỉ, ảnh đại diện.
-− Quản lý người bán phụ: Thêm, cấp quyền cho người bán phụ.
-− Quản lý sản phẩm: Thêm, xóa, sửa sản phẩm của shop.
-− Quản lý danh mục ngành hàng: Thêm, xóa, sửa danh mục riêng của shop.
-− Quản lý khuyến mãi: Thêm, xóa, sửa khuyến mãi của shop.
-− Quản lý đơn hàng: Xem chi tiết đơn hàng, cập nhật trạng thái đơn hàng.
-− Quản lý đánh giá: Phản hồi bình luận, đánh giá sản phẩm của khách hàng.
-− Xem báo cáo thống kê.
-− Thông báo với người dùng.
-• Người quản lý
-− Đăng nhập tài khoản được cung cấp sẵn.
-− Quản lý người bán và người dùng.
-− Quản lý sản phẩm trên toàn hệ thống.
-− Quản lý đơn hàng của toàn hệ thống.
-− Thêm, sửa, xóa danh mục sản phẩm trên toàn hệ thống.
-− Xem báo cáo và thống kê.v
-− Thông báo toàn hệ thống.
+Các tính năng chính: 
+• Người dùng (người mua hàng): 
+  − Đăng nhập, đăng ký tài khoản, quên mật khẩu. 
+  − Quản lý thông tin cá nhân 
+  − Tìm kiếm và lọc sản phẩm, xem chi tiết sản phẩm. 
+  − Quản lý giỏ hàng: Thêm, xóa, cập nhật sản phẩm trong giỏ. 
+  − Sử dụng voucher, điểm tích lũy để giảm giá đơn hàng. 
+  − Đặt hàng, thanh toán online qua VNPAY. 
+  − Quản lý đơn hàng cá nhân 
+  − Bình luận, đánh giá sản phẩm đã mua. 
+  − Xem thông báo trên hệ thống. 
+• Người bán hàng: 
+− Quản lý thông tin cá nhân 
+− Quản lý thông tin shop 
+− Quản lý người bán phụ 
+− Quản lý sản phẩm: Thêm, xóa, sửa sản phẩm của shop. 
+− Quản lý danh mục ngành hàng 
+− Quản lý khuyến mãi 
+− Quản lý đơn hàng 
+− Quản lý đánh giá 
+− Xem báo cáo thống kê. 
+− Thông báo với người dùng. 
+• Người quản lý 
+− Đăng nhập tài khoản được cung cấp sẵn. 
+− Quản lý người bán và người dùng. 
+− Quản lý sản phẩm trên toàn hệ thống. 
+− Quản lý đơn hàng của toàn hệ thống. 
+− Thêm, sửa, xóa danh mục sản phẩm trên toàn hệ thống. 
+− Xem báo cáo và thống kê. 
+− Thông báo toàn hệ thống. 
 - Link BE github: https://github.com/Trandinhdongkhanh/G2WebStoreV2.git  
-- Công nghệ sử dụng (Front End):
+- Công nghệ sử dụng (Front End): 
   •	React JS    
   •	React Hook  
   •	Material UI  
