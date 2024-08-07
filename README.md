@@ -48,13 +48,13 @@ Giúp người dùng có thể mua hàng và tạo shop bán các sản phẩm c
 - Firebase Hosting (Deploy)
 - Stomp Js (Websocket)
 
-## Liên kết dự án
+## Liên kết dự án backendbackend
 [Link BE Github](https://github.com/Trandinhdongkhanh/G2WebStoreV2.git)
 
 ## Cài đặt và sử dụng
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/Daongocthach/G2Store_FE
 
 # Navigate to the project directory
 cd yourproject
