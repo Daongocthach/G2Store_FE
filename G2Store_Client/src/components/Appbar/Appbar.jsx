@@ -19,15 +19,19 @@ function AppBar() {
         <Box className="static w-full flex items-center justify-between overflow-auto bg-gray-800 h-16">
           <Box className="flex items-center gap-3 flex-1">
             <Box className="flex items-center gap-1">
-              <img src={mockData.images.G2Logo} className="h-16 w-16 hidden lg:flex" />
-              <Link to="/" className="no-underline">
-                <Typography variant="h5" fontWeight={'bold'} className="hidden sm:flex text-white hover:text-orange-300">G2Store</Typography>
-              </Link>
-              <DrawerMenu atk={atk} />
+              <Box className="hidden lg:flex items-center gap-1">
+                <img src={mockData.images.G2Logo} className="h-16 w-16" />
+                <Link to="/" className="no-underline">
+                  <Typography variant="h5" fontWeight={'bold'} className="text-white hover:text-orange-300">G2Store</Typography>
+                </Link>
+              </Box>
+              <Box className="flex md:hidden">
+                <DrawerMenu atk={atk} />
+              </Box>
             </Box>
             <Search />
           </Box>
-          <Box className="flex flex-row items-center gap-4">
+          <Box className="flex-row items-center gap-4 hidden md:flex">
             <Box className="flex flex-row items-center gap-5">
               <MenuNotifications />
               <Tooltip title="Giỏ hàng">

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { ShoppingCart, Login, AccountCircle, PersonAdd, Logout, Menu } from '@mui/icons-material'
+import { ShoppingCart, Login, AccountCircle, PersonAdd, Logout, Menu, Notifications } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../redux/actions/auth'
@@ -10,10 +10,11 @@ import { useAlert } from '../ShowAlert/ShowAlert'
 import { mockData } from '../../apis/mockdata'
 
 const links = [
-    { to: '/cart', title: 'Giỏ hàng', icon: <ShoppingCart fontSize="small" /> },
     { to: '/profile', title: 'Tài khoản', icon: <AccountCircle fontSize="small" /> }
 ]
 const links2 = [
+    { to: '/', title: 'Thông báo', icon: <Notifications fontSize="small" /> },
+    { to: '/cart', title: 'Giỏ hàng', icon: <ShoppingCart fontSize="small" /> },
     { to: '/login', title: 'Đăng nhập', icon: <Login fontSize="small" /> },
     { to: '/register', title: 'Đăng ký', icon: <PersonAdd fontSize="small" /> }
 ]

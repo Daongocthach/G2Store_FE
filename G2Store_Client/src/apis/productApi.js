@@ -1,11 +1,12 @@
 import axiosClient from './axiosClient'
 const productApi = {
     getProducts(page, size, sort, startPrice, endPrice, districtId, star) {
-        var seed = sessionStorage.getItem('seed')
-        if (!seed) {
-            sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
-            seed = sessionStorage.getItem('seed')
-        }
+        var seed = 123
+        // var seed = sessionStorage.getItem('seed')
+        // if (!seed) {
+        //     sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
+        //     seed = sessionStorage.getItem('seed')
+        // }
         const params = {}
         if (districtId) {
             params.districtId = districtId
@@ -26,11 +27,11 @@ const productApi = {
         return axiosClient.get(url, { params: params })
     },
     getProductsByCategoryId(categoryId, page, size, sort, startPrice, endPrice, districtId, star) {
-        var seed = sessionStorage.getItem('seed')
-        if (!seed) {
-            sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
-            seed = sessionStorage.getItem('seed')
-        }
+        var seed = 123
+        // if (!seed) {
+        //     sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
+        //     seed = sessionStorage.getItem('seed')
+        // }
         const params = {}
         if (districtId) {
             params.districtId = districtId
@@ -51,7 +52,8 @@ const productApi = {
         return axiosClient.get(url, { params: params })
     },
     searchProducts(name, page, size, sort, startPrice, endPrice, districtId, star) {
-        var seed = sessionStorage.getItem('seed')
+        var seed = 123
+
         if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
             seed = sessionStorage.getItem('seed')
@@ -76,7 +78,7 @@ const productApi = {
         return axiosClient.get(url, { params: params })
     },
     getShopProducts(shop_id, page, size, sort, name, shop_cate_id, startPrice, endPrice) {
-        var seed = sessionStorage.getItem('seed')
+        var seed = 123
         if (!seed) {
             sessionStorage.setItem('seed', Math.floor((Math.random() * 100) + 1))
             seed = sessionStorage.getItem('seed')

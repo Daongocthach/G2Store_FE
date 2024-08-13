@@ -38,7 +38,7 @@ function MenuNotifications() {
         var stompClient = null
         var count = 0
         const connect = () => {
-            if (stompClient) {
+            if (stompClient?.connected) {
                 return
             }
             let Sock = new SockJS(baseURL + 'ws')

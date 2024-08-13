@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import MenuCategory from '../MenuCategory/MenuCategory'
 import categoryApi from '../../apis/categoryApi'
+import { mockData } from '../../apis/mockdata'
 
 function BoardBar() {
     const navigate = useNavigate()
@@ -22,8 +23,10 @@ function BoardBar() {
             .then(response => {
                 setCategories(response)
             })
-            .catch(error => {
-                console.error(error)
+            .catch((error) => {
+                console.log(error)
+                if (error?.code == 'ERR_NETWORK')
+                    setCategories(mockData.categories)
             })
     }, [])
     return (
@@ -33,11 +36,11 @@ function BoardBar() {
                     <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                         <Chip icon={<Category />} clickable sx={useStyles.chip} label="Danh mục" onClick={handleClick}
                             onDelete={handle} deleteIcon={<KeyboardArrowDown />} />
-                        <Link to={'/promotion'}><Chip icon={<MoneyOff />} label={'Khuyến mãi'} clickable sx={useStyles.chip} ></Chip></Link>
                         <Chip icon={<Widgets />} label={'Sản phẩm'} clickable sx={useStyles.chip}
                             onClick={() => navigate('/genre-detail')} />
                     </Box>
-                    <Menu anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
+                    <Menu className='w-9/12'
+                     anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button' }} >
                         {(Array.isArray(categories) && categories.length > 0) ?
                             <MenuCategory categories={categories} />
                             :

@@ -63,7 +63,7 @@ function AddShopCateProduct({ shop_cate_id }) {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            productApi.getShopProducts(0, 16, '')
+            productApi.getShopProducts(0, 9999, '')
                 .then((response) => {
                     setProducts(response?.content)
                     setCheckedProducts([])

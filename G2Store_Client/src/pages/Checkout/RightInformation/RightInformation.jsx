@@ -81,6 +81,9 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
             setPaymentType(value)
         }
     }
+    const handleUsePoint = () => {
+        setIsPointSpent(!is_point_spent)
+    }
     return (
         <Box className='flex flex-col gap-3'>
             <Box className='flex items-center justify-between'>
@@ -104,7 +107,7 @@ function RightInformation({ cartItems, address, feeShips, paymentType, setPaymen
                     <Typography className='text-gray-600' fontSize={14}>
                         Dùng điểm tích lũy (-{formatCurrency(point > totalTemp ? totalTemp : point || 0)})
                     </Typography>
-                    <IOSSwitch checked={is_point_spent} onChange={() => setIsPointSpent(!is_point_spent)} color="error" />
+                    <IOSSwitch checked={is_point_spent} onChange={() => handleUsePoint()} color="error" />
                 </Box>
                 <Typography className='text-red-700' fontSize={13}>
                     -{formatCurrency(is_point_spent ? ((point > totalTemp ? totalTemp : point) || 0) : 0)}

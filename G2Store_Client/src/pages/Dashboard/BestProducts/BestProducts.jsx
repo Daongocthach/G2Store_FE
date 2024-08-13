@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import productApi from '../../../apis/productApi'
 import CardProduct from '../../../components/Product/CardProduct'
 import EmptyData from '../../../components/EmptyData/EmptyData'
+import { mockData } from '../../../apis/mockdata'
 
 function BestProducts() {
     const navigate = useNavigate()
@@ -13,7 +14,11 @@ function BestProducts() {
         setLoading(true)
         productApi.getProducts(0, 16)
             .then((response) => setProducts(response?.content))
-            .catch((error) => console.log(error))
+            .catch((error) => {
+                console.log(error)
+                if (error?.code =='ERR_NETWORK')
+                    setProducts(mockData.products?.content)
+            })
             .finally(() => setLoading(false))
     }
     useEffect(() => {

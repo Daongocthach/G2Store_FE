@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Box, Typography, Container, Divider, Grid } from '@mui/material'
+import { Box, Typography, Container, Grid } from '@mui/material'
 import reviewApi from '../../apis/reviewApi'
 import LeftInformation from './LeftInformation/LeftInformation'
 import RightInformation from './RigthInformation/RightInformation'
@@ -8,6 +8,7 @@ import Reviews from './Reviews/Reviews'
 import productApi from '../../apis/productApi'
 import RelativeProducts from './RelativeProducts/RelativeProducts'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
+import { mockData } from '../../apis/mockdata'
 
 function ProductDetail() {
   const navigate = useNavigate()
@@ -25,7 +26,14 @@ function ProductDetail() {
   useEffect(() => {
     productApi.getProduct(product_id)
       .then((response) => { setProduct(response) })
-      .catch(() => { navigate('/product-not-exist') })
+      .catch((error) => {
+        console.log(error)
+        if (error?.code === 400)
+          navigate('/product-not-exist')
+        if (error?.code == 'ERR_NETWORK')
+          setProduct(mockData.products.content[0])
+      })
+      .catch(() => { })
   }, [product_id])
   return (
     <Box sx={{ minHeight: '100vh' }}>

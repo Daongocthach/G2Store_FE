@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TextField, Dialog, DialogContent, DialogTitle, Box, Button } from '@mui/material'
+import { TextField, Dialog, DialogContent, DialogTitle, Box, Button, Tooltip } from '@mui/material'
 import AddCircle from '@mui/icons-material/AddCircle'
 import categoryApi from '../../../../apis/categoryApi'
 import Loading from '../../../../components/Loading/Loading'
@@ -30,16 +30,16 @@ function AddCategory({ parent_id, isParent, reRender, setReRender }) {
     }
     return (
         <Box >
-            <Button sx={{ color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} size='medium'
+            {/* <Button sx={{ color: 'white', fontWeight: 'bold', ':hover': { bgcolor: 'inherit', borderWidth: 2 } }} size='medium'
                 startIcon={<AddCircle className='text-white' />} variant="outlined" onClick={() => setOpen(true)}>
                 Thêm ngành hàng
-            </Button>
-            {/* <Tooltip title='Thêm ngành hàng'>
-                <Add className="action-buttons" sx={{
+            </Button> */}
+            <Tooltip title='Thêm ngành hàng'>
+                <AddCircle className="action-buttons" sx={{
                     fontSize: '20px', visibility: isParent ? 'visible' : 'hidden',
                     ':hover': { color: '#1E90FF', bgcolor: 'inherit' }, color: isParent ? 'white' : 'inherit'
                 }}
-                    onClick={() => setOpen(true)} /></Tooltip> */}
+                    onClick={() => setOpen(true)} /></Tooltip>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle sx={{ textAlign: 'center' }}>Thêm ngành hàng</DialogTitle>
                 <DialogContent >

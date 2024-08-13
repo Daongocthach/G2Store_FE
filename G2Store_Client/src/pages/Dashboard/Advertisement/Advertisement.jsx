@@ -7,20 +7,21 @@ function Advertisement() {
   const [index, setIndex] = useState(0)
   const promotions = mockData.promotions
   return (
-    <Box sx={{ width: '100%', height: (theme) => theme.webCustom.promotionBannerHeight, position: 'relative' }} >
-      <Box sx={{ width: '100%', height: '100%', bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#898989' : '#E6E6FA') }}>
-        <img src={promotions[index]?.image} alt='product' style={{ borderRadius: 10, width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(60%)' }} />
-        <Typography variant={'h2'} sx={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', fontWeight: 'bold',
+    <Box className='relative w-full max-h-screen'>
+      <img src={promotions[index]?.image} alt='product' className='w-full h-full object-fill brightness-50' />
+      <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-2 flex flex-col items-center'>
+        <Typography variant={'h3'} sx={{
+          color: 'white', fontWeight: 'bold',
           fontFamily: 'Rubik Vinyl, cursive', width: '400px', textAlign: 'center'
         }}>{promotions[index]?.name}</Typography>
-      </Box>
-      <Box sx={{ display: 'flex', gap: 1, position: 'absolute', top: '80%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', height: '40px', opacity: 0.8 }}>
-        <Button variant="contained" startIcon={<Visibility sx={{ color: 'black' }} />}
-          sx={{ bgcolor: 'white', color: 'black', fontWeight: 'bold' }}>Xem
-        </Button>
-        <Button variant="contained" startIcon={<ShoppingCart />}
-          sx={{ color: 'white', border: 'none', backgroundColor: '#1C1C1C', fontWeight: 'bold', minWidth: '200px' }}>Thêm vào giỏ</Button>
+        <Box className='opacity-80  gap-2 flex-row flex '>
+          <Button variant="contained" startIcon={<Visibility sx={{ color: 'black' }} />}
+            sx={{ bgcolor: 'white', color: 'black', fontWeight: 'bold', ':hover': { bgcolor: 'gray' } }}>Xem
+          </Button>
+          <Button variant="contained" startIcon={<ShoppingCart />}
+            sx={{ color: 'white', border: 'none', backgroundColor: '#1C1C1C', fontWeight: 'bold', minWidth: '200px', ':hover': { bgcolor: 'gray' } }}>
+            Thêm vào giỏ</Button>
+        </Box>
       </Box>
       {index > 0 && <IconButton
         sx={{ ...useStyles.btnNextPrev, left: '5%' }} onClick={() => { setIndex(index - 1) }}><ArrowBackIos /></IconButton>}
@@ -35,6 +36,6 @@ export default Advertisement
 
 const useStyles = {
   btnNextPrev: {
-    position: 'absolute', fontWeight: 'bold', transform: 'translate(-50%, -50%)', top: '50%', opacity: 0.5, ':hover': { bgcolor: 'gray' }
+    position: 'absolute', transform: 'translate(-50%, -50%)', top: '50%', opacity: 0.8, bgcolor: 'white'
   }
 }

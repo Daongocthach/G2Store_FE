@@ -159,6 +159,8 @@ function Products() {
               <MenuItem color='#444444' value={'STOCK_QUANTITY_ASC'}>Tồn kho tăng dần</MenuItem>
               <MenuItem color='#444444' value={'SOLD_QUANTITY_DESC'}>Đã bán giảm dần</MenuItem>
               <MenuItem color='#444444' value={'SOLD_QUANTITY_ASC'}>Đã bán tăng dần</MenuItem>
+              <MenuItem color='#444444' value={'TOP_INCOME'}>Doanh thu cao nhất</MenuItem>
+              <MenuItem color='#444444' value={'LOW_INCOME'}>Doanh thu thấp nhất</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -204,7 +206,7 @@ function Products() {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Tooltip title='Cập nhật'><Create sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }}
                           onClick={() => handleClickUpdate(product)} /></Tooltip>
-                        <StatisticalProduct product={product}/>
+                        <StatisticalProduct product={product} />
                         <DeleteProduct productId={product?.product_id} reRender={reRender} setReRender={setReRender} />
                       </Box>
                     </TableCell>

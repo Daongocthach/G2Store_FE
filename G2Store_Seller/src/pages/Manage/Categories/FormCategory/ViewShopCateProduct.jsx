@@ -16,7 +16,7 @@ function ViewShopCateProduct({ shop_cate_id }) {
     }
     const handleOpen = () => {
         setLoading(true)
-        productApi.getShopCateProducts(shop_cate_id, 0, 16)
+        productApi.getShopCateProducts(shop_cate_id, 0, 9999)
             .then((response) => {
                 setProducts(response?.content)
             })

@@ -1,4 +1,4 @@
-import { Grid, Typography, Box, FormControl, Select, MenuItem, Pagination, CircularProgress, Link, Divider } from '@mui/material'
+import { Grid, Typography, Box, Pagination, CircularProgress, Link, Divider } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -10,6 +10,7 @@ import FilterByDistrict from './Filter/FilterByDistrict'
 import EmptyData from '../../../components/EmptyData/EmptyData'
 import Sort from '../../../components/Sort/Sort'
 import FilterByStar from './Filter/FilterByStar'
+import { mockData } from '../../../apis/mockdata'
 
 function Products() {
     const navigate = useNavigate()
@@ -65,7 +66,11 @@ function Products() {
                 .then((response) => {
                     setProducts(response)
                 })
-                .catch((error) => console.log(error))
+                .catch((error) => {
+                    console.log(error)
+                    if (error?.code =='ERR_NETWORK')
+                        setProducts(mockData.products)
+                })
                 .finally(() => setLoading(false))
         }
         fetchData()

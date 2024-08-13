@@ -61,7 +61,7 @@ function AddVoucherToProducts({ voucher_id }) {
     const handleClickOpen = async () => {
         setOpen(true)
         setLoading(true)
-        productApi.getShopProducts(0, 100)
+        productApi.getShopProducts(0, 100, '')
             .then((response) => {
                 setProducts(response?.content)
                 setCheckedProducts([])
@@ -70,7 +70,6 @@ function AddVoucherToProducts({ voucher_id }) {
             .catch((error) => console.log(error))
             .finally(() => setLoading(false))
     }
-
     return (
         <Box>
             <Tooltip title='Áp dụng cho các sản phẩm'><Attachment sx={{ bgcolor: 'inherit', color: '#444444', cursor: 'pointer' }} onClick={handleClickOpen} /></Tooltip>

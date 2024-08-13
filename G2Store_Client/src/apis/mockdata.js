@@ -13,13 +13,13 @@ export const mockData = {
     },
     notifications: [
         {
-          'notification_id': 1,
-          'content': 'Your order has been shipped',
-          'created_date': '2024-07-08T10:15:30',
-          'is_read': false,
-          'is_public': true,
-          'customer_id': 1,
-          'seller_id': 456
+            'notification_id': 1,
+            'content': 'Your order has been shipped',
+            'created_date': '2024-07-08T10:15:30',
+            'is_read': false,
+            'is_public': true,
+            'customer_id': 1,
+            'seller_id': 456
         },
         {
             'notification_id': 2,
@@ -55,7 +55,7 @@ export const mockData = {
         }
 
     ],
-    listProductKeyWords : [
+    listProductKeyWords: [
         'Bánh trung thu',
         'Bánh snack',
         'Bánh bông lan',
@@ -165,5 +165,273 @@ export const mockData = {
         'Máy lọc không khí',
         'Điều hòa nhiệt độ',
         'Máy hút bụi'
+    ],
+    categories: [
+        {
+            'name': 'Điện thoại',
+            'path': '1',
+            'category_id': 1,
+            'child_categories': [
+                {
+                    'name': 'Điện thoại cảm ứng',
+                    'path': '1/2',
+                    'category_id': 2,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Phụ kiện',
+                    'path': '1/3',
+                    'category_id': 3,
+                    'child_categories': [
+                        {
+                            'name': 'Ốp lưng',
+                            'path': '1/3/5',
+                            'category_id': 5,
+                            'child_categories': [
+                                {
+                                    'name': 'Ốp lưng doraemon',
+                                    'path': '1/3/5/7',
+                                    'category_id': 7,
+                                    'child_categories': [
+                                        {
+                                            'name': 'Ốp lưng doraemon black',
+                                            'path': '1/3/5/7/8',
+                                            'category_id': 8,
+                                            'child_categories': []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    'name': 'Điện thoại nút bấm',
+                    'path': '1/4',
+                    'category_id': 4,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Sim',
+                    'path': '1/6',
+                    'category_id': 6,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Quần áo',
+            'path': '9',
+            'category_id': 9,
+            'child_categories': [
+                {
+                    'name': 'Quần tây',
+                    'path': '9/31',
+                    'category_id': 31,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Áo sơ mi',
+                    'path': '9/32',
+                    'category_id': 32,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Áo thun',
+                    'path': '9/33',
+                    'category_id': 33,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Nước ngọt',
+            'path': '10',
+            'category_id': 10,
+            'child_categories': [
+                {
+                    'name': 'Nước ngọt có gas',
+                    'path': '10/34',
+                    'category_id': 34,
+                    'child_categories': [
+                        {
+                            'name': 'Nước ngọt có đường',
+                            'path': '10/34/36',
+                            'category_id': 36,
+                            'child_categories': []
+                        },
+                        {
+                            'name': 'Nước ngọt không đường',
+                            'path': '10/34/37',
+                            'category_id': 37,
+                            'child_categories': []
+                        }
+                    ]
+                },
+                {
+                    'name': 'Nước khoáng',
+                    'path': '10/35',
+                    'category_id': 35,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Bánh kẹo',
+            'path': '11',
+            'category_id': 11,
+            'child_categories': [
+                {
+                    'name': 'Snack',
+                    'path': '11/28',
+                    'category_id': 28,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Bánh bông lan',
+                    'path': '11/29',
+                    'category_id': 29,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Kẹo',
+                    'path': '11/30',
+                    'category_id': 30,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Đồ điện tử',
+            'path': '12',
+            'category_id': 12,
+            'child_categories': [
+                {
+                    'name': 'Tủ lạnh',
+                    'path': '12/25',
+                    'category_id': 25,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Tivi',
+                    'path': '12/26',
+                    'category_id': 26,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Máy giặt',
+                    'path': '12/27',
+                    'category_id': 27,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Đồ gia dụng',
+            'path': '13',
+            'category_id': 13,
+            'child_categories': [
+                {
+                    'name': 'Ghế',
+                    'path': '13/22',
+                    'category_id': 22,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Bàn',
+                    'path': '13/23',
+                    'category_id': 23,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Đồ thủ công',
+                    'path': '13/24',
+                    'category_id': 24,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Gia vị',
+            'path': '14',
+            'category_id': 14,
+            'child_categories': [
+                {
+                    'name': 'Nước chấm',
+                    'path': '14/18',
+                    'category_id': 18,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Muối',
+                    'path': '14/19',
+                    'category_id': 19,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Đường',
+                    'path': '14/20',
+                    'category_id': 20,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Bột ngọt',
+                    'path': '14/21',
+                    'category_id': 21,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Đồ thể thao',
+            'path': '15',
+            'category_id': 15,
+            'child_categories': [
+                {
+                    'name': 'Bóng',
+                    'path': '15/16',
+                    'category_id': 16,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Vợt cầu lông',
+                    'path': '15/17',
+                    'category_id': 17,
+                    'child_categories': []
+                }
+            ]
+        },
+        {
+            'name': 'Thú nhồi bông',
+            'path': '38',
+            'category_id': 38,
+            'child_categories': []
+        },
+        {
+            'name': 'Máy tính',
+            'path': '39',
+            'category_id': 39,
+            'child_categories': [
+                {
+                    'name': 'Laptop',
+                    'path': '39/40',
+                    'category_id': 40,
+                    'child_categories': []
+                },
+                {
+                    'name': 'PC',
+                    'path': '39/41',
+                    'category_id': 41,
+                    'child_categories': []
+                },
+                {
+                    'name': 'Card đồ họa',
+                    'path': '39/42',
+                    'category_id': 42,
+                    'child_categories': []
+                }
+            ]
+        }
     ]
+
 }

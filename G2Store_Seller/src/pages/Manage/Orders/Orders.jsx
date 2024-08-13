@@ -1,62 +1,32 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, Tab, Tabs, Tooltip, Button } from '@mui/material'
-import { Print } from '@mui/icons-material'
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer, Tab, Tabs, TableFooter } from '@mui/material'
 import { format } from 'date-fns'
 import { formatCurrency } from '../../../utils/price'
 import orderApi from '../../../apis/orderApi'
-import ViewOrder from './FormOrder/ViewOrder'
 import OrderItem from './OrderItem/OrderItem'
 import Search from '../../../components/Search/Search'
 import BreadCrumbs from '../../../components/BreadCrumbs/BreadCrumbs'
-import { useAlert } from '../../../components/ShowAlert/ShowAlert'
-import ghnApiV2 from '../../../apis/ghnApiV2'
-import PaginationFooter from '../../../components/PaginationFooter/PaginationFooter'
-import TrackingOrder from './FormOrder/TrackingOrder'
-import ViewRefundImages from './FormOrder/ViewRefundImages'
-import CancelOrder from './FormOrder/CancelOrder'
-import NextOrder from './FormOrder/NextOrder'
 import MenuSelect from './MenuSelect/MenuSelect'
+import EmptyData from '../../../components/EmptyData/EmptyData'
 
 function Orders() {
-  const triggerAlert = useAlert()
   const navigate = useNavigate()
   const [reRender, setRerender] = useState(false)
   const [orders, setOrders] = useState([])
   const [tab, setTab] = useState('UN_PAID')
-  const [page, setPage] = useState(0)
-  const [totalElements, setTotalElements] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
   const handleChange = (event, newTab) => {
     setTab(newTab)
-    orderApi.getShopOrders(newTab, 0, 8)
+    orderApi.getShopOrders(newTab, 0, 99999)
       .then((response) => {
         setOrders(response?.content)
-        setTotalElements(response?.totalElements)
-      })
-  }
-  const handlePrint = (orderCode) => {
-    ghnApiV2.printOrder(orderCode)
-      .then((response) => {
-        location.assign(response)
-        triggerAlert('In đơn thành công!', false, false)
-      })
-      .catch((err) => {
-        console.log(err)
-        triggerAlert('In đơn thất bại!', true, false)
-
       })
   }
   const fetchData = () => {
-    orderApi.getShopOrders(tab, 0, 16)
-      .then((response) => { setOrders(response?.content) })
+    orderApi.getShopOrders(tab, 0, 9999)
+      .then((response) => {
+        setOrders(response?.content)
+      })
       .catch((error) => {
         if (error?.response?.data?.message == 'Access Denied') {
           navigate('/seller/access-denied')
@@ -104,28 +74,18 @@ function Orders() {
                       <TableCell ><Typography variant='body2'>{formatCurrency(order?.grand_total)}</Typography></TableCell>
                       <TableCell sx={{ color: '#1C86EE', fontWeight: 'bold' }}>{order?.payment_type}</TableCell>
                       <TableCell >
-                        <MenuSelect order={order} reRender={reRender} setRerender={setRerender}/>
-                        {/* <Box className='flex flex-row items-center gap-2'>
-                          <ViewOrder order={order} />
-                          <Tooltip title='In đơn giao hàng nhanh'>
-                            <Print className='text-gray-700 cursor-pointer' sx={{ display: tab === 'PACKED' ? 'inherit' : 'none' }}
-                              onClick={() => handlePrint(order?.ghn_order_code)} />
-                          </Tooltip>
-                          {(tab === 'PACKED' || tab === 'DELIVERING') && <TrackingOrder order={order} />}
-                          {(tab === 'REFUNDING' || tab === 'REFUNDED') && <ViewRefundImages images={order?.refund_images} content={order?.refund_reason} />}
-                          {(tab === 'CONFIRMED' || tab === 'ORDERED' || tab === 'PACKED' || tab === 'DELIVERING') &&
-                            <Box className='flex flex-row items-center gap-2'>
-                              <NextOrder order={order} reRender={reRender} setReRender={setRerender} />
-                              <CancelOrder orderId={order?.order_id} reRender={reRender} setReRender={setRerender} />
-                            </Box>}
-                        </Box> */}
+                        <MenuSelect order={order} reRender={reRender} setRerender={setRerender} />
                       </TableCell>
                     </TableRow>)
                 })}
               </TableBody>
-              <PaginationFooter isNotEmpty={(Array.isArray(orders) && orders.length > 0)} content={'Bạn chưa có đơn hàng nào!'}
-                totalElements={totalElements} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage}
-                handleChangeRowsPerPage={handleChangeRowsPerPage} />
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={12}>
+                    {(Array.isArray(orders) && orders.length < 1) && <EmptyData content={'Bạn chưa có đơn hàng nào!'} />}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Box>

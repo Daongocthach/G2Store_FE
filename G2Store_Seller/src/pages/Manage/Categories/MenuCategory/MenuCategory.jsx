@@ -31,7 +31,7 @@ function MenuCategory({ categories, reRender, setReRender, isReset, setIsReset }
                             sx={{ color: selectCategory === category ? '#2a99ff' : '#444444', width: 130, textAlign: 'left', cursor:'pointer' }} >
                             {category?.name}
                         </Typography>
-                        {/* <AddCategory parent_id={category?.shop_cate_id} reRender={reRender} setReRender={setReRender} /> */}
+                        <AddCategory parent_id={category?.shop_cate_id} reRender={reRender} setReRender={setReRender} />
                         <UpdateCategory category={category} reRender={reRender} setReRender={setReRender} />
                         <DeleteCategory category_id={category?.shop_cate_id} reRender={reRender} setReRender={setReRender} />
                         <AddProductCate shop_cate_id={category?.shop_cate_id}/>

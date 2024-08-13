@@ -27,7 +27,10 @@ function MenuSelect({ order, reRender, setRerender }) {
             >
                 <ViewOrder order={order} />
                 {(order?.order_status === 'PACKED' || order?.order_status === 'DELIVERING') &&
-                    <TrackingOrder order={order} />}
+                <Box>
+                    <TrackingOrder order={order} />
+                    <PrintOrder orderCode={order?.ghn_order_code}/>
+                </Box>}
                 {(order?.order_status === 'REFUNDING' || order?.order_status === 'REFUNDED') &&
                     <ViewRefundImages images={order?.refund_images} content={order?.refund_reason} />}
                 {(order?.order_status === 'CONFIRMED' || order?.order_status === 'ORDERED' ||
